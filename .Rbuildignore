@@ -1,2 +1,4 @@
 ^pteridocatgen\.Rproj$
 ^\.Rproj\.user$
+^data_raw$
+^LICENSE\.md$
