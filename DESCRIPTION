@@ -13,10 +13,8 @@ RoxygenNote: 7.1.2
 Imports: 
     assertr,
     assertthat,
-    data.table,
     digest,
     dplyr,
-    fs,
     glue,
     stringr,
     tibble
