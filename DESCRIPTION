@@ -2,7 +2,7 @@ Package: pteridocatgen
 Title: Generate the pteridocat taxonomic database
 Version: 0.0.0.9000
 Authors@R: 
-    person("Joel", "Nitta", "joelnitta@gmail.com", role = c("aut", "cre"),
+    person("Joel", "Nitta", email = "joelnitta@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0003-4719-7472"))
 Description: Generate the pteridocat taxonomic database.
 License: MIT + file LICENSE
