@@ -2,25 +2,47 @@
 % Please edit documentation in R/pcg_assert_tax_dat.R
 \name{dct_assert_tax_dat}
 \alias{dct_assert_tax_dat}
-\title{Assert that a taxonomic database is correctly formatted}
+\title{Check that a taxonomic database is correctly formatted}
 \usage{
-dct_assert_tax_dat(tax_dat)
+dct_assert_tax_dat(
+  tax_dat,
+  check_taxon_id = TRUE,
+  check_syn_map = TRUE,
+  check_taxonomic_status = TRUE,
+  check_acc_syn_diff = TRUE,
+  check_col_names = TRUE
+)
 }
 \arguments{
 \item{tax_dat}{Dataframe; taxonomic database in Darwin Core format}
+
+\item{check_taxon_id}{Logical; should all instances of \code{taxonID} be required
+to be non-missing and unique?}
+
+\item{check_syn_map}{Logical; should all synonyms be required to map to
+accepted names?}
+
+\item{check_taxonomic_status}{Logical; should all taxonomic names be required
+to include the status of either "accepted" or "synonym"?}
+
+\item{check_acc_syn_diff}{Logical; should accepted names and synonyms be
+required to be different?}
+
+\item{check_col_names}{Logical; should all column names be required to
+be a valid Darwin Core term?}
 }
 \value{
 Dataframe; taxonomic database in Darwin Core format. Will
 be the same as the input.
 }
 \description{
-Assertions include:
-\itemize{
-\item all synonyms must map to an accepted name
-\item all synonyms and accepted names must be distinct
-\item all names must include a unique taxonID
-}
+Stops with an error if any check fails. Most checks are geared towards being
+able to use the taxonomic database for taxonomic name resolution at the
+species level.
 }
 \details{
-Stops with an error if any check fails.
+Accepted names are any taxonomic name where \code{taxonomicStatus} contains the string "accepted".
+
+Synonyms are any taxonomic name where \code{taxonomicStatus} contains the string "synonym".
+(Note this includes "ambiguous synonym" as well as "synonym").
 }
