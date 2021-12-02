@@ -25,7 +25,7 @@
 #' be the same as the input.
 #' @autoglobal
 #' @export
-dct_assert_tax_dat <- function(
+dct_validate_tax_dat <- function(
 	tax_dat,
 	check_taxon_id = TRUE,
 	check_syn_map = TRUE,
