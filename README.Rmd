@@ -13,17 +13,17 @@ knitr::opts_chunk$set(
 )
 ```
 
-# dwctaxonr
+# dwctaxr
 
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of dwctaxonr is to facilitate working with Darwin Core Taxon data.
+The goal of dwctaxr is to facilitate working with Darwin Core Taxon data.
 
 ## Installation
 
-You can install the released version of dwctaxonr from [CRAN](https://CRAN.R-project.org) with:
+You can install the released version of dwctaxr from [CRAN](https://CRAN.R-project.org) with:
 
 ``` r
-install.packages("dwctaxonr")
+install.packages("dwctaxr")
 ```

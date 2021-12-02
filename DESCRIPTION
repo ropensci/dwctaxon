@@ -1,4 +1,4 @@
-Package: dwctaxonr
+Package: dwctaxr
 Title: Tools for Working with Darwin Core Taxon Data
 Version: 0.0.0.9000
 Authors@R: 
