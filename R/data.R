@@ -1,8 +1,14 @@
 #' Darwin Core Taxon terms
 #'
-#' A list of Darwin Core terms in the Taxon class
+#' A table of Darwin Core terms in the Taxon class
 #'
-#' @format Character vector, including two attributes:
+#' @format Dataframe (tibble), including two columns:
+#' - `group`: Darwin Core term group; either "taxon" (terms in the Taxon class)
+#' or "record-level" (terms that are generic in that they might apply
+#' to any type of record in a dataset.)
+#' - `term`: Darwin Core term
+#'
+#' with two additional attributes:
 #' - `retrieved`: Date the terms were obtained
 #' - `url`: URL from which the terms were obtained
 #' @source \url{https://dwc.tdwg.org/terms/#taxon}

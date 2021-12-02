@@ -5,7 +5,15 @@
 \alias{dct_terms}
 \title{Darwin Core Taxon terms}
 \format{
-Character vector, including two attributes:
+Dataframe (tibble), including two columns:
+\itemize{
+\item \code{group}: Darwin Core term group; either "taxon" (terms in the Taxon class)
+or "record-level" (terms that are generic in that they might apply
+to any type of record in a dataset.)
+\item \code{term}: Darwin Core term
+}
+
+with two additional attributes:
 \itemize{
 \item \code{retrieved}: Date the terms were obtained
 \item \code{url}: URL from which the terms were obtained
@@ -18,6 +26,6 @@ Character vector, including two attributes:
 dct_terms
 }
 \description{
-A list of Darwin Core terms in the Taxon class
+A table of Darwin Core terms in the Taxon class
 }
 \keyword{datasets}
