@@ -31,7 +31,7 @@ dct_add_row <- function(
 		acceptedNameUsageID = usage_id,
 		taxonomicStatus = tax_status,
 		scientificName = sci_name,
-		taxonRemarks = glue::glue("taxon added {Sys.time()}")
+		modified = Sys.time()
 	)
 	# Check for duplicated ID
 	overlap_id <- dplyr::inner_join(tax_dat, new_row, by = "taxonID")
