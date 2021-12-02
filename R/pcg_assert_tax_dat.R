@@ -13,7 +13,7 @@
 #' be the same as the input.
 #' @autoglobal
 #' @export
-pcg_assert_tax_dat <- function(tax_dat) {
+dct_assert_tax_dat <- function(tax_dat) {
 	# Make sure all synonyms map correctly
 	tax_dat_accepted <-
 		tax_dat |>

@@ -14,7 +14,7 @@
 #' @return Dataframe; taxonomic database in Darwin Core format
 #' @autoglobal
 #' @export
-pcg_change_status <- function(
+dct_change_status <- function(
 	tax_dat, taxon_id = NULL,
 	sci_name = NULL, new_status,
 	strict = FALSE) {
@@ -62,7 +62,7 @@ pcg_change_status <- function(
 		tibble::add_row(new_row, .before = row_hits)
 
 	# Optionally run taxonomic database checks
-	if (isTRUE(strict)) res <- pcg_assert_tax_dat(res)
+	if (isTRUE(strict)) res <- dct_assert_tax_dat(res)
 
 	res
 
