@@ -26,3 +26,5 @@ Suggests:
     roxyglobals (>= 0.2.1)
 Remotes: 
     anthonynorth/roxyglobals
+Depends: 
+    R (>= 2.10)

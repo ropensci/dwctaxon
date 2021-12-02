@@ -1,5 +1,5 @@
 ^dwctaxonr\.Rproj$
 ^\.Rproj\.user$
-^data_raw$
 ^LICENSE\.md$
 ^README\.Rmd$
+^data-raw$
