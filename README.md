@@ -11,9 +11,9 @@ data.
 
 ## Installation
 
-You can install the released version of dwctaxr from
-[CRAN](https://CRAN.R-project.org) with:
+You can install dwctaxr from [GitHub](https://github.com/) with:
 
 ``` r
-install.packages("dwctaxr")
+# install.packages("remotes")
+remotes::install_github("joelnitta/dwctaxr")
 ```
