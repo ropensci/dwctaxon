@@ -1,6 +1,7 @@
 #' Darwin Core Taxon terms
 #'
-#' A table of Darwin Core terms in the Taxon class
+#' A table of valid Darwin Core terms. Only terms in the Taxon class or at the
+#' record-level are included.
 #'
 #' @format Dataframe (tibble), including two columns:
 #' - `group`: Darwin Core term group; either "taxon" (terms in the Taxon class)

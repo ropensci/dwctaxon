@@ -26,6 +26,7 @@ with two additional attributes:
 dct_terms
 }
 \description{
-A table of Darwin Core terms in the Taxon class
+A table of valid Darwin Core terms. Only terms in the Taxon class or at the
+record-level are included.
 }
 \keyword{datasets}
