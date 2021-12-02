@@ -12,6 +12,7 @@
 #' taxonomic database?
 #'
 #' @return Dataframe; taxonomic database in Darwin Core format
+#' @autoglobal
 #' @export
 pcg_change_status <- function(
 	tax_dat, taxon_id = NULL,
