@@ -20,8 +20,11 @@ Imports:
     digest,
     dplyr,
     glue,
+    methods,
+    purrr,
     stringr,
-    tibble
+    tibble,
+    tidyr
 Suggests: 
     roxyglobals (>= 0.2.1)
 Remotes: 

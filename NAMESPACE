@@ -2,4 +2,5 @@
 
 export(dct_add_row)
 export(dct_change_status)
+export(dct_fix_format)
 export(dct_validate_tax_dat)
