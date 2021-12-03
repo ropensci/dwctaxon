@@ -64,6 +64,7 @@ dct_validate(filmy_taxonomy)
 
 ```{r fix}
 filmy_taxonomy_fixed <- dct_fix_format(filmy_taxonomy)
+
 # Now the validation passes
 dct_validate(filmy_taxonomy_fixed)
 ```
@@ -82,8 +83,10 @@ filmy_taxonomy_fixed |>
 
 ```{r change-status}
 filmy_taxonomy_fixed |>
-	# The modified entry is 'taxonomicStatus' of the second row. Look carefully...
-	dct_change_status(taxon_id = "54133783", new_status = "accepted")
+	# The modified entry is 'taxonomicStatus' of the second row. Slice to that so we can see it.
+	dct_change_status(taxon_id = "54133783", new_status = "accepted") |>
+	slice_head(n = 2) |>
+	select(taxonID, taxonomicStatus, scientificName, modified)
 ```
 
 ### Piping

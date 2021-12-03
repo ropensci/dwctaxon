@@ -96,6 +96,7 @@ filmy_taxonomy_fixed <- dct_fix_format(filmy_taxonomy)
 #> Coercing column subgenus from logical to character
 #> Coercing column namePublishedIn from logical to character
 #> Coercing column taxonConceptID from logical to character
+
 # Now the validation passes
 dct_validate(filmy_taxonomy_fixed)
 #> # A tibble: 2,729 × 26
@@ -138,28 +139,15 @@ filmy_taxonomy_fixed |>
 
 ``` r
 filmy_taxonomy_fixed |>
-    # The modified entry is 'taxonomicStatus' of the second row. Look carefully...
-    dct_change_status(taxon_id = "54133783", new_status = "accepted")
-#> # A tibble: 2,729 × 26
-#>    taxonID  datasetID datasetName             acceptedNameUsag… parentNameUsage…
-#>    <chr>    <chr>     <chr>                   <chr>             <chr>           
-#>  1 54115096 140       World Ferns in Species… <NA>              54830341        
-#>  2 54133783 140       World Ferns in Species… 54115097          <NA>            
-#>  3 54115097 140       World Ferns in Species… <NA>              54830341        
-#>  4 54133784 140       World Ferns in Species… 54115098          <NA>            
-#>  5 54115098 140       World Ferns in Species… <NA>              54830341        
-#>  6 54133785 140       World Ferns in Species… 54115099          <NA>            
-#>  7 54115099 140       World Ferns in Species… <NA>              54830341        
-#>  8 54133786 140       World Ferns in Species… 54115100          <NA>            
-#>  9 54133787 140       World Ferns in Species… 54115100          <NA>            
-#> 10 54133788 140       World Ferns in Species… 54115100          <NA>            
-#> # … with 2,719 more rows, and 21 more variables: taxonomicStatus <chr>,
-#> #   taxonRank <chr>, verbatimTaxonRank <chr>, scientificName <chr>,
-#> #   kingdom <chr>, phylum <chr>, class <chr>, order <chr>, family <chr>,
-#> #   genericName <chr>, genus <chr>, subgenus <chr>, specificEpithet <chr>,
-#> #   infraspecificEpithet <chr>, scientificNameAuthorship <chr>,
-#> #   namePublishedIn <chr>, nameAccordingTo <chr>, modified <chr>,
-#> #   taxonConceptID <chr>, scientificNameID <chr>, references <chr>
+    # The modified entry is 'taxonomicStatus' of the second row. Slice to that so we can see it.
+    dct_change_status(taxon_id = "54133783", new_status = "accepted") |>
+    slice_head(n = 2) |>
+    select(taxonID, taxonomicStatus, scientificName, modified)
+#> # A tibble: 2 × 4
+#>   taxonID  taxonomicStatus scientificName                modified           
+#>   <chr>    <chr>           <chr>                         <chr>              
+#> 1 54115096 accepted name   Cephalomanes atrovirens Presl Nov 2018           
+#> 2 54133783 accepted        Trichomanes crassum Copel.    2021-12-03 10:42:58
 ```
 
 ### Piping
