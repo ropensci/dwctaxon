@@ -62,7 +62,7 @@ dct_change_status <- function(
 		tibble::add_row(new_row, .before = row_hits)
 
 	# Optionally run taxonomic database checks
-	if (isTRUE(strict)) res <- dct_validate_tax_dat(res)
+	if (isTRUE(strict)) res <- dct_validate(res)
 
 	res
 

@@ -59,7 +59,7 @@ dct_add_row <- function(
 		tibble::add_row(new_row)
 
 	# Optionally run taxonomic database checks
-	if (isTRUE(strict)) res <- dct_validate_tax_dat(res)
+	if (isTRUE(strict)) res <- dct_validate(res)
 
 	res
 }
