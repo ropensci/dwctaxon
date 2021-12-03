@@ -31,7 +31,7 @@ dct_add_row <- function(
 		acceptedNameUsageID = usage_id,
 		taxonomicStatus = tax_status,
 		scientificName = sci_name,
-		modified = Sys.time()
+		modified = as.character(Sys.time())
 	)
 	# Check for duplicated ID
 	overlap_id <- dplyr::inner_join(tax_dat, new_row, by = "taxonID")

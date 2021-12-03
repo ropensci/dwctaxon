@@ -48,11 +48,11 @@ dct_change_status <- function(
 	new_row <- dplyr::mutate(
 		tax_dat_row,
 		taxonomicStatus = new_status,
-		taxonRemarks = paste3(taxonRemarks, glue::glue("taxonomicStatus updated {Sys.time()}"))
+		modified = as.character(Sys.time())
 		)
 
 	assertthat::assert_that(
-		!isTRUE(all.equal(tax_dat_row, new_row)),
+		!isTRUE(all.equal(tax_dat_row$taxonomicStatus, new_row$taxonomicStatus)),
 		msg = "Must choose a new taxonomic status"
 	)
 
