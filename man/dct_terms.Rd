@@ -5,12 +5,13 @@
 \alias{dct_terms}
 \title{Darwin Core Taxon terms}
 \format{
-Dataframe (tibble), including two columns:
+Dataframe (tibble), including three columns:
 \itemize{
 \item \code{group}: Darwin Core term group; either "taxon" (terms in the Taxon class)
 or "record-level" (terms that are generic in that they might apply
 to any type of record in a dataset.)
 \item \code{term}: Darwin Core term
+\item \code{type}: Type of data, corresponding to class in R (except for "date").
 }
 
 with two additional attributes:
