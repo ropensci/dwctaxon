@@ -101,9 +101,11 @@ dct_change_status <- function(
 		modified = as.character(Sys.time())
 		)
 
+	# Make sure update actually changes something
 	assertthat::assert_that(
-		!isTRUE(all.equal(tax_dat_row$taxonomicStatus, new_row$taxonomicStatus)),
-		msg = "Must choose a new taxonomic status"
+		!isTRUE(all.equal(tax_dat_row$taxonomicStatus, new_row$taxonomicStatus)) ||
+			!isTRUE(all.equal(tax_dat_row$acceptedNameUsageID, new_row$acceptedNameUsageID)),
+		msg = "Must choose a new taxonomicStatus or acceptedNameUsageID"
 	)
 
 	# Add any columns that may be missing from original data
