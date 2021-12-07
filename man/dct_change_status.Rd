@@ -9,19 +9,29 @@ dct_change_status(
   taxon_id = NULL,
   sci_name = NULL,
   new_status,
+  usage_id = NULL,
+  usage_name = NULL,
+  clear_usage_id = grepl("accepted", new_status, ignore.case = TRUE),
   strict = FALSE
 )
 }
 \arguments{
-\item{tax_dat}{Dataframe; taxonomic database in Darwin Core format}
+\item{tax_dat}{Dataframe; taxonomic database in Darwin Core format.}
 
-\item{taxon_id}{taxonID for the entry to be changed}
+\item{taxon_id}{Character vector of length 1; taxonID for the entry to be changed.}
 
-\item{sci_name}{scientificName for the entry to be changed}
+\item{sci_name}{Character vector of length 1; scientificName for the entry to be changed.}
 
-\item{new_status}{Updated taxonomicStatus to use for the entry}
+\item{new_status}{Character vector of length 1; updated taxonomicStatus to use for the entry.}
 
-\item{strict}{Logical; should taxonomic checks be run on the updated
+\item{usage_id}{Character vector of length 1; taxonID for accepted name if new status is synonym.}
+
+\item{usage_name}{Character vector of length 1; scientificName for accepted name if new status is synonym.}
+
+\item{clear_usage_id}{Logical vector of length 1; should \code{acceptedNameUsageID} be set to \code{NA}?.
+Default: TRUE if \code{new_status} is "accepted" (case insensitive).}
+
+\item{strict}{Logical vector of length 1; should taxonomic checks be run on the updated
 taxonomic database?}
 }
 \value{
@@ -30,4 +40,23 @@ Dataframe; taxonomic database in Darwin Core format
 \description{
 Only one of \code{taxon_id} or \code{sci_name} needs to be entered. Either will
 work if as long as it makes a partial or full match to one row in the data.
+}
+\details{
+\code{usage_id} or \code{usage_name} should be provided if the new status is a synonym;
+either will work as it makes a partial or full match to one row in the data.
+}
+\examples{
+# Swap the accepted / synonym status of Cephalomanes crassum (Copel.) M. G. Price
+# and Trichomanes crassum Copel.
+dct_filmies |>
+  dct_change_status(
+    sci_name = "Cephalomanes crassum (Copel.) M. G. Price",
+    new_status = "synonym",
+    usage_name = "Trichomanes crassum Copel."
+  ) |>
+  dct_change_status(
+    sci_name = "Trichomanes crassum Copel.",
+    new_status = "accepted"
+  ) |>
+  dct_validate()
 }
