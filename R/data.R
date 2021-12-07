@@ -15,3 +15,18 @@
 #' - `url`: URL from which the terms were obtained
 #' @source \url{https://dwc.tdwg.org/terms/#taxon}
 "dct_terms"
+
+#' Taxonomic data of filmy ferns
+#'
+#' Taxonomic data of filmy ferns (family Hymenophyllaceae) in Darwin Core format.
+#' Modified from data downloaded from the [Catalog of
+#' Life](https://www.catalogueoflife.org/) under the [Creative Commons
+#' Attribution (CC BY) 4.0](https://creativecommons.org/licenses/by/4.0/)
+#' license.
+#'
+#' @format Dataframe (tibble), with `r nrow(dct_filmies)` rows and
+#' `r ncol(dct_filmies)` columns. For details about data format, see
+#'   <https://dwc.tdwg.org/terms/#taxon>.
+#'
+#' @source \url{https://dwc.tdwg.org/terms/#taxon}
+"dct_filmies"
