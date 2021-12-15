@@ -12,7 +12,8 @@ dct_change_status(
   usage_id = NULL,
   usage_name = NULL,
   clear_usage_id = grepl("accepted", new_status, ignore.case = TRUE),
-  strict = FALSE
+  strict = FALSE,
+  args_tbl = NULL
 )
 }
 \arguments{
@@ -33,6 +34,10 @@ Default: TRUE if \code{new_status} is "accepted" (case insensitive).}
 
 \item{strict}{Logical vector of length 1; should taxonomic checks be run on the updated
 taxonomic database?}
+
+\item{args_tbl}{A tibble including columns corresponding to one or more of the
+above arguments, except for \code{tax_dat}. In this case, the input taxonomic database
+will be modified sequentially over each row of input in \code{args_tbl}.}
 }
 \value{
 Dataframe; taxonomic database in Darwin Core format
@@ -44,6 +49,10 @@ work if as long as it makes a partial or full match to one row in the data.
 \details{
 \code{usage_id} or \code{usage_name} should be provided if the new status is a synonym;
 either will work as it makes a partial or full match to one row in the data.
+
+Can either modify a single row in the input taxonomic database if each
+argument is supplied as a vector of length 1, or can apply a set of changes
+to the taxonomic database if the input is supplied as a dataframe.
 }
 \examples{
 # Swap the accepted / synonym status of Cephalomanes crassum (Copel.) M. G. Price
@@ -59,4 +68,15 @@ dct_filmies |>
     new_status = "accepted"
   ) |>
   dct_validate()
+
+# Apply a set of changes
+library(tibble)
+updates <- tibble(
+  sci_name = c("Cephalomanes atrovirens Presl", "Cephalomanes crassum (Copel.) M. G. Price"),
+  new_status = "synonym",
+  usage_name = "Trichomanes crassum Copel."
+)
+dct_filmies |>
+  dct_change_status(args_tbl = updates) |>
+  dct_change_status(sci_name = "Trichomanes crassum Copel.", new_status = "accepted")
 }
