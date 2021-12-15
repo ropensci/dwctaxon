@@ -35,7 +35,7 @@ Default: TRUE if \code{new_status} is "accepted" (case insensitive).}
 \item{strict}{Logical vector of length 1; should taxonomic checks be run on the updated
 taxonomic database?}
 
-\item{args_tbl}{A tibble including columns corresponding to one or more of the
+\item{args_tbl}{A dataframe including columns corresponding to one or more of the
 above arguments, except for \code{tax_dat}. In this case, the input taxonomic database
 will be modified sequentially over each row of input in \code{args_tbl}.}
 }
