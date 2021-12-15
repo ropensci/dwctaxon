@@ -9,6 +9,10 @@
 #' "provisionally accepted" is counted as "accepted", "ambiguous synonym" is
 #' counted as "synonym", etc (not case-sensitive).
 #'
+#' For `check_mapping`, the `acceptedNameUsageID` must map to the `taxonID` of
+#' an existing name which itself does not have an `acceptedNameUsageID` (i.e.,
+#' no multiple levels of mapping allowed).
+#'
 #' @param tax_dat Dataframe; taxonomic database in Darwin Core format
 #' @param check_taxon_id Logical; should all instances of `taxonID` be required
 #' to be non-missing and unique?
@@ -27,6 +31,7 @@
 #' @export
 #' @examples
 #' dct_validate(dct_filmies)
+#'
 dct_validate <- function(
 	tax_dat,
 	check_taxon_id = TRUE,

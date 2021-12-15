@@ -45,7 +45,12 @@ For \code{check_taxonomic_status} and \code{check_acc_syn_diff}, "accepted" and
 "synonym" are determined by string matching of \code{taxonomicStatus}; so
 "provisionally accepted" is counted as "accepted", "ambiguous synonym" is
 counted as "synonym", etc (not case-sensitive).
+
+For \code{check_mapping}, the \code{acceptedNameUsageID} must map to the \code{taxonID} of
+an existing name which itself does not have an \code{acceptedNameUsageID} (i.e.,
+no multiple levels of mapping allowed).
 }
 \examples{
 dct_validate(dct_filmies)
+
 }
