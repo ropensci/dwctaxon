@@ -7,7 +7,7 @@
 dct_validate(
   tax_dat,
   check_taxon_id = TRUE,
-  check_syn_map = TRUE,
+  check_mapping = TRUE,
   check_taxonomic_status = TRUE,
   check_acc_syn_diff = TRUE,
   check_col_names = TRUE
@@ -19,8 +19,8 @@ dct_validate(
 \item{check_taxon_id}{Logical; should all instances of \code{taxonID} be required
 to be non-missing and unique?}
 
-\item{check_syn_map}{Logical; should all synonyms be required to map to
-accepted names?}
+\item{check_mapping}{Logical; should all values of \code{acceptedNameUsageID} be
+required to map to the \code{taxonID} of an existing name?}
 
 \item{check_taxonomic_status}{Logical; should all taxonomic names be required
 to include the status of either "accepted" or "synonym"?}
@@ -41,8 +41,11 @@ able to use the taxonomic database for taxonomic name resolution at the
 species level.
 }
 \details{
-Accepted names are any taxonomic name where \code{taxonomicStatus} contains the string "accepted".
-
-Synonyms are any taxonomic name where \code{taxonomicStatus} contains the string "synonym".
-(Note this includes "ambiguous synonym" as well as "synonym").
+For \code{check_taxonomic_status} and \code{check_acc_syn_diff}, "accepted" and
+"synonym" are determined by string matching of \code{taxonomicStatus}; so
+"provisionally accepted" is counted as "accepted", "ambiguous synonym" is
+counted as "synonym", etc (not case-sensitive).
+}
+\examples{
+dct_validate(dct_filmies)
 }

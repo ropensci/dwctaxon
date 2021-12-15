@@ -4,16 +4,16 @@
 #' able to use the taxonomic database for taxonomic name resolution at the
 #' species level.
 #'
-#' Accepted names are any taxonomic name where `taxonomicStatus` contains the string "accepted".
-#'
-#' Synonyms are any taxonomic name where `taxonomicStatus` contains the string "synonym".
-#' (Note this includes "ambiguous synonym" as well as "synonym").
+#' For `check_taxonomic_status` and `check_acc_syn_diff`, "accepted" and
+#' "synonym" are determined by string matching of `taxonomicStatus`; so
+#' "provisionally accepted" is counted as "accepted", "ambiguous synonym" is
+#' counted as "synonym", etc (not case-sensitive).
 #'
 #' @param tax_dat Dataframe; taxonomic database in Darwin Core format
 #' @param check_taxon_id Logical; should all instances of `taxonID` be required
 #' to be non-missing and unique?
-#' @param check_syn_map Logical; should all synonyms be required to map to
-#' accepted names?
+#' @param check_mapping Logical; should all values of `acceptedNameUsageID` be
+#' required to map to the `taxonID` of an existing name?
 #' @param check_taxonomic_status Logical; should all taxonomic names be required
 #' to include the status of either "accepted" or "synonym"?
 #' @param check_acc_syn_diff Logical; should accepted names and synonyms be
@@ -25,10 +25,12 @@
 #' be the same as the input.
 #' @autoglobal
 #' @export
+#' @examples
+#' dct_validate(dct_filmies)
 dct_validate <- function(
 	tax_dat,
 	check_taxon_id = TRUE,
-	check_syn_map = TRUE,
+	check_mapping = TRUE,
 	check_taxonomic_status = TRUE,
 	check_acc_syn_diff = TRUE,
 	check_col_names = TRUE) {
@@ -39,28 +41,29 @@ dct_validate <- function(
 		assertr::assert(tax_dat, assertr::not_na, taxonID, success_fun = assertr::success_logical)
 	}
 
-	# Separate accepted names and synonyms
-	tax_dat_accepted <-
-		tax_dat |>
-		dplyr::filter(stringr::str_detect(taxonomicStatus, "accepted"))
-
-	tax_dat_synonyms <-
-		tax_dat |>
-		dplyr::filter(stringr::str_detect(taxonomicStatus, "synonym"))
-
-	# Check for synonym mapping
-	if (isTRUE(check_syn_map)) {
+	# Check for name mapping
+	if (isTRUE(check_mapping)) {
 
 		assertthat::assert_that(
 			isTRUE(check_taxon_id),
-			msg = "`check_syn_map` requires `check_taxon_id` to be TRUE")
+			msg = "`check_mapping` requires `check_taxon_id` to be TRUE")
 
-		tax_dat_synonyms_check <-
-			dplyr::anti_join(tax_dat_synonyms, tax_dat_accepted, by = c(acceptedNameUsageID = "taxonID"))
+		# Split dataset into "target" (no acceptedNameUsageID) and "query"
+		# (acceptedNameUsageID is present)
+		tax_dat_target <-
+			tax_dat |>
+			dplyr::filter(is.na(acceptedNameUsageID) | acceptedNameUsageID == "")
+
+		tax_dat_query <-
+			dplyr::anti_join(tax_dat, tax_dat_target, by = "taxonID")
+
+		# All names should map
+		tax_dat_mapping_check <-
+			dplyr::anti_join(tax_dat_query, tax_dat_target, by = c(acceptedNameUsageID = "taxonID"))
 
 		assertthat::assert_that(
-			nrow(tax_dat_synonyms_check) == 0,
-			msg = "`check_syn_map` failed. At least one synonym does not map to an accepted name")
+			nrow(tax_dat_mapping_check) == 0,
+			msg = "`check_mapping` failed. At least one `acceptedNameUsageID` value does not map to `taxonID` of an existing name")
 	}
 
 	# Check that all names have either accepted or synonym
@@ -69,9 +72,15 @@ dct_validate <- function(
 		assertthat::assert_that(
 			isTRUE(check_taxon_id),
 			msg = "`check_taxonomic_status` requires `check_taxon_id` to be TRUE")
-		assertthat::assert_that(
-			isTRUE(check_syn_map),
-			msg = "`check_taxonomic_status` requires `check_syn_map` to be TRUE")
+
+		# Separate accepted names and synonyms
+		tax_dat_accepted <-
+			tax_dat |>
+			dplyr::filter(stringr::str_detect(taxonomicStatus, stringr::fixed("accepted", ignore_case = TRUE)))
+
+		tax_dat_synonyms <-
+			tax_dat |>
+			dplyr::filter(stringr::str_detect(taxonomicStatus, stringr::fixed("synonym", ignore_case = TRUE)))
 
 		# Make sure all accepted names and synonyms are accounted for
 		tax_dat_accepted_check <-
@@ -85,13 +94,18 @@ dct_validate <- function(
 
 	# Check that accepted names and synonyms are distinct
 	if (isTRUE(check_acc_syn_diff)) {
-	tax_dat_no_overlap_check <-
-		tax_dat_accepted |>
-		dplyr::inner_join(tax_dat_synonyms, by = "scientificName")
 
-	assertthat::assert_that(
-		nrow(tax_dat_no_overlap_check) == 0,
-		msg = "`check_acc_syn_diff` failed. Some scientific names appear in both accepted names and synonyms")
+		assertthat::assert_that(
+			isTRUE(check_taxonomic_status),
+			msg = "`check_acc_syn_diff` requires `check_taxonomic_status` to be TRUE")
+
+		tax_dat_no_overlap_check <-
+			tax_dat_accepted |>
+			dplyr::inner_join(tax_dat_synonyms, by = "scientificName")
+
+		assertthat::assert_that(
+			nrow(tax_dat_no_overlap_check) == 0,
+			msg = "`check_acc_syn_diff` failed. Some scientific names appear in both accepted names and synonyms")
 	}
 
 	# Check that column names are valid

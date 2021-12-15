@@ -5,6 +5,7 @@ utils::globalVariables(c(
   "input_type", # <dct_fix_format>
   "type", # <dct_fix_format>
   "taxonID", # <dct_validate>
+  "acceptedNameUsageID", # <dct_validate>
   "taxonomicStatus", # <dct_validate>
   "dct_terms", # <dct_validate>
   NULL
