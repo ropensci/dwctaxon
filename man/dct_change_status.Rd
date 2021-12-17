@@ -69,6 +69,15 @@ dct_filmies |>
   ) |>
   dct_validate()
 
+# Sometimes changing one name will affect others, if they map
+# to the new synonym
+dct_change_status(
+  tax_dat = dct_filmies |> head(),
+  sci_name = "Cephalomanes crassum (Copel.) M. G. Price",
+  new_status = "synonym",
+  usage_name = "Cephalomanes densinervium (Copel.) Copel."
+)
+
 # Apply a set of changes
 library(tibble)
 updates <- tibble(

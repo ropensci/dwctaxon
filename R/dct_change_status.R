@@ -37,6 +37,11 @@ dct_change_status_single <- function(
 	if (is.null(strict) || is.na(strict)) strict <- FALSE
 	if (is.null(clear_usage_id) || is.na(clear_usage_id)) clear_usage_id <- FALSE
 
+	# Make sure that all taxonID are non-missing, unique, char vec
+	assertr::assert(tax_dat, assertr::not_na, taxonID, success_fun = assertr::success_logical)
+	assertr::assert(tax_dat, assertr::is_uniq, taxonID, success_fun = assertr::success_logical)
+	assertr::assert(tax_dat, is.character, taxonID, success_fun = assertr::success_logical)
+
 	assertthat::assert_that(assertthat::is.string(new_status))
 	assertthat::assert_that(
 		sum(is.null(taxon_id), is.null(sci_name)) == 1,
@@ -63,7 +68,7 @@ dct_change_status_single <- function(
 	assertthat::assert_that(length(row_hits) == 1,
 													msg = "Not exactly one row selected")
 
-	# Map to acceptedNameUsageID:
+	# For synonyms, map to acceptedNameUsageID:
 	acceptedNameUsageID_matched <- NA
 	if (!is.null(usage_name) && is.null(usage_id) && clear_usage_id == FALSE) {
 		assertthat::assert_that(
@@ -96,6 +101,21 @@ dct_change_status_single <- function(
 		modified = as.character(Sys.time())
 	)
 
+	# For change to synonym, check if other names will be affected
+	new_row_other <- NULL
+	if (!is.na(acceptedNameUsageID_matched)) {
+		new_row_other <- dplyr::filter(
+			tax_dat, acceptedNameUsageID == tax_dat_row$taxonID
+		)
+		if (nrow(new_row_other) > 0) {
+			new_row_other <- dplyr::mutate(
+				new_row_other,
+				acceptedNameUsageID = acceptedNameUsageID_matched,
+				modified = as.character(Sys.time())
+			)
+		}
+	}
+
 	# Make sure update actually changes something
 	assertthat::assert_that(
 		!isTRUE(all.equal(tax_dat_row$taxonomicStatus, new_row$taxonomicStatus)) ||
@@ -103,19 +123,24 @@ dct_change_status_single <- function(
 		msg = "Must choose a new taxonomicStatus or acceptedNameUsageID"
 	)
 
-	# Add any columns that may be missing from original data
-	# but are present in row to add (e.g., `modified`)
-	missing_cols <- setdiff(colnames(new_row), colnames(tax_dat))
-	if (length(missing_cols > 0)) {
-		for (i in seq_along(missing_cols)) {
-			tax_dat[[missing_cols[[i]]]] <- NA
-		}
-	}
-
 	# Remove selected row, add back in with modified taxonomic status
 	res <- tax_dat |>
-		dplyr::slice(-row_hits) |>
-		tibble::add_row(new_row, .before = row_hits)
+		dplyr::anti_join(new_row, by = "taxonID") |>
+		dplyr::bind_rows(new_row)
+
+	# Do same for other synonyms, if present
+	if (!is.null(new_row_other)) {
+		res <-
+			res |>
+			dplyr::anti_join(new_row_other, by = "taxonID") |>
+			dplyr::bind_rows(new_row_other)
+	}
+
+	# Restore original order
+	res <-
+	tax_dat |>
+		dplyr::select(taxonID) |>
+		dplyr::inner_join(res)
 
 	# Optionally run taxonomic database checks
 	if (isTRUE(strict)) res <- dct_validate(res)
@@ -180,6 +205,15 @@ val_if_in_dat <- function(df, col, i) {
 #'     new_status = "accepted"
 #'   ) |>
 #'   dct_validate()
+#'
+#' # Sometimes changing one name will affect others, if they map
+#' # to the new synonym
+#' dct_change_status(
+#'   tax_dat = dct_filmies |> head(),
+#'   sci_name = "Cephalomanes crassum (Copel.) M. G. Price",
+#'   new_status = "synonym",
+#'   usage_name = "Cephalomanes densinervium (Copel.) Copel."
+#' )
 #'
 #' # Apply a set of changes
 #' library(tibble)
