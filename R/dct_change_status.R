@@ -50,22 +50,16 @@ dct_change_status_single <- function(
 
 	# Isolate row to change
 	if (!is.null(sci_name) && is.null(taxon_id)) {
-		row_hits <- stringr::str_detect(
-			tax_dat$scientificName, stringr::fixed(sci_name)) |> which()
-		if (length(row_hits) == 1) {
-			tax_dat_row <- dplyr::slice(tax_dat, row_hits)
-		}
+		sci_name_select <- sci_name
+		tax_dat_row <- dplyr::filter(tax_dat, scientificName == sci_name_select)
 	}
 
 	if (!is.null(taxon_id) && is.null(sci_name)) {
-		row_hits <- stringr::str_detect(
-			tax_dat$taxonID, stringr::fixed(taxon_id)) |> which()
-		if (length(row_hits) == 1) {
-			tax_dat_row <- dplyr::slice(tax_dat, row_hits)
-		}
+		taxon_id_select <- taxon_id
+		tax_dat_row <- dplyr::filter(tax_dat, taxon_id == taxon_id_select)
 	}
 
-	assertthat::assert_that(length(row_hits) == 1,
+	assertthat::assert_that(nrow(tax_dat_row) == 1,
 													msg = "Not exactly one row selected")
 
 	# For synonyms, map to acceptedNameUsageID:
@@ -138,9 +132,9 @@ dct_change_status_single <- function(
 
 	# Restore original order
 	res <-
-	tax_dat |>
+		tax_dat |>
 		dplyr::select(taxonID) |>
-		dplyr::inner_join(res)
+		dplyr::inner_join(res, by = "taxonID")
 
 	# Optionally run taxonomic database checks
 	if (isTRUE(strict)) res <- dct_validate(res)

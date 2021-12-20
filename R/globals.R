@@ -2,6 +2,7 @@
 
 utils::globalVariables(c(
   "taxonID", # <dct_change_status_single>
+  "scientificName", # <dct_change_status_single>
   "acceptedNameUsageID", # <dct_change_status_single>
   "dct_terms", # <dct_fix_format>
   "input_type", # <dct_fix_format>
