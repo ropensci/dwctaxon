@@ -110,12 +110,14 @@ dct_change_status_single <- function(
 		}
 	}
 
-	# Make sure update actually changes something
-	assertthat::assert_that(
-		!isTRUE(all.equal(tax_dat_row$taxonomicStatus, new_row$taxonomicStatus)) ||
-			!isTRUE(all.equal(tax_dat_row$acceptedNameUsageID, new_row$acceptedNameUsageID)),
-		msg = "Must choose a new taxonomicStatus or acceptedNameUsageID"
-	)
+	# Warn if update doesn't modify changes anything
+	if (
+		isTRUE(all.equal(tax_dat_row$taxonomicStatus, new_row$taxonomicStatus)) ||
+			isTRUE(all.equal(tax_dat_row$acceptedNameUsageID, new_row$acceptedNameUsageID))
+	) {
+		warning("No change to taxonomicStatus or acceptedNameUsageID; returning original input")
+		return(tax_dat)
+		}
 
 	# Remove selected row, add back in with modified taxonomic status
 	res <- tax_dat |>
