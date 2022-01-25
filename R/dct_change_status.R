@@ -16,6 +16,7 @@
 #' Default: TRUE if `new_status` is "accepted" (case insensitive).
 #' @param strict Logical vector of length 1; should taxonomic checks be run on the updated
 #' taxonomic database?
+#' @param quiet Logical vector of length 1; should warnings be silenced?
 #'
 #' @return Dataframe; taxonomic database in Darwin Core format
 #' @autoglobal
@@ -26,7 +27,8 @@ dct_change_status_single <- function(
 	usage_id = NULL,
 	usage_name = NULL,
 	clear_usage_id = grepl("accepted", new_status, ignore.case = TRUE),
-	strict = FALSE) {
+	strict = FALSE,
+	quiet = FALSE) {
 
 	# Convert any NA input to NULL
 	if (!is.null(taxon_id) && is.na(taxon_id)) taxon_id <- NULL
@@ -110,18 +112,19 @@ dct_change_status_single <- function(
 		}
 	}
 
-	# Warn if update doesn't modify changes anything
+	# Return input if update doesn't modify changes anything
 	if (
 		isTRUE(all.equal(tax_dat_row$taxonomicStatus, new_row$taxonomicStatus)) &&
-			isTRUE(all.equal(
-				as.character(tax_dat_row$acceptedNameUsageID),
-				as.character(new_row$acceptedNameUsageID)
-				)
-			)
+		isTRUE(all.equal(
+			as.character(tax_dat_row$acceptedNameUsageID),
+			as.character(new_row$acceptedNameUsageID)
+		))
 	) {
-		warning("No change to taxonomicStatus or acceptedNameUsageID; returning original input")
-		return(tax_dat)
+		if (quiet == FALSE) {
+			warning("No change to taxonomicStatus or acceptedNameUsageID; returning original input")
 		}
+		return(tax_dat)
+	}
 
 	# Remove selected row, add back in with modified taxonomic status
 	res <- tax_dat |>
@@ -184,6 +187,7 @@ val_if_in_dat <- function(df, col, i) {
 #' Default: TRUE if `new_status` is "accepted" (case insensitive).
 #' @param strict Logical vector of length 1; should taxonomic checks be run on the updated
 #' taxonomic database?
+#' @param quiet Logical vector of length 1; should warnings be silenced?
 #' @param args_tbl A dataframe including columns corresponding to one or more of the
 #' above arguments, except for `tax_dat`. In this case, the input taxonomic database
 #' will be modified sequentially over each row of input in `args_tbl`.
@@ -232,6 +236,7 @@ dct_change_status <- function(
 	usage_name = NULL,
 	clear_usage_id = grepl("accepted", new_status, ignore.case = TRUE),
 	strict = FALSE,
+	quiet = FALSE,
 	args_tbl = NULL) {
 	# If input is args_tbl, loop over tax_dat, using the previous output of each
 	# iteration as input into the next iteration
@@ -265,6 +270,7 @@ dct_change_status <- function(
 		usage_id = usage_id,
 		usage_name = usage_name,
 		clear_usage_id = clear_usage_id,
-		strict = strict
+		strict = strict,
+		quiet = quiet
 	)
 }

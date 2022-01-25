@@ -13,6 +13,7 @@ dct_change_status(
   usage_name = NULL,
   clear_usage_id = grepl("accepted", new_status, ignore.case = TRUE),
   strict = FALSE,
+  quiet = FALSE,
   args_tbl = NULL
 )
 }
@@ -34,6 +35,8 @@ Default: TRUE if \code{new_status} is "accepted" (case insensitive).}
 
 \item{strict}{Logical vector of length 1; should taxonomic checks be run on the updated
 taxonomic database?}
+
+\item{quiet}{Logical vector of length 1; should warnings be silenced?}
 
 \item{args_tbl}{A dataframe including columns corresponding to one or more of the
 above arguments, except for \code{tax_dat}. In this case, the input taxonomic database
