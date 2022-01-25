@@ -112,8 +112,12 @@ dct_change_status_single <- function(
 
 	# Warn if update doesn't modify changes anything
 	if (
-		isTRUE(all.equal(tax_dat_row$taxonomicStatus, new_row$taxonomicStatus)) ||
-			isTRUE(all.equal(tax_dat_row$acceptedNameUsageID, new_row$acceptedNameUsageID))
+		isTRUE(all.equal(tax_dat_row$taxonomicStatus, new_row$taxonomicStatus)) &&
+			isTRUE(all.equal(
+				as.character(tax_dat_row$acceptedNameUsageID),
+				as.character(new_row$acceptedNameUsageID)
+				)
+			)
 	) {
 		warning("No change to taxonomicStatus or acceptedNameUsageID; returning original input")
 		return(tax_dat)

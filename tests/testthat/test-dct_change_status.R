@@ -17,4 +17,13 @@ test_that("attempt to update without changes returns original data", {
 		),
 		"No change to taxonomicStatus or acceptedNameUsageID; returning original input"
 	)
+	expect_warning(
+		dct_change_status(
+			dct_filmies,
+			sci_name = "Trichomanes crassum Copel.",
+			usage_id = "54115097",
+			new_status = "synonym"
+		),
+		"No change to taxonomicStatus or acceptedNameUsageID; returning original input"
+	)
 })
