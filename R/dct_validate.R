@@ -53,22 +53,24 @@ dct_validate <- function(
 			isTRUE(check_taxon_id),
 			msg = "`check_mapping` requires `check_taxon_id` to be TRUE")
 
-		# Split dataset into "target" (no acceptedNameUsageID) and "query"
-		# (acceptedNameUsageID is present)
-		tax_dat_target <-
-			tax_dat |>
-			dplyr::filter(is.na(acceptedNameUsageID) | acceptedNameUsageID == "")
+		if ("acceptedNameUsageID" %in% colnames(tax_dat)) {
+			# Split dataset into "target" (no acceptedNameUsageID) and "query"
+			# (acceptedNameUsageID is present)
+			tax_dat_target <-
+				tax_dat |>
+				dplyr::filter(is.na(acceptedNameUsageID) | acceptedNameUsageID == "")
 
-		tax_dat_query <-
-			dplyr::anti_join(tax_dat, tax_dat_target, by = "taxonID")
+			tax_dat_query <-
+				dplyr::anti_join(tax_dat, tax_dat_target, by = "taxonID")
 
-		# All names should map
-		tax_dat_mapping_check <-
-			dplyr::anti_join(tax_dat_query, tax_dat_target, by = c(acceptedNameUsageID = "taxonID"))
+			# All names should map
+			tax_dat_mapping_check <-
+				dplyr::anti_join(tax_dat_query, tax_dat_target, by = c(acceptedNameUsageID = "taxonID"))
 
-		assertthat::assert_that(
-			nrow(tax_dat_mapping_check) == 0,
-			msg = "`check_mapping` failed. At least one `acceptedNameUsageID` value does not map to `taxonID` of an existing name")
+			assertthat::assert_that(
+				nrow(tax_dat_mapping_check) == 0,
+				msg = "`check_mapping` failed. At least one `acceptedNameUsageID` value does not map to `taxonID` of an existing name")
+		}
 	}
 
 	# Check that all names have either accepted or synonym
@@ -78,28 +80,30 @@ dct_validate <- function(
 			isTRUE(check_taxon_id),
 			msg = "`check_taxonomic_status` requires `check_taxon_id` to be TRUE")
 
-		# Separate accepted names and synonyms
-		tax_dat_accepted <-
-			tax_dat |>
-			dplyr::filter(stringr::str_detect(taxonomicStatus, stringr::fixed("accepted", ignore_case = TRUE)))
+		if ("taxonomicStatus" %in% colnames(tax_dat)) {
+			# Separate accepted names and synonyms
+			tax_dat_accepted <-
+				tax_dat |>
+				dplyr::filter(stringr::str_detect(taxonomicStatus, stringr::fixed("accepted", ignore_case = TRUE)))
 
-		tax_dat_synonyms <-
-			tax_dat |>
-			dplyr::filter(stringr::str_detect(taxonomicStatus, stringr::fixed("synonym", ignore_case = TRUE)))
+			tax_dat_synonyms <-
+				tax_dat |>
+				dplyr::filter(stringr::str_detect(taxonomicStatus, stringr::fixed("synonym", ignore_case = TRUE)))
 
-		# Make sure all accepted names and synonyms are accounted for
-		tax_dat_accepted_check <-
-			dplyr::bind_rows(tax_dat_accepted, tax_dat_synonyms) |>
-			dplyr::anti_join(tax_dat, by = "taxonID")
+			# Make sure all accepted names and synonyms are accounted for
+			tax_dat_accepted_check <-
+				dplyr::bind_rows(tax_dat_accepted, tax_dat_synonyms) |>
+				dplyr::anti_join(tax_dat, by = "taxonID")
 
-		assertthat::assert_that(
-			nrow(tax_dat_accepted_check) == 0,
-			msg = "`check_taxonomic_status` failed. At least one name does not have the `taxonomicStatus` as either an accepted name or a synonym")
+			assertthat::assert_that(
+				nrow(tax_dat_accepted_check) == 0,
+				msg = "`check_taxonomic_status` failed. At least one name does not have the `taxonomicStatus` as either an accepted name or a synonym")
+		}
 	}
 
 	# Check that accepted names and synonyms are distinct
 	if (isTRUE(check_acc_syn_diff)) {
-
+		if ("taxonomicStatus" %in% colnames(tax_dat)) {
 		assertthat::assert_that(
 			isTRUE(check_taxonomic_status),
 			msg = "`check_acc_syn_diff` requires `check_taxonomic_status` to be TRUE")
@@ -111,6 +115,7 @@ dct_validate <- function(
 		assertthat::assert_that(
 			nrow(tax_dat_no_overlap_check) == 0,
 			msg = "`check_acc_syn_diff` failed. Some scientific names appear in both accepted names and synonyms")
+		}
 	}
 
 	# Check that column names are valid
