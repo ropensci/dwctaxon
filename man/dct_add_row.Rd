@@ -4,7 +4,7 @@
 \alias{dct_add_row}
 \title{Add one entry to a taxonomic database}
 \usage{
-dct_add_row(tax_dat, taxon_id = NULL, sci_name, strict = TRUE, ...)
+dct_add_row(tax_dat, taxon_id = NULL, sci_name, strict = FALSE, ...)
 }
 \arguments{
 \item{tax_dat}{Dataframe; taxonomic database in Darwin Core format}
@@ -35,6 +35,7 @@ tibble::tibble(
 dct_add_row(
   sci_name = "Foogenus barspecies var. bla",
   parentNameUsageID = "123",
-  nameAccordingTo = "me"
+  nameAccordingTo = "me",
+  strict = TRUE
 )
 }

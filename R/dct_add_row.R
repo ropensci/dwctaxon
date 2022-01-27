@@ -19,12 +19,13 @@
 #' dct_add_row(
 #'   sci_name = "Foogenus barspecies var. bla",
 #'   parentNameUsageID = "123",
-#'   nameAccordingTo = "me"
+#'   nameAccordingTo = "me",
+#'   strict = TRUE
 #' )
 #' @autoglobal
 #' @export
 dct_add_row <- function(
-	tax_dat, taxon_id = NULL, sci_name, strict = TRUE, ...) {
+	tax_dat, taxon_id = NULL, sci_name, strict = FALSE, ...) {
 
 	# Check input
 	assertthat::assert_that(assertthat::is.string(sci_name))
