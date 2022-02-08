@@ -145,36 +145,45 @@ Bad `scientificName`: {bad_taxon_species}")
 	# Check that accepted names and synonyms are distinct
 	if (isTRUE(check_acc_syn_diff)) {
 		if ("taxonomicStatus" %in% colnames(tax_dat)) {
-			assertthat::assert_that(
-				isTRUE(check_taxonomic_status),
-				msg = "`check_acc_syn_diff` requires `check_taxonomic_status` to be TRUE")
 
-			tax_dat_no_overlap_check <-
-				tax_dat_accepted |>
-				dplyr::inner_join(tax_dat_synonyms, by = "scientificName")
+			# Separate accepted names and synonyms
+			tax_dat_accepted <-
+				tax_dat |>
+				dplyr::filter(stringr::str_detect(taxonomicStatus, stringr::fixed("accepted", ignore_case = TRUE)))
 
-			# Extract bad taxon IDs and species
-			bad_taxon_id <- ""
-			if (!is.null(tax_dat_no_overlap_check[["taxonID"]])) {
-				bad_taxon_id <- paste(tax_dat_no_overlap_check$taxonID, sep = ", ")
-			}
+			tax_dat_synonyms <-
+				tax_dat |>
+				dplyr::filter(stringr::str_detect(taxonomicStatus, stringr::fixed("synonym", ignore_case = TRUE)))
 
-			bad_taxon_species <- ""
-			if (!is.null(tax_dat_no_overlap_check[["scientificName"]])) {
-				bad_taxon_species <- paste(
-					tax_dat_no_overlap_check$scientificName, sep = ", ")
-			}
+			if (nrow(tax_dat_accepted) > 0 && nrow(tax_dat_synonyms) > 0) {
 
-			assertthat::assert_that(
-				nrow(tax_dat_no_overlap_check) == 0,
-				msg =
-					glue::glue(
-						"`check_acc_syn_diff` failed.
+				tax_dat_no_overlap_check <-
+					tax_dat_accepted |>
+					dplyr::inner_join(tax_dat_synonyms, by = "scientificName")
+
+				# Extract bad taxon IDs and species
+				bad_taxon_id <- ""
+				if (!is.null(tax_dat_no_overlap_check[["taxonID"]])) {
+					bad_taxon_id <- paste(tax_dat_no_overlap_check$taxonID, sep = ", ")
+				}
+
+				bad_taxon_species <- ""
+				if (!is.null(tax_dat_no_overlap_check[["scientificName"]])) {
+					bad_taxon_species <- paste(
+						tax_dat_no_overlap_check$scientificName, sep = ", ")
+				}
+
+				assertthat::assert_that(
+					nrow(tax_dat_no_overlap_check) == 0,
+					msg =
+						glue::glue(
+							"`check_acc_syn_diff` failed.
 `taxonID`(s) detected whose `taxonomicStatus` scientific names appear in both
 accepted names and synonyms
 Bad `taxonID`: {bad_taxon_id}
 Bad `scientificName`: {bad_taxon_species}")
-			)
+				)
+			}
 		}
 	}
 
