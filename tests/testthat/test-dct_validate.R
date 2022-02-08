@@ -14,7 +14,7 @@ test_that("validation of mapping works", {
 		~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
 		"1", NA, "accepted", "Species foo",
 		"2", "1", "synoWHAT", "Species bar",
-		"3", "1", "synonym", "Species bat")
+		"3", "1", "synoWHO", "Species bat")
 	expect_error(
 		dct_validate(bad_dat_2),
 		"`check_taxonomic_status` failed"

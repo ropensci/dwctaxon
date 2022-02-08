@@ -70,13 +70,13 @@ dct_validate <- function(
 			# Extract bad taxon IDs and species
 			bad_taxon_id <- ""
 			if (!is.null(tax_dat_mapping_check[["taxonID"]])) {
-				bad_taxon_id <- paste(tax_dat_mapping_check$taxonID, sep = ", ")
+				bad_taxon_id <- paste(tax_dat_mapping_check$taxonID, collapse = ", ")
 			}
 
 			bad_taxon_species <- ""
 			if (!is.null(tax_dat_mapping_check[["scientificName"]])) {
 				bad_taxon_species <- paste(
-					tax_dat_mapping_check$scientificName, sep = ", ")
+					tax_dat_mapping_check$scientificName, collapse = ", ")
 			}
 
 			assertthat::assert_that(
@@ -121,13 +121,13 @@ Bad `scientificName`: {bad_taxon_species}")
 			# Extract bad taxon IDs and species
 			bad_taxon_id <- ""
 			if (!is.null(tax_dat_accepted_check[["taxonID"]])) {
-				bad_taxon_id <- paste(tax_dat_accepted_check$taxonID, sep = ", ")
+				bad_taxon_id <- paste(tax_dat_accepted_check$taxonID, collapse = ", ")
 			}
 
 			bad_taxon_species <- ""
 			if (!is.null(tax_dat_accepted_check[["scientificName"]])) {
 				bad_taxon_species <- paste(
-					tax_dat_accepted_check$scientificName, sep = ", ")
+					tax_dat_accepted_check$scientificName, collapse = ", ")
 			}
 
 			assertthat::assert_that(
@@ -164,13 +164,13 @@ Bad `scientificName`: {bad_taxon_species}")
 				# Extract bad taxon IDs and species
 				bad_taxon_id <- ""
 				if (!is.null(tax_dat_no_overlap_check[["taxonID"]])) {
-					bad_taxon_id <- paste(tax_dat_no_overlap_check$taxonID, sep = ", ")
+					bad_taxon_id <- paste(tax_dat_no_overlap_check$taxonID, collapse = ", ")
 				}
 
 				bad_taxon_species <- ""
 				if (!is.null(tax_dat_no_overlap_check[["scientificName"]])) {
 					bad_taxon_species <- paste(
-						tax_dat_no_overlap_check$scientificName, sep = ", ")
+						tax_dat_no_overlap_check$scientificName, collapse = ", ")
 				}
 
 				assertthat::assert_that(
