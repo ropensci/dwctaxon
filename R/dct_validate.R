@@ -67,9 +67,28 @@ dct_validate <- function(
 			tax_dat_mapping_check <-
 				dplyr::anti_join(tax_dat_query, tax_dat_target, by = c(acceptedNameUsageID = "taxonID"))
 
+			# Extract bad taxon IDs and species
+			bad_taxon_id <- ""
+			if (!is.null(tax_dat_mapping_check[["taxonID"]])) {
+				bad_taxon_id <- paste(tax_dat_mapping_check$taxonID, sep = ", ")
+			}
+
+			bad_taxon_species <- ""
+			if (!is.null(tax_dat_mapping_check[["scientificName"]])) {
+				bad_taxon_species <- paste(
+					tax_dat_mapping_check$scientificName, sep = ", ")
+			}
+
 			assertthat::assert_that(
 				nrow(tax_dat_mapping_check) == 0,
-				msg = "`check_mapping` failed. At least one `acceptedNameUsageID` value does not map to `taxonID` of an existing name")
+				msg =
+					glue::glue(
+						"`check_mapping` failed.
+`taxonID`(s) detected whose `acceptedNameUsageID` value does not map to
+`taxonID` of an existing name.
+Bad `taxonID`: {bad_taxon_id}
+Bad `scientificName`: {bad_taxon_species}")
+			)
 		}
 	}
 
@@ -90,31 +109,72 @@ dct_validate <- function(
 				tax_dat |>
 				dplyr::filter(stringr::str_detect(taxonomicStatus, stringr::fixed("synonym", ignore_case = TRUE)))
 
-			# Make sure all accepted names and synonyms are accounted for
+			# Make sure all accepted names and synonyms are accounted for:
+			# anti_join should result in zero rows
 			tax_dat_accepted_check <-
-				dplyr::bind_rows(tax_dat_accepted, tax_dat_synonyms) |>
-				dplyr::anti_join(tax_dat, by = "taxonID")
+				tax_dat |>
+				dplyr::anti_join(
+					dplyr::bind_rows(tax_dat_accepted, tax_dat_synonyms),
+					by = "taxonID"
+				)
+
+			# Extract bad taxon IDs and species
+			bad_taxon_id <- ""
+			if (!is.null(tax_dat_accepted_check[["taxonID"]])) {
+				bad_taxon_id <- paste(tax_dat_accepted_check$taxonID, sep = ", ")
+			}
+
+			bad_taxon_species <- ""
+			if (!is.null(tax_dat_accepted_check[["scientificName"]])) {
+				bad_taxon_species <- paste(
+					tax_dat_accepted_check$scientificName, sep = ", ")
+			}
 
 			assertthat::assert_that(
 				nrow(tax_dat_accepted_check) == 0,
-				msg = "`check_taxonomic_status` failed. At least one name does not have the `taxonomicStatus` as either an accepted name or a synonym")
+				msg =
+					glue::glue(
+						"`check_taxonomic_status` failed.
+`taxonID`(s) detected whose `taxonomicStatus` is neither an accepted name nor synonym
+Bad `taxonID`: {bad_taxon_id}
+Bad `scientificName`: {bad_taxon_species}")
+			)
 		}
 	}
 
 	# Check that accepted names and synonyms are distinct
 	if (isTRUE(check_acc_syn_diff)) {
 		if ("taxonomicStatus" %in% colnames(tax_dat)) {
-		assertthat::assert_that(
-			isTRUE(check_taxonomic_status),
-			msg = "`check_acc_syn_diff` requires `check_taxonomic_status` to be TRUE")
+			assertthat::assert_that(
+				isTRUE(check_taxonomic_status),
+				msg = "`check_acc_syn_diff` requires `check_taxonomic_status` to be TRUE")
 
-		tax_dat_no_overlap_check <-
-			tax_dat_accepted |>
-			dplyr::inner_join(tax_dat_synonyms, by = "scientificName")
+			tax_dat_no_overlap_check <-
+				tax_dat_accepted |>
+				dplyr::inner_join(tax_dat_synonyms, by = "scientificName")
 
-		assertthat::assert_that(
-			nrow(tax_dat_no_overlap_check) == 0,
-			msg = "`check_acc_syn_diff` failed. Some scientific names appear in both accepted names and synonyms")
+			# Extract bad taxon IDs and species
+			bad_taxon_id <- ""
+			if (!is.null(tax_dat_no_overlap_check[["taxonID"]])) {
+				bad_taxon_id <- paste(tax_dat_no_overlap_check$taxonID, sep = ", ")
+			}
+
+			bad_taxon_species <- ""
+			if (!is.null(tax_dat_no_overlap_check[["scientificName"]])) {
+				bad_taxon_species <- paste(
+					tax_dat_no_overlap_check$scientificName, sep = ", ")
+			}
+
+			assertthat::assert_that(
+				nrow(tax_dat_no_overlap_check) == 0,
+				msg =
+					glue::glue(
+						"`check_acc_syn_diff` failed.
+`taxonID`(s) detected whose `taxonomicStatus` scientific names appear in both
+accepted names and synonyms
+Bad `taxonID`: {bad_taxon_id}
+Bad `scientificName`: {bad_taxon_species}")
+			)
 		}
 	}
 
