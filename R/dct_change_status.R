@@ -255,6 +255,7 @@ dct_change_status <- function(
 				usage_name = val_if_in_dat(args_tbl, "usage_name", i),
 				clear_usage_id = val_if_in_dat(args_tbl, "clear_usage_id", i),
 				strict = val_if_in_dat(args_tbl, "strict", i),
+				quiet = quiet
 			)
 			# Only need contents of most recently modified element.
 			# Set previous to NA to save memory
