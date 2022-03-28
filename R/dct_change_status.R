@@ -58,7 +58,7 @@ dct_change_status_single <- function(
 
 	if (!is.null(taxon_id) && is.null(sci_name)) {
 		taxon_id_select <- taxon_id
-		tax_dat_row <- dplyr::filter(tax_dat, taxon_id == taxon_id_select)
+		tax_dat_row <- dplyr::filter(tax_dat, taxonID == taxon_id_select)
 	}
 
 	assertthat::assert_that(nrow(tax_dat_row) == 1,
@@ -266,6 +266,7 @@ dct_change_status <- function(
 	# Otherwise, run dct_change_status_single()
 	dct_change_status_single(
 		tax_dat,
+		taxon_id = taxon_id,
 		sci_name = sci_name,
 		new_status = new_status,
 		usage_id = usage_id,
