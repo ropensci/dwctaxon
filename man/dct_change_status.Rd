@@ -2,7 +2,7 @@
 % Please edit documentation in R/dct_change_status.R
 \name{dct_change_status}
 \alias{dct_change_status}
-\title{Change the taxonomic status of one entry in a taxonomic database}
+\title{Change the taxonomic status of data in a taxonomic database}
 \usage{
 dct_change_status(
   tax_dat,

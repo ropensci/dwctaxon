@@ -165,7 +165,7 @@ val_if_in_dat <- function(df, col, i) {
 	ifelse(col %in% colnames(df), df[[col]][[i]], NA)
 }
 
-#' Change the taxonomic status of one entry in a taxonomic database
+#' Change the taxonomic status of data in a taxonomic database
 #'
 #' Only one of `taxon_id` or `sci_name` needs to be entered. Either will
 #' work if as long as it makes a partial or full match to one row in the data.
@@ -245,10 +245,9 @@ dct_change_status <- function(
 			inherits(args_tbl, "data.frame"),
 			msg = "`args_tbl` must be of class data.frame"
 		)
-		new_dat <- list(tax_dat)
 		for (i in 1:nrow(args_tbl)) {
-			new_dat[[i + 1]] <- dct_change_status_single(
-				new_dat[[i]],
+			tax_dat <- dct_change_status_single(
+				tax_dat,
 				sci_name = val_if_in_dat(args_tbl, "sci_name", i),
 				new_status = val_if_in_dat(args_tbl, "new_status", i),
 				usage_id = val_if_in_dat(args_tbl, "usage_id", i),
@@ -257,11 +256,8 @@ dct_change_status <- function(
 				strict = val_if_in_dat(args_tbl, "strict", i),
 				quiet = quiet
 			)
-			# Only need contents of most recently modified element.
-			# Set previous to NA to save memory
-			new_dat[[i]] <- NA
 		}
-		return(new_dat[[i + 1]])
+		return(tax_dat)
 	}
 	# Otherwise, run dct_change_status_single()
 	dct_change_status_single(
