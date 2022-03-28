@@ -19,6 +19,7 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 [![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
+[![DOI](https://zenodo.org/badge/434126221.svg)](https://zenodo.org/badge/latestdoi/434126221)
 <!-- badges: end -->
 
 The goal of dwctaxon is to facilitate working with [Darwin Core Taxon data](https://dwc.tdwg.org/terms/#taxon) in R.
@@ -73,7 +74,7 @@ dct_validate(filmy_taxonomy_fixed)
 
 ```{r add-row}
 filmy_taxonomy_fixed |>
-	dct_add_row(sci_name = "Hymenophyllum dwctaxonense Nitta", tax_status = "accepted") |>
+	dct_add_row(sci_name = "Hymenophyllum dwctaxonense Nitta", taxonomicStatus = "accepted") |>
 	# The new row is added at the end. Slice to that so we can see it.
 	slice_tail(n = 1) |>
 	select(taxonID, taxonomicStatus, scientificName, modified)
@@ -97,11 +98,27 @@ All the functions in dwctaxon take a dataframe as their first argument, so they 
 filmy_taxonomy |>
 	dct_fix_format() |>
 	dct_change_status(taxon_id = "54133783", new_status = "accepted") |>
-	dct_add_row(sci_name = "Hymenophyllum dwctaxonense Nitta", tax_status = "accepted") |>
+	dct_add_row(sci_name = "Hymenophyllum dwctaxonense Nitta", taxonomicStatus = "accepted") |>
 	dct_validate()
 ```
 
 It's often a good idea to include `dct_validate()` to make sure the modified taxonomic database is still correctly formatted.
+
+## Citing this package
+
+If you use this package, please cite it! Here is an example:
+
+    Nitta, JH (2021) dwctaxon: Tools for working with Darwin Core Taxon data in R. https://doi.org/10.5281/zenodo.6388271
+
+The example DOI above is for the overall package.
+
+Here is the latest DOI, which you should use if you are using the latest
+version of the package:
+
+[![DOI](https://zenodo.org/badge/434126221.svg)](https://zenodo.org/badge/latestdoi/434126221)
+
+You can find DOIs for older versions by viewing the "Releases" menu on
+the right.
 
 ## License
 
