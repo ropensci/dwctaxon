@@ -52,7 +52,7 @@ filmy_taxonomy
 
 `filmy_taxonomy` is a taxonomic dataset of filmy ferns included in the `taxastand` package.
 
-All functions in the `dwctaxon` package start with `dwc_`.
+All functions in the `dwctaxon` package start with `dct_`.
 
 ### Validate taxonomy
 

@@ -51,31 +51,32 @@ library(dwctaxon)
 
 filmy_taxonomy
 #> # A tibble: 2,729 × 31
-#>     taxonID identifier   datasetID datasetName acceptedNameUsa… parentNameUsage…
-#>       <dbl> <chr>            <dbl> <chr>                  <dbl>            <dbl>
-#>  1 54115096 f5950556e57…       140 World Fern…               NA         54830341
-#>  2 54133783 <NA>               140 World Fern…         54115097               NA
-#>  3 54115097 bb5e2f01763…       140 World Fern…               NA         54830341
-#>  4 54133784 <NA>               140 World Fern…         54115098               NA
-#>  5 54115098 002e095eec0…       140 World Fern…               NA         54830341
-#>  6 54133785 <NA>               140 World Fern…         54115099               NA
-#>  7 54115099 4bd27cdc1fd…       140 World Fern…               NA         54830341
-#>  8 54133786 <NA>               140 World Fern…         54115100               NA
-#>  9 54133787 <NA>               140 World Fern…         54115100               NA
-#> 10 54133788 <NA>               140 World Fern…         54115100               NA
-#> # … with 2,719 more rows, and 25 more variables: taxonomicStatus <chr>,
-#> #   taxonRank <chr>, verbatimTaxonRank <chr>, scientificName <chr>,
+#>     taxonID identifier   datas…¹ datas…² accep…³ paren…⁴ taxon…⁵ taxon…⁶ verba…⁷
+#>       <dbl> <chr>          <dbl> <chr>     <dbl>   <dbl> <chr>   <chr>   <chr>  
+#>  1 54115096 f5950556e57…     140 World … NA       5.48e7 accept… species <NA>   
+#>  2 54133783 <NA>             140 World …  5.41e7 NA      synonym species <NA>   
+#>  3 54115097 bb5e2f01763…     140 World … NA       5.48e7 accept… species <NA>   
+#>  4 54133784 <NA>             140 World …  5.41e7 NA      synonym species <NA>   
+#>  5 54115098 002e095eec0…     140 World … NA       5.48e7 accept… species <NA>   
+#>  6 54133785 <NA>             140 World …  5.41e7 NA      synonym species <NA>   
+#>  7 54115099 4bd27cdc1fd…     140 World … NA       5.48e7 provis… species <NA>   
+#>  8 54133786 <NA>             140 World …  5.41e7 NA      synonym species <NA>   
+#>  9 54133787 <NA>             140 World …  5.41e7 NA      synonym species <NA>   
+#> 10 54133788 <NA>             140 World …  5.41e7 NA      synonym species <NA>   
+#> # … with 2,719 more rows, 22 more variables: scientificName <chr>,
 #> #   kingdom <chr>, phylum <chr>, class <chr>, order <chr>, superfamily <lgl>,
 #> #   family <chr>, genericName <chr>, genus <chr>, subgenus <lgl>,
 #> #   specificEpithet <chr>, infraspecificEpithet <chr>,
 #> #   scientificNameAuthorship <chr>, source <lgl>, namePublishedIn <lgl>,
-#> #   nameAccordingTo <chr>, modified <chr>, description <chr>, …
+#> #   nameAccordingTo <chr>, modified <chr>, description <chr>,
+#> #   taxonConceptID <lgl>, scientificNameID <chr>, references <chr>, …
+#> # ℹ Use `print(n = ...)` to see more rows, and `colnames()` to see all variable names
 ```
 
 `filmy_taxonomy` is a taxonomic dataset of filmy ferns included in the
 `taxastand` package.
 
-All functions in the `dwctaxon` package start with `dwc_`.
+All functions in the `dwctaxon` package start with `dct_`.
 
 ### Validate taxonomy
 
@@ -101,25 +102,26 @@ filmy_taxonomy_fixed <- dct_fix_format(filmy_taxonomy)
 # Now the validation passes
 dct_validate(filmy_taxonomy_fixed)
 #> # A tibble: 2,729 × 26
-#>    taxonID  datasetID datasetName              acceptedNameUsa… parentNameUsage…
-#>    <chr>    <chr>     <chr>                    <chr>            <chr>           
-#>  1 54115096 140       World Ferns in Species … <NA>             54830341        
-#>  2 54133783 140       World Ferns in Species … 54115097         <NA>            
-#>  3 54115097 140       World Ferns in Species … <NA>             54830341        
-#>  4 54133784 140       World Ferns in Species … 54115098         <NA>            
-#>  5 54115098 140       World Ferns in Species … <NA>             54830341        
-#>  6 54133785 140       World Ferns in Species … 54115099         <NA>            
-#>  7 54115099 140       World Ferns in Species … <NA>             54830341        
-#>  8 54133786 140       World Ferns in Species … 54115100         <NA>            
-#>  9 54133787 140       World Ferns in Species … 54115100         <NA>            
-#> 10 54133788 140       World Ferns in Species … 54115100         <NA>            
-#> # … with 2,719 more rows, and 21 more variables: taxonomicStatus <chr>,
-#> #   taxonRank <chr>, verbatimTaxonRank <chr>, scientificName <chr>,
-#> #   kingdom <chr>, phylum <chr>, class <chr>, order <chr>, family <chr>,
-#> #   genericName <chr>, genus <chr>, subgenus <chr>, specificEpithet <chr>,
-#> #   infraspecificEpithet <chr>, scientificNameAuthorship <chr>,
-#> #   namePublishedIn <chr>, nameAccordingTo <chr>, modified <chr>,
-#> #   taxonConceptID <chr>, scientificNameID <chr>, references <chr>
+#>    taxonID  datasetID datasetN…¹ accep…² paren…³ taxon…⁴ taxon…⁵ verba…⁶ scien…⁷
+#>    <chr>    <chr>     <chr>      <chr>   <chr>   <chr>   <chr>   <chr>   <chr>  
+#>  1 54115096 140       World Fer… <NA>    548303… accept… species <NA>    Cephal…
+#>  2 54133783 140       World Fer… 541150… <NA>    synonym species <NA>    Tricho…
+#>  3 54115097 140       World Fer… <NA>    548303… accept… species <NA>    Cephal…
+#>  4 54133784 140       World Fer… 541150… <NA>    synonym species <NA>    Tricho…
+#>  5 54115098 140       World Fer… <NA>    548303… accept… species <NA>    Cephal…
+#>  6 54133785 140       World Fer… 541150… <NA>    synonym species <NA>    Tricho…
+#>  7 54115099 140       World Fer… <NA>    548303… provis… species <NA>    Cephal…
+#>  8 54133786 140       World Fer… 541151… <NA>    synonym species <NA>    Cephal…
+#>  9 54133787 140       World Fer… 541151… <NA>    synonym species <NA>    Cephal…
+#> 10 54133788 140       World Fer… 541151… <NA>    synonym species <NA>    Cephal…
+#> # … with 2,719 more rows, 17 more variables: kingdom <chr>, phylum <chr>,
+#> #   class <chr>, order <chr>, family <chr>, genericName <chr>, genus <chr>,
+#> #   subgenus <chr>, specificEpithet <chr>, infraspecificEpithet <chr>,
+#> #   scientificNameAuthorship <chr>, namePublishedIn <chr>,
+#> #   nameAccordingTo <chr>, modified <chr>, taxonConceptID <chr>,
+#> #   scientificNameID <chr>, references <chr>, and abbreviated variable names
+#> #   ¹​datasetName, ²​acceptedNameUsageID, ³​parentNameUsageID, ⁴​taxonomicStatus, …
+#> # ℹ Use `print(n = ...)` to see more rows, and `colnames()` to see all variable names
 ```
 
 ### Add rows
@@ -131,9 +133,10 @@ filmy_taxonomy_fixed |>
     slice_tail(n = 1) |>
     select(taxonID, taxonomicStatus, scientificName, modified)
 #> # A tibble: 1 × 4
-#>   taxonID                          taxonomicStatus scientificName       modified
-#>   <chr>                            <chr>           <chr>                <chr>   
-#> 1 193e2011c8ace0ed138af91f41a335cc accepted        Hymenophyllum dwcta… 2022-03…
+#>   taxonID                          taxonomicStatus scientificName        modif…¹
+#>   <chr>                            <chr>           <chr>                 <chr>  
+#> 1 193e2011c8ace0ed138af91f41a335cc accepted        Hymenophyllum dwctax… 2022-0…
+#> # … with abbreviated variable name ¹​modified
 ```
 
 ### Change status
@@ -148,7 +151,7 @@ filmy_taxonomy_fixed |>
 #>   taxonID  taxonomicStatus scientificName                modified           
 #>   <chr>    <chr>           <chr>                         <chr>              
 #> 1 54115096 accepted name   Cephalomanes atrovirens Presl Nov 2018           
-#> 2 54133783 accepted        Trichomanes crassum Copel.    2022-03-28 13:37:56
+#> 2 54133783 accepted        Trichomanes crassum Copel.    2022-08-11 15:55:10
 ```
 
 ### Piping
@@ -171,25 +174,26 @@ filmy_taxonomy |>
 #> Coercing column namePublishedIn from logical to character
 #> Coercing column taxonConceptID from logical to character
 #> # A tibble: 2,730 × 26
-#>    taxonID  datasetID datasetName              acceptedNameUsa… parentNameUsage…
-#>    <chr>    <chr>     <chr>                    <chr>            <chr>           
-#>  1 54115096 140       World Ferns in Species … <NA>             54830341        
-#>  2 54133783 140       World Ferns in Species … <NA>             <NA>            
-#>  3 54115097 140       World Ferns in Species … <NA>             54830341        
-#>  4 54133784 140       World Ferns in Species … 54115098         <NA>            
-#>  5 54115098 140       World Ferns in Species … <NA>             54830341        
-#>  6 54133785 140       World Ferns in Species … 54115099         <NA>            
-#>  7 54115099 140       World Ferns in Species … <NA>             54830341        
-#>  8 54133786 140       World Ferns in Species … 54115100         <NA>            
-#>  9 54133787 140       World Ferns in Species … 54115100         <NA>            
-#> 10 54133788 140       World Ferns in Species … 54115100         <NA>            
-#> # … with 2,720 more rows, and 21 more variables: taxonomicStatus <chr>,
-#> #   taxonRank <chr>, verbatimTaxonRank <chr>, scientificName <chr>,
-#> #   kingdom <chr>, phylum <chr>, class <chr>, order <chr>, family <chr>,
-#> #   genericName <chr>, genus <chr>, subgenus <chr>, specificEpithet <chr>,
-#> #   infraspecificEpithet <chr>, scientificNameAuthorship <chr>,
-#> #   namePublishedIn <chr>, nameAccordingTo <chr>, modified <chr>,
-#> #   taxonConceptID <chr>, scientificNameID <chr>, references <chr>
+#>    taxonID  datasetID datasetN…¹ accep…² paren…³ taxon…⁴ taxon…⁵ verba…⁶ scien…⁷
+#>    <chr>    <chr>     <chr>      <chr>   <chr>   <chr>   <chr>   <chr>   <chr>  
+#>  1 54115096 140       World Fer… <NA>    548303… accept… species <NA>    Cephal…
+#>  2 54133783 140       World Fer… <NA>    <NA>    accept… species <NA>    Tricho…
+#>  3 54115097 140       World Fer… <NA>    548303… accept… species <NA>    Cephal…
+#>  4 54133784 140       World Fer… 541150… <NA>    synonym species <NA>    Tricho…
+#>  5 54115098 140       World Fer… <NA>    548303… accept… species <NA>    Cephal…
+#>  6 54133785 140       World Fer… 541150… <NA>    synonym species <NA>    Tricho…
+#>  7 54115099 140       World Fer… <NA>    548303… provis… species <NA>    Cephal…
+#>  8 54133786 140       World Fer… 541151… <NA>    synonym species <NA>    Cephal…
+#>  9 54133787 140       World Fer… 541151… <NA>    synonym species <NA>    Cephal…
+#> 10 54133788 140       World Fer… 541151… <NA>    synonym species <NA>    Cephal…
+#> # … with 2,720 more rows, 17 more variables: kingdom <chr>, phylum <chr>,
+#> #   class <chr>, order <chr>, family <chr>, genericName <chr>, genus <chr>,
+#> #   subgenus <chr>, specificEpithet <chr>, infraspecificEpithet <chr>,
+#> #   scientificNameAuthorship <chr>, namePublishedIn <chr>,
+#> #   nameAccordingTo <chr>, modified <chr>, taxonConceptID <chr>,
+#> #   scientificNameID <chr>, references <chr>, and abbreviated variable names
+#> #   ¹​datasetName, ²​acceptedNameUsageID, ³​parentNameUsageID, ⁴​taxonomicStatus, …
+#> # ℹ Use `print(n = ...)` to see more rows, and `colnames()` to see all variable names
 ```
 
 It’s often a good idea to include `dct_validate()` to make sure the
