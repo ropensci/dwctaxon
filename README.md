@@ -24,7 +24,15 @@ for taxonomic name resolution, for example with the
 
 ## Installation
 
-You can install dwctaxon from [GitHub](https://github.com/) with:
+`dwctaxon` can be installed from
+[r-universe](https://joelnitta.r-universe.dev) or
+[github](https://github.com/joelnitta).
+
+``` r
+install.packages("dwctaxon", repos = 'https://joelnitta.r-universe.dev')
+```
+
+OR
 
 ``` r
 # install.packages("remotes")
@@ -149,7 +157,7 @@ filmy_taxonomy_fixed |>
 #>   taxonID  taxonomicStatus scientificName                modified           
 #>   <chr>    <chr>           <chr>                         <chr>              
 #> 1 54115096 accepted name   Cephalomanes atrovirens Presl Nov 2018           
-#> 2 54133783 accepted        Trichomanes crassum Copel.    2022-09-20 14:52:14
+#> 2 54133783 accepted        Trichomanes crassum Copel.    2022-09-20 15:36:55
 ```
 
 ### Piping

@@ -30,12 +30,19 @@ The primary motivation for validation is so that the dataset can be used for tax
 
 ## Installation
 
-You can install dwctaxon from [GitHub](https://github.com/) with:
+`dwctaxon` can be installed from [r-universe](https://joelnitta.r-universe.dev) or [github](https://github.com/joelnitta).
+
+``` r
+install.packages("dwctaxon", repos = 'https://joelnitta.r-universe.dev')
+```
+
+OR
 
 ``` r
 # install.packages("remotes")
 remotes::install_github("joelnitta/dwctaxon")
 ```
+
 
 ## Usage
 
