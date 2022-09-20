@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# dwctaxon
+# dwctaxon <img src='man/figures/logo.png' align="right" height="150"/>
 
 <!-- badges: start -->
 
@@ -70,7 +70,6 @@ filmy_taxonomy
 #> #   scientificNameAuthorship <chr>, source <lgl>, namePublishedIn <lgl>,
 #> #   nameAccordingTo <chr>, modified <chr>, description <chr>,
 #> #   taxonConceptID <lgl>, scientificNameID <chr>, references <chr>, …
-#> # ℹ Use `print(n = ...)` to see more rows, and `colnames()` to see all variable names
 ```
 
 `filmy_taxonomy` is a taxonomic dataset of filmy ferns included in the
@@ -121,7 +120,6 @@ dct_validate(filmy_taxonomy_fixed)
 #> #   nameAccordingTo <chr>, modified <chr>, taxonConceptID <chr>,
 #> #   scientificNameID <chr>, references <chr>, and abbreviated variable names
 #> #   ¹​datasetName, ²​acceptedNameUsageID, ³​parentNameUsageID, ⁴​taxonomicStatus, …
-#> # ℹ Use `print(n = ...)` to see more rows, and `colnames()` to see all variable names
 ```
 
 ### Add rows
@@ -151,7 +149,7 @@ filmy_taxonomy_fixed |>
 #>   taxonID  taxonomicStatus scientificName                modified           
 #>   <chr>    <chr>           <chr>                         <chr>              
 #> 1 54115096 accepted name   Cephalomanes atrovirens Presl Nov 2018           
-#> 2 54133783 accepted        Trichomanes crassum Copel.    2022-08-11 15:55:10
+#> 2 54133783 accepted        Trichomanes crassum Copel.    2022-09-20 14:52:14
 ```
 
 ### Piping
@@ -193,7 +191,6 @@ filmy_taxonomy |>
 #> #   nameAccordingTo <chr>, modified <chr>, taxonConceptID <chr>,
 #> #   scientificNameID <chr>, references <chr>, and abbreviated variable names
 #> #   ¹​datasetName, ²​acceptedNameUsageID, ³​parentNameUsageID, ⁴​taxonomicStatus, …
-#> # ℹ Use `print(n = ...)` to see more rows, and `colnames()` to see all variable names
 ```
 
 It’s often a good idea to include `dct_validate()` to make sure the
