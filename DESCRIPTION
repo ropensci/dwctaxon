@@ -36,3 +36,6 @@ Remotes:
 Depends: 
     R (>= 2.10)
 Config/testthat/edition: 3
+URL: https://joelnitta.github.io/dwctaxon/,
+    https://github.com/joelnitta/dwctaxon
+BugReports: https://github.com/ropensci/canaper/issues
