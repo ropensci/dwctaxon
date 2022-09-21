@@ -8,6 +8,7 @@
 #' \url{https://stackoverflow.com/questions/13673894/suppress-nas-in-paste}
 #' @param ... Strings to paste
 #' @param sep Character used to separate pasted strings
+#' @noRd
 paste3 <- function(..., sep=" ") {
 	L <- list(...)
 	L <- lapply(L,function(x) {x[is.na(x)] <- ""; x})
