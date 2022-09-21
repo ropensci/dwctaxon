@@ -4,3 +4,8 @@
 ^README\.Rmd$
 ^data-raw$
 ^working$
+^codemeta\.json$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^\.github$

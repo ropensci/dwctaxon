@@ -1,0 +1,26 @@
+url: https://joelnitta.github.io/dwctaxon/
+template:
+  bootstrap: 5
+  params:
+    bootswatch: lumen
+home:
+  title: Tools for Working with Darwin Core Taxon Data in R
+  description: |
+    Provides functions to create, manipulate, and validate taxonomic 
+    data in compliance with Darwin Core standards in R.
+authors:
+  Joel Nitta:
+    href: https://joelnitta.com
+reference:
+- title: Modify taxonomic names
+- contents:
+  - dct_add_row
+  - dct_change_status
+  - dct_fix_format
+- title: Validate taxonomic names
+- contents:
+  - dct_validate
+- title: Datasets
+- contents:
+  - dct_filmies
+  - dct_terms
