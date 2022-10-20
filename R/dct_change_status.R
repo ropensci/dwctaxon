@@ -21,135 +21,139 @@
 #' @return Dataframe; taxonomic database in Darwin Core format
 #' @autoglobal
 #' @noRd
-dct_change_status_single <- function(
-	tax_dat, taxon_id = NULL,
-	sci_name = NULL, new_status,
-	usage_id = NULL,
-	usage_name = NULL,
-	clear_usage_id = grepl("accepted", new_status, ignore.case = TRUE),
-	strict = FALSE,
-	quiet = FALSE) {
+dct_change_status_single <- function(tax_dat, taxon_id = NULL,
+                                     sci_name = NULL, new_status,
+                                     usage_id = NULL,
+                                     usage_name = NULL,
+                                     clear_usage_id = grepl("accepted", new_status, ignore.case = TRUE),
+                                     strict = FALSE,
+                                     quiet = FALSE) {
 
-	# Convert any NA input to NULL
-	if (!is.null(taxon_id) && is.na(taxon_id)) taxon_id <- NULL
-	if (!is.null(sci_name) && is.na(sci_name)) sci_name <- NULL
-	if (!is.null(usage_id) && is.na(usage_id)) usage_id <- NULL
-	if (!is.null(usage_name) && is.na(usage_name)) usage_name <- NULL
-	# Convert missing logicals to FALSE
-	if (is.null(strict) || is.na(strict)) strict <- FALSE
-	if (is.null(clear_usage_id) || is.na(clear_usage_id)) clear_usage_id <- FALSE
+  # Convert any NA input to NULL
+  if (!is.null(taxon_id) && is.na(taxon_id)) taxon_id <- NULL
+  if (!is.null(sci_name) && is.na(sci_name)) sci_name <- NULL
+  if (!is.null(usage_id) && is.na(usage_id)) usage_id <- NULL
+  if (!is.null(usage_name) && is.na(usage_name)) usage_name <- NULL
+  # Convert missing logicals to FALSE
+  if (is.null(strict) || is.na(strict)) strict <- FALSE
+  if (is.null(clear_usage_id) || is.na(clear_usage_id)) clear_usage_id <- FALSE
 
-	# Make sure that all taxonID are non-missing, unique, char vec
-	assertr::assert(tax_dat, assertr::not_na, taxonID, success_fun = assertr::success_logical)
-	assertr::assert(tax_dat, assertr::is_uniq, taxonID, success_fun = assertr::success_logical)
-	assertr::assert(tax_dat, is.character, taxonID, success_fun = assertr::success_logical)
+  # Make sure that all taxonID are non-missing, unique, char vec
+  assertr::assert(tax_dat, assertr::not_na, taxonID, success_fun = assertr::success_logical)
+  assertr::assert(tax_dat, assertr::is_uniq, taxonID, success_fun = assertr::success_logical)
+  assertr::assert(tax_dat, is.character, taxonID, success_fun = assertr::success_logical)
 
-	assertthat::assert_that(assertthat::is.string(new_status))
-	assertthat::assert_that(
-		sum(is.null(taxon_id), is.null(sci_name)) == 1,
-		msg = "Only one of `sci_name` or `taxon_id` should be NULL, not both"
-	)
+  assertthat::assert_that(assertthat::is.string(new_status))
+  assertthat::assert_that(
+    sum(is.null(taxon_id), is.null(sci_name)) == 1,
+    msg = "Only one of `sci_name` or `taxon_id` should be NULL, not both"
+  )
 
-	# Isolate row to change
-	if (!is.null(sci_name) && is.null(taxon_id)) {
-		sci_name_select <- sci_name
-		tax_dat_row <- dplyr::filter(tax_dat, scientificName == sci_name_select)
-	}
+  # Isolate row to change
+  if (!is.null(sci_name) && is.null(taxon_id)) {
+    sci_name_select <- sci_name
+    tax_dat_row <- dplyr::filter(tax_dat, scientificName == sci_name_select)
+  }
 
-	if (!is.null(taxon_id) && is.null(sci_name)) {
-		taxon_id_select <- taxon_id
-		tax_dat_row <- dplyr::filter(tax_dat, taxonID == taxon_id_select)
-	}
+  if (!is.null(taxon_id) && is.null(sci_name)) {
+    taxon_id_select <- taxon_id
+    tax_dat_row <- dplyr::filter(tax_dat, taxonID == taxon_id_select)
+  }
 
-	assertthat::assert_that(nrow(tax_dat_row) == 1,
-													msg = "Not exactly one row selected")
+  assertthat::assert_that(nrow(tax_dat_row) == 1,
+    msg = "Not exactly one row selected"
+  )
 
-	# For synonyms, map to acceptedNameUsageID:
-	acceptedNameUsageID_matched <- NA
-	if (!is.null(usage_name) && is.null(usage_id) && clear_usage_id == FALSE) {
-		assertthat::assert_that(
-			usage_name %in% tax_dat$scientificName,
-			msg = "`usage_name` not detected in `tax_dat$scientificName`")
-		acceptedNameUsageID_matched <- tax_dat$taxonID[tax_dat$scientificName == usage_name]
-		assertthat::assert_that(
-			length(acceptedNameUsageID_matched) == 1,
-			msg = "Not exactly one scientific name matches `usage_name`")
-	}
+  # For synonyms, map to acceptedNameUsageID:
+  acceptedNameUsageID_matched <- NA
+  if (!is.null(usage_name) && is.null(usage_id) && clear_usage_id == FALSE) {
+    assertthat::assert_that(
+      usage_name %in% tax_dat$scientificName,
+      msg = "`usage_name` not detected in `tax_dat$scientificName`"
+    )
+    acceptedNameUsageID_matched <- tax_dat$taxonID[tax_dat$scientificName == usage_name]
+    assertthat::assert_that(
+      length(acceptedNameUsageID_matched) == 1,
+      msg = "Not exactly one scientific name matches `usage_name`"
+    )
+  }
 
-	if (!is.null(usage_id) && is.null(usage_name) && clear_usage_id == FALSE) {
-		assertthat::assert_that(
-			usage_id %in% tax_dat$taxonID,
-			msg = "`usage_id` not detected in `tax_dat$taxonID`")
-		acceptedNameUsageID_matched <- tax_dat$taxonID[tax_dat$taxonID == usage_id]
-		assertthat::assert_that(
-			length(acceptedNameUsageID_matched) == 1,
-			msg = "Not exactly one taxonID matches `usage_id`")
-	}
+  if (!is.null(usage_id) && is.null(usage_name) && clear_usage_id == FALSE) {
+    assertthat::assert_that(
+      usage_id %in% tax_dat$taxonID,
+      msg = "`usage_id` not detected in `tax_dat$taxonID`"
+    )
+    acceptedNameUsageID_matched <- tax_dat$taxonID[tax_dat$taxonID == usage_id]
+    assertthat::assert_that(
+      length(acceptedNameUsageID_matched) == 1,
+      msg = "Not exactly one taxonID matches `usage_id`"
+    )
+  }
 
-	assertthat::assert_that(
-		sum(!is.null(usage_id), !is.null(usage_name)) != 2,
-		msg = "Must use either `usage_id` or `usage_name`, not both")
+  assertthat::assert_that(
+    sum(!is.null(usage_id), !is.null(usage_name)) != 2,
+    msg = "Must use either `usage_id` or `usage_name`, not both"
+  )
 
-	new_row <- dplyr::mutate(
-		tax_dat_row,
-		taxonomicStatus = new_status,
-		acceptedNameUsageID = acceptedNameUsageID_matched,
-		modified = as.character(Sys.time())
-	)
+  new_row <- dplyr::mutate(
+    tax_dat_row,
+    taxonomicStatus = new_status,
+    acceptedNameUsageID = acceptedNameUsageID_matched,
+    modified = as.character(Sys.time())
+  )
 
-	# For change to synonym, check if other names will be affected
-	new_row_other <- NULL
-	if (!is.na(acceptedNameUsageID_matched)) {
-		new_row_other <- dplyr::filter(
-			tax_dat, acceptedNameUsageID == tax_dat_row$taxonID
-		)
-		if (nrow(new_row_other) > 0) {
-			new_row_other <- dplyr::mutate(
-				new_row_other,
-				acceptedNameUsageID = acceptedNameUsageID_matched,
-				modified = as.character(Sys.time())
-			)
-		}
-	}
+  # For change to synonym, check if other names will be affected
+  new_row_other <- NULL
+  if (!is.na(acceptedNameUsageID_matched)) {
+    new_row_other <- dplyr::filter(
+      tax_dat, acceptedNameUsageID == tax_dat_row$taxonID
+    )
+    if (nrow(new_row_other) > 0) {
+      new_row_other <- dplyr::mutate(
+        new_row_other,
+        acceptedNameUsageID = acceptedNameUsageID_matched,
+        modified = as.character(Sys.time())
+      )
+    }
+  }
 
-	# Return input if update doesn't modify changes anything
-	if (
-		isTRUE(all.equal(tax_dat_row$taxonomicStatus, new_row$taxonomicStatus)) &&
-		isTRUE(all.equal(
-			as.character(tax_dat_row$acceptedNameUsageID),
-			as.character(new_row$acceptedNameUsageID)
-		))
-	) {
-		if (quiet == FALSE) {
-			warning("No change to taxonomicStatus or acceptedNameUsageID; returning original input")
-		}
-		return(tax_dat)
-	}
+  # Return input if update doesn't modify changes anything
+  if (
+    isTRUE(all.equal(tax_dat_row$taxonomicStatus, new_row$taxonomicStatus)) &&
+      isTRUE(all.equal(
+        as.character(tax_dat_row$acceptedNameUsageID),
+        as.character(new_row$acceptedNameUsageID)
+      ))
+  ) {
+    if (quiet == FALSE) {
+      warning("No change to taxonomicStatus or acceptedNameUsageID; returning original input")
+    }
+    return(tax_dat)
+  }
 
-	# Remove selected row, add back in with modified taxonomic status
-	res <- tax_dat |>
-		dplyr::anti_join(new_row, by = "taxonID") |>
-		dplyr::bind_rows(new_row)
+  # Remove selected row, add back in with modified taxonomic status
+  res <- tax_dat |>
+    dplyr::anti_join(new_row, by = "taxonID") |>
+    dplyr::bind_rows(new_row)
 
-	# Do same for other synonyms, if present
-	if (!is.null(new_row_other)) {
-		res <-
-			res |>
-			dplyr::anti_join(new_row_other, by = "taxonID") |>
-			dplyr::bind_rows(new_row_other)
-	}
+  # Do same for other synonyms, if present
+  if (!is.null(new_row_other)) {
+    res <-
+      res |>
+      dplyr::anti_join(new_row_other, by = "taxonID") |>
+      dplyr::bind_rows(new_row_other)
+  }
 
-	# Restore original order
-	res <-
-		tax_dat |>
-		dplyr::select(taxonID) |>
-		dplyr::inner_join(res, by = "taxonID")
+  # Restore original order
+  res <-
+    tax_dat |>
+    dplyr::select(taxonID) |>
+    dplyr::inner_join(res, by = "taxonID")
 
-	# Optionally run taxonomic database checks
-	if (isTRUE(strict)) res <- dct_validate(res)
+  # Optionally run taxonomic database checks
+  if (isTRUE(strict)) res <- dct_validate(res)
 
-	res
-
+  res
 }
 
 #' Helper function to get value from a dataframe
@@ -162,7 +166,7 @@ dct_change_status_single <- function(
 #' that column exists; otherwise `NA`
 #' @noRd
 val_if_in_dat <- function(df, col, i) {
-	ifelse(col %in% colnames(df), df[[col]][[i]], NA)
+  ifelse(col %in% colnames(df), df[[col]][[i]], NA)
 }
 
 #' Change the taxonomic status of data in a taxonomic database
@@ -229,46 +233,45 @@ val_if_in_dat <- function(df, col, i) {
 #' dct_filmies |>
 #'   dct_change_status(args_tbl = updates) |>
 #'   dct_change_status(sci_name = "Trichomanes crassum Copel.", new_status = "accepted")
-dct_change_status <- function(
-	tax_dat, taxon_id = NULL,
-	sci_name = NULL, new_status,
-	usage_id = NULL,
-	usage_name = NULL,
-	clear_usage_id = grepl("accepted", new_status, ignore.case = TRUE),
-	strict = FALSE,
-	quiet = FALSE,
-	args_tbl = NULL) {
-	# If input is args_tbl, loop over tax_dat, using the previous output of each
-	# iteration as input into the next iteration
-	if (!is.null(args_tbl)) {
-		assertthat::assert_that(
-			inherits(args_tbl, "data.frame"),
-			msg = "`args_tbl` must be of class data.frame"
-		)
-		for (i in 1:nrow(args_tbl)) {
-			tax_dat <- dct_change_status_single(
-				tax_dat,
-				sci_name = val_if_in_dat(args_tbl, "sci_name", i),
-				new_status = val_if_in_dat(args_tbl, "new_status", i),
-				usage_id = val_if_in_dat(args_tbl, "usage_id", i),
-				usage_name = val_if_in_dat(args_tbl, "usage_name", i),
-				clear_usage_id = val_if_in_dat(args_tbl, "clear_usage_id", i),
-				strict = val_if_in_dat(args_tbl, "strict", i),
-				quiet = quiet
-			)
-		}
-		return(tax_dat)
-	}
-	# Otherwise, run dct_change_status_single()
-	dct_change_status_single(
-		tax_dat,
-		taxon_id = taxon_id,
-		sci_name = sci_name,
-		new_status = new_status,
-		usage_id = usage_id,
-		usage_name = usage_name,
-		clear_usage_id = clear_usage_id,
-		strict = strict,
-		quiet = quiet
-	)
+dct_change_status <- function(tax_dat, taxon_id = NULL,
+                              sci_name = NULL, new_status,
+                              usage_id = NULL,
+                              usage_name = NULL,
+                              clear_usage_id = grepl("accepted", new_status, ignore.case = TRUE),
+                              strict = FALSE,
+                              quiet = FALSE,
+                              args_tbl = NULL) {
+  # If input is args_tbl, loop over tax_dat, using the previous output of each
+  # iteration as input into the next iteration
+  if (!is.null(args_tbl)) {
+    assertthat::assert_that(
+      inherits(args_tbl, "data.frame"),
+      msg = "`args_tbl` must be of class data.frame"
+    )
+    for (i in 1:nrow(args_tbl)) {
+      tax_dat <- dct_change_status_single(
+        tax_dat,
+        sci_name = val_if_in_dat(args_tbl, "sci_name", i),
+        new_status = val_if_in_dat(args_tbl, "new_status", i),
+        usage_id = val_if_in_dat(args_tbl, "usage_id", i),
+        usage_name = val_if_in_dat(args_tbl, "usage_name", i),
+        clear_usage_id = val_if_in_dat(args_tbl, "clear_usage_id", i),
+        strict = val_if_in_dat(args_tbl, "strict", i),
+        quiet = quiet
+      )
+    }
+    return(tax_dat)
+  }
+  # Otherwise, run dct_change_status_single()
+  dct_change_status_single(
+    tax_dat,
+    taxon_id = taxon_id,
+    sci_name = sci_name,
+    new_status = new_status,
+    usage_id = usage_id,
+    usage_name = usage_name,
+    clear_usage_id = clear_usage_id,
+    strict = strict,
+    quiet = quiet
+  )
 }

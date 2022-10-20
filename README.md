@@ -134,14 +134,14 @@ dct_validate(filmy_taxonomy_fixed)
 
 ``` r
 filmy_taxonomy_fixed |>
-    dct_add_row(sci_name = "Hymenophyllum dwctaxonense Nitta", taxonomicStatus = "accepted") |>
-    # The new row is added at the end. Slice to that so we can see it.
-    slice_tail(n = 1) |>
-    select(taxonID, taxonomicStatus, scientificName, modified)
+  dct_add_row(sci_name = "Hymenophyllum dwctaxonense Nitta", taxonomicStatus = "accepted") |>
+  # The new row is added at the end. Slice to that so we can see it.
+  slice_tail(n = 1) |>
+  select(taxonID, taxonomicStatus, scientificName, modified)
 #> # A tibble: 1 × 4
 #>   taxonID                          taxonomicStatus scientificName        modif…¹
 #>   <chr>                            <chr>           <chr>                 <chr>  
-#> 1 193e2011c8ace0ed138af91f41a335cc accepted        Hymenophyllum dwctax… 2022-0…
+#> 1 193e2011c8ace0ed138af91f41a335cc accepted        Hymenophyllum dwctax… 2022-1…
 #> # … with abbreviated variable name ¹​modified
 ```
 
@@ -149,15 +149,15 @@ filmy_taxonomy_fixed |>
 
 ``` r
 filmy_taxonomy_fixed |>
-    # The modified entry is 'taxonomicStatus' of the second row. Slice to that so we can see it.
-    dct_change_status(taxon_id = "54133783", new_status = "accepted") |>
-    slice_head(n = 2) |>
-    select(taxonID, taxonomicStatus, scientificName, modified)
+  # The modified entry is 'taxonomicStatus' of the second row. Slice to that so we can see it.
+  dct_change_status(taxon_id = "54133783", new_status = "accepted") |>
+  slice_head(n = 2) |>
+  select(taxonID, taxonomicStatus, scientificName, modified)
 #> # A tibble: 2 × 4
 #>   taxonID  taxonomicStatus scientificName                modified           
 #>   <chr>    <chr>           <chr>                         <chr>              
 #> 1 54115096 accepted name   Cephalomanes atrovirens Presl Nov 2018           
-#> 2 54133783 accepted        Trichomanes crassum Copel.    2022-09-21 09:05:43
+#> 2 54133783 accepted        Trichomanes crassum Copel.    2022-10-20 16:33:10
 ```
 
 ### Piping
@@ -167,10 +167,10 @@ so they are “pipe-friendly” and can be chained together:
 
 ``` r
 filmy_taxonomy |>
-    dct_fix_format() |>
-    dct_change_status(taxon_id = "54133783", new_status = "accepted") |>
-    dct_add_row(sci_name = "Hymenophyllum dwctaxonense Nitta", taxonomicStatus = "accepted") |>
-    dct_validate()
+  dct_fix_format() |>
+  dct_change_status(taxon_id = "54133783", new_status = "accepted") |>
+  dct_add_row(sci_name = "Hymenophyllum dwctaxonense Nitta", taxonomicStatus = "accepted") |>
+  dct_validate()
 #> Dropping the following non-standard columns: identifier, superfamily, source, description, isExtinct
 #> Coercing column taxonID from numeric to character
 #> Coercing column datasetID from numeric to character

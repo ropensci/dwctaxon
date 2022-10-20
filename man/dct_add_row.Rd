@@ -32,10 +32,10 @@ tibble::tibble(
   taxonID = "123",
   scientificName = "Foogenus barspecies"
 ) |>
-dct_add_row(
-  sci_name = "Foogenus barspecies var. bla",
-  parentNameUsageID = "123",
-  nameAccordingTo = "me",
-  strict = TRUE
-)
+  dct_add_row(
+    sci_name = "Foogenus barspecies var. bla",
+    parentNameUsageID = "123",
+    nameAccordingTo = "me",
+    strict = TRUE
+  )
 }

@@ -80,20 +80,20 @@ dct_validate(filmy_taxonomy_fixed)
 
 ```{r add-row}
 filmy_taxonomy_fixed |>
-	dct_add_row(sci_name = "Hymenophyllum dwctaxonense Nitta", taxonomicStatus = "accepted") |>
-	# The new row is added at the end. Slice to that so we can see it.
-	slice_tail(n = 1) |>
-	select(taxonID, taxonomicStatus, scientificName, modified)
+  dct_add_row(sci_name = "Hymenophyllum dwctaxonense Nitta", taxonomicStatus = "accepted") |>
+  # The new row is added at the end. Slice to that so we can see it.
+  slice_tail(n = 1) |>
+  select(taxonID, taxonomicStatus, scientificName, modified)
 ```
 
 ### Change status
 
 ```{r change-status}
 filmy_taxonomy_fixed |>
-	# The modified entry is 'taxonomicStatus' of the second row. Slice to that so we can see it.
-	dct_change_status(taxon_id = "54133783", new_status = "accepted") |>
-	slice_head(n = 2) |>
-	select(taxonID, taxonomicStatus, scientificName, modified)
+  # The modified entry is 'taxonomicStatus' of the second row. Slice to that so we can see it.
+  dct_change_status(taxon_id = "54133783", new_status = "accepted") |>
+  slice_head(n = 2) |>
+  select(taxonID, taxonomicStatus, scientificName, modified)
 ```
 
 ### Piping
@@ -102,10 +102,10 @@ All the functions in dwctaxon take a dataframe as their first argument, so they 
 
 ```{r pipe}
 filmy_taxonomy |>
-	dct_fix_format() |>
-	dct_change_status(taxon_id = "54133783", new_status = "accepted") |>
-	dct_add_row(sci_name = "Hymenophyllum dwctaxonense Nitta", taxonomicStatus = "accepted") |>
-	dct_validate()
+  dct_fix_format() |>
+  dct_change_status(taxon_id = "54133783", new_status = "accepted") |>
+  dct_add_row(sci_name = "Hymenophyllum dwctaxonense Nitta", taxonomicStatus = "accepted") |>
+  dct_validate()
 ```
 
 It's often a good idea to include `dct_validate()` to make sure the modified taxonomic database is still correctly formatted.
