@@ -248,7 +248,7 @@ dct_change_status <- function(tax_dat, taxon_id = NULL,
       inherits(args_tbl, "data.frame"),
       msg = "`args_tbl` must be of class data.frame"
     )
-    for (i in 1:nrow(args_tbl)) {
+    for (i in seq_len(args_tbl)) {
       tax_dat <- dct_change_status_single(
         tax_dat,
         sci_name = val_if_in_dat(args_tbl, "sci_name", i),
