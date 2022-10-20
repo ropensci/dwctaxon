@@ -1,4 +1,26 @@
 test_that("validation of mapping works", {
+  # taxon ID (check_taxon_id)
+  bad_dat <- tibble::tribble(
+    ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
+    "1", NA, "accepted", "Species foo",
+    NA, "1", "accepted", "Species bar",
+    "3", NA, "accepted", "Species bat"
+  )
+  expect_error(
+    dct_validate(bad_dat),
+    "Column 'taxonID' violates assertion 'not_na' 1 time"
+  )
+  # duplicated taxon ID
+  bad_dat <- tibble::tribble(
+    ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
+    "1", NA, "accepted", "Species foo",
+    "3", "1", "accepted", "Species bar",
+    "3", NA, "accepted", "Species bat"
+  )
+  expect_error(
+    dct_validate(bad_dat),
+    "Column 'taxonID' violates assertion 'is_uniq' 2 times"
+  )
   # bad mapping of synonyms
   bad_dat <- tibble::tribble(
     ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
@@ -11,25 +33,25 @@ test_that("validation of mapping works", {
     "`check_mapping` failed"
   )
   # bad taxonomicStatus
-  bad_dat_2 <- tibble::tribble(
+  bad_dat <- tibble::tribble(
     ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
     "1", NA, "accepted", "Species foo",
     "2", "1", "synoWHAT", "Species bar",
     "3", "1", "synoWHO", "Species bat"
   )
   expect_error(
-    dct_validate(bad_dat_2),
+    dct_validate(bad_dat),
     "`check_taxonomic_status` failed"
   )
   # names appear in both accepted names and synonyms
-  bad_dat_3 <- tibble::tribble(
+  bad_dat <- tibble::tribble(
     ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
     "1", NA, "accepted", "Species foo",
     "2", NA, "accepted", "Species bar",
     "3", "2", "synonym", "Species foo"
   )
   expect_error(
-    dct_validate(bad_dat_3),
+    dct_validate(bad_dat),
     "`check_acc_syn_diff` failed"
   )
   # bad columns: taxonomicstatus instead of taxonomicStatus

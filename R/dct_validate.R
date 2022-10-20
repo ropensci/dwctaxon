@@ -41,12 +41,8 @@ dct_validate <- function(tax_dat,
 
   # Check for unique, non-missing taxon ID
   if (isTRUE(check_taxon_id)) {
-    assertr::assert(
-      tax_dat, assertr::is_uniq, taxonID,
-      success_fun = assertr::success_logical)
-    assertr::assert(
-      tax_dat, assertr::not_na, taxonID,
-      success_fun = assertr::success_logical)
+    assert_dat(tax_dat, assertr::not_na, taxonID)
+    assert_dat(tax_dat, assertr::is_uniq, taxonID)
   }
 
   # Check for name mapping
