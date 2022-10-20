@@ -41,8 +41,12 @@ dct_validate <- function(tax_dat,
 
   # Check for unique, non-missing taxon ID
   if (isTRUE(check_taxon_id)) {
-    assertr::assert(tax_dat, assertr::is_uniq, taxonID, success_fun = assertr::success_logical)
-    assertr::assert(tax_dat, assertr::not_na, taxonID, success_fun = assertr::success_logical)
+    assertr::assert(
+      tax_dat, assertr::is_uniq, taxonID,
+      success_fun = assertr::success_logical)
+    assertr::assert(
+      tax_dat, assertr::not_na, taxonID,
+      success_fun = assertr::success_logical)
   }
 
   # Check for name mapping
@@ -64,7 +68,9 @@ dct_validate <- function(tax_dat,
 
       # All names should map
       tax_dat_mapping_check <-
-        dplyr::anti_join(tax_dat_query, tax_dat_target, by = c(acceptedNameUsageID = "taxonID"))
+        dplyr::anti_join(
+          tax_dat_query,
+          tax_dat_target, by = c(acceptedNameUsageID = "taxonID"))
 
       # Extract bad taxon IDs and species
       bad_taxon_id <- ""
@@ -105,11 +111,19 @@ Bad `scientificName`: {bad_taxon_species}"
       # Separate accepted names and synonyms
       tax_dat_accepted <-
         tax_dat |>
-        dplyr::filter(stringr::str_detect(taxonomicStatus, stringr::fixed("accepted", ignore_case = TRUE)))
+        dplyr::filter(
+          stringr::str_detect(
+            taxonomicStatus, stringr::fixed("accepted", ignore_case = TRUE)
+          )
+        )
 
       tax_dat_synonyms <-
         tax_dat |>
-        dplyr::filter(stringr::str_detect(taxonomicStatus, stringr::fixed("synonym", ignore_case = TRUE)))
+        dplyr::filter(
+          stringr::str_detect(
+            taxonomicStatus, stringr::fixed("synonym", ignore_case = TRUE)
+          )
+        )
 
       # Make sure all accepted names and synonyms are accounted for:
       # anti_join should result in zero rows
@@ -136,14 +150,14 @@ Bad `scientificName`: {bad_taxon_species}"
 
       assertthat::assert_that(
         nrow(tax_dat_accepted_check) == 0,
-        msg =
-          glue::glue(
+        msg = glue::glue(
             "`check_taxonomic_status` failed.
-`taxonID`(s) detected whose `taxonomicStatus` is neither an accepted name nor synonym
-Bad `taxonID`: {bad_taxon_id}
-Bad `scientificName`: {bad_taxon_species}"
+             `taxonID`(s) detected whose `taxonomicStatus` is neither an \\
+             accepted name nor synonym.
+             Bad `taxonID`: {bad_taxon_id}
+             Bad `scientificName`: {bad_taxon_species}"
           )
-      )
+       )
     }
   }
 
@@ -154,11 +168,19 @@ Bad `scientificName`: {bad_taxon_species}"
       # Separate accepted names and synonyms
       tax_dat_accepted <-
         tax_dat |>
-        dplyr::filter(stringr::str_detect(taxonomicStatus, stringr::fixed("accepted", ignore_case = TRUE)))
+        dplyr::filter(
+          stringr::str_detect(
+            taxonomicStatus, stringr::fixed("accepted", ignore_case = TRUE)
+          )
+        )
 
       tax_dat_synonyms <-
         tax_dat |>
-        dplyr::filter(stringr::str_detect(taxonomicStatus, stringr::fixed("synonym", ignore_case = TRUE)))
+        dplyr::filter(
+          stringr::str_detect(
+            taxonomicStatus, stringr::fixed("synonym", ignore_case = TRUE)
+          )
+        )
 
       if (nrow(tax_dat_accepted) > 0 && nrow(tax_dat_synonyms) > 0) {
         tax_dat_no_overlap_check <-
@@ -168,7 +190,8 @@ Bad `scientificName`: {bad_taxon_species}"
         # Extract bad taxon IDs and species
         bad_taxon_id <- ""
         if (!is.null(tax_dat_no_overlap_check[["taxonID"]])) {
-          bad_taxon_id <- paste(tax_dat_no_overlap_check$taxonID, collapse = ", ")
+          bad_taxon_id <- paste(
+            tax_dat_no_overlap_check$taxonID, collapse = ", ")
         }
 
         bad_taxon_species <- ""
@@ -199,7 +222,10 @@ Bad `scientificName`: {bad_taxon_species}"
     bad_col_names <- setdiff(colnames(tax_dat), dct_terms$term)
     assertthat::assert_that(
       length(bad_col_names) == 0,
-      msg = glue::glue("`check_col_names` failed. Invalid column names present: {paste(bad_col_names, collapse = ', ')}. See dct_terms for valid column names.")
+      msg = glue::glue(
+        "`check_col_names` failed. Invalid column names present: \\
+        {paste(bad_col_names, collapse = ', ')}. \\
+        See dct_terms for valid column names.")
     )
   }
 
