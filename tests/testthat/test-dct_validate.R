@@ -71,11 +71,11 @@ test_that("Setting valid taxonomic status via env var works", {
   Sys.unsetenv("VALID_TAX_STATUS")
 })
 
-test_that("validation catches errors", {
-  # taxonID column missing (check_taxon_id)
+test_that("check_taxon_id works", {
+  # taxonID column missing
   expect_error(
     dct_validate(data.frame(scientificName = "foo bar")),
-    "Column 'taxonID' required in input data"
+    "`check_taxon_id` requires column 'taxonID' in input data"
   )
   expect_error(
     dct_validate(
@@ -83,7 +83,7 @@ test_that("validation catches errors", {
     ),
     "Column 'taxonID' must be of class 'character', 'numeric', or 'integer'"
   )
-  # taxonID with missing values (check_taxon_id)
+  # taxonID with missing values
   bad_dat <- tibble::tribble(
     ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
     "1", NA, "accepted", "Species foo",
@@ -94,7 +94,7 @@ test_that("validation catches errors", {
     dct_validate(bad_dat),
     "Column 'taxonID' violates assertion 'not_na' 1 time"
   )
-  # Duplicated taxonID (check_taxon_id)
+  # Duplicated taxonID
   bad_dat <- tibble::tribble(
     ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
     "1", NA, "accepted", "Species foo",
@@ -105,7 +105,9 @@ test_that("validation catches errors", {
     dct_validate(bad_dat),
     "Column 'taxonID' violates assertion 'is_uniq' 2 times"
   )
-  # Bad mapping of synonyms
+})
+
+test_that("check_mapping works", {
   bad_dat <- tibble::tribble(
     ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
     "1", NA, "accepted", "Species foo",
@@ -116,6 +118,9 @@ test_that("validation catches errors", {
     dct_validate(bad_dat),
     "`check_mapping` failed"
   )
+})
+
+test_that("check_taxonomic_status works", {
   # Bad taxonomicStatus
   bad_dat <- tibble::tribble(
     ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
@@ -127,17 +132,6 @@ test_that("validation catches errors", {
     dct_validate(bad_dat),
     "`check_taxonomic_status` failed"
   )
-  # Names appear in both accepted names and synonyms
-  bad_dat <- tibble::tribble(
-    ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
-    "1", NA, "accepted", "Species foo",
-    "2", NA, "accepted", "Species bar",
-    "3", "2", "synonym", "Species foo"
-  )
-  expect_error(
-    dct_validate(bad_dat),
-    "`check_acc_syn_diff` failed"
-  )
   # Bad columns: taxonomicstatus instead of taxonomicStatus
   bad_dat <- tibble::tribble(
     ~taxonID, ~acceptedNameUsageID, ~taxonomicstatus, ~scientificName,
@@ -147,6 +141,20 @@ test_that("validation catches errors", {
   )
   expect_error(
     dct_validate(bad_dat),
-    "Column 'taxonomicStatus' required in input data"
+    "`check_taxonomic_status` requires column 'taxonomicStatus' in input data"
+  )
+})
+
+test_that("check_acc_syn_diff works", {
+  # Names appear in both accepted names and synonyms
+  bad_dat <- tibble::tribble(
+    ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
+    "1", NA, "accepted", "Species foo",
+    "2", NA, "accepted", "Species bar",
+    "3", "2", "synonym", "Species foo"
+  )
+  expect_error(
+    dct_validate(bad_dat),
+    "`check_acc_syn_diff` failed\\.\n`taxonID`\\(s\\) detected whose scientific names appear in both accepted names and synonyms" # nolint
   )
 })
