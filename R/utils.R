@@ -72,14 +72,20 @@ assert_dat <- function(...) {
 #' @param col String; name of column that must be included
 #' @param class Character vector of classes. `col` must inherit from at least
 #' one of the classes.
+#' @param req_by Name of check that requires this assertion
 #' @param req_col Logical; is `col` required to be present? Set to FALSE to
 #'   check for classes only if that column is present
 #' @noRd
-assert_col <- function(dat, col, class = NULL, req_col = TRUE) {
+assert_col <- function(dat, col, class = NULL, req_by = NULL, req_col = TRUE) {
   if (isTRUE(req_col)) {
+    col_err_msg <- if (!is.null(req_by)) {
+      glue::glue("`{req_by}` requires column '{col}' in input data")
+    } else {
+      glue::glue("Column '{col}' required in input data")
+    }
     assertthat::assert_that(
         col %in% colnames(dat),
-        msg = glue::glue("Column '{col}' required in input data")
+        msg = col_err_msg
       )
   }
   if (!is.null(class)) {

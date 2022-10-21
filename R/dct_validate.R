@@ -4,16 +4,22 @@
 #' able to use the taxonomic database for taxonomic name resolution at the
 #' species level.
 #'
-#' For `check_acc_syn_diff`, "accepted" and
-#' "synonym" are determined by string matching of `taxonomicStatus`; so
+#' For `check_acc_syn_diff` and `strict_mapping`, "accepted", "synonym", and
+#' "variant" are determined by string matching of `taxonomicStatus`; so
 #' "provisionally accepted" is counted as "accepted", "ambiguous synonym" is
-#' counted as "synonym", etc (not case-sensitive).
+#' counted as "synonym", etc (case-sensitive).
 #'
-#' For `strict_mapping`, rows with `taxonomicStatus` of "synonym" (synonyms)
-#' must have an `acceptedNameUsageID` matching the `taxonID` of an accepted
-#' name; rows with `taxonomicStatus` of "variant" (orthographic variants) must
-#' have an `acceptedNameUsageID` matching the `taxonID` of an accepted name or
-#' synonym (but not another variant).
+#' For `strict_mapping`, the following rules are enforced:
+#' - Rows with `taxonomicStatus` of "synonym" (synonyms) must have an
+#'   `acceptedNameUsageID` matching the `taxonID` of an accepted name (
+#'   `taxonomicStatus` of "accepted")
+#' - Rows with `taxonomicStatus` of "variant" (orthographic variants) must
+#'   have an `acceptedNameUsageID` matching the `taxonID` of an accepted name or
+#'   synonym (but not another variant)
+#' - Rows with `taxonomicStatus` of "accepted" must not have any value entered
+#'   for `acceptedNameUsageID`
+#' - Rows with a value for `acceptedNameUsageID` must have a valid value for
+#'   `taxonomicStatus`.
 #'
 #' @param tax_dat Dataframe; taxonomic database in Darwin Core format
 #' @param check_taxon_id Logical; should all instances of `taxonID` be required
@@ -23,13 +29,12 @@
 #' @param check_taxonomic_status Logical; should all taxonomic names be required
 #'   to include a valid value for taxonomic status (by default, "accepted",
 #'   "synonym", or "variant")?
-#' @param check_acc_syn_diff Logical; should accepted names and synonyms be
-#' required to be different?
+#' @param check_acc_syn_diff Logical; should each scientific name be allowed
+#'   to have only one taxonomic status?
 #' @param check_col_names Logical; should all column names be required to
 #' be a valid Darwin Core term?
-#' @param strict_mapping Logical; should rows with `taxonomicStatus` of
-#'   "synonym" or "variant" be required to have a non-NA value for
-#'   `acceptedNameUsageID`?
+#' @param strict_mapping Logical; should rules about mapping of variants and
+#'   synonyms be enforced? (see Details)
 #' @param valid_tax_status Character vector of length 1; valid values for
 #'   `taxonomicStatus`. Each value must be separated by a space. Default
 #'   "accepted synonym variant NA". "NA" indicates that missing (NA) values are
@@ -52,7 +57,7 @@ dct_validate <- function(tax_dat,
                          strict_mapping = TRUE,
                          valid_tax_status = Sys.getenv(
                           "VALID_TAX_STATUS",
-                          unset = c("accepted synonym variant NA"))
+                          unset = "accepted synonym variant NA")
  ) {
 
   # tax_dat must be a dataframe
@@ -81,22 +86,22 @@ dct_validate <- function(tax_dat,
   assert_col(tax_dat, "scientificName", "character", req_col = FALSE)
   assert_col(tax_dat, "taxonomicStatus", "character", req_col = FALSE)
 
-  # Check for unique, non-missing taxon ID
+  # Check for taxon ID -----
   if (isTRUE(check_taxon_id)) {
-    assert_col(tax_dat, "taxonID")
+    assert_col(tax_dat, "taxonID", req_by = "check_taxon_id")
     assert_dat(tax_dat, assertr::not_na, taxonID)
     assert_dat(tax_dat, assertr::is_uniq, taxonID)
   }
 
-  # Check for name mapping
+  # Check for name mapping -----
   if (isTRUE(check_mapping)) {
     # check pre-reqs
     assertthat::assert_that(
       isTRUE(check_taxon_id),
       msg = "`check_mapping` requires `check_taxon_id` to be TRUE"
     )
-    assert_col(tax_dat, "acceptedNameUsageID")
-    assert_col(tax_dat, "scientificName")
+    assert_col(tax_dat, "acceptedNameUsageID", req_by = "check_mapping")
+    assert_col(tax_dat, "scientificName", req_by = "check_mapping")
 
     map_id_is_good <- tax_dat$acceptedNameUsageID %in% tax_dat$taxonID
     map_id_is_na <- is.na(tax_dat$acceptedNameUsageID)
@@ -123,7 +128,7 @@ dct_validate <- function(tax_dat,
       msg = "`check_taxonomic_status` requires `check_taxon_id` to be TRUE"
     )
     # taxonID already checked
-    assert_col(tax_dat, "taxonomicStatus")
+    assert_col(tax_dat, "taxonomicStatus", req_by = "check_taxonomic_status")
     # Convert valid_tax_status to vector
     valid_tax_status_v <- strsplit(valid_tax_status, " +")[[1]] |>
       unique()
@@ -144,13 +149,154 @@ dct_validate <- function(tax_dat,
   }
 
   if (isTRUE(strict_mapping)) {
+    # Check pre-reqs
+    # require check_mapping
     assertthat::assert_that(
       isTRUE(check_mapping),
       msg = "`strict_mapping` requires `check_mapping` to be TRUE"
     )
+    # require check_taxonomic_status
     assertthat::assert_that(
       isTRUE(check_taxonomic_status),
       msg = "`strict_mapping` requires `check_taxonomic_status` to be TRUE"
+    )
+    # require accepted, synonym, variant in valid status
+    assertthat::assert_that(
+      grepl("synonym", valid_tax_status, ignore.case = FALSE),
+      msg = "'synonym' not in `valid_tax_status`"
+    )
+    assertthat::assert_that(
+      grepl("accepted", valid_tax_status, ignore.case = FALSE),
+      msg = "'accepted' not in `valid_tax_status`"
+    )
+    assertthat::assert_that(
+      grepl("variant", valid_tax_status, ignore.case = FALSE),
+      msg = "'variant' not in `valid_tax_status`"
+    )
+    # taxonID, acceptedNameUsageID, scientificName already required
+
+    # Separate accepted names, synonyms, and variants
+    tax_dat_accepted <-
+      tax_dat |>
+      dplyr::filter(
+        stringr::str_detect(
+          taxonomicStatus, stringr::fixed("accepted", ignore_case = FALSE)
+        )
+      )
+    tax_dat_synonyms <-
+      tax_dat |>
+      dplyr::filter(
+        stringr::str_detect(
+          taxonomicStatus, stringr::fixed("synonym", ignore_case = FALSE)
+        )
+      )
+    tax_dat_variants <-
+      tax_dat |>
+      dplyr::filter(
+        stringr::str_detect(
+          taxonomicStatus, stringr::fixed("variant", ignore_case = FALSE)
+        )
+      )
+    tax_dat_with_acc_usage_id <- dplyr::filter(
+      tax_dat, !is.na(acceptedNameUsageID)
+    )
+    # all synonyms must map to accepted names
+    syn_id_not_in_acc_id <- !tax_dat_synonyms$acceptedNameUsageID %in%
+      tax_dat_accepted$taxonID
+    assertthat::assert_that(
+      sum(syn_id_not_in_acc_id) == 0,
+      msg = glue::glue(
+        "`strict_mapping` failed.
+          synonym(s) detected whose `acceptedNameUsageID` value does not \\
+          map to `taxonID` of an accepted name.
+          Bad `taxonID`: \\
+          {paste(tax_dat_synonyms$taxonID[syn_id_not_in_acc_id], \\
+            collapse = ', ')}
+          Bad `scientificName`: \\
+          {paste(tax_dat_synonyms$scientificName[syn_id_not_in_acc_id], collapse = ', ')}" # nolint
+      )
+    )
+    # any row with acceptedNameUsageID must have non-missing taxonomicStatus
+    missing_acc_usage_id <- is.na(tax_dat_with_acc_usage_id$taxonomicStatus)
+    assertthat::assert_that(
+      sum(missing_acc_usage_id) == 0,
+      msg = glue::glue(
+        "`strict_mapping` failed.
+          rows(s) detected whose `acceptedNameUsageID` value is not missing, \\
+          but have missing `taxonomicStatus`.
+          Bad `taxonID`: \\
+          {paste(tax_dat_with_acc_usage_id$taxonID[missing_acc_usage_id], \\
+            collapse = ', ')}
+          Bad `scientificName`: \\
+          {paste(tax_dat_with_acc_usage_id$scientificName[missing_acc_usage_id], collapse = ', ')}" # nolint
+      )
+    )
+    # any row with acceptedNameUsageID must have valid taxonomicStatus
+    bad_acc_usage_id <- !grepl("accepted|synonym|variant",
+      tax_dat_with_acc_usage_id$taxonomicStatus)
+    assertthat::assert_that(
+      sum(bad_acc_usage_id) == 0,
+      msg = glue::glue(
+        "`strict_mapping` failed.
+          rows(s) detected whose `acceptedNameUsageID` value is not missing, \\
+          but have `taxonomicStatus` that is not 'accepted', 'synonym', or \\
+          'variant'.
+          Bad `taxonID`: \\
+          {paste(tax_dat_with_acc_usage_id$taxonID[bad_acc_usage_id], \\
+            collapse = ', ')}
+          Bad `scientificName`: \\
+          {paste(tax_dat_with_acc_usage_id$scientificName[bad_acc_usage_id], \\
+            collapse = ', ')}
+          Bad `taxonomicStatus`: \\
+          {paste(tax_dat_with_acc_usage_id$taxonomicStatus[bad_acc_usage_id], \\
+            collapse = ', ')}"
+      )
+    )
+
+    # variants cannot map to variants
+    var_id_map_to_var_id <- tax_dat_variants$acceptedNameUsageID %in%
+      tax_dat_variants$taxonID
+    assertthat::assert_that(
+      sum(var_id_map_to_var_id) == 0,
+      msg = glue::glue(
+        "`strict_mapping` failed.
+          variants(s) detected whose `acceptedNameUsageID` value maps to \\
+          `taxonID` of a variant.
+          Bad `taxonID`: \\
+          {paste(tax_dat_variants$taxonID[var_id_map_to_var_id], \\
+            collapse = ', ')}
+          Bad `scientificName`: \\
+          {paste(tax_dat_variants$scientificName[var_id_map_to_var_id], collapse = ', ')}" # nolint
+      )
+    )
+    # variants must map to something
+    var_id_no_acc_id <- is.na(tax_dat_variants$acceptedNameUsageID)
+    assertthat::assert_that(
+      sum(var_id_no_acc_id) == 0,
+      msg = glue::glue(
+        "`strict_mapping` failed.
+          variants(s) detected who lack an `acceptedNameUsageID`.
+          Bad `taxonID`: \\
+          {paste(tax_dat_variants$taxonID[var_id_no_acc_id], \\
+            collapse = ', ')}
+          Bad `scientificName`: \\
+          {paste(tax_dat_variants$scientificName[var_id_no_acc_id], collapse = ', ')}" # nolint
+      )
+    )
+    # accepted names cannot map to anything
+    acc_id_map_to_something <- !is.na(tax_dat_accepted$acceptedNameUsageID)
+    assertthat::assert_that(
+      sum(acc_id_map_to_something) == 0,
+      msg = glue::glue(
+        "`strict_mapping` failed.
+          Accepted names(s) detected with a non-missing value for \\
+          `acceptedNameUsageID`.
+          Bad `taxonID`: \\
+          {paste(tax_dat_accepted$taxonID[acc_id_map_to_something], \\
+            collapse = ', ')}
+          Bad `scientificName`: \\
+          {paste(tax_dat_accepted$scientificName[acc_id_map_to_something], collapse = ', ')}" # nolint
+      )
     )
   }
 
@@ -194,7 +340,7 @@ dct_validate <- function(tax_dat,
         nrow(tax_dat_no_overlap_check) == 0,
         msg = glue::glue(
           "`check_acc_syn_diff` failed.
-          `taxonID`(s) detected whose `taxonomicStatus` scientific names \\
+          `taxonID`(s) detected whose scientific names \\
           appear in both accepted names and synonyms
           Bad `taxonID`: {bad_taxon_id}
           Bad `scientificName`: {bad_taxon_species}"

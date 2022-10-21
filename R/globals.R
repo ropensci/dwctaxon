@@ -9,6 +9,7 @@ utils::globalVariables(c(
   "type", # <dct_fix_format>
   "taxonID", # <dct_validate>
   "taxonomicStatus", # <dct_validate>
+  "acceptedNameUsageID", # <dct_validate>
   "dct_terms", # <dct_validate>
   NULL
 ))

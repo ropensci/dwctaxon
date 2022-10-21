@@ -145,6 +145,107 @@ test_that("check_taxonomic_status works", {
   )
 })
 
+test_that("strict_mapping works", {
+  # bad data: synonym doesn't map to accepted name
+  bad_dat <- tibble::tribble(
+    ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
+    "1", NA, "accepted", "Species foo",
+    "2", "3", "synonym", "Species bar",
+    "3", "2", "variant", "Species foobar"
+  )
+  expect_error(
+    dct_validate(bad_dat),
+    "`strict_mapping` failed\\.\nsynonym\\(s\\) detected whose `acceptedNameUsageID` value does not map to `taxonID` of an accepted name" # nolint
+  )
+  bad_dat <- tibble::tribble(
+    ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
+    "1", NA, "accepted", "Species foo",
+    "2", NA, "synonym", "Species bar",
+    "3", "2", "variant", "Species foobar"
+  )
+  expect_error(
+    dct_validate(bad_dat),
+    "`strict_mapping` failed\\.\nsynonym\\(s\\) detected whose `acceptedNameUsageID` value does not map to `taxonID` of an accepted name" # nolint
+  )
+  # bad data: variant maps to variant
+  bad_dat <- tibble::tribble(
+    ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
+    "1", NA, "accepted", "Species foo",
+    "2", "3", "variant", "Species bar",
+    "3", "1", "variant", "Species foobar"
+  )
+  expect_error(
+    dct_validate(bad_dat),
+    "`strict_mapping` failed\\.\nvariants\\(s\\) detected whose `acceptedNameUsageID` value maps to `taxonID` of a variant" # nolint
+  )
+  # bad data: variant has no acceptedNameUsageID
+  bad_dat <- tibble::tribble(
+    ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
+    "1", NA, "accepted", "Species foo",
+    "2", NA, "variant", "Species bar",
+    "3", "1", "variant", "Species foobar"
+  )
+  expect_error(
+    dct_validate(bad_dat),
+    "`strict_mapping` failed\\.\nvariants\\(s\\) detected who lack an `acceptedNameUsageID`" # nolint
+  )
+  # bad data: accepted name has an acceptedNameUsageID
+  bad_dat <- tibble::tribble(
+    ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
+    "1", "2", "accepted", "Species foo",
+    "2", NA, "accepted", "Species bar"
+  )
+  expect_error(
+    dct_validate(bad_dat),
+    "`strict_mapping` failed\\.\nAccepted names\\(s\\) detected with a non-missing value for `acceptedNameUsageID`.*Bad `taxonID`\\: 1\nBad `scientificName`\\: Species foo" # nolint
+  )
+  # bad data: any row with acceptedNameUsageID must have a non-missing
+  # taxonomicStatus
+  bad_dat <- tibble::tribble(
+    ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
+    "1", NA, "accepted", "Species foo",
+    "2", "3", "variant", "Species bar",
+    "3", "1", "synonym", "Species foobar",
+    "4", "1", NA, "Species foobar"
+  )
+  expect_error(
+    dct_validate(bad_dat),
+    "`strict_mapping` failed.*`acceptedNameUsageID` value is not missing, but have missing `taxonomicStatus`.*Bad `taxonID`\\: 4\nBad `scientificName`\\: Species foobar" # nolint
+  )
+  # bad data: any row with acceptedNameUsageID must have taxonomicStatus
+  # of 'accepted', 'synonym', or 'variant'
+  bad_dat <- tibble::tribble(
+    ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
+    "1", NA, "accepted", "Species foo",
+    "2", "3", "variant", "Species bar",
+    "3", "1", "synonym", "Species foobar",
+    "4", "1", "fooblah", "Species foobar"
+  )
+  expect_error(
+    dct_validate(
+      bad_dat,
+      valid_tax_status = "accepted synonym variant fooblah"),
+      paste0(
+        "`strict_mapping` failed.*",
+        "`taxonomicStatus`.* is not 'accepted', 'synonym', or 'variant'.*",
+        "Bad `taxonID`\\: 4.*",
+        "Bad `scientificName`\\: Species foobar.*",
+        "Bad `taxonomicStatus`\\: fooblah.*"
+      )
+  )
+  # NA values that don't intefere with mapping are OK
+  good_dat <- tibble::tribble(
+    ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
+    "1", NA, "accepted", "Species foo",
+    "2", "3", "variant", "Species bar",
+    "3", "1", "synonym", "Species foobar",
+    "4", NA, NA, "Species foobar"
+  )
+  expect_no_error(
+    dct_validate(good_dat)
+  )
+})
+
 test_that("check_acc_syn_diff works", {
   # Names appear in both accepted names and synonyms
   bad_dat <- tibble::tribble(

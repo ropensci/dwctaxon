@@ -13,7 +13,7 @@ dct_validate(
   check_col_names = TRUE,
   strict_mapping = TRUE,
   valid_tax_status = Sys.getenv("VALID_TAX_STATUS", unset =
-    c("accepted synonym variant NA"))
+    "accepted synonym variant NA")
 )
 }
 \arguments{
@@ -29,15 +29,14 @@ required to map to the \code{taxonID} of an existing name?}
 to include a valid value for taxonomic status (by default, "accepted",
 "synonym", or "variant")?}
 
-\item{check_acc_syn_diff}{Logical; should accepted names and synonyms be
-required to be different?}
+\item{check_acc_syn_diff}{Logical; should each scientific name be allowed
+to have only one taxonomic status?}
 
 \item{check_col_names}{Logical; should all column names be required to
 be a valid Darwin Core term?}
 
-\item{strict_mapping}{Logical; should rows with \code{taxonomicStatus} of
-"synonym" or "variant" be required to have a non-NA value for
-\code{acceptedNameUsageID}?}
+\item{strict_mapping}{Logical; should rules about mapping of variants and
+synonyms be enforced? (see Details)}
 
 \item{valid_tax_status}{Character vector of length 1; valid values for
 \code{taxonomicStatus}. Each value must be separated by a space. Default
@@ -55,16 +54,24 @@ able to use the taxonomic database for taxonomic name resolution at the
 species level.
 }
 \details{
-For \code{check_acc_syn_diff}, "accepted" and
-"synonym" are determined by string matching of \code{taxonomicStatus}; so
+For \code{check_acc_syn_diff} and \code{strict_mapping}, "accepted", "synonym", and
+"variant" are determined by string matching of \code{taxonomicStatus}; so
 "provisionally accepted" is counted as "accepted", "ambiguous synonym" is
-counted as "synonym", etc (not case-sensitive).
+counted as "synonym", etc (case-sensitive).
 
-For \code{strict_mapping}, rows with \code{taxonomicStatus} of "synonym" (synonyms)
-must have an \code{acceptedNameUsageID} matching the \code{taxonID} of an accepted
-name; rows with \code{taxonomicStatus} of "variant" (orthographic variants) must
+For \code{strict_mapping}, the following rules are enforced:
+\itemize{
+\item Rows with \code{taxonomicStatus} of "synonym" (synonyms) must have an
+\code{acceptedNameUsageID} matching the \code{taxonID} of an accepted name (
+\code{taxonomicStatus} of "accepted")
+\item Rows with \code{taxonomicStatus} of "variant" (orthographic variants) must
 have an \code{acceptedNameUsageID} matching the \code{taxonID} of an accepted name or
-synonym (but not another variant).
+synonym (but not another variant)
+\item Rows with \code{taxonomicStatus} of "accepted" must not have any value entered
+for \code{acceptedNameUsageID}
+\item Rows with a value for \code{acceptedNameUsageID} must have a valid value for
+\code{taxonomicStatus}.
+}
 }
 \examples{
 dct_validate(dct_filmies)
