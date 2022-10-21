@@ -10,7 +10,10 @@ dct_validate(
   check_mapping = TRUE,
   check_taxonomic_status = TRUE,
   check_acc_syn_diff = TRUE,
-  check_col_names = TRUE
+  check_col_names = TRUE,
+  strict_mapping = TRUE,
+  valid_tax_status = Sys.getenv("VALID_TAX_STATUS", unset =
+    c("accepted synonym variant NA"))
 )
 }
 \arguments{
@@ -23,13 +26,24 @@ to be non-missing and unique?}
 required to map to the \code{taxonID} of an existing name?}
 
 \item{check_taxonomic_status}{Logical; should all taxonomic names be required
-to include the status of either "accepted" or "synonym"?}
+to include a valid value for taxonomic status (by default, "accepted",
+"synonym", or "variant")?}
 
 \item{check_acc_syn_diff}{Logical; should accepted names and synonyms be
 required to be different?}
 
 \item{check_col_names}{Logical; should all column names be required to
 be a valid Darwin Core term?}
+
+\item{strict_mapping}{Logical; should rows with \code{taxonomicStatus} of
+"synonym" or "variant" be required to have a non-NA value for
+\code{acceptedNameUsageID}?}
+
+\item{valid_tax_status}{Character vector of length 1; valid values for
+\code{taxonomicStatus}. Each value must be separated by a space. Default
+"accepted synonym variant NA". "NA" indicates that missing (NA) values are
+valid. Case-sensitive. Can also be set with the environmental variable
+"VALID_TAX_STATUS".}
 }
 \value{
 Dataframe; taxonomic database in Darwin Core format. Will
@@ -41,14 +55,16 @@ able to use the taxonomic database for taxonomic name resolution at the
 species level.
 }
 \details{
-For \code{check_taxonomic_status} and \code{check_acc_syn_diff}, "accepted" and
+For \code{check_acc_syn_diff}, "accepted" and
 "synonym" are determined by string matching of \code{taxonomicStatus}; so
 "provisionally accepted" is counted as "accepted", "ambiguous synonym" is
 counted as "synonym", etc (not case-sensitive).
 
-For \code{check_mapping}, the \code{acceptedNameUsageID} must map to the \code{taxonID} of
-an existing name which itself does not have an \code{acceptedNameUsageID} (i.e.,
-no multiple levels of mapping allowed).
+For \code{strict_mapping}, rows with \code{taxonomicStatus} of "synonym" (synonyms)
+must have an \code{acceptedNameUsageID} matching the \code{taxonID} of an accepted
+name; rows with \code{taxonomicStatus} of "variant" (orthographic variants) must
+have an \code{acceptedNameUsageID} matching the \code{taxonID} of an accepted name or
+synonym (but not another variant).
 }
 \examples{
 dct_validate(dct_filmies)

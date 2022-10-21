@@ -1,3 +1,6 @@
+# Clear default value for VALID_TAX_STATUS
+Sys.unsetenv("VALID_TAX_STATUS")
+
 test_that("checks on input work", {
   expect_error(
     dct_validate(1),
@@ -23,6 +26,14 @@ test_that("checks on input work", {
     dct_validate(data.frame(), check_col_names = NULL),
     "check_col_names is not a flag"
   )
+  expect_error(
+    dct_validate(data.frame(), strict_mapping = NULL),
+    "strict_mapping is not a flag"
+  )
+  expect_error(
+    dct_validate(data.frame(), valid_tax_status = c(1, 2)),
+    "valid_tax_status is not a string \\(a length one character vector\\)"
+  )
 })
 
 test_that("correctly formatted data does not error", {
@@ -37,10 +48,27 @@ test_that("correctly formatted data does not error", {
     dct_validate(
       data.frame(taxonID = 1),
       check_mapping = FALSE,
+      strict_mapping = FALSE,
       check_taxonomic_status = FALSE,
       check_acc_syn_diff = FALSE
     )
   )
+})
+
+test_that("Setting valid taxonomic status via env var works", {
+  Sys.setenv(VALID_TAX_STATUS = "accepted")
+  expect_error(
+    dct_validate(
+      data.frame(taxonID = 1, taxonomicStatus = "synonym"),
+      check_mapping = FALSE,
+      strict_mapping = FALSE,
+      check_acc_syn_diff = FALSE,
+      check_col_names = FALSE
+      ),
+      "`check_taxonomic_status` failed"
+  )
+  # reset
+  Sys.unsetenv("VALID_TAX_STATUS")
 })
 
 test_that("validation catches errors", {
