@@ -1,5 +1,10 @@
 test_that("validation of mapping works", {
-  # taxon ID (check_taxon_id)
+  # taxonID missing (check_taxon_id)
+  expect_error(
+    dct_validate(data.frame(scientificName = "foo bar")),
+    "Column 'taxonID' missing from 'tax_dat'"
+  )
+  # taxonID (check_taxon_id)
   bad_dat <- tibble::tribble(
     ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
     "1", NA, "accepted", "Species foo",
@@ -10,7 +15,7 @@ test_that("validation of mapping works", {
     dct_validate(bad_dat),
     "Column 'taxonID' violates assertion 'not_na' 1 time"
   )
-  # duplicated taxon ID
+  # duplicated taxonID (check_taxon_id)
   bad_dat <- tibble::tribble(
     ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
     "1", NA, "accepted", "Species foo",

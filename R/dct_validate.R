@@ -41,6 +41,10 @@ dct_validate <- function(tax_dat,
 
   # Check for unique, non-missing taxon ID
   if (isTRUE(check_taxon_id)) {
+    assertthat::assert_that(
+      "taxonID" %in% colnames(tax_dat),
+      msg = "Column 'taxonID' missing from 'tax_dat'"
+    )
     assert_dat(tax_dat, assertr::not_na, taxonID)
     assert_dat(tax_dat, assertr::is_uniq, taxonID)
   }
