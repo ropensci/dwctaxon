@@ -36,9 +36,9 @@
 #' @param strict_mapping Logical; should rules about mapping of variants and
 #'   synonyms be enforced? (see Details)
 #' @param valid_tax_status Character vector of length 1; valid values for
-#'   `taxonomicStatus`. Each value must be separated by a space. Default
-#'   "accepted synonym variant NA". "NA" indicates that missing (NA) values are
-#'   valid. Case-sensitive. Can also be set with the environmental variable
+#'   `taxonomicStatus`. Each value must be separated by a comma. Default
+#'   "accepted, synonym, variant, NA". "NA" indicates that missing (NA) values
+#'   are valid. Case-sensitive. Can also be set with the environmental variable
 #'   "VALID_TAX_STATUS".
 #'
 #' @return Dataframe; taxonomic database in Darwin Core format. Will
@@ -46,9 +46,13 @@
 #' @autoglobal
 #' @export
 #' @examples
+#'
 #' dct_validate(
-#'   dct_filmies, check_taxonomic_status = FALSE,
-#'   strict_mapping = FALSE)
+#'   dct_filmies,
+#'   valid_tax_status =
+#'     paste("accepted name, ambiguous synonym, provisionally accepted name,",
+#'           "synonym, variant")
+#' )
 #'
 dct_validate <- function(tax_dat,
                          check_taxon_id = TRUE,
@@ -59,7 +63,7 @@ dct_validate <- function(tax_dat,
                          strict_mapping = TRUE,
                          valid_tax_status = Sys.getenv(
                           "VALID_TAX_STATUS",
-                          unset = "accepted synonym variant NA")
+                          unset = "accepted, synonym, variant, NA")
  ) {
 
   # tax_dat must be a dataframe
@@ -132,7 +136,7 @@ dct_validate <- function(tax_dat,
     # taxonID already checked
     assert_col(tax_dat, "taxonomicStatus", req_by = "check_taxonomic_status")
     # Convert valid_tax_status to vector
-    valid_tax_status_v <- strsplit(valid_tax_status, " +")[[1]] |>
+    valid_tax_status_v <- strsplit(valid_tax_status, ", *")[[1]] |>
       unique()
     valid_tax_status_v[valid_tax_status_v == "NA"] <- NA_character_
     tax_status_is_bad <- !tax_dat$taxonomicStatus %in% valid_tax_status_v
@@ -215,7 +219,8 @@ dct_validate <- function(tax_dat,
           {paste(tax_dat_synonyms$taxonID[syn_id_not_in_acc_id], \\
             collapse = ', ')}
           Bad `scientificName`: \\
-          {paste(tax_dat_synonyms$scientificName[syn_id_not_in_acc_id], collapse = ', ')}" # nolint
+          {paste(tax_dat_synonyms$scientificName[syn_id_not_in_acc_id], \\
+            collapse = ', ')}"
       )
     )
     # any row with acceptedNameUsageID must have non-missing taxonomicStatus
@@ -230,7 +235,8 @@ dct_validate <- function(tax_dat,
           {paste(tax_dat_with_acc_usage_id$taxonID[missing_acc_usage_id], \\
             collapse = ', ')}
           Bad `scientificName`: \\
-          {paste(tax_dat_with_acc_usage_id$scientificName[missing_acc_usage_id], collapse = ', ')}" # nolint
+          {paste(tax_dat_with_acc_usage_id$scientificName\\
+            [missing_acc_usage_id], collapse = ', ')}"
       )
     )
     # any row with acceptedNameUsageID must have valid taxonomicStatus
@@ -268,7 +274,8 @@ dct_validate <- function(tax_dat,
           {paste(tax_dat_variants$taxonID[var_id_map_to_var_id], \\
             collapse = ', ')}
           Bad `scientificName`: \\
-          {paste(tax_dat_variants$scientificName[var_id_map_to_var_id], collapse = ', ')}" # nolint
+          {paste(tax_dat_variants$scientificName[var_id_map_to_var_id], \\
+            collapse = ', ')}"
       )
     )
     # variants must map to something
@@ -282,7 +289,8 @@ dct_validate <- function(tax_dat,
           {paste(tax_dat_variants$taxonID[var_id_no_acc_id], \\
             collapse = ', ')}
           Bad `scientificName`: \\
-          {paste(tax_dat_variants$scientificName[var_id_no_acc_id], collapse = ', ')}" # nolint
+          {paste(tax_dat_variants$scientificName[var_id_no_acc_id], \\
+            collapse = ', ')}"
       )
     )
     # accepted names cannot map to anything
@@ -297,7 +305,8 @@ dct_validate <- function(tax_dat,
           {paste(tax_dat_accepted$taxonID[acc_id_map_to_something], \\
             collapse = ', ')}
           Bad `scientificName`: \\
-          {paste(tax_dat_accepted$scientificName[acc_id_map_to_something], collapse = ', ')}" # nolint
+          {paste(tax_dat_accepted$scientificName[acc_id_map_to_something], \\
+            collapse = ', ')}"
       )
     )
   }

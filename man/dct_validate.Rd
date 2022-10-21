@@ -13,7 +13,7 @@ dct_validate(
   check_col_names = TRUE,
   strict_mapping = TRUE,
   valid_tax_status = Sys.getenv("VALID_TAX_STATUS", unset =
-    "accepted synonym variant NA")
+    "accepted, synonym, variant, NA")
 )
 }
 \arguments{
@@ -39,9 +39,9 @@ be a valid Darwin Core term?}
 synonyms be enforced? (see Details)}
 
 \item{valid_tax_status}{Character vector of length 1; valid values for
-\code{taxonomicStatus}. Each value must be separated by a space. Default
-"accepted synonym variant NA". "NA" indicates that missing (NA) values are
-valid. Case-sensitive. Can also be set with the environmental variable
+\code{taxonomicStatus}. Each value must be separated by a comma. Default
+"accepted, synonym, variant, NA". "NA" indicates that missing (NA) values
+are valid. Case-sensitive. Can also be set with the environmental variable
 "VALID_TAX_STATUS".}
 }
 \value{
@@ -74,8 +74,12 @@ for \code{acceptedNameUsageID}
 }
 }
 \examples{
+
 dct_validate(
-  dct_filmies, check_taxonomic_status = FALSE,
-  strict_mapping = FALSE)
+  dct_filmies,
+  valid_tax_status =
+    paste("accepted name, ambiguous synonym, provisionally accepted name,",
+          "synonym, variant")
+)
 
 }

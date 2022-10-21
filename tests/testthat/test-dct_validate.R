@@ -224,7 +224,7 @@ test_that("strict_mapping works", {
   expect_error(
     dct_validate(
       bad_dat,
-      valid_tax_status = "accepted synonym variant fooblah"),
+      valid_tax_status = "accepted, synonym, variant, fooblah"),
       paste0(
         "`strict_mapping` failed.*",
         "`taxonomicStatus`.* is not 'accepted', 'synonym', or 'variant'.*",
@@ -243,6 +243,19 @@ test_that("strict_mapping works", {
   )
   expect_no_error(
     dct_validate(good_dat)
+  )
+  # Values like 'ambiguous synonym' work
+  good_dat <- tibble::tribble(
+    ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
+    "1", NA, "accepted", "Species foo",
+    "2", "3", "variant", "Species bar",
+    "3", "1", "ambiguous synonym", "Species foobar",
+    "4", NA, NA, "Species foobar"
+  )
+  expect_no_error(
+    dct_validate(
+      good_dat,
+      valid_tax_status = "accepted, ambiguous synonym, variant, NA")
   )
 })
 
