@@ -1,5 +1,31 @@
-test_that("validation works", {
-  # No errrors on correctly formatted data
+test_that("checks on input work", {
+  expect_error(
+    dct_validate(1),
+    "'tax_dat' must be of class 'data.frame'"
+  )
+  expect_error(
+    dct_validate(data.frame(), check_taxon_id = NULL),
+    "check_taxon_id is not a flag"
+  )
+  expect_error(
+    dct_validate(data.frame(), check_mapping = NULL),
+    "check_mapping is not a flag"
+  )
+  expect_error(
+    dct_validate(data.frame(), check_taxonomic_status = NULL),
+    "check_taxonomic_status is not a flag"
+  )
+  expect_error(
+    dct_validate(data.frame(), check_acc_syn_diff = NULL),
+    "check_acc_syn_diff is not a flag"
+  )
+  expect_error(
+    dct_validate(data.frame(), check_col_names = NULL),
+    "check_col_names is not a flag"
+  )
+})
+
+test_that("correctly formatted data does not error", {
   good_dat <- tibble::tribble(
     ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
     "1", NA, "accepted", "Species foo",
@@ -15,11 +41,9 @@ test_that("validation works", {
       check_acc_syn_diff = FALSE
     )
   )
-  # input not data frame
-  expect_error(
-    dct_validate(1),
-    "'tax_dat' must be of class 'data.frame'"
-  )
+})
+
+test_that("validation catches errors", {
   # taxonID column missing (check_taxon_id)
   expect_error(
     dct_validate(data.frame(scientificName = "foo bar")),

@@ -44,6 +44,12 @@ dct_validate <- function(tax_dat,
     inherits(tax_dat, "data.frame"),
     msg = "'tax_dat' must be of class 'data.frame'"
   )
+  # others are all logical flags
+  assertthat::assert_that(assertthat::is.flag(check_taxon_id))
+  assertthat::assert_that(assertthat::is.flag(check_mapping))
+  assertthat::assert_that(assertthat::is.flag(check_taxonomic_status))
+  assertthat::assert_that(assertthat::is.flag(check_acc_syn_diff))
+  assertthat::assert_that(assertthat::is.flag(check_col_names))
 
   # Check for required column types (only if columns are present)
   # taxonID could be numeric or character
