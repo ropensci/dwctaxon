@@ -27,7 +27,8 @@ Imports:
     purrr,
     stringr,
     tibble,
-    tidyr
+    tidyr,
+    utils
 Suggests: 
     testthat (>= 3.0.0),
     roxyglobals (>= 0.2.1)

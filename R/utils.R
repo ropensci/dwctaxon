@@ -50,7 +50,7 @@ assert_dat <- function(...) {
         success_fun = assertr::success_logical,
         error_fun = assertr::error_logical
       ),
-    msg = capture.output(
+    msg = utils::capture.output(
             assertr::assert(
               ...,
               success_fun = assertr::success_logical,
