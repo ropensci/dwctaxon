@@ -182,25 +182,32 @@ val_if_in_dat <- function(df, col, i) {
 #' to the taxonomic database if the input is supplied as a dataframe.
 #'
 #' @param tax_dat Dataframe; taxonomic database in Darwin Core format.
-#' @param taxon_id Character vector of length 1; taxonID for the entry to be changed.
-#' @param sci_name Character vector of length 1; scientificName for the entry to be changed.
-#' @param new_status Character vector of length 1; updated taxonomicStatus to use for the entry.
-#' @param usage_id Character vector of length 1; taxonID for accepted name if new status is synonym.
-#' @param usage_name Character vector of length 1; scientificName for accepted name if new status is synonym.
-#' @param clear_usage_id Logical vector of length 1; should `acceptedNameUsageID` be set to `NA`?.
+#' @param taxon_id Character vector of length 1; taxonID for the entry to be
+#' changed.
+#' @param sci_name Character vector of length 1; scientificName for the entry to
+#' be changed.
+#' @param new_status Character vector of length 1; updated taxonomicStatus to
+#' use for the entry.
+#' @param usage_id Character vector of length 1; taxonID for accepted name if
+#' new status is synonym.
+#' @param usage_name Character vector of length 1; scientificName for accepted
+#' name if new status is synonym.
+#' @param clear_usage_id Logical vector of length 1; should
+#' `acceptedNameUsageID` be set to `NA`?.
 #' Default: TRUE if `new_status` is "accepted" (case insensitive).
-#' @param strict Logical vector of length 1; should taxonomic checks be run on the updated
-#' taxonomic database?
+#' @param strict Logical vector of length 1; should taxonomic checks be run on
+#' the updated taxonomic database?
 #' @param quiet Logical vector of length 1; should warnings be silenced?
-#' @param args_tbl A dataframe including columns corresponding to one or more of the
-#' above arguments, except for `tax_dat`. In this case, the input taxonomic database
-#' will be modified sequentially over each row of input in `args_tbl`.
+#' @param args_tbl A dataframe including columns corresponding to one or more of
+#' the above arguments, except for `tax_dat`. In this case, the input taxonomic
+#' database will be modified sequentially over each row of input in `args_tbl`.
 #'
 #' @return Dataframe; taxonomic database in Darwin Core format
 #' @autoglobal
 #' @export
 #' @examples
-#' # Swap the accepted / synonym status of Cephalomanes crassum (Copel.) M. G. Price
+#' # Swap the accepted / synonym status of
+#' # Cephalomanes crassum (Copel.) M. G. Price
 #' # and Trichomanes crassum Copel.
 #' dct_filmies |>
 #'   dct_change_status(
@@ -212,7 +219,7 @@ val_if_in_dat <- function(df, col, i) {
 #'     sci_name = "Trichomanes crassum Copel.",
 #'     new_status = "accepted"
 #'   ) |>
-#'   dct_validate()
+#'   dct_validate(check_taxonomic_status = FALSE, strict_mapping = FALSE)
 #'
 #' # Sometimes changing one name will affect others, if they map
 #' # to the new synonym
@@ -226,18 +233,22 @@ val_if_in_dat <- function(df, col, i) {
 #' # Apply a set of changes
 #' library(tibble)
 #' updates <- tibble(
-#'   sci_name = c("Cephalomanes atrovirens Presl", "Cephalomanes crassum (Copel.) M. G. Price"),
+#'   sci_name = c("Cephalomanes atrovirens Presl",
+#'     "Cephalomanes crassum (Copel.) M. G. Price"),
 #'   new_status = "synonym",
 #'   usage_name = "Trichomanes crassum Copel."
 #' )
 #' dct_filmies |>
 #'   dct_change_status(args_tbl = updates) |>
-#'   dct_change_status(sci_name = "Trichomanes crassum Copel.", new_status = "accepted")
+#'   dct_change_status(sci_name = "Trichomanes crassum Copel.",
+#'     new_status = "accepted")
 dct_change_status <- function(tax_dat, taxon_id = NULL,
                               sci_name = NULL, new_status,
                               usage_id = NULL,
                               usage_name = NULL,
-                              clear_usage_id = grepl("accepted", new_status, ignore.case = TRUE),
+                              clear_usage_id = grepl(
+                                "accepted", new_status, ignore.case = TRUE
+                              ),
                               strict = FALSE,
                               quiet = FALSE,
                               args_tbl = NULL) {
@@ -248,7 +259,7 @@ dct_change_status <- function(tax_dat, taxon_id = NULL,
       inherits(args_tbl, "data.frame"),
       msg = "`args_tbl` must be of class data.frame"
     )
-    for (i in seq_len(args_tbl)) {
+    for (i in nrow(args_tbl)) {
       tax_dat <- dct_change_status_single(
         tax_dat,
         sci_name = val_if_in_dat(args_tbl, "sci_name", i),

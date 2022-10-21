@@ -20,27 +20,33 @@ dct_change_status(
 \arguments{
 \item{tax_dat}{Dataframe; taxonomic database in Darwin Core format.}
 
-\item{taxon_id}{Character vector of length 1; taxonID for the entry to be changed.}
+\item{taxon_id}{Character vector of length 1; taxonID for the entry to be
+changed.}
 
-\item{sci_name}{Character vector of length 1; scientificName for the entry to be changed.}
+\item{sci_name}{Character vector of length 1; scientificName for the entry to
+be changed.}
 
-\item{new_status}{Character vector of length 1; updated taxonomicStatus to use for the entry.}
+\item{new_status}{Character vector of length 1; updated taxonomicStatus to
+use for the entry.}
 
-\item{usage_id}{Character vector of length 1; taxonID for accepted name if new status is synonym.}
+\item{usage_id}{Character vector of length 1; taxonID for accepted name if
+new status is synonym.}
 
-\item{usage_name}{Character vector of length 1; scientificName for accepted name if new status is synonym.}
+\item{usage_name}{Character vector of length 1; scientificName for accepted
+name if new status is synonym.}
 
-\item{clear_usage_id}{Logical vector of length 1; should \code{acceptedNameUsageID} be set to \code{NA}?.
+\item{clear_usage_id}{Logical vector of length 1; should
+\code{acceptedNameUsageID} be set to \code{NA}?.
 Default: TRUE if \code{new_status} is "accepted" (case insensitive).}
 
-\item{strict}{Logical vector of length 1; should taxonomic checks be run on the updated
-taxonomic database?}
+\item{strict}{Logical vector of length 1; should taxonomic checks be run on
+the updated taxonomic database?}
 
 \item{quiet}{Logical vector of length 1; should warnings be silenced?}
 
-\item{args_tbl}{A dataframe including columns corresponding to one or more of the
-above arguments, except for \code{tax_dat}. In this case, the input taxonomic database
-will be modified sequentially over each row of input in \code{args_tbl}.}
+\item{args_tbl}{A dataframe including columns corresponding to one or more of
+the above arguments, except for \code{tax_dat}. In this case, the input taxonomic
+database will be modified sequentially over each row of input in \code{args_tbl}.}
 }
 \value{
 Dataframe; taxonomic database in Darwin Core format
@@ -58,7 +64,8 @@ argument is supplied as a vector of length 1, or can apply a set of changes
 to the taxonomic database if the input is supplied as a dataframe.
 }
 \examples{
-# Swap the accepted / synonym status of Cephalomanes crassum (Copel.) M. G. Price
+# Swap the accepted / synonym status of
+# Cephalomanes crassum (Copel.) M. G. Price
 # and Trichomanes crassum Copel.
 dct_filmies |>
   dct_change_status(
@@ -70,7 +77,7 @@ dct_filmies |>
     sci_name = "Trichomanes crassum Copel.",
     new_status = "accepted"
   ) |>
-  dct_validate()
+  dct_validate(check_taxonomic_status = FALSE, strict_mapping = FALSE)
 
 # Sometimes changing one name will affect others, if they map
 # to the new synonym
@@ -84,11 +91,13 @@ dct_change_status(
 # Apply a set of changes
 library(tibble)
 updates <- tibble(
-  sci_name = c("Cephalomanes atrovirens Presl", "Cephalomanes crassum (Copel.) M. G. Price"),
+  sci_name = c("Cephalomanes atrovirens Presl",
+    "Cephalomanes crassum (Copel.) M. G. Price"),
   new_status = "synonym",
   usage_name = "Trichomanes crassum Copel."
 )
 dct_filmies |>
   dct_change_status(args_tbl = updates) |>
-  dct_change_status(sci_name = "Trichomanes crassum Copel.", new_status = "accepted")
+  dct_change_status(sci_name = "Trichomanes crassum Copel.",
+    new_status = "accepted")
 }

@@ -14,7 +14,9 @@
 #' @examples
 #' tibble::tibble(
 #'   taxonID = "123",
-#'   scientificName = "Foogenus barspecies"
+#'   scientificName = "Foogenus barspecies",
+#'   acceptedNameUsageID = NA_character_,
+#'   taxonomicStatus = "accepted"
 #' ) |>
 #'   dct_add_row(
 #'     sci_name = "Foogenus barspecies var. bla",
@@ -50,6 +52,7 @@ dct_add_row <- function(tax_dat, taxon_id = NULL, sci_name, strict = FALSE, ...)
       other_data,
       check_taxon_id = FALSE,
       check_mapping = FALSE,
+      strict_mapping = FALSE,
       check_taxonomic_status = FALSE,
       check_acc_syn_diff = FALSE,
       check_col_names = TRUE

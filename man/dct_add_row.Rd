@@ -30,7 +30,9 @@ Add one entry to a taxonomic database
 \examples{
 tibble::tibble(
   taxonID = "123",
-  scientificName = "Foogenus barspecies"
+  scientificName = "Foogenus barspecies",
+  acceptedNameUsageID = NA_character_,
+  taxonomicStatus = "accepted"
 ) |>
   dct_add_row(
     sci_name = "Foogenus barspecies var. bla",

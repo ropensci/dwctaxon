@@ -46,7 +46,9 @@
 #' @autoglobal
 #' @export
 #' @examples
-#' dct_validate(dct_filmies)
+#' dct_validate(
+#'   dct_filmies, check_taxonomic_status = FALSE,
+#'   strict_mapping = FALSE)
 #'
 dct_validate <- function(tax_dat,
                          check_taxon_id = TRUE,
