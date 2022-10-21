@@ -61,3 +61,45 @@ assert_dat <- function(...) {
       paste(collapse = "\n")
   )
 }
+
+#' Make an assertion about columns of a dataframe
+#'
+#' assertr::assert() normally prints the diagnostic part of the error
+#' to the screen instead of returning it as a proper error. This will
+#' return an error, not a printed message
+#'
+#' @param dat Input dataframe
+#' @param col String; name of column that must be included
+#' @param class Character vector of classes. `col` must inherit from at least
+#' one of the classes.
+#' @param req_col Logical; is `col` required to be present? Set to FALSE to
+#'   check for classes only if that column is present
+#' @noRd
+assert_col <- function(dat, col, class = NULL, req_col = TRUE) {
+  if (isTRUE(req_col)) {
+    assertthat::assert_that(
+        col %in% colnames(dat),
+        msg = glue::glue("Column '{col}' required in input data")
+      )
+  }
+  if (!is.null(class)) {
+    # early exit if don't require column and it isn't there
+    if (!col %in% colnames(dat) && req_col == FALSE) return(TRUE)
+    if (length(class) > 2) {
+      class_list <- c(
+          class[1:length(class) - 1], "or", class[length(class)]
+        )
+      class_list <- paste(class_list, collapse = "', '")
+      class_list <- paste0("'", class_list, "'") |>
+        gsub("'or',", "or", x = _)
+    } else if (length(class) == 2) {
+      class_list <- glue::glue("'{class[[1]]}' or '{class[[2]]}'")
+    } else {
+      class_list <- glue::glue("'{class}'")
+    }
+    assertthat::assert_that(
+        inherits(dat[[col]], class),
+        msg = glue::glue("Column '{col}' must be of class {class_list}")
+      )
+  }
+}
