@@ -72,33 +72,39 @@ work if as long as it makes a partial or full match to one row in the data.</p>
 
 
 <dt>taxon_id</dt>
-<dd><p>Character vector of length 1; taxonID for the entry to be changed.</p></dd>
+<dd><p>Character vector of length 1; taxonID for the entry to be
+changed.</p></dd>
 
 
 <dt>sci_name</dt>
-<dd><p>Character vector of length 1; scientificName for the entry to be changed.</p></dd>
+<dd><p>Character vector of length 1; scientificName for the entry to
+be changed.</p></dd>
 
 
 <dt>new_status</dt>
-<dd><p>Character vector of length 1; updated taxonomicStatus to use for the entry.</p></dd>
+<dd><p>Character vector of length 1; updated taxonomicStatus to
+use for the entry.</p></dd>
 
 
 <dt>usage_id</dt>
-<dd><p>Character vector of length 1; taxonID for accepted name if new status is synonym.</p></dd>
+<dd><p>Character vector of length 1; taxonID for accepted name if
+new status is synonym.</p></dd>
 
 
 <dt>usage_name</dt>
-<dd><p>Character vector of length 1; scientificName for accepted name if new status is synonym.</p></dd>
+<dd><p>Character vector of length 1; scientificName for accepted
+name if new status is synonym.</p></dd>
 
 
 <dt>clear_usage_id</dt>
-<dd><p>Logical vector of length 1; should <code>acceptedNameUsageID</code> be set to <code>NA</code>?.
+<dd><p>Logical vector of length 1; should
+<code>acceptedNameUsageID</code> be set to <code>NA</code>?.
 Default: TRUE if <code>new_status</code> is "accepted" (case insensitive).</p></dd>
 
 
 <dt>strict</dt>
-<dd><p>Logical vector of length 1; should taxonomic checks be run on the updated
-taxonomic database?</p></dd>
+<dd><p>Logical vector of length 1; should taxonomic checks be run on
+the updated taxonomic database?</p></dd>
 
 
 <dt>quiet</dt>
@@ -106,9 +112,9 @@ taxonomic database?</p></dd>
 
 
 <dt>args_tbl</dt>
-<dd><p>A dataframe including columns corresponding to one or more of the
-above arguments, except for <code>tax_dat</code>. In this case, the input taxonomic database
-will be modified sequentially over each row of input in <code>args_tbl</code>.</p></dd>
+<dd><p>A dataframe including columns corresponding to one or more of
+the above arguments, except for <code>tax_dat</code>. In this case, the input taxonomic
+database will be modified sequentially over each row of input in <code>args_tbl</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -128,7 +134,8 @@ to the taxonomic database if the input is supplied as a dataframe.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Swap the accepted / synonym status of Cephalomanes crassum (Copel.) M. G. Price</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Swap the accepted / synonym status of</span></span></span>
+<span class="r-in"><span><span class="co"># Cephalomanes crassum (Copel.) M. G. Price</span></span></span>
 <span class="r-in"><span><span class="co"># and Trichomanes crassum Copel.</span></span></span>
 <span class="r-in"><span><span class="va">dct_filmies</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu">dct_change_status</span><span class="op">(</span></span></span>
@@ -140,13 +147,13 @@ to the taxonomic database if the input is supplied as a dataframe.</p>
 <span class="r-in"><span>    sci_name <span class="op">=</span> <span class="st">"Trichomanes crassum Copel."</span>,</span></span>
 <span class="r-in"><span>    new_status <span class="op">=</span> <span class="st">"accepted"</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span> <span class="op">|&gt;</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="dct_validate.html">dct_validate</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="dct_validate.html">dct_validate</a></span><span class="op">(</span>check_taxonomic_status <span class="op">=</span> <span class="cn">FALSE</span>, strict_mapping <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2,729 × 6</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    taxonID  acceptedNameUsageID taxonomicStatus          taxon…¹ scien…² modif…³</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 54115096 <span style="color: #BB0000;">NA</span>                  accepted name            species Cephal… <span style="color: #BB0000;">NA</span>     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 54133783 <span style="color: #BB0000;">NA</span>                  accepted                 species Tricho… 2022-0…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 54115097 54133783            synonym                  species Cephal… 2022-0…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 54133783 <span style="color: #BB0000;">NA</span>                  accepted                 species Tricho… 2022-1…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 54115097 54133783            synonym                  species Cephal… 2022-1…</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 54133784 54115098            synonym                  species Tricho… <span style="color: #BB0000;">NA</span>     </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 54115098 <span style="color: #BB0000;">NA</span>                  accepted name            species Cephal… <span style="color: #BB0000;">NA</span>     </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 54133785 54115099            synonym                  species Tricho… <span style="color: #BB0000;">NA</span>     </span>
@@ -169,8 +176,8 @@ to the taxonomic database if the input is supplied as a dataframe.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   taxonID  acceptedNameUsageID taxonomicStatus taxonRank scientificName  modif…¹</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 54115096 <span style="color: #BB0000;">NA</span>                  accepted name   species   Cephalomanes a… <span style="color: #BB0000;">NA</span>     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 54133783 54115098            synonym         species   Trichomanes cr… 2022-0…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 54115097 54115098            synonym         species   Cephalomanes c… 2022-0…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 54133783 54115098            synonym         species   Trichomanes cr… 2022-1…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 54115097 54115098            synonym         species   Cephalomanes c… 2022-1…</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> 54133784 54115098            synonym         species   Trichomanes de… <span style="color: #BB0000;">NA</span>     </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> 54115098 <span style="color: #BB0000;">NA</span>                  accepted name   species   Cephalomanes d… <span style="color: #BB0000;">NA</span>     </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> 54133785 54115099            synonym         species   Trichomanes in… <span style="color: #BB0000;">NA</span>     </span>
@@ -179,19 +186,21 @@ to the taxonomic database if the input is supplied as a dataframe.</p>
 <span class="r-in"><span><span class="co"># Apply a set of changes</span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tibble.tidyverse.org/" class="external-link">tibble</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">updates</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  sci_name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Cephalomanes atrovirens Presl"</span>, <span class="st">"Cephalomanes crassum (Copel.) M. G. Price"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  sci_name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Cephalomanes atrovirens Presl"</span>,</span></span>
+<span class="r-in"><span>    <span class="st">"Cephalomanes crassum (Copel.) M. G. Price"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  new_status <span class="op">=</span> <span class="st">"synonym"</span>,</span></span>
 <span class="r-in"><span>  usage_name <span class="op">=</span> <span class="st">"Trichomanes crassum Copel."</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">dct_filmies</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu">dct_change_status</span><span class="op">(</span>args_tbl <span class="op">=</span> <span class="va">updates</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
-<span class="r-in"><span>  <span class="fu">dct_change_status</span><span class="op">(</span>sci_name <span class="op">=</span> <span class="st">"Trichomanes crassum Copel."</span>, new_status <span class="op">=</span> <span class="st">"accepted"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu">dct_change_status</span><span class="op">(</span>sci_name <span class="op">=</span> <span class="st">"Trichomanes crassum Copel."</span>,</span></span>
+<span class="r-in"><span>    new_status <span class="op">=</span> <span class="st">"accepted"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2,729 × 6</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    taxonID  acceptedNameUsageID taxonomicStatus          taxon…¹ scien…² modif…³</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 54115096 54133783            synonym                  species Cephal… 2022-0…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 54133783 <span style="color: #BB0000;">NA</span>                  accepted                 species Tricho… 2022-0…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 54115097 54133783            synonym                  species Cephal… 2022-0…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 54115096 <span style="color: #BB0000;">NA</span>                  accepted name            species Cephal… <span style="color: #BB0000;">NA</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 54133783 <span style="color: #BB0000;">NA</span>                  accepted                 species Tricho… 2022-1…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 54115097 54133783            synonym                  species Cephal… 2022-1…</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 54133784 54115098            synonym                  species Tricho… <span style="color: #BB0000;">NA</span>     </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 54115098 <span style="color: #BB0000;">NA</span>                  accepted name            species Cephal… <span style="color: #BB0000;">NA</span>     </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 54133785 54115099            synonym                  species Tricho… <span style="color: #BB0000;">NA</span>     </span>
