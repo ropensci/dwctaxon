@@ -163,3 +163,15 @@ assert_col <- function(dat, col, class = NULL, req_by = NULL,
   # If nothing else to check, return TRUE
   TRUE
 }
+
+#' Bind rows of several dataframes
+#'
+#' Similar to dplyr::bind_rows(), but if the input contains anything
+#' that is not a dataframe it will be excluded
+#' @param ... Raw input, including multiple dataframes (not a list)
+#' @noRd
+bind_rows_f <- function(...) {
+  x <- list(...)
+  x <- x[sapply(x, function(y) inherits(y, "data.frame"))]
+  do.call(dplyr::bind_rows, x)
+}

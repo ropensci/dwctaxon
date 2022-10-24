@@ -6,21 +6,20 @@
 #' - taxonID may not be missing (NA)
 #' - taxonID must be unique
 #'
-#' The return value depends on the result of the check and on values of
-#' `on_fail` and `on_success`:
+#' @param tax_dat Dataframe; taxonomic database in Darwin Core format.
+#' @param on_fail Character vector of length 1, either "error" or "summary".
+#'  Describes what to do if the check fails. Default "error".
+#' @param on_success Character vector of length 1, either  "logical" or "data".
+#'  Describes what to do if the check passes. Default "data".
+#'
+#' @return Depends on the result of the check and on values of `on_fail` and
+#' `on_success`:
 #' - If the check passes and `on_success` is "logical", return `TRUE`
 #' - If the check passes and `on_success` is "data", return the input dataframe
 #' - If the check fails and `on_fail` is "error", return an error
 #' - If the check fails and `on_fail` is "summary", issue a warning and
 #'   return a dataframe with a summary of the reasons for failure
 #'
-#' @param tax_dat Dataframe; taxonomic database in Darwin Core format.
-#' @param on_fail Character vector of length 1, either "error" or "summary".
-#'  Describes what to do if the check fails. See Details.
-#' @param on_success Character vector of length 1, either  "logical" or "data".
-#'  Describes what to do if the check passes. See Details.
-#'
-#' @return Depends on values of `on_fail` and `on_success`; see Details.
 #' @examples
 #' suppressWarnings(
 #'   dct_check_taxon_id(

@@ -151,3 +151,13 @@ test_that("assert_col() detects column of wrong class", {
     "Column a must be of class character, numeric, or integer"
   )
 })
+
+test_that("bind_rows_f() works", {
+  expect_equal(
+    bind_rows_f(data.frame(a = 1), TRUE, data.frame(b = 2), data.frame(a = 3)),
+    data.frame(
+      a = c(1, NA, 3),
+      b = c(NA, 2, NA)
+    )
+  )
+})
