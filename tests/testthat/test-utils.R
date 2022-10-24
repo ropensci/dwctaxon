@@ -27,35 +27,120 @@ test_that("assert_dat() returns expected error", {
   )
 })
 
-test_that("assert_col() works", {
+test_that("assert_that_d() works", {
+  expect_warning(
+    assert_that_d(1 == 2, data = data.frame(error = "1 not equal to 2"))
+  )
+  expect_equal(
+    suppressWarnings(
+      assert_that_d(
+        1 == 2,
+        data = data.frame(error = "1 not equal to 2"), msg = "1 not equal to 2"
+      )
+    ),
+    data.frame(error = "1 not equal to 2")
+  )
+  expect_equal(
+    assert_that_d(1 != 2),
+    TRUE
+  )
+})
+
+test_that("assert_col() don't error on correct data", {
   expect_no_error(assert_col(data.frame(a = "a"), "a", "character"))
   expect_no_error(assert_col(data.frame(a = "a"), "a"))
-  # note that column only needs to inherit *one* of the classes
+  # - note that column only needs to inherit *one* of the classes
   expect_no_error(
     assert_col(data.frame(a = 1), "a", c("character", "numeric"))
   )
   expect_error(
     assert_col(data.frame(a = 1), "b", "numeric"),
-    "Column 'b' required in input data"
+    "Column b required in input data"
   )
+})
+
+test_that("assert_col() detects missing column", {
+  # on_fail = "summary" returns df
+  expect_equal(
+    suppressWarnings(
+      assert_col(
+        data.frame(a = 1), "b", req_by = "some_func", on_fail = "summary"
+      )
+    ),
+    tibble::tibble(
+      check = "some_func",
+      error = "some_func requires column b in input data"
+    )
+  )
+  # `req_by` is optional
+  expect_equal(
+    suppressWarnings(
+      assert_col(
+        data.frame(a = 1), "b", on_fail = "summary"
+      )
+    ),
+    tibble::tibble(
+      error = "Column b required in input data"
+    )
+  )
+  # on_fail = "summary" issues warning
+  expect_warning(
+    assert_col(
+        data.frame(a = 1), "b", req_by = "some_func", on_fail = "summary"
+      ),
+    "some_func requires column b in input data"
+  )
+  # on_fail = "error" issues error
+  expect_error(
+    assert_col(data.frame(a = 1), "b"),
+    "Column b required in input data"
+  )
+})
+
+test_that("assert_col() detects column of wrong class", {
+  # on_fail = "summary" returns df
+  expect_equal(
+    suppressWarnings(
+      assert_col(
+        data.frame(a = 1), "a", "character",
+        req_by = "some_fun", on_fail = "summary")
+    ),
+    tibble::tibble(
+      check = "some_fun",
+      error = "Column a must be of class character"
+    )
+  )
+  # `req_by` is optional
+  expect_equal(
+    suppressWarnings(
+      assert_col(
+        data.frame(a = 1), "a", "character", on_fail = "summary")
+    ),
+    tibble::tibble(
+      error = "Column a must be of class character"
+    )
+  )
+  # on_fail = "summary" issues warning
+  expect_warning(
+    assert_col(
+      data.frame(a = 1), "a", "character",
+      req_by = "some_fun", on_fail = "summary"
+    ),
+    "Column a must be of class character"
+  )
+  # on_fail = "error" issues error
   expect_error(
     assert_col(data.frame(a = 1), "a", "character"),
-    "Column 'a' must be of class 'character'"
+    "Column a must be of class character"
   )
-  expect_error(
-    assert_col(data.frame(a = 1), "b", "character"),
-    "Column 'b' required in input data"
-  )
-  expect_no_error(
-    assert_col(data.frame(a = 1), "b", "character", req_col = FALSE)
-  )
+  # Checks for multiple classes issue correctly formatted warnings
   expect_error(
     assert_col(
       data.frame(a = complex(1)),
       "a",
       c("character", "numeric")
     ),
-    "Column 'a' must be of class 'character' or 'numeric"
+    "Column a must be of class character or numeric"
   )
   expect_error(
     assert_col(
@@ -63,6 +148,6 @@ test_that("assert_col() works", {
       "a",
       c("character", "numeric", "integer")
     ),
-    "Column 'a' must be of class 'character', 'numeric', or 'integer'"
+    "Column a must be of class character, numeric, or integer"
   )
 })
