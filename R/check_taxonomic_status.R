@@ -1,0 +1,146 @@
+#' Check that taxonomicStatus is in range of valid values
+#' Assumes that required columns
+#' (taxonomicStatus, taxonID) are present.
+#' @param valid_tax_status See dct_check_tax_status()
+#' @inherit dct_check_taxon_id
+#' @noRd
+check_tax_status <- function(
+  tax_dat,
+  on_fail = "error",
+  on_success = "data",
+  valid_tax_status = Sys.getenv(
+    "VALID_TAX_STATUS",
+    unset = "accepted, synonym, variant, NA")
+  ) {
+  # Convert valid_tax_status to vector
+    valid_tax_status_v <- strsplit(valid_tax_status, ", *")[[1]] |>
+      unique()
+    valid_tax_status_v[valid_tax_status_v == "NA"] <- NA_character_
+  # Check that that taxonomicStatus is in range of valid values
+    tax_status_is_bad <- !tax_dat$taxonomicStatus %in% valid_tax_status_v
+
+  # In case of failure
+  if (on_fail == "error") {
+    # either TRUE or early exit with failure
+    assertthat::assert_that(
+      sum(tax_status_is_bad) == 0,
+      msg = glue::glue(
+        "check_tax_status failed.
+          taxonID detected whose taxonomicStatus is not \\
+          in valid_tax_status ({valid_tax_status})
+          Bad taxonID: \\
+          {paste(tax_dat$taxonID[tax_status_is_bad], collapse = ', ')}
+          Bad taxonomicStatus: \\
+          {paste(tax_dat$taxonomicStatus[tax_status_is_bad], collapse = ', ')}"
+      )
+    )
+  }
+  if (on_fail == "summary") {
+    #  either skip or early exit with data
+    if (length(tax_status_is_bad) != 0) {
+      warning("check_tax_status failed")
+      return(
+        tibble::tibble(
+          taxonID = tax_dat$taxonID[tax_status_is_bad],
+          scientificName = tax_dat$scientificName[tax_status_is_bad],
+          error = as.character(glue::glue(
+            "taxonID detected whose taxonomicStatus is not \\
+             in valid_tax_status ({valid_tax_status})")),
+          check = "check_tax_status"
+        )
+      )
+    }
+  }
+  # In case of success
+  if (on_success == "data") {
+    return(tax_dat)
+  }
+  if (on_success == "logical") {
+    return(TRUE)
+  }
+
+}
+
+#' Check that taxonomicStatus is within valid values in
+#' Darwin Core taxonomic data
+#'
+#' @param valid_tax_status Character vector of length 1; valid values for
+#'   `taxonomicStatus`. Each value must be separated by a comma. Default
+#'   `"accepted, synonym, variant, NA"`. `"NA"` indicates that missing (NA)
+#'   values are valid. Case-sensitive. Can also be set with the environmental
+#'   variable `"VALID_TAX_STATUS"` (see Examples).
+#' @inheritParams dct_check_taxon_id
+#' @inherit dct_check_taxon_id return
+#' @references <https://dwc.tdwg.org/terms/#dwc:taxonomicStatus>
+#' @examples
+#' # The bad data has an taxonomicStatus (third row, "foo") that is not
+#' # a valid value
+#' bad_dat <- tibble::tribble(
+#'   ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
+#'   "1", NA, "accepted", "Species foo",
+#'   "2", "1", "synonym", "Species bar",
+#'   "3", NA, "foo", "Species bat"
+#' )
+#' suppressWarnings(
+#'   dct_check_tax_status(bad_dat, on_fail = "summary")
+#' )
+#' # Example of setting valid values of taxonomicStatus via an environmental
+#' # variable
+#' Sys.setenv(VALID_TAX_STATUS = "provisionally accepted, synonym, NA")
+#' tibble::tribble(
+#'    ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
+#'    "1", NA, "provisionally accepted", "Species foo",
+#'    "2", "1", "synonym", "Species bar",
+#'    "3", NA, NA, "Strange name"
+#'  ) |>
+#' dct_check_tax_status()
+#' Sys.unsetenv("VALID_TAX_STATUS")
+#'
+#' @export
+dct_check_tax_status  <- function(
+  tax_dat,
+  on_fail = "error",
+  on_success = "data",
+  valid_tax_status = Sys.getenv(
+    "VALID_TAX_STATUS",
+    unset = "accepted, synonym, variant, NA")
+  ) {
+
+  # Check for required columns
+  taxon_id_exists <- assert_col(
+    tax_dat, "taxonID", c("character", "numeric", "integer"),
+    req_by = "check_tax_status", on_fail = on_fail
+  )
+  taxonomic_status_exists <- assert_col(
+    tax_dat, "taxonomicStatus", "character",
+    req_by = "check_tax_status", on_fail = on_fail
+  )
+  # Early exit if req cols not present
+  if (on_fail == "summary") {
+    if (any(!isTRUE(taxon_id_exists), !isTRUE(taxonomic_status_exists))) {
+      return(bind_rows_f(taxon_id_exists, taxonomic_status_exists))
+    }
+  }
+
+  # Run main check
+  check_tax_status_res <- suppressWarnings(
+    check_tax_status(
+      tax_dat, on_fail = on_fail, on_success = "logical"
+    )
+  )
+
+  # Format output
+  if (on_fail == "summary") {
+    if (!isTRUE(check_tax_status_res)) {
+      warning("check_tax_status failed")
+      return(check_tax_status_res)
+    }
+  }
+  if (on_success == "data") {
+    return(tax_dat)
+  }
+  if (on_success == "logical") {
+    return(TRUE)
+  }
+
+}
