@@ -38,11 +38,15 @@ The following rules are enforced:
 }
 }
 \examples{
-suppressWarnings(
-  dct_check_taxon_id(
-    data.frame(taxonID = NA_character_),
-    on_fail = "summary")
+# The bad data has an acceptedNameUsageID (third row, "4") that lacks a
+# corresponding taxonID
+bad_dat <- tibble::tribble(
+  ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
+  "1", NA, "accepted", "Species foo",
+  "2", "1", "synonym", "Species bar",
+  "3", "4", "synonym", "Species bat"
 )
-dct_check_taxon_id(data.frame(taxonID = 1))
-
+suppressWarnings(
+  dct_check_mapping(bad_dat, on_fail = "summary")
+)
 }

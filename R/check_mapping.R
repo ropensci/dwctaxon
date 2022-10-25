@@ -118,8 +118,21 @@ check_mapping <- function(
 #' - taxonID may not be identical to acceptedNameUsageID within a single row
 #' - Every acceptedNameUsageID must have a corresponding taxonID
 #'
-#' @inherit dct_check_taxon_id
+#' @inheritParams dct_check_taxon_id
+#' @inherit dct_check_taxon_id return
 #' @export
+#' @examples
+#' # The bad data has an acceptedNameUsageID (third row, "4") that lacks a
+#' # corresponding taxonID
+#' bad_dat <- tibble::tribble(
+#'   ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
+#'   "1", NA, "accepted", "Species foo",
+#'   "2", "1", "synonym", "Species bar",
+#'   "3", "4", "synonym", "Species bat"
+#' )
+#' suppressWarnings(
+#'   dct_check_mapping(bad_dat, on_fail = "summary")
+#' )
 dct_check_mapping <- function(
   tax_dat,
   on_fail = "error",
@@ -134,37 +147,38 @@ dct_check_mapping <- function(
     tax_dat, "scientificName", "character",
     req_by = "check_mapping", on_fail = on_fail
   )
+  # Early exit if req cols not present
   if (on_fail == "summary") {
-    if (!isTRUE(acc_name_id_exists) && !isTRUE(sci_name_exists)) {
-      return(rbind(acc_name_id_exists, sci_name_exists))
-    }
-    if (isTRUE(acc_name_id_exists) && !isTRUE(sci_name_exists)) {
-      return(sci_name_exists)
-    }
-    if (!isTRUE(acc_name_id_exists) && isTRUE(sci_name_exists)) {
-      return(acc_name_id_exists)
+    if (any(!isTRUE(acc_name_id_exists), !isTRUE(sci_name_exists))) {
+      return(bind_rows_f(acc_name_id_exists, sci_name_exists))
     }
   }
 
   # Check taxon ID
-  check_taxon_id_res <- dct_check_taxon_id(
-    tax_dat, on_fail = on_fail, on_success = "logical"
-  )
-  # Check for mapping to self
-  check_mapping_to_self_res <- check_mapping_to_self(
-    tax_dat, on_fail = on_fail, on_success = "logical"
-  )
-  # Check for matching taxonID in acceptedNameUsageID
-  check_mapping_res <- check_mapping(
-    tax_dat, on_fail = on_fail, on_success = "logical"
-  )
+  suppressWarnings({
+    check_taxon_id_res <- dct_check_taxon_id(
+      tax_dat, on_fail = on_fail, on_success = "logical"
+    )
+    # Check for mapping to self
+    check_mapping_to_self_res <- check_mapping_to_self(
+      tax_dat, on_fail = on_fail, on_success = "logical"
+    )
+    # Check for matching taxonID in acceptedNameUsageID
+    check_mapping_res <- check_mapping(
+      tax_dat, on_fail = on_fail, on_success = "logical"
+    )
+  })
 
   # In case of failure
   # (errors will exit early anyways)
   if (on_fail == "summary") {
-    if (!isTRUE(check_mapping_to_self_res) ||
-        !isTRUE(check_mapping_res) ||
-        !isTRUE(check_taxon_id_res)) {
+    if (
+      any(
+        !isTRUE(check_mapping_to_self_res),
+        !isTRUE(check_mapping_res),
+        !isTRUE(check_taxon_id_res)
+      )
+    ) {
       warning("check_mapping failed")
       return(
         bind_rows_f(

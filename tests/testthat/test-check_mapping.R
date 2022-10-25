@@ -180,3 +180,6 @@ test_that("bad taxonID also causes failure", {
     )
   )
 })
+
+rm(bad_dat_1)
+rm(bad_dat_2)
