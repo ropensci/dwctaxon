@@ -183,3 +183,25 @@ test_that("any_not_true() works", {
     TRUE
   )
 })
+
+test_that("null_transformer() works", {
+  expect_equal(
+    glue::glue("hi {NULL}", .transformer = null_transformer("there")),
+    "hi there"
+  )
+  expect_equal(
+    glue::glue("hi {}", .transformer = null_transformer("there")),
+    "hi there"
+  )
+})
+
+test_that("make_msg() works", {
+  expect_equal(
+    make_msg("taxonID", c(1, 2), is_last = TRUE),
+    "Bad taxonID: 1, 2"
+  )
+  expect_equal(
+    make_msg("taxonID", c(1, 2)),
+    "Bad taxonID: 1, 2\n"
+  )
+})

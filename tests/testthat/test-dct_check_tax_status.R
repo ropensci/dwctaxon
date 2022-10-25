@@ -43,6 +43,7 @@ test_that("Bad data results in error with on_fail = 'error'", {
     tibble::tibble(
       taxonID = "3",
       scientificName = "Species bat",
+      taxonomicStatus = "foo",
       error = paste(
         "taxonID detected whose taxonomicStatus is not in",
         "valid_tax_status (accepted, synonym, variant, NA)"),
@@ -65,6 +66,7 @@ test_that("Bad data results in error with on_fail = 'error'", {
     tibble::tibble(
       taxonID = "3",
       scientificName = "Species bat",
+      taxonomicStatus = "foo",
       error = paste(
         "taxonID detected whose taxonomicStatus is not in",
         "valid_tax_status (accepted, synonym, variant, NA)"),

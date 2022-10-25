@@ -70,7 +70,8 @@ test_that("Bad data results in error with on_fail = 'error'", {
       "check_mapping failed.*",
       "taxonID detected with identical acceptedNameUsageID.*",
       "Bad taxonID\\: 3.*",
-      "Bad scientificName\\: Species bat"
+      "Bad scientificName\\: Species bat.*",
+      "Bad acceptedNameUsageID\\: 3"
     )
   )
   expect_error(
@@ -80,7 +81,8 @@ test_that("Bad data results in error with on_fail = 'error'", {
       "taxonID detected whose acceptedNameUsageID value does not map to.*",
       "taxonID of an existing name.*",
       "Bad taxonID\\: 3.*",
-      "Bad scientificName\\: Species bat"
+      "Bad scientificName\\: Species bat.*",
+      "Bad acceptedNameUsageID\\: 4"
     )
   )
   expect_error(
@@ -89,7 +91,8 @@ test_that("Bad data results in error with on_fail = 'error'", {
       "check_mapping failed.*",
       "taxonID detected with identical acceptedNameUsageID.*",
       "Bad taxonID\\: 3.*",
-      "Bad scientificName\\: Species bat"
+      "Bad scientificName\\: Species bat.*",
+      "Bad acceptedNameUsageID\\: 3"
     )
   )
   expect_error(
@@ -99,7 +102,8 @@ test_that("Bad data results in error with on_fail = 'error'", {
       "taxonID detected whose acceptedNameUsageID value does not map to.*",
       "taxonID of an existing name.*",
       "Bad taxonID\\: 3.*",
-      "Bad scientificName\\: Species bat"
+      "Bad scientificName\\: Species bat.*",
+      "Bad acceptedNameUsageID\\: 4"
     )
   )
 })
@@ -112,6 +116,7 @@ test_that("Bad data results in summary with on_fail = 'summary'", {
     tibble::tibble(
       taxonID = "3",
       scientificName = "Species bat",
+      acceptedNameUsageID = "3",
       error = "taxonID detected with identical acceptedNameUsageID",
       check = "check_mapping"
     )
@@ -123,6 +128,7 @@ test_that("Bad data results in summary with on_fail = 'summary'", {
     tibble::tibble(
       taxonID = "3",
       scientificName = "Species bat",
+      acceptedNameUsageID = "3",
       error = "taxonID detected with identical acceptedNameUsageID",
       check = "check_mapping"
     )
@@ -134,6 +140,7 @@ test_that("Bad data results in summary with on_fail = 'summary'", {
     tibble::tibble(
       taxonID = "3",
       scientificName = "Species bat",
+      acceptedNameUsageID = "4",
       error = "taxonID detected whose acceptedNameUsageID value does not map to taxonID of an existing name.", # nolint
       check = "check_mapping",
     )
@@ -145,6 +152,7 @@ test_that("Bad data results in summary with on_fail = 'summary'", {
     tibble::tibble(
       taxonID = "3",
       scientificName = "Species bat",
+      acceptedNameUsageID = "4",
       error = "taxonID detected whose acceptedNameUsageID value does not map to taxonID of an existing name.", # nolint
       check = "check_mapping",
     )

@@ -187,3 +187,31 @@ any_not_true <- function(x) {
   sapply(x, function(y) !isTRUE(y)) |>
     any()
 }
+
+#' Transformer for glue
+#' @param str String to print for NULL in glue expressions
+#' @noRd
+null_transformer <- function(str = "NULL") {
+  function(text, envir) {
+    out <- glue::identity_transformer(text, envir)
+    if (is.null(out)) {
+      return(str)
+    }
+    out
+  }
+}
+
+#' Helper function to make an error message
+#' @param bad_col Name of column with bad values
+#' @param values The bad values
+#' @param is_last Logical; is this the last of a series of strings
+#'   in an error message? (in which case it should not have a line break
+#'   after it).
+#' @noRd
+make_msg <- function(bad_col, values, is_last = FALSE) {
+  if (is.null(values)) return(NULL)
+  if (length(values) == 0) return(NULL)
+  glue::glue(
+    "Bad {bad_col}: {paste(values, collapse = ', ')}{txt}",
+    txt = ifelse(is_last, "", "\n"))
+}

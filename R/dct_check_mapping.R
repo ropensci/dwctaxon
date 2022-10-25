@@ -21,56 +21,36 @@ check_mapping_to_self <- function(
   map_id_is_na <- is.na(tax_dat$acceptedNameUsageID)
   map_id_is_bad <- !map_id_is_na & map_to_self
 
+  # Get vectors of bad values
+  bad_taxon_id <- tax_dat$taxonID[map_id_is_bad]
+  bad_sci_name <- tax_dat$scientificName[map_id_is_bad]
+  bad_acc_id <- tax_dat$acceptedNameUsageID[map_id_is_bad]
+
   # Format results
-  # provide sci name if available
-  if (!is.null((tax_dat$scientificName))) {
-    if (on_fail == "error") {
-      assertthat::assert_that(
-        sum(map_id_is_bad) == 0,
-        msg = glue::glue(
-          "check_mapping failed.
-            taxonID detected with identical acceptedNameUsageID.
-            Bad taxonID: \\
-            {paste(tax_dat$taxonID[map_id_is_bad], collapse = ', ')}
-            Bad scientificName: \\
-            {paste(tax_dat$scientificName[map_id_is_bad], collapse = ', ')}"
-        )
+  if (on_fail == "error") {
+    assertthat::assert_that(
+      sum(map_id_is_bad) == 0,
+      msg = glue::glue(
+        "check_mapping failed.
+          taxonID detected with identical acceptedNameUsageID.
+          {make_msg('taxonID', bad_taxon_id)}\\
+          {make_msg('scientificName', bad_sci_name)}\\
+          {make_msg('acceptedNameUsageID', bad_acc_id, is_last = TRUE)}",
+          .transformer = null_transformer("")
       )
-    }
-    if (on_fail == "summary") {
-      assert_that_d(
-        sum(map_id_is_bad) == 0,
-        data = tibble::tibble(
-          taxonID = tax_dat$taxonID[map_id_is_bad],
-          scientificName = tax_dat$scientificName[map_id_is_bad],
-          error = "taxonID detected with identical acceptedNameUsageID",
-          check = "check_mapping"
-        )
-      )
-    }
+    )
   }
-  if (is.null((tax_dat$scientificName))) {
-    if (on_fail == "error") {
-      assertthat::assert_that(
-        sum(map_id_is_bad) == 0,
-        msg = glue::glue(
-          "check_mapping failed.
-            taxonID detected with identical acceptedNameUsageID.
-            Bad taxonID: \\
-            {paste(tax_dat$taxonID[map_id_is_bad], collapse = ', ')}"
-        )
+  if (on_fail == "summary") {
+    assert_that_d(
+      sum(map_id_is_bad) == 0,
+      data = tibble::tibble(
+        taxonID = bad_taxon_id,
+        scientificName = bad_sci_name,
+        acceptedNameUsageID = bad_acc_id,
+        error = "taxonID detected with identical acceptedNameUsageID",
+        check = "check_mapping"
       )
-    }
-    if (on_fail == "summary") {
-      assert_that_d(
-        sum(map_id_is_bad) == 0,
-        data = tibble::tibble(
-          taxonID = tax_dat$taxonID[map_id_is_bad],
-          error = "taxonID detected with identical acceptedNameUsageID",
-          check = "check_mapping"
-        )
-      )
-    }
+    )
   }
   if (on_success == "data") {
     return(tax_dat)
@@ -105,65 +85,43 @@ check_mapping <- function(
   map_id_is_na <- is.na(tax_dat$acceptedNameUsageID)
   map_id_is_bad <- !map_id_is_na & !map_id_is_good
 
+  # Get vectors of bad values
+  bad_taxon_id <- tax_dat$taxonID[map_id_is_bad]
+  bad_sci_name <- tax_dat$scientificName[map_id_is_bad]
+  bad_acc_id <- tax_dat$acceptedNameUsageID[map_id_is_bad]
+
   # Format results
   # provide sci name if available
-  if (!is.null((tax_dat$scientificName))) {
-    if (on_fail == "error") {
-      assertthat::assert_that(
-        sum(map_id_is_bad) == 0,
-        msg = glue::glue(
-          "check_mapping failed.
-            taxonID detected whose acceptedNameUsageID value does not \\
-            map to taxonID of an existing name.
-            Bad taxonID: \\
-            {paste(tax_dat$taxonID[map_id_is_bad], collapse = ', ')}
-            Bad scientificName: \\
-            {paste(tax_dat$scientificName[map_id_is_bad], collapse = ', ')}"
-        )
+  if (on_fail == "error") {
+    assertthat::assert_that(
+      sum(map_id_is_bad) == 0,
+      msg = glue::glue(
+        "check_mapping failed.
+          taxonID detected whose acceptedNameUsageID value does not \\
+          map to taxonID of an existing name.
+          {make_msg('taxonID', bad_taxon_id)}\\
+          {make_msg('scientificName', bad_sci_name)}\\
+          {make_msg('acceptedNameUsageID', bad_acc_id, is_last = TRUE)}",
+          .transformer = null_transformer("")
       )
-    }
-    if (on_fail == "summary") {
-      assert_that_d(
-        sum(map_id_is_bad) == 0,
-        data = tibble::tibble(
-          taxonID = tax_dat$taxonID[map_id_is_bad],
-          scientificName = tax_dat$scientificName[map_id_is_bad],
-          error = paste(
-            "taxonID detected whose acceptedNameUsageID value does not",
-            "map to taxonID of an existing name."
-          ),
-          check = "check_mapping"
-        )
-      )
-    }
+    )
   }
-  if (is.null((tax_dat$scientificName))) {
-    if (on_fail == "error") {
-      assertthat::assert_that(
-        sum(map_id_is_bad) == 0,
-        msg = glue::glue(
-          "check_mapping failed.
-            taxonID detected whose acceptedNameUsageID value does not \\
-            map to taxonID of an existing name.
-            Bad taxonID: \\
-            {paste(tax_dat$taxonID[map_id_is_bad], collapse = ', ')}"
-        )
+  if (on_fail == "summary") {
+    assert_that_d(
+      sum(map_id_is_bad) == 0,
+      data = tibble::tibble(
+        taxonID = bad_taxon_id,
+        scientificName = bad_sci_name,
+        acceptedNameUsageID = bad_acc_id,
+        error = paste(
+          "taxonID detected whose acceptedNameUsageID value does not",
+          "map to taxonID of an existing name."
+        ),
+        check = "check_mapping"
       )
-    }
-    if (on_fail == "summary") {
-      assert_that_d(
-        sum(map_id_is_bad) == 0,
-        data = tibble::tibble(
-          taxonID = tax_dat$taxonID[map_id_is_bad],
-          error = paste(
-            "taxonID detected whose acceptedNameUsageID value does not",
-            "map to taxonID of an existing name."
-          ),
-          check = "check_mapping"
-        )
-      )
-    }
+    )
   }
+
   if (on_success == "data") {
     return(tax_dat)
   }
