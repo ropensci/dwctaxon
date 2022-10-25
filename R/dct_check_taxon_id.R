@@ -1,3 +1,89 @@
+#' check_taxon_id sub-check: check that no taxonID is missing
+#' Assumes that required columns
+#' (taxonID) are present.
+#' @inherit dct_check_taxon_id
+#' @noRd
+check_taxon_id_not_na <- function(
+  tax_dat,
+  on_fail,
+  on_success
+) {
+
+  # Check for missing ID
+  missing_tax_id <- tax_dat$taxonID[is.na(tax_dat$taxonID)]
+
+  # Format results
+  if (on_fail == "error") {
+    assertthat::assert_that(
+      length(missing_tax_id) == 0,
+      msg = glue::glue(
+        "check_taxon_id failed
+         taxonID detected with missing value
+         Bad taxonID: {missing_tax_id}
+      ")
+    )
+  }
+  if (on_fail == "summary") {
+    assert_that_d(
+      length(missing_tax_id) == 0,
+      data = tibble::tibble(
+        taxonID = missing_tax_id,
+        check = "check_taxon_id",
+        error = "taxonID detected with missing value"
+      )
+    )
+  }
+  if (on_success == "data") {
+    return(tax_dat)
+  }
+  if (on_success == "logical") {
+    return(TRUE)
+  }
+}
+
+#' check_taxon_id sub-check: check that all taxonID values are unique
+#' Assumes that required columns
+#' (taxonID) are present.
+#' @inherit dct_check_taxon_id
+#' @noRd
+check_taxon_id_is_uniq <- function(
+  tax_dat,
+  on_fail,
+  on_success
+) {
+
+  # Check for duplicated ID
+  duplicated_tax_id <- tax_dat$taxonID[duplicated(tax_dat$taxonID)]
+  
+  # Format results
+  if (on_fail == "error") {
+    assertthat::assert_that(
+      length(duplicated_tax_id) == 0,
+      msg = glue::glue(
+        "check_taxon_id failed
+         taxonID detected with duplicated value
+         Bad taxonID: {duplicated_tax_id}
+      ")
+    )
+  }
+  if (on_fail == "summary") {
+    assert_that_d(
+      length(duplicated_tax_id) == 0,
+      data = tibble::tibble(
+        taxonID = duplicated_tax_id,
+        check = "check_taxon_id",
+        error = "taxonID detected with duplicated value"
+      )
+    )
+  }
+  if (on_success == "data") {
+    return(tax_dat)
+  }
+  if (on_success == "logical") {
+    return(TRUE)
+  }
+}
+
 #' Check taxonID
 #'
 #' Check for correctly formatted taxonID column in Darwin Core taxonomic data.
@@ -32,7 +118,8 @@ dct_check_taxon_id <- function(
   tax_dat,
   on_fail = "error",
   on_success = "data") {
-  # Run checks on input
+
+  # Check input format
   assertthat::assert_that(
     inherits(tax_dat, "data.frame"),
     msg = "'tax_dat' must be of class 'data.frame'"
@@ -47,49 +134,27 @@ dct_check_taxon_id <- function(
     on_success %in% c("data", "logical"),
     msg = "on_success must be one of 'data' or 'logical'"
   )
-  # First check for required column
-  req_col_check <- assert_col(
-    tax_dat, "taxonID", c("character", "numeric", "integer"),
-    req_by = "check_taxon_id", on_fail = on_fail
+
+  # Run main checks
+  suppressWarnings(
+    check_res <- list(
+      # Check for required columns
+      assert_col(
+        tax_dat, "taxonID", c("character", "numeric", "integer"),
+        req_by = "check_taxon_id", on_fail = on_fail
+      ),
+      # Check taxonID not NA
+      check_taxon_id_not_na(tax_dat, on_fail = on_fail, on_success = "logical"),
+      # Check taxonID is unique
+      check_taxon_id_is_uniq(tax_dat, on_fail = on_fail, on_success = "logical")
+    )
   )
-  if (!isTRUE(req_col_check) && on_fail == "summary") {
-    return(req_col_check)
-  }
-  missing_tax_id <- tax_dat$taxonID[is.na(tax_dat$taxonID)]
-  dup_tax_id <- tax_dat$taxonID[duplicated(tax_dat$taxonID)]
-  if (on_fail == "error") {
-    assertthat::assert_that(
-      length(missing_tax_id) == 0,
-      msg = glue::glue(
-        "check_taxon_id failed
-         taxonID detected with missing value
-         Bad taxonID: {missing_tax_id}
-      ")
-    )
-    assertthat::assert_that(
-      length(dup_tax_id) == 0,
-      msg = glue::glue(
-        "check_taxon_id failed
-         taxonID detected with duplicated value
-         Bad taxonID: {dup_tax_id}
-      ")
-    )
-  }
+
+  # Format results
   if (on_fail == "summary") {
-    if (length(missing_tax_id) != 0 || length(dup_tax_id) != 0) {
-      missing_tax_id_summary <- tibble::tibble(
-        taxonID = missing_tax_id,
-        check = "check_taxon_id",
-        error = "taxonID detected with missing value"
-      )
-     dup_tax_id_summary <- tibble::tibble(
-        taxonID = dup_tax_id,
-        check = "check_taxon_id",
-        error = "taxonID detected with duplicated value"
-     )
-     error_summary <- rbind(missing_tax_id_summary, dup_tax_id_summary)
-     warning("check_taxon_id failed")
-     return(error_summary)
+    if (any_not_true(check_res)) {
+      warning("check_taxon failed")
+      return(bind_rows_f(check_res))
     }
   }
   if (on_success == "data") {
@@ -98,4 +163,5 @@ dct_check_taxon_id <- function(
   if (on_success == "logical") {
     return(TRUE)
   }
+
 }

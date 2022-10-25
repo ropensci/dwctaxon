@@ -65,14 +65,19 @@ assert_dat <- function(...) {
 #' Make an assertion and return a dataframe if not true
 #'
 #' Similar to assertthat::assert_that(), but returns a dataframe (and a warning)
-#' on failure
+#' on failure.
+#'
+#' Must only be used inside a function, in which case the function will exit
+#' early with the warning and return the data.
 #'
 #' @param condition The test condition
 #' @param data Dataframe to return if test is false
 #' @param msg Warning message to return if test if false
+#' @param env Environment in which to evaluate the function; default is
+#'   the parent frame (function)
 #' @return TRUE if test is true or `data` if test is false
 #' @noRd
-assert_that_d <- function(condition, data, msg = NULL) {
+assert_that_d <- function(condition, data, msg = NULL, env = parent.frame()) {
   assert_res <- tryCatch(
     expr = assertthat::assert_that(condition, msg = msg),
     error = function(e) return(e),
@@ -82,7 +87,7 @@ assert_that_d <- function(condition, data, msg = NULL) {
     return(TRUE)
   } else {
     warning(unclass(assert_res)$message)
-    return(data)
+    do.call(return, list(data), envir = env)
   }
 }
 
@@ -168,10 +173,17 @@ assert_col <- function(dat, col, class = NULL, req_by = NULL,
 #'
 #' Similar to dplyr::bind_rows(), but if the input contains anything
 #' that is not a dataframe it will be excluded
-#' @param ... Raw input, including multiple dataframes (not a list)
+#' @param x List possibly including multiple dataframes
 #' @noRd
-bind_rows_f <- function(...) {
-  x <- list(...)
+bind_rows_f <- function(x) {
   x <- x[sapply(x, function(y) inherits(y, "data.frame"))]
   do.call(dplyr::bind_rows, x)
+}
+
+#' Check if any elements of a list are not TRUE
+#' @param x A list
+#' @noRd
+any_not_true <- function(x) {
+  sapply(x, function(y) !isTRUE(y)) |>
+    any()
 }

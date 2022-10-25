@@ -83,8 +83,9 @@ test_that("Bad data results in summary with on_fail = 'summary'", {
   expect_equal(
     suppressWarnings(
       dct_check_taxon_id(
-      data.frame(scientificName = "foo bar"),
-      on_fail = "summary")
+        data.frame(scientificName = "foo bar"),
+        on_fail = "summary"
+      )
     ),
     tibble::tibble(
       check = "check_taxon_id",

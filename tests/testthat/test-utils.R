@@ -28,12 +28,17 @@ test_that("assert_dat() returns expected error", {
 })
 
 test_that("assert_that_d() works", {
+  # assert_that_d() only works inside a function, so first define
+  # the function
+  assert_that_d_wrapper <- function(...) {
+    assert_that_d(...)
+  }
   expect_warning(
-    assert_that_d(1 == 2, data = data.frame(error = "1 not equal to 2"))
+    assert_that_d_wrapper(1 == 2, data = data.frame(error = "1 not equal to 2"))
   )
   expect_equal(
     suppressWarnings(
-      assert_that_d(
+      assert_that_d_wrapper(
         1 == 2,
         data = data.frame(error = "1 not equal to 2"), msg = "1 not equal to 2"
       )
@@ -41,7 +46,7 @@ test_that("assert_that_d() works", {
     data.frame(error = "1 not equal to 2")
   )
   expect_equal(
-    assert_that_d(1 != 2),
+    assert_that_d_wrapper(1 != 2),
     TRUE
   )
 })
@@ -154,10 +159,27 @@ test_that("assert_col() detects column of wrong class", {
 
 test_that("bind_rows_f() works", {
   expect_equal(
-    bind_rows_f(data.frame(a = 1), TRUE, data.frame(b = 2), data.frame(a = 3)),
+    bind_rows_f(
+      list(data.frame(a = 1), TRUE, data.frame(b = 2), data.frame(a = 3))
+    ),
     data.frame(
       a = c(1, NA, 3),
       b = c(NA, 2, NA)
     )
+  )
+})
+
+test_that("any_not_true() works", {
+  expect_equal(
+    any_not_true(list(TRUE, TRUE)),
+    FALSE
+  )
+  expect_equal(
+    any_not_true(list(TRUE, "a")),
+    TRUE
+  )
+  expect_equal(
+    any_not_true(list(TRUE, data.frame(a = 1))),
+    TRUE
   )
 })

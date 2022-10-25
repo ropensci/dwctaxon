@@ -13,9 +13,8 @@ check_mapping_to_self <- function(
   map_id_is_na <- is.na(tax_dat$acceptedNameUsageID)
   map_id_is_bad <- !map_id_is_na & map_to_self
 
-  # In case of failure
+  # Format results
   if (on_fail == "error") {
-    # either TRUE or early exit with failure
     assertthat::assert_that(
       sum(map_id_is_bad) == 0,
       msg = glue::glue(
@@ -29,19 +28,16 @@ check_mapping_to_self <- function(
     )
   }
   if (on_fail == "summary") {
-    #  either skip or early exit with data
-    if (length(map_id_is_bad) != 0) {
-      return(
-        tibble::tibble(
-          taxonID = tax_dat$taxonID[map_id_is_bad],
-          scientificName = tax_dat$scientificName[map_id_is_bad],
-          error = "taxonID detected with identical acceptedNameUsageID",
-          check = "check_mapping"
-        )
+    assert_that_d(
+      sum(map_id_is_bad) == 0,
+      data = tibble::tibble(
+        taxonID = tax_dat$taxonID[map_id_is_bad],
+        scientificName = tax_dat$scientificName[map_id_is_bad],
+        error = "taxonID detected with identical acceptedNameUsageID",
+        check = "check_mapping"
       )
-    }
+    )
   }
-  # In case of success
   if (on_success == "data") {
     return(tax_dat)
   }
@@ -67,9 +63,8 @@ check_mapping <- function(
   map_id_is_na <- is.na(tax_dat$acceptedNameUsageID)
   map_id_is_bad <- !map_id_is_na & !map_id_is_good
 
-  # In case of failure
+  # Format results
   if (on_fail == "error") {
-    # either TRUE or early exit with failure
     assertthat::assert_that(
       sum(map_id_is_bad) == 0,
       msg = glue::glue(
@@ -84,22 +79,19 @@ check_mapping <- function(
     )
   }
   if (on_fail == "summary") {
-    #  either skip or early exit with data
-    if (length(map_id_is_bad) != 0) {
-      return(
-        tibble::tibble(
-          taxonID = tax_dat$taxonID[map_id_is_bad],
-          scientificName = tax_dat$scientificName[map_id_is_bad],
-          error = paste(
-            "taxonID detected whose acceptedNameUsageID value does not",
-            "map to taxonID of an existing name."
-          ),
-          check = "check_mapping"
-        )
+    assert_that_d(
+      sum(map_id_is_bad) == 0,
+      data = tibble::tibble(
+        taxonID = tax_dat$taxonID[map_id_is_bad],
+        scientificName = tax_dat$scientificName[map_id_is_bad],
+        error = paste(
+          "taxonID detected whose acceptedNameUsageID value does not",
+          "map to taxonID of an existing name."
+        ),
+        check = "check_mapping"
       )
-    }
+    )
   }
-  # In case of success
   if (on_success == "data") {
     return(tax_dat)
   }
@@ -138,57 +130,56 @@ dct_check_mapping <- function(
   on_fail = "error",
   on_success = "data") {
 
-  # Check for required columns
-  acc_name_id_exists <- assert_col(
-    tax_dat, "acceptedNameUsageID", c("character", "numeric", "integer"),
-    req_by = "check_mapping", on_fail = on_fail
+  # Check input format
+  assertthat::assert_that(
+    inherits(tax_dat, "data.frame"),
+    msg = "'tax_dat' must be of class 'data.frame'"
   )
-  sci_name_exists <- assert_col(
-    tax_dat, "scientificName", "character",
-    req_by = "check_mapping", on_fail = on_fail
+  assertthat::assert_that(assertthat::is.string(on_fail))
+  assertthat::assert_that(assertthat::is.string(on_success))
+  assertthat::assert_that(
+    on_fail %in% c("error", "summary"),
+    msg = "on_fail must be one of 'error' or 'summary'"
   )
-  # Early exit if req cols not present
-  if (on_fail == "summary") {
-    if (any(!isTRUE(acc_name_id_exists), !isTRUE(sci_name_exists))) {
-      return(bind_rows_f(acc_name_id_exists, sci_name_exists))
-    }
-  }
+  assertthat::assert_that(
+    on_success %in% c("data", "logical"),
+    msg = "on_success must be one of 'data' or 'logical'"
+  )
 
-  # Check taxon ID
+  # Run main checks
   suppressWarnings({
-    check_taxon_id_res <- dct_check_taxon_id(
-      tax_dat, on_fail = on_fail, on_success = "logical"
-    )
-    # Check for mapping to self
-    check_mapping_to_self_res <- check_mapping_to_self(
-      tax_dat, on_fail = on_fail, on_success = "logical"
-    )
-    # Check for matching taxonID in acceptedNameUsageID
-    check_mapping_res <- check_mapping(
-      tax_dat, on_fail = on_fail, on_success = "logical"
+    check_res <- list(
+      # Check for required columns
+      assert_col(
+          tax_dat, "taxonID", c("character", "numeric", "integer"),
+          req_by = "check_mapping", on_fail = on_fail
+        ),
+      assert_col(
+          tax_dat, "acceptedNameUsageID", c("character", "numeric", "integer"),
+          req_by = "check_mapping", on_fail = on_fail
+        ),
+      assert_col(
+          tax_dat, "scientificName", "character",
+          req_by = "check_mapping", on_fail = on_fail
+        ),
+      # Check taxonID not NA
+      check_taxon_id_not_na(tax_dat, on_fail = on_fail, on_success = "logical"),
+      # Check taxonID is unique
+      check_taxon_id_is_uniq(
+        tax_dat, on_fail = on_fail, on_success = "logical"),
+      # Check no names map to self
+      check_mapping_to_self(tax_dat, on_fail = on_fail, on_success = "logical"),
+      # Check all names have matching taxonID for acceptedNameUsageID
+      check_mapping(tax_dat, on_fail = on_fail, on_success = "logical")
     )
   })
-
-  # In case of failure
-  # (errors will exit early anyways)
+  # Format results
   if (on_fail == "summary") {
-    if (
-      any(
-        !isTRUE(check_mapping_to_self_res),
-        !isTRUE(check_mapping_res),
-        !isTRUE(check_taxon_id_res)
-      )
-    ) {
+    if (any_not_true(check_res)) {
       warning("check_mapping failed")
-      return(
-        bind_rows_f(
-          check_taxon_id_res,
-          check_mapping_to_self_res,
-          check_mapping_res)
-        )
+      return(bind_rows_f(check_res))
     }
   }
-  # In case of success
   if (on_success == "data") {
     return(tax_dat)
   }
