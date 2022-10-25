@@ -8,35 +8,69 @@ check_mapping_to_self <- function(
   on_fail = "error",
   on_success = "data") {
 
+  # Early exit with NULL if req'd cols not present
+  if (is.null((tax_dat$taxonID))) {
+    return(NULL)
+  }
+  if (is.null((tax_dat$acceptedNameUsageID))) {
+    return(NULL)
+  }
+
   # Check for names that lack a taxonID for acceptedNameUsageID
   map_to_self <- tax_dat$acceptedNameUsageID == tax_dat$taxonID
   map_id_is_na <- is.na(tax_dat$acceptedNameUsageID)
   map_id_is_bad <- !map_id_is_na & map_to_self
 
   # Format results
-  if (on_fail == "error") {
-    assertthat::assert_that(
-      sum(map_id_is_bad) == 0,
-      msg = glue::glue(
-        "check_mapping failed.
-          taxonID detected with identical acceptedNameUsageID.
-          Bad taxonID: \\
-          {paste(tax_dat$taxonID[map_id_is_bad], collapse = ', ')}
-          Bad scientificName: \\
-          {paste(tax_dat$scientificName[map_id_is_bad], collapse = ', ')}"
+  # provide sci name if available
+  if (!is.null((tax_dat$scientificName))) {
+    if (on_fail == "error") {
+      assertthat::assert_that(
+        sum(map_id_is_bad) == 0,
+        msg = glue::glue(
+          "check_mapping failed.
+            taxonID detected with identical acceptedNameUsageID.
+            Bad taxonID: \\
+            {paste(tax_dat$taxonID[map_id_is_bad], collapse = ', ')}
+            Bad scientificName: \\
+            {paste(tax_dat$scientificName[map_id_is_bad], collapse = ', ')}"
+        )
       )
-    )
+    }
+    if (on_fail == "summary") {
+      assert_that_d(
+        sum(map_id_is_bad) == 0,
+        data = tibble::tibble(
+          taxonID = tax_dat$taxonID[map_id_is_bad],
+          scientificName = tax_dat$scientificName[map_id_is_bad],
+          error = "taxonID detected with identical acceptedNameUsageID",
+          check = "check_mapping"
+        )
+      )
+    }
   }
-  if (on_fail == "summary") {
-    assert_that_d(
-      sum(map_id_is_bad) == 0,
-      data = tibble::tibble(
-        taxonID = tax_dat$taxonID[map_id_is_bad],
-        scientificName = tax_dat$scientificName[map_id_is_bad],
-        error = "taxonID detected with identical acceptedNameUsageID",
-        check = "check_mapping"
+  if (is.null((tax_dat$scientificName))) {
+    if (on_fail == "error") {
+      assertthat::assert_that(
+        sum(map_id_is_bad) == 0,
+        msg = glue::glue(
+          "check_mapping failed.
+            taxonID detected with identical acceptedNameUsageID.
+            Bad taxonID: \\
+            {paste(tax_dat$taxonID[map_id_is_bad], collapse = ', ')}"
+        )
       )
-    )
+    }
+    if (on_fail == "summary") {
+      assert_that_d(
+        sum(map_id_is_bad) == 0,
+        data = tibble::tibble(
+          taxonID = tax_dat$taxonID[map_id_is_bad],
+          error = "taxonID detected with identical acceptedNameUsageID",
+          check = "check_mapping"
+        )
+      )
+    }
   }
   if (on_success == "data") {
     return(tax_dat)
@@ -58,39 +92,77 @@ check_mapping <- function(
   on_fail = "error",
   on_success = "data") {
 
+  # Early exit with NULL if req'd cols not present
+  if (is.null((tax_dat$taxonID))) {
+    return(NULL)
+  }
+  if (is.null((tax_dat$acceptedNameUsageID))) {
+    return(NULL)
+  }
+
   # Check for names that lack a taxonID for acceptedNameUsageID
   map_id_is_good <- tax_dat$acceptedNameUsageID %in% tax_dat$taxonID
   map_id_is_na <- is.na(tax_dat$acceptedNameUsageID)
   map_id_is_bad <- !map_id_is_na & !map_id_is_good
 
   # Format results
-  if (on_fail == "error") {
-    assertthat::assert_that(
-      sum(map_id_is_bad) == 0,
-      msg = glue::glue(
-        "check_mapping failed.
-          taxonID detected whose acceptedNameUsageID value does not \\
-          map to taxonID of an existing name.
-          Bad taxonID: \\
-          {paste(tax_dat$taxonID[map_id_is_bad], collapse = ', ')}
-          Bad scientificName: \\
-          {paste(tax_dat$scientificName[map_id_is_bad], collapse = ', ')}"
+  # provide sci name if available
+  if (!is.null((tax_dat$scientificName))) {
+    if (on_fail == "error") {
+      assertthat::assert_that(
+        sum(map_id_is_bad) == 0,
+        msg = glue::glue(
+          "check_mapping failed.
+            taxonID detected whose acceptedNameUsageID value does not \\
+            map to taxonID of an existing name.
+            Bad taxonID: \\
+            {paste(tax_dat$taxonID[map_id_is_bad], collapse = ', ')}
+            Bad scientificName: \\
+            {paste(tax_dat$scientificName[map_id_is_bad], collapse = ', ')}"
+        )
       )
-    )
+    }
+    if (on_fail == "summary") {
+      assert_that_d(
+        sum(map_id_is_bad) == 0,
+        data = tibble::tibble(
+          taxonID = tax_dat$taxonID[map_id_is_bad],
+          scientificName = tax_dat$scientificName[map_id_is_bad],
+          error = paste(
+            "taxonID detected whose acceptedNameUsageID value does not",
+            "map to taxonID of an existing name."
+          ),
+          check = "check_mapping"
+        )
+      )
+    }
   }
-  if (on_fail == "summary") {
-    assert_that_d(
-      sum(map_id_is_bad) == 0,
-      data = tibble::tibble(
-        taxonID = tax_dat$taxonID[map_id_is_bad],
-        scientificName = tax_dat$scientificName[map_id_is_bad],
-        error = paste(
-          "taxonID detected whose acceptedNameUsageID value does not",
-          "map to taxonID of an existing name."
-        ),
-        check = "check_mapping"
+  if (is.null((tax_dat$scientificName))) {
+    if (on_fail == "error") {
+      assertthat::assert_that(
+        sum(map_id_is_bad) == 0,
+        msg = glue::glue(
+          "check_mapping failed.
+            taxonID detected whose acceptedNameUsageID value does not \\
+            map to taxonID of an existing name.
+            Bad taxonID: \\
+            {paste(tax_dat$taxonID[map_id_is_bad], collapse = ', ')}"
+        )
       )
-    )
+    }
+    if (on_fail == "summary") {
+      assert_that_d(
+        sum(map_id_is_bad) == 0,
+        data = tibble::tibble(
+          taxonID = tax_dat$taxonID[map_id_is_bad],
+          error = paste(
+            "taxonID detected whose acceptedNameUsageID value does not",
+            "map to taxonID of an existing name."
+          ),
+          check = "check_mapping"
+        )
+      )
+    }
   }
   if (on_success == "data") {
     return(tax_dat)
@@ -147,7 +219,7 @@ dct_check_mapping <- function(
   )
 
   # Run main checks
-  suppressWarnings({
+  suppressWarnings(
     check_res <- list(
       # Check for required columns
       assert_col(
@@ -156,10 +228,6 @@ dct_check_mapping <- function(
         ),
       assert_col(
           tax_dat, "acceptedNameUsageID", c("character", "numeric", "integer"),
-          req_by = "check_mapping", on_fail = on_fail
-        ),
-      assert_col(
-          tax_dat, "scientificName", "character",
           req_by = "check_mapping", on_fail = on_fail
         ),
       # Check taxonID not NA
@@ -171,8 +239,11 @@ dct_check_mapping <- function(
       check_mapping_to_self(tax_dat, on_fail = on_fail, on_success = "logical"),
       # Check all names have matching taxonID for acceptedNameUsageID
       check_mapping(tax_dat, on_fail = on_fail, on_success = "logical")
-    )
-  })
+    ) |>
+    # drop any NULL results
+    purrr::compact()
+  )
+
   # Format results
   if (on_fail == "summary") {
     if (any_not_true(check_res)) {

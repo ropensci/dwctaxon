@@ -1,21 +1,4 @@
 test_that("Checks on required columns work", {
-  bad_dat <- tibble::tribble(
-    ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus,
-    "1", NA, "accepted",
-    "2", "1", "synonym"
-  )
-  expect_equal(
-    suppressWarnings(
-      dct_check_mapping(
-        bad_dat,
-        on_fail = "summary"
-      )
-    ),
-    tibble::tibble(
-      check = "check_mapping",
-      error = "check_mapping requires column scientificName in input data"
-    )
-  )
   expect_equal(
     suppressWarnings(
       dct_check_mapping(
@@ -36,11 +19,10 @@ test_that("Checks on required columns work", {
       )
     ),
     tibble::tibble(
-      check = rep("check_mapping", 3),
+      check = rep("check_mapping", 2),
       error = c(
         "check_mapping requires column taxonID in input data",
-        "check_mapping requires column acceptedNameUsageID in input data",
-        "check_mapping requires column scientificName in input data"
+        "check_mapping requires column acceptedNameUsageID in input data"
       )
     )
   )

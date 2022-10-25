@@ -9,6 +9,11 @@ check_taxon_id_not_na <- function(
   on_success
 ) {
 
+  # Early exit with NULL if req'd cols not present
+  if (is.null((tax_dat$taxonID))) {
+    return(NULL)
+  }
+
   # Check for missing ID
   missing_tax_id <- tax_dat$taxonID[is.na(tax_dat$taxonID)]
 
@@ -52,9 +57,14 @@ check_taxon_id_is_uniq <- function(
   on_success
 ) {
 
+  # Early exit with NULL if req'd cols not present
+  if (is.null((tax_dat$taxonID))) {
+    return(NULL)
+  }
+
   # Check for duplicated ID
   duplicated_tax_id <- tax_dat$taxonID[duplicated(tax_dat$taxonID)]
-  
+
   # Format results
   if (on_fail == "error") {
     assertthat::assert_that(
@@ -147,7 +157,9 @@ dct_check_taxon_id <- function(
       check_taxon_id_not_na(tax_dat, on_fail = on_fail, on_success = "logical"),
       # Check taxonID is unique
       check_taxon_id_is_uniq(tax_dat, on_fail = on_fail, on_success = "logical")
-    )
+    ) |>
+    # drop any NULL results
+    purrr::compact()
   )
 
   # Format results
