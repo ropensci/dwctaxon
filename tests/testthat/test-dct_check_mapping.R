@@ -36,10 +36,10 @@ test_that("Correctly formatted data does not error", {
     "3", "1", "synonym", "Species bat"
   )
   expect_equal(
-    check_mapping(good_dat), good_dat
+    check_mapping_exists(good_dat), good_dat
   )
   expect_equal(
-    check_mapping(good_dat, on_success = "logical"), TRUE
+    check_mapping_exists(good_dat, on_success = "logical"), TRUE
   )
   expect_equal(
     dct_check_mapping(good_dat), good_dat
@@ -75,7 +75,7 @@ test_that("Bad data results in error with on_fail = 'error'", {
     )
   )
   expect_error(
-    check_mapping(bad_dat_2),
+    check_mapping_exists(bad_dat_2),
     paste0(
       "check_mapping failed.*",
       "taxonID detected whose acceptedNameUsageID value does not map to.*",
@@ -135,7 +135,7 @@ test_that("Bad data results in summary with on_fail = 'summary'", {
   )
   expect_equal(
     suppressWarnings(
-      check_mapping(bad_dat_2, on_fail = "summary")
+      check_mapping_exists(bad_dat_2, on_fail = "summary")
     ),
     tibble::tibble(
       taxonID = "3",

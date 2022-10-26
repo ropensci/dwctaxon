@@ -1,19 +1,22 @@
 #' Check that taxonomicStatus is in range of valid values
-#' Assumes that required columns
-#' (taxonomicStatus) are present.
+#'
+#' Required columns:
+#' - taxonomicStatus
+#'
 #' @param valid_tax_status See dct_check_tax_status()
-#' @inherit dct_check_taxon_id
+#' @inherit check_taxon_id_not_na
 #' @noRd
-check_tax_status <- function(
+check_tax_status_valid <- function(
   tax_dat,
   on_fail = "error",
   on_success = "data",
   valid_tax_status = Sys.getenv(
     "VALID_TAX_STATUS",
-    unset = "accepted, synonym, variant, NA")
+    unset = "accepted, synonym, variant, NA"),
+  run = TRUE
   ) {
   # Early exit with NULL if req'd cols not present
-  if (is.null((tax_dat$taxonomicStatus))) {
+  if (is.null(tax_dat$taxonomicStatus) || run == FALSE) {
     return(NULL)
   }
 
@@ -114,7 +117,6 @@ dct_check_tax_status  <- function(
     unset = "accepted, synonym, variant, NA")
   ) {
 
-
   # Run main checks
   suppressWarnings(
     check_res <- list(
@@ -124,7 +126,7 @@ dct_check_tax_status  <- function(
         req_by = "check_tax_status", on_fail = on_fail
       ),
       # Check taxonomic status
-      check_tax_status(tax_dat, on_fail = on_fail, on_success = "logical"
+      check_tax_status_valid(tax_dat, on_fail = on_fail, on_success = "logical"
     )
     ) |>
     # drop any NULL results

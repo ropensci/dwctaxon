@@ -1,16 +1,18 @@
 #' check_taxon_id sub-check: check that no taxonID is missing
-#' Assumes that required columns
-#' (taxonID) are present.
+#' Required columns:
+#' - taxonID
 #' @inherit dct_check_taxon_id
+#' @param run Logical; should this check be run? If FALSE, return NULL
 #' @noRd
 check_taxon_id_not_na <- function(
   tax_dat,
   on_fail,
-  on_success
+  on_success,
+  run = TRUE
 ) {
 
   # Early exit with NULL if req'd cols not present
-  if (is.null((tax_dat$taxonID))) {
+  if (is.null(tax_dat$taxonID) || run == FALSE) {
     return(NULL)
   }
 
@@ -47,18 +49,19 @@ check_taxon_id_not_na <- function(
 }
 
 #' check_taxon_id sub-check: check that all taxonID values are unique
-#' Assumes that required columns
-#' (taxonID) are present.
-#' @inherit dct_check_taxon_id
+#' Required columns:
+#' - taxonID
+#' @inherit check_taxon_id_not_na
 #' @noRd
 check_taxon_id_is_uniq <- function(
   tax_dat,
   on_fail,
-  on_success
+  on_success,
+  run = TRUE
 ) {
 
   # Early exit with NULL if req'd cols not present
-  if (is.null((tax_dat$taxonID))) {
+  if (is.null(tax_dat$taxonID) || run == FALSE) {
     return(NULL)
   }
 

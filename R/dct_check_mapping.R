@@ -1,18 +1,23 @@
 #' check_mapping sub-check: check that no names map to self
-#' Assumes that dct_check_taxon_id has already passed and that required columns
-#' (acceptedNameUsageID, taxonID, scientificName) are present.
-#' @inherit dct_check_taxon_id
+#'
+#' Required columns:
+#' - taxonID
+#' - acceptedNameUsageID
+#'
+#' @inherit check_taxon_id_not_na
 #' @noRd
 check_mapping_to_self <- function(
   tax_dat,
   on_fail = "error",
-  on_success = "data") {
+  on_success = "data",
+  run = TRUE) {
 
   # Early exit with NULL if req'd cols not present
-  if (is.null((tax_dat$taxonID))) {
-    return(NULL)
-  }
-  if (is.null((tax_dat$acceptedNameUsageID))) {
+  if (
+    is.null(tax_dat$taxonID) ||
+    is.null(tax_dat$acceptedNameUsageID) ||
+    run == FALSE
+  ) {
     return(NULL)
   }
 
@@ -63,20 +68,25 @@ check_mapping_to_self <- function(
 
 #' check_mapping sub-check: check that no acceptedNameUsageID are missing
 #' from taxonID.
-#' Assumes that dct_check_taxon_id has already passed and that required columns
-#' (acceptedNameUsageID, taxonID, scientificName) are present.
-#' @inherit dct_check_taxon_id
+#'
+#' Required columns:
+#' - taxonID
+#' - acceptedNameUsageID
+#'
+#' @inherit check_taxon_id_not_na
 #' @noRd
-check_mapping <- function(
+check_mapping_exists <- function(
   tax_dat,
   on_fail = "error",
-  on_success = "data") {
+  on_success = "data",
+  run = TRUE) {
 
   # Early exit with NULL if req'd cols not present
-  if (is.null((tax_dat$taxonID))) {
-    return(NULL)
-  }
-  if (is.null((tax_dat$acceptedNameUsageID))) {
+  if (
+    is.null(tax_dat$taxonID) ||
+    is.null(tax_dat$acceptedNameUsageID) ||
+    run == FALSE
+  ) {
     return(NULL)
   }
 
@@ -91,7 +101,6 @@ check_mapping <- function(
   bad_acc_id <- tax_dat$acceptedNameUsageID[map_id_is_bad]
 
   # Format results
-  # provide sci name if available
   if (on_fail == "error") {
     assertthat::assert_that(
       sum(map_id_is_bad) == 0,
@@ -196,7 +205,7 @@ dct_check_mapping <- function(
       # Check no names map to self
       check_mapping_to_self(tax_dat, on_fail = on_fail, on_success = "logical"),
       # Check all names have matching taxonID for acceptedNameUsageID
-      check_mapping(tax_dat, on_fail = on_fail, on_success = "logical")
+      check_mapping_exists(tax_dat, on_fail = on_fail, on_success = "logical")
     ) |>
     # drop any NULL results
     purrr::compact()
