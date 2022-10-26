@@ -205,3 +205,24 @@ test_that("make_msg() works", {
     "Bad taxonID: 1, 2\n"
   )
 })
+
+test_that("sort_cols_dwc() works", {
+  expect_equal(
+    sort_cols_dwc(
+      data.frame(
+        check = "a",
+        taxonID = "b",
+        scientificName = "c",
+        acceptedNameUsageID = "d",
+        error = "e"
+      )
+    ),
+    data.frame(
+      taxonID = "b",
+      acceptedNameUsageID = "d",
+      scientificName = "c",
+      error = "e",
+      check = "a"
+    )
+  )
+})

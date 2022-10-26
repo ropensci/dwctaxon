@@ -87,7 +87,7 @@ assert_that_d <- function(condition, data, msg = NULL, env = parent.frame()) {
     return(TRUE)
   } else {
     warning(unclass(assert_res)$message)
-    do.call(return, list(data), envir = env)
+    do.call("return", list(data), envir = env)
   }
 }
 
@@ -100,9 +100,14 @@ assert_that_d <- function(condition, data, msg = NULL, env = parent.frame()) {
 #' @param req_by Name of check that requires this assertion
 #' @param on_fail String; either "error" (return error) or "summary" (return
 #'   tibble with summary of failure)
+#' @param run Logical; should this check be run? If FALSE, return NULL
+#'
 #' @noRd
 assert_col <- function(dat, col, class = NULL, req_by = NULL,
-  on_fail = "error") {
+  on_fail = "error", run = TRUE) {
+  if (run == FALSE) {
+    return(NULL)
+  }
   # Check for required column
   req_col_exists <- col %in% colnames(dat)
   # Format error message
@@ -172,12 +177,32 @@ assert_col <- function(dat, col, class = NULL, req_by = NULL,
 #' Bind rows of several dataframes
 #'
 #' Similar to dplyr::bind_rows(), but if the input contains anything
-#' that is not a dataframe it will be excluded
+#' that is not a dataframe with at least one row it will be excluded
 #' @param x List possibly including multiple dataframes
 #' @noRd
 bind_rows_f <- function(x) {
   x <- x[sapply(x, function(y) inherits(y, "data.frame"))]
+  x <- x[sapply(x, function(y) nrow(y) > 0)]
   do.call(dplyr::bind_rows, x)
+}
+
+#' Sort columns to match order of those in Darwin Core Taxon
+#'
+#' Also adds columns "error" and "check"
+#'
+#' @param x Dataframe
+#' @noRd
+sort_cols_dwc <- function(x) {
+  # valid col names are those in DWC terms plus "error" and "check"
+  val_cols <- c(dct_terms$term, "error", "check")
+  # Sort colnames in same order as valid col names
+  cols <- colnames(x)
+  cols_sorted <- val_cols[val_cols %in% cols]
+  res <- x[, cols_sorted]
+  if (ncol(x) != ncol(res)) {
+    stop("Non-valid column names in data")
+  }
+  res
 }
 
 #' Check if any elements of a list are not TRUE

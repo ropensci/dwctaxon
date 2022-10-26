@@ -4,12 +4,19 @@ utils::globalVariables(c(
   "taxonID", # <dct_change_status_single>
   "scientificName", # <dct_change_status_single>
   "acceptedNameUsageID", # <dct_change_status_single>
+  "dct_terms", # <check_col_names_p>
+  "taxonomicStatus", # <check_syn_map_to_acc>
+  "acceptedNameUsageID", # <check_acc_id_has_tax_status>
+  "acceptedNameUsageID", # <check_acc_id_valid_tax_status>
+  "taxonomicStatus", # <check_variant_map_to_nonvar>
+  "taxonomicStatus", # <check_variant_map_to_something>
+  "taxonomicStatus", # <check_accepted_map_to_nothing>
+  "scientificName", # <check_status_diff_p>
+  "taxonomicStatus", # <check_status_diff_p>
   "dct_terms", # <dct_fix_format>
   "input_type", # <dct_fix_format>
   "type", # <dct_fix_format>
-  "taxonID", # <dct_validate>
-  "taxonomicStatus", # <dct_validate>
-  "acceptedNameUsageID", # <dct_validate>
-  "dct_terms", # <dct_validate>
+  "check", # <dct_validate>
+  "error", # <dct_validate>
   NULL
 ))

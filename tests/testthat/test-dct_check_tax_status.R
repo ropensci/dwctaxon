@@ -1,21 +1,12 @@
 # Clear default value for VALID_TAX_STATUS
 Sys.unsetenv("VALID_TAX_STATUS")
 
-# Set up some shared data for tests
-good_dat <- tibble::tribble(
-  ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
-  "1", NA, "accepted", "Species foo",
-  "2", "1", "synonym", "Species bar"
-)
-
-bad_dat <- tibble::tribble(
-  ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
-  "1", NA, "accepted", "Species foo",
-  "2", "1", "synonym", "Species bar",
-  "3", NA, "foo", "Species bat"
-)
-
 test_that("correctly formatted data does not error", {
+  good_dat <- tibble::tribble(
+    ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
+    "1", NA, "accepted", "Species foo",
+    "2", "1", "synonym", "Species bar"
+  )
   expect_equal(
     check_tax_status_valid(good_dat),
     good_dat
@@ -26,7 +17,13 @@ test_that("correctly formatted data does not error", {
   )
 })
 
-test_that("Bad data results in error with on_fail = 'error'", {
+test_that("Check for 'taxonomicStatus in valid values' works", {
+  bad_dat <- tibble::tribble(
+    ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
+    "1", NA, "accepted", "Species foo",
+    "2", "1", "synonym", "Species bar",
+    "3", NA, "foo", "Species bat"
+  )
   expect_error(
     check_tax_status_valid(bad_dat),
     paste0(
@@ -75,5 +72,5 @@ test_that("Bad data results in error with on_fail = 'error'", {
   )
 })
 
-rm(good_dat)
-rm(bad_dat)
+# Clear default value for VALID_TAX_STATUS
+Sys.unsetenv("VALID_TAX_STATUS")

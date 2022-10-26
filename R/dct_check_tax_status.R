@@ -137,7 +137,10 @@ dct_check_tax_status  <- function(
   if (on_fail == "summary") {
     if (any_not_true(check_res)) {
       warning("check_tax_status failed")
-      return(bind_rows_f(check_res))
+      res <- check_res |>
+        bind_rows_f() |>
+        sort_cols_dwc()
+      return(res)
     }
   }
   if (on_success == "data") {

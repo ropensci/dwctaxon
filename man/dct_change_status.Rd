@@ -77,7 +77,10 @@ dct_filmies |>
     sci_name = "Trichomanes crassum Copel.",
     new_status = "accepted"
   ) |>
-  dct_validate(check_taxonomic_status = FALSE, strict_mapping = FALSE)
+  dct_validate(
+    check_tax_status = FALSE,
+    check_mapping_strict = FALSE,
+    check_sci_name = FALSE)
 
 # Sometimes changing one name will affect others, if they map
 # to the new synonym

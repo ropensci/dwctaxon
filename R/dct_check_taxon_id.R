@@ -26,7 +26,7 @@ check_taxon_id_not_na <- function(
       msg = glue::glue(
         "check_taxon_id failed
          taxonID detected with missing value
-         Bad taxonID: {missing_tax_id}
+         {make_msg('taxonID', missing_tax_id)}
       ")
     )
   }
@@ -75,7 +75,7 @@ check_taxon_id_is_uniq <- function(
       msg = glue::glue(
         "check_taxon_id failed
          taxonID detected with duplicated value
-         Bad taxonID: {duplicated_tax_id}
+         {make_msg('taxonID', duplicated_tax_id)}
       ")
     )
   }
@@ -126,6 +126,7 @@ check_taxon_id_is_uniq <- function(
 #'     on_fail = "summary")
 #' )
 #' dct_check_taxon_id(data.frame(taxonID = 1))
+#' @export
 #'
 dct_check_taxon_id <- function(
   tax_dat,
@@ -169,7 +170,10 @@ dct_check_taxon_id <- function(
   if (on_fail == "summary") {
     if (any_not_true(check_res)) {
       warning("check_taxon failed")
-      return(bind_rows_f(check_res))
+      res <- check_res |>
+        bind_rows_f() |>
+        sort_cols_dwc()
+      return(res)
     }
   }
   if (on_success == "data") {

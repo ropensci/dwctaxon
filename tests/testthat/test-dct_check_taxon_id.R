@@ -33,11 +33,23 @@ test_that("Correctly formatted data does not error", {
   expect_equal(dct_check_taxon_id(good_dat, on_success = "logical"), TRUE)
 })
 
-test_that("Bad data results in error with on_fail = 'error'", {
+test_that("check for correctly formatted columns works", {
   # taxonID column missing
   expect_error(
     dct_check_taxon_id(data.frame(scientificName = "foo bar")),
     "check_taxon_id requires column taxonID in input data"
+  )
+  expect_equal(
+    suppressWarnings(
+      dct_check_taxon_id(
+        data.frame(scientificName = "foo bar"),
+        on_fail = "summary"
+      )
+    ),
+    tibble::tibble(
+      error = "check_taxon_id requires column taxonID in input data",
+      check = "check_taxon_id"
+    )
   )
   # taxonID of wrong class
   expect_error(
@@ -46,12 +58,43 @@ test_that("Bad data results in error with on_fail = 'error'", {
     ),
     "Column taxonID must be of class character, numeric, or integer"
   )
+  expect_equal(
+    suppressWarnings(
+      dct_check_taxon_id(
+        data.frame(taxonID = complex(1)), on_fail = "summary"
+      )
+    ),
+    tibble::tibble(
+      error = "Column taxonID must be of class character, numeric, or integer",
+      check = "check_taxon_id"
+    )
+  )
+})
+
+test_that("check for 'taxonID cannot be missing' works", {
   # taxonID with missing values
   bad_dat <- tibble::tribble(
     ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
-    "1", NA, "accepted", "Species foo",
     NA, "1", "accepted", "Species bar",
     "3", NA, "accepted", "Species bat"
+  )
+  expect_error(
+    check_taxon_id_not_na(bad_dat, on_fail = "error"),
+    paste(
+      "check_taxon_id failed.*",
+      "taxonID detected with missing value.*",
+      "Bad taxonID\\: NA"
+    )
+  )
+  expect_equal(
+    suppressWarnings(
+      check_taxon_id_not_na(bad_dat, on_fail = "summary")
+    ),
+    tibble::tibble(
+      taxonID = NA_character_,
+      check = "check_taxon_id",
+      error = "taxonID detected with missing value"
+    )
   )
   expect_error(
     dct_check_taxon_id(bad_dat),
@@ -61,12 +104,42 @@ test_that("Bad data results in error with on_fail = 'error'", {
       "Bad taxonID\\: NA"
     )
   )
+  expect_equal(
+    suppressWarnings(
+      dct_check_taxon_id(bad_dat, on_fail = "summary")
+    ),
+    tibble::tibble(
+      taxonID = NA_character_,
+      error = "taxonID detected with missing value",
+      check = "check_taxon_id"
+    )
+  )
+})
+
+test_that("check for 'taxonID cannot be duplicated' works", {
   # Duplicated taxonID
   bad_dat <- tibble::tribble(
     ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
     "1", NA, "accepted", "Species foo",
-    "3", "1", "accepted", "Species bar",
-    "3", NA, "accepted", "Species bat"
+    "3", NA, "accepted", "Species bar",
+    "3", NA, "accepted", "Species bat",
+    "3", "1", "synonym", "Species blah"
+  )
+  expect_error(
+    check_taxon_id_is_uniq(bad_dat, on_fail = "error"),
+    paste(
+      "check_taxon_id failed.*",
+      "taxonID detected with duplicated value.*",
+      "Bad taxonID\\: 3"
+    )
+  )
+  expect_equal(
+    suppressWarnings(check_taxon_id_is_uniq(bad_dat, on_fail = "summary")),
+    tibble::tibble(
+      taxonID = as.character(rep(3, 2)),
+      check = rep("check_taxon_id", 2),
+      error = rep("taxonID detected with duplicated value", 2)
+    )
   )
   expect_error(
     dct_check_taxon_id(bad_dat),
@@ -76,64 +149,12 @@ test_that("Bad data results in error with on_fail = 'error'", {
       "Bad taxonID\\: 3"
     )
   )
-})
-
-test_that("Bad data results in summary with on_fail = 'summary'", {
-  # taxonID column missing
-  expect_equal(
-    suppressWarnings(
-      dct_check_taxon_id(
-        data.frame(scientificName = "foo bar"),
-        on_fail = "summary"
-      )
-    ),
-    tibble::tibble(
-      check = "check_taxon_id",
-      error = "check_taxon_id requires column taxonID in input data")
-  )
-  # taxonID of wrong class
-  expect_equal(
-    suppressWarnings(
-      dct_check_taxon_id(
-        data.frame(taxonID = complex(1)), on_fail = "summary"
-      )
-    ),
-    tibble::tibble(
-      check = "check_taxon_id",
-      error = "Column taxonID must be of class character, numeric, or integer"
-    )
-  )
-  # taxonID with missing values
-  bad_dat <- tibble::tribble(
-    ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
-    "1", NA, "accepted", "Species foo",
-    NA, "1", "accepted", "Species bar",
-    "3", NA, "accepted", "Species bat"
-  )
-  expect_equal(
-    suppressWarnings(
-      dct_check_taxon_id(bad_dat, on_fail = "summary")
-    ),
-    tibble::tibble(
-      taxonID = NA_character_,
-      check = "check_taxon_id",
-      error = "taxonID detected with missing value"
-    )
-  )
-  # Duplicated taxonID
-  bad_dat <- tibble::tribble(
-    ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
-    "1", NA, "accepted", "Species foo",
-    "3", "1", "accepted", "Species bar",
-    "3", NA, "accepted", "Species bat",
-    "3", NA, "accepted", "Species blah"
-  )
   expect_equal(
     suppressWarnings(dct_check_taxon_id(bad_dat, on_fail = "summary")),
     tibble::tibble(
       taxonID = as.character(rep(3, 2)),
-      check = rep("check_taxon_id", 2),
-      error = rep("taxonID detected with duplicated value", 2)
+      error = rep("taxonID detected with duplicated value", 2),
+      check = rep("check_taxon_id", 2)
     )
   )
 })
