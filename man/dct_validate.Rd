@@ -7,46 +7,66 @@
 dct_validate(
   tax_dat,
   check_taxon_id = TRUE,
+  check_tax_status = TRUE,
   check_mapping = TRUE,
-  check_taxonomic_status = TRUE,
-  check_acc_syn_diff = TRUE,
+  check_mapping_strict = TRUE,
+  check_sci_name = TRUE,
+  check_status_diff = !check_sci_name,
   check_col_names = TRUE,
-  strict_mapping = TRUE,
   valid_tax_status = Sys.getenv("VALID_TAX_STATUS", unset =
-    "accepted, synonym, variant, NA")
+    "accepted, synonym, variant, NA"),
+  on_success = "data",
+  on_fail = "error"
 )
 }
 \arguments{
-\item{tax_dat}{Dataframe; taxonomic database in Darwin Core format}
+\item{tax_dat}{Dataframe; taxonomic database in Darwin Core format.}
 
 \item{check_taxon_id}{Logical; should all instances of \code{taxonID} be required
 to be non-missing and unique?}
 
-\item{check_mapping}{Logical; should all values of \code{acceptedNameUsageID} be
-required to map to the \code{taxonID} of an existing name?}
-
-\item{check_taxonomic_status}{Logical; should all taxonomic names be required
+\item{check_tax_status}{Logical; should all taxonomic names be required
 to include a valid value for taxonomic status (by default, "accepted",
 "synonym", or "variant")?}
 
-\item{check_acc_syn_diff}{Logical; should each scientific name be allowed
-to have only one taxonomic status?}
+\item{check_mapping}{Logical; should all values of \code{acceptedNameUsageID} be
+required to map to the \code{taxonID} of an existing name?}
+
+\item{check_mapping_strict}{Logical; should rules about mapping of variants
+and synonyms be enforced? (see Details)}
+
+\item{check_sci_name}{Logical; should all instances of \code{scientificName} be
+required to be non-missing and unique?}
+
+\item{check_status_diff}{Logical; should each scientific name be allowed
+to have only one taxonomic status? Default FALSE if \code{check_sci_name}
+is TRUE, since \code{check_sci_name} makes this check redundant.}
 
 \item{check_col_names}{Logical; should all column names be required to
 be a valid Darwin Core term?}
 
-\item{strict_mapping}{Logical; should rules about mapping of variants and
-synonyms be enforced? (see Details)}
-
 \item{valid_tax_status}{Character vector of length 1; valid values for
 \code{taxonomicStatus}. Each value must be separated by a comma. Default
-"accepted, synonym, variant, NA". "NA" indicates that missing (NA) values
-are valid. Case-sensitive. Can also be set with the environmental variable
-"VALID_TAX_STATUS".}
+\code{"accepted, synonym, variant, NA"}. \code{"NA"} indicates that missing (NA)
+values are valid. Case-sensitive. Can also be set with the environmental
+variable \code{"VALID_TAX_STATUS"} (see Examples).}
+
+\item{on_success}{Character vector of length 1, either  "logical" or "data".
+Describes what to do if the check passes. Default "data".}
+
+\item{on_fail}{Character vector of length 1, either "error" or "summary".
+Describes what to do if the check fails. Default "error".}
 }
 \value{
-Dataframe; taxonomic database in Darwin Core format. Will
-be the same as the input.
+Depends on the result of the check and on values of \code{on_fail} and
+\code{on_success}:
+\itemize{
+\item If the check passes and \code{on_success} is "logical", return \code{TRUE}
+\item If the check passes and \code{on_success} is "data", return the input dataframe
+\item If the check fails and \code{on_fail} is "error", return an error
+\item If the check fails and \code{on_fail} is "summary", issue a warning and
+return a dataframe with a summary of the reasons for failure
+}
 }
 \description{
 Stops with an error if any check fails. Most checks are geared towards being
@@ -54,12 +74,12 @@ able to use the taxonomic database for taxonomic name resolution at the
 species level.
 }
 \details{
-For \code{check_acc_syn_diff} and \code{strict_mapping}, "accepted", "synonym", and
-"variant" are determined by string matching of \code{taxonomicStatus}; so
+For \code{check_mapping_strict} and \code{check_status_diff}, "accepted", "synonym",
+and "variant" are determined by string matching of \code{taxonomicStatus}; so
 "provisionally accepted" is counted as "accepted", "ambiguous synonym" is
 counted as "synonym", etc (case-sensitive).
 
-For \code{strict_mapping}, the following rules are enforced:
+For \code{check_mapping_strict}, the following rules are enforced:
 \itemize{
 \item Rows with \code{taxonomicStatus} of "synonym" (synonyms) must have an
 \code{acceptedNameUsageID} matching the \code{taxonID} of an accepted name (
@@ -77,6 +97,7 @@ for \code{acceptedNameUsageID}
 
 dct_validate(
   dct_filmies,
+  check_sci_name = FALSE,
   valid_tax_status =
     paste("accepted name, ambiguous synonym, provisionally accepted name,",
           "synonym, variant")

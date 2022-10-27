@@ -2,5 +2,9 @@
 
 export(dct_add_row)
 export(dct_change_status)
+export(dct_check_mapping)
+export(dct_check_sci_name)
+export(dct_check_tax_status)
+export(dct_check_taxon_id)
 export(dct_fix_format)
 export(dct_validate)

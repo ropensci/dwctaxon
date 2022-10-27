@@ -20,6 +20,10 @@ reference:
 - title: Validate taxonomic names
 - contents:
   - dct_validate
+  - dct_check_taxon_id
+  - dct_check_tax_status
+  - dct_check_mapping
+  - dct_check_sci_name
 - title: Datasets
 - contents:
   - dct_filmies
