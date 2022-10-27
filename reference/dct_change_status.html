@@ -147,7 +147,10 @@ to the taxonomic database if the input is supplied as a dataframe.</p>
 <span class="r-in"><span>    sci_name <span class="op">=</span> <span class="st">"Trichomanes crassum Copel."</span>,</span></span>
 <span class="r-in"><span>    new_status <span class="op">=</span> <span class="st">"accepted"</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span> <span class="op">|&gt;</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="dct_validate.html">dct_validate</a></span><span class="op">(</span>check_taxonomic_status <span class="op">=</span> <span class="cn">FALSE</span>, strict_mapping <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="dct_validate.html">dct_validate</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    check_tax_status <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
+<span class="r-in"><span>    check_mapping_strict <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
+<span class="r-in"><span>    check_sci_name <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2,729 × 6</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    taxonID  acceptedNameUsageID taxonomicStatus          taxon…¹ scien…² modif…³</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span>
