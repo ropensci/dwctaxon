@@ -259,14 +259,19 @@ dct_validate <- function(tax_dat,
     purrr::compact()
   )
 
+  # Delete any empty dataframes
+  empty_df <- sapply(
+    check_res, function(y) inherits(y, "data.frame") && nrow(y) == 0)
+  check_res <- check_res[!empty_df]
+
   # Format results
   if (on_fail == "summary") {
     if (any_not_true(check_res)) {
       warning("check_mapping failed")
       res <- check_res |>
         bind_rows_f() |>
-        sort_cols_dwc()
-      res <- dplyr::arrange(res, check, error)
+        sort_cols_dwc() |>
+        dplyr::arrange(check, error)
       return(res)
     }
   }
