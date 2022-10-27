@@ -265,8 +265,8 @@ dct_validate <- function(tax_dat,
       warning("check_mapping failed")
       res <- check_res |>
         bind_rows_f() |>
-        sort_cols_dwc() |>
-        dplyr::arrange(check, error) # nolint
+        sort_cols_dwc()
+      res <- dplyr::arrange(res, check, error)
       return(res)
     }
   }
