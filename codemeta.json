@@ -6,14 +6,15 @@
   "name": "dwctaxon: Tools for Working with Darwin Core Taxon Data",
   "relatedLink": "https://joelnitta.github.io/dwctaxon/",
   "codeRepository": "https://github.com/joelnitta/dwctaxon",
+  "issueTracker": "https://github.com/joelnitta/dwctaxon/issues",
   "license": "https://spdx.org/licenses/MIT",
-  "version": "1.0.0",
+  "version": "1.0.0.9000",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 4.2.0 (2022-04-22)",
+  "runtimePlatform": "R version 4.2.1 (2022-06-23)",
   "author": [
     {
       "@type": "Person",
@@ -170,13 +171,18 @@
     },
     "11": {
       "@type": "SoftwareApplication",
+      "identifier": "utils",
+      "name": "utils"
+    },
+    "12": {
+      "@type": "SoftwareApplication",
       "identifier": "R",
       "name": "R",
       "version": ">= 2.10"
     },
     "SystemRequirements": null
   },
-  "fileSize": "223.162KB",
+  "fileSize": "326.972KB",
   "readme": "https://github.com/joelnitta/dwctaxon/blob/main/README.md",
   "developmentStatus": "https://www.repostatus.org/#wip"
 }
