@@ -41,7 +41,6 @@ dct_change_status_single <- function(tax_dat, taxon_id = NULL,
   # Make sure that all taxonID are non-missing, unique, char vec
   assertr::assert(tax_dat, assertr::not_na, taxonID, success_fun = assertr::success_logical)
   assertr::assert(tax_dat, assertr::is_uniq, taxonID, success_fun = assertr::success_logical)
-  assertr::assert(tax_dat, is.character, taxonID, success_fun = assertr::success_logical)
 
   assertthat::assert_that(assertthat::is.string(new_status))
   assertthat::assert_that(
@@ -262,9 +261,10 @@ dct_change_status <- function(tax_dat, taxon_id = NULL,
       inherits(args_tbl, "data.frame"),
       msg = "`args_tbl` must be of class data.frame"
     )
-    for (i in nrow(args_tbl)) {
+    for (i in 1:nrow(args_tbl)) { # nolint
       tax_dat <- dct_change_status_single(
         tax_dat,
+        taxon_id = val_if_in_dat(args_tbl, "taxon_id", i),
         sci_name = val_if_in_dat(args_tbl, "sci_name", i),
         new_status = val_if_in_dat(args_tbl, "new_status", i),
         usage_id = val_if_in_dat(args_tbl, "usage_id", i),
