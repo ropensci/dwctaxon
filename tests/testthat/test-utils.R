@@ -226,3 +226,20 @@ test_that("sort_cols_dwc() works", {
     )
   )
 })
+
+test_that("val_if_in_dat() works", {
+  expect_equal(
+    val_if_in_dat(
+      data.frame(a = 1),
+      "a", 1
+    ),
+    1
+  )
+  expect_equal(
+    val_if_in_dat(
+      data.frame(a = 1),
+      "b", 1
+    ),
+    NA
+  )
+})
