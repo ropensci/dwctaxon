@@ -240,3 +240,37 @@ make_msg <- function(bad_col, values, is_last = FALSE) {
     "Bad {bad_col}: {paste(values, collapse = ', ')}{txt}",
     txt = ifelse(is_last, "", "\n"))
 }
+
+#' Helper function to get value from a dataframe
+#'
+#' @param df Dataframe
+#' @param col String; name of column to extract value
+#' @param i Index of the value to extract in the selected column
+#'
+#' @return The value at the selected index of the selected column, if
+#' that column exists; otherwise `NA`
+#' @noRd
+val_if_in_dat <- function(df, col, i) {
+  ifelse(col %in% colnames(df), df[[col]][[i]], NA)
+}
+
+val_if_in_dat_2 <- function(df, col, i) {
+  ifelse(col %in% colnames(df), df[[col]][i], NA)
+}
+
+#' Mutate a dataframe only if a given condition is TRUE
+#'
+#' @param df Dataframe
+#' @param condition TRUE or FALSE
+#' @param ... Other arguments passed to dplyr::mutate
+#'
+#' @return Dataframe
+#' @noRd
+mutate_if <- function(df, condition, ...) {
+  if (condition) {
+    res <- dplyr::mutate(df, ...)
+  } else {
+    res <- df
+  }
+  return(res)
+}

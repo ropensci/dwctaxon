@@ -8,13 +8,14 @@ dct_change_status(
   tax_dat,
   taxon_id = NULL,
   sci_name = NULL,
-  new_status,
+  new_status = NULL,
   usage_id = NULL,
   usage_name = NULL,
   clear_usage_id = grepl("accepted", new_status, ignore.case = TRUE),
   strict = FALSE,
   quiet = FALSE,
-  args_tbl = NULL
+  args_tbl = NULL,
+  ...
 )
 }
 \arguments{
@@ -36,8 +37,8 @@ new status is synonym.}
 name if new status is synonym.}
 
 \item{clear_usage_id}{Logical vector of length 1; should
-\code{acceptedNameUsageID} be set to \code{NA}?.
-Default: TRUE if \code{new_status} is "accepted" (case insensitive).}
+\code{acceptedNameUsageID} be set to \code{NA}?. Default: TRUE if \code{new_status} is
+"accepted" (case insensitive).}
 
 \item{strict}{Logical vector of length 1; should taxonomic checks be run on
 the updated taxonomic database?}
@@ -47,6 +48,19 @@ the updated taxonomic database?}
 \item{args_tbl}{A dataframe including columns corresponding to one or more of
 the above arguments, except for \code{tax_dat}. In this case, the input taxonomic
 database will be modified sequentially over each row of input in \code{args_tbl}.}
+
+\item{...}{Additional arguments passed to \code{\link[=dct_validate]{dct_validate()}}; only used if
+\code{strict} is TRUE.}
+
+\item{remap_variety}{Logical vector of length 1; should the
+\code{acceptedNameUsageID} of names with \code{taxonomicStatus} of "variety"
+be updated (remapped) if they are varieties of the entry to be changed
+(i.e., if their \code{acceptedNameUsageID} is the same as the \code{taxonID} of the
+entry to be changed)?}
+
+\item{stamp_modified}{Logical vector of length 1; should the \code{modified}
+column of any modified row be changed to a timestamp with the date and time
+of modification?}
 }
 \value{
 Dataframe; taxonomic database in Darwin Core format
