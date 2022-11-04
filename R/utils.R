@@ -254,10 +254,6 @@ val_if_in_dat <- function(df, col, i) {
   ifelse(col %in% colnames(df), df[[col]][[i]], NA)
 }
 
-val_if_in_dat_2 <- function(df, col, i) {
-  ifelse(col %in% colnames(df), df[[col]][i], NA)
-}
-
 #' Mutate a dataframe only if a given condition is TRUE
 #'
 #' @param df Dataframe

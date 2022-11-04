@@ -9,7 +9,7 @@
 #' @param other_terms Tibble of additional DWC terms to add to data;
 #'   will over-write if any columns already exist
 #' @inheritParams dct_change_status
-#' 
+#'
 #' @return Dataframe; taxonomic database in Darwin Core format
 #' @autoglobal
 #' @noRd
@@ -27,8 +27,8 @@ dct_change_status_single <- function(tax_dat,
                                      stamp_modified = TRUE,
                                      strict = FALSE,
                                      quiet = FALSE,
-                                     other_terms,
-                                     validate_args) {
+                                     other_terms = NULL
+                                     ) {
 
   # Convert any NA input to NULL
   if (!is.null(taxon_id) && is.na(taxon_id)) taxon_id <- NULL
@@ -78,6 +78,10 @@ dct_change_status_single <- function(tax_dat,
   # - add acceptedNameUsageID
   if (!is.null(usage_id)) {
     new_row <- dplyr::mutate(new_row, acceptedNameUsageID = usage_id)
+  }
+
+  if (isTRUE(clear_usage_id)) {
+    new_row <- dplyr::mutate(new_row, acceptedNameUsageID = NA)
   }
 
   # - add other DWC terms, overwriting existing values
@@ -165,7 +169,9 @@ dct_change_status_single <- function(tax_dat,
     dplyr::inner_join(res, by = "taxonID")
 
   # Optionally run taxonomic database checks
-  if (isTRUE(strict)) res <- do.call(dct_validate, c(res, validate_args))
+  if (isTRUE(strict)) {
+    res <- dct_validate(res)
+  }
 
   res
 }
@@ -194,7 +200,6 @@ dct_change_status_single <- function(tax_dat,
 #' (taxonID for accepted name) if new status is synonym.
 #' @param usage_name Character vector of length 1; scientificName for accepted
 #' name if new status is synonym.
-#' @param other_terms Named character vector; 
 #' @param clear_usage_id Logical vector of length 1; should
 #' `acceptedNameUsageID` be set to `NA`?. Default: TRUE if `new_status` is
 #' "accepted" (case insensitive).
@@ -212,6 +217,8 @@ dct_change_status_single <- function(tax_dat,
 #' @param args_tbl A dataframe including columns corresponding to one or more of
 #' the above arguments, except for `tax_dat`. In this case, the input taxonomic
 #' database will be modified sequentially over each row of input in `args_tbl`.
+#' Other Darwin Core terms can also be included as additional columns,
+#' similar to using `...` to modify a single row.
 #' @param ... other Darwin Core terms to modify, specified as sets of named
 #'   values.
 #'   Each element of the vector must have a name corresponding to a valid
@@ -266,12 +273,13 @@ dct_change_status <- function(tax_dat,
                               new_status = NULL,
                               usage_id = NULL,
                               usage_name = NULL,
-                              other_terms = NULL,
                               clear_usage_id = grepl(
                                 "accepted",
                                 new_status,
                                 ignore.case = TRUE
                               ),
+                              remap_variety = FALSE,
+                              stamp_modified = FALSE,
                               strict = FALSE,
                               quiet = FALSE,
                               args_tbl = NULL,
@@ -313,25 +321,6 @@ dct_change_status <- function(tax_dat,
     assertthat::assert_that(
       inherits(args_tbl, "data.frame"),
       msg = "args_tbl must be of class data.frame"
-    )
-  }
-  if (!is.null(other_terms)) {
-    assertthat::assert_that(
-      inherits(other_terms, "data.frame"),
-      msg = "other_terms must be of class data.frame"
-    )
-    assertthat::assert_that(
-      nrow(other_terms) == 1,
-      msg = "other_terms must include only a single row"
-    )
-    forbidden_terms <- c(
-      "taxonID", "scientificNameID", "acceptedNameUsageID"
-    )
-    assertthat::assert_that(
-      !any(colnames(other_terms) %in% forbidden_terms),
-      msg = glue::glue(
-        "other_terms must not include any of the following terms: \\
-        {paste(forbidden_terms, collapse = ', ')}")
     )
   }
   # Other input checks ----
@@ -386,17 +375,18 @@ dct_change_status <- function(tax_dat,
         new_status = val_if_in_dat(args_tbl, "new_status", i),
         usage_id = val_if_in_dat(args_tbl, "usage_id", i),
         usage_name = val_if_in_dat(args_tbl, "usage_name", i),
-        other_terms = val_if_in_dat_2(args_tbl, "other_terms", i)[[1]],
         clear_usage_id = val_if_in_dat(args_tbl, "clear_usage_id", i),
         remap_variety = val_if_in_dat(args_tbl, "remap_variety", i),
         stamp_modified = val_if_in_dat(args_tbl, "stamp_modified", i),
         strict = val_if_in_dat(args_tbl, "strict", i),
         quiet = quiet,
-        other_terms = args_tbl[!colnames(args_tbl) %in% std_args][i,]
+        other_terms = args_tbl[i, !colnames(args_tbl) %in% std_args]
       )
     }
+
     return(tax_dat)
   }
+
   # Otherwise, run dct_change_status_single()
   dct_change_status_single(
     tax_dat,
@@ -406,8 +396,10 @@ dct_change_status <- function(tax_dat,
     usage_id = usage_id,
     usage_name = usage_name,
     clear_usage_id = clear_usage_id,
+    remap_variety = remap_variety,
+    stamp_modified = stamp_modified,
     strict = strict,
     quiet = quiet,
-    ... = ...
+    other_terms = tibble::tibble(...)
   )
 }

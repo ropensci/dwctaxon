@@ -12,6 +12,8 @@ dct_change_status(
   usage_id = NULL,
   usage_name = NULL,
   clear_usage_id = grepl("accepted", new_status, ignore.case = TRUE),
+  remap_variety = FALSE,
+  stamp_modified = FALSE,
   strict = FALSE,
   quiet = FALSE,
   args_tbl = NULL,
@@ -30,8 +32,8 @@ be changed.}
 \item{new_status}{Character vector of length 1; updated taxonomicStatus to
 use for the entry.}
 
-\item{usage_id}{Character vector of length 1; taxonID for accepted name if
-new status is synonym.}
+\item{usage_id}{Character vector of length 1; acceptedNameUsageID
+(taxonID for accepted name) if new status is synonym.}
 
 \item{usage_name}{Character vector of length 1; scientificName for accepted
 name if new status is synonym.}
@@ -39,18 +41,6 @@ name if new status is synonym.}
 \item{clear_usage_id}{Logical vector of length 1; should
 \code{acceptedNameUsageID} be set to \code{NA}?. Default: TRUE if \code{new_status} is
 "accepted" (case insensitive).}
-
-\item{strict}{Logical vector of length 1; should taxonomic checks be run on
-the updated taxonomic database?}
-
-\item{quiet}{Logical vector of length 1; should warnings be silenced?}
-
-\item{args_tbl}{A dataframe including columns corresponding to one or more of
-the above arguments, except for \code{tax_dat}. In this case, the input taxonomic
-database will be modified sequentially over each row of input in \code{args_tbl}.}
-
-\item{...}{Additional arguments passed to \code{\link[=dct_validate]{dct_validate()}}; only used if
-\code{strict} is TRUE.}
 
 \item{remap_variety}{Logical vector of length 1; should the
 \code{acceptedNameUsageID} of names with \code{taxonomicStatus} of "variety"
@@ -61,6 +51,22 @@ entry to be changed)?}
 \item{stamp_modified}{Logical vector of length 1; should the \code{modified}
 column of any modified row be changed to a timestamp with the date and time
 of modification?}
+
+\item{strict}{Logical vector of length 1; should taxonomic checks be run on
+the updated taxonomic database?}
+
+\item{quiet}{Logical vector of length 1; should warnings be silenced?}
+
+\item{args_tbl}{A dataframe including columns corresponding to one or more of
+the above arguments, except for \code{tax_dat}. In this case, the input taxonomic
+database will be modified sequentially over each row of input in \code{args_tbl}.
+Other Darwin Core terms can also be included as additional columns,
+similar to using \code{...} to modify a single row.}
+
+\item{...}{other Darwin Core terms to modify, specified as sets of named
+values.
+Each element of the vector must have a name corresponding to a valid
+DWC term; see \link{dct_terms}.}
 }
 \value{
 Dataframe; taxonomic database in Darwin Core format
@@ -75,7 +81,8 @@ either will work as it makes a partial or full match to one row in the data.
 
 Can either modify a single row in the input taxonomic database if each
 argument is supplied as a vector of length 1, or can apply a set of changes
-to the taxonomic database if the input is supplied as a dataframe.
+to the taxonomic database if the input is supplied as a dataframe via
+\code{args_tbl}.
 }
 \examples{
 # Swap the accepted / synonym status of
