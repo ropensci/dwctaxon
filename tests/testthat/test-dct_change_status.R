@@ -46,6 +46,44 @@ test_that("other terms can be added", {
   )
 })
 
+test_that("argument aliases work", {
+  dat <- tibble::tribble(
+    ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
+    "1", NA, "accepted", "foo",
+    "2", "1", "synonym", "bar",
+    "3", NA, "accepted", "bat"
+    )
+  expect_equal(
+    dct_change_status(dat, taxon_id = "2", new_status = "accepted"),
+    dct_change_status(dat, taxonID = "2", new_status = "accepted")
+  )
+  expect_equal(
+    dct_change_status(dat, sci_name = "bar", new_status = "accepted"),
+    dct_change_status(dat, scientificName = "bar", new_status = "accepted")
+  )
+  # TODO make new_status non-required
+  expect_equal(
+    dct_change_status(
+      dat, taxon_id = "2", usage_id = "3", new_status = "synonym"),
+    dct_change_status(
+      dat, taxon_id = "2", acceptedNameUsageID = "3", new_status = "synonym")
+  )
+  expect_equal(
+    dct_change_status(
+      dat, taxon_id = "2", usage_name = "bat", new_status = "synonym"),
+    dct_change_status(
+      dat, taxon_id = "2", acceptedNameUsage = "bat", new_status = "synonym")
+  )
+  expect_equal(
+    dct_change_status(
+      dat, taxon_id = "2", usage_name = "bat", new_status = "synonym"),
+    dct_change_status(
+      dat, taxon_id = "2", acceptedNameUsage = "bat",
+      taxonomicStatus = "synonym", clear_usage_id = FALSE
+    )
+  )
+})
+
 test_that("varieties don't get remapped by default", {
   tax_dat <- tibble::tribble(
     ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,

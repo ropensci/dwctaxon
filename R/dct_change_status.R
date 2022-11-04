@@ -30,7 +30,7 @@ dct_change_status_single <- function(tax_dat,
                                      other_terms = NULL
                                      ) {
 
-  # Convert any NA input to NULL
+  # Convert any NA input (from args_tbl) to NULL
   if (!is.null(taxon_id) && is.na(taxon_id)) taxon_id <- NULL
   if (!is.null(sci_name) && is.na(sci_name)) sci_name <- NULL
   if (!is.null(usage_id) && is.na(usage_id)) usage_id <- NULL
@@ -43,6 +43,64 @@ dct_change_status_single <- function(tax_dat,
   if (is.null(stamp_modified) || is.na(stamp_modified)) stamp_modified <- FALSE
   if (is.null(strict) || is.na(strict)) strict <- FALSE
   if (is.null(quiet) || is.na(quiet)) quiet <- FALSE
+
+  # Check if other_terms overlaps with abbreviated terms and convert
+  if (nrow(other_terms) > 0) {
+    # - taxon_id
+    assertthat::assert_that(
+      sum(!is.null(taxon_id), "taxonID" %in% colnames(other_terms)) != 2,
+      msg = "Must use either taxon_id or taxonID"
+    )
+    if ("taxonID" %in% colnames(other_terms)) {
+      taxon_id <- other_terms$taxonID[[1]]
+      other_terms$taxonID <- NULL
+    }
+    # - sci_name
+    assertthat::assert_that(
+      sum(!is.null(sci_name), "scientificName" %in% colnames(other_terms)) != 2,
+      msg = "Must use either sci_name or scientificName"
+    )
+    if ("scientificName" %in% colnames(other_terms)) {
+      sci_name <- other_terms$scientificName[[1]]
+      other_terms$scientificName <- NULL
+    }
+    # - usage_id
+    assertthat::assert_that(
+      sum(
+        !is.null(usage_id),
+        "acceptedNameUsageID" %in% colnames(other_terms)
+      ) != 2,
+      msg = "Must use either usage_id or acceptedNameUsageID"
+    )
+    if ("acceptedNameUsageID" %in% colnames(other_terms)) {
+      usage_id <- other_terms$acceptedNameUsageID[[1]]
+      other_terms$acceptedNameUsageID <- NULL
+    }
+    # - usage_name
+    assertthat::assert_that(
+      sum(
+        !is.null(usage_name),
+        "acceptedNameUsage" %in% colnames(other_terms)
+      ) != 2,
+      msg = "Must use either usage_name or acceptedNameUsage"
+    )
+    if ("acceptedNameUsage" %in% colnames(other_terms)) {
+      usage_name <- other_terms$acceptedNameUsage[[1]]
+      other_terms$acceptedNameUsage <- NULL
+    }
+    # - new_status
+    assertthat::assert_that(
+      sum(
+        !is.null(new_status),
+        "taxonomicStatus" %in% colnames(other_terms)
+      ) != 2,
+      msg = "Must use either new_status or taxonomicStatus"
+    )
+    if ("taxonomicStatus" %in% colnames(other_terms)) {
+      new_status <- other_terms$taxonomicStatus[[1]]
+      other_terms$taxonomicStatus <- NULL
+    }
+  }
 
   # Assumptions:
   # - all taxonID are non-missing and unique
@@ -178,6 +236,11 @@ dct_change_status_single <- function(tax_dat,
 
 #' Change the taxonomic status of data in a taxonomic database
 #'
+#' Arguments `taxon_id`, `sci_name`, `new_status`, `usage_id`, and `usage_name`
+#' are provided as convenience to avoid typing "taxonomicID", "scientificName",
+#' "taxonomicStatus", "acceptedNameUsageID", and "acceptedNameUsage",
+#' respectively, but the latter also work.
+#'
 #' Only one of `taxon_id` or `sci_name` needs to be entered. Either will
 #' work if as long as it makes a partial or full match to one row in the data.
 #'
@@ -191,15 +254,16 @@ dct_change_status_single <- function(tax_dat,
 #'
 #' @param tax_dat Dataframe; taxonomic database in Darwin Core format.
 #' @param taxon_id Character vector of length 1; taxonID for the entry to be
-#' changed.
+#' changed. Can also use "taxonomicID".
 #' @param sci_name Character vector of length 1; scientificName for the entry to
-#' be changed.
+#' be changed. Can also use "scientificName".
 #' @param new_status Character vector of length 1; updated taxonomicStatus to
-#' use for the entry.
+#' use for the entry. Can also use "taxonomicStatus"
 #' @param usage_id Character vector of length 1; acceptedNameUsageID
-#' (taxonID for accepted name) if new status is synonym.
+#' (taxonID for accepted name) if new status is synonym. Can also use
+#' "acceptedNameUsageID".
 #' @param usage_name Character vector of length 1; scientificName for accepted
-#' name if new status is synonym.
+#' name if new status is synonym. Can also use "acceptedNameUsage".
 #' @param clear_usage_id Logical vector of length 1; should
 #' `acceptedNameUsageID` be set to `NA`?. Default: TRUE if `new_status` is
 #' "accepted" (case insensitive).

@@ -24,19 +24,20 @@ dct_change_status(
 \item{tax_dat}{Dataframe; taxonomic database in Darwin Core format.}
 
 \item{taxon_id}{Character vector of length 1; taxonID for the entry to be
-changed.}
+changed. Can also use "taxonomicID".}
 
 \item{sci_name}{Character vector of length 1; scientificName for the entry to
-be changed.}
+be changed. Can also use "scientificName".}
 
 \item{new_status}{Character vector of length 1; updated taxonomicStatus to
-use for the entry.}
+use for the entry. Can also use "taxonomicStatus"}
 
 \item{usage_id}{Character vector of length 1; acceptedNameUsageID
-(taxonID for accepted name) if new status is synonym.}
+(taxonID for accepted name) if new status is synonym. Can also use
+"acceptedNameUsageID".}
 
 \item{usage_name}{Character vector of length 1; scientificName for accepted
-name if new status is synonym.}
+name if new status is synonym. Can also use "acceptedNameUsage".}
 
 \item{clear_usage_id}{Logical vector of length 1; should
 \code{acceptedNameUsageID} be set to \code{NA}?. Default: TRUE if \code{new_status} is
@@ -72,10 +73,15 @@ DWC term; see \link{dct_terms}.}
 Dataframe; taxonomic database in Darwin Core format
 }
 \description{
-Only one of \code{taxon_id} or \code{sci_name} needs to be entered. Either will
-work if as long as it makes a partial or full match to one row in the data.
+Arguments \code{taxon_id}, \code{sci_name}, \code{new_status}, \code{usage_id}, and \code{usage_name}
+are provided as convenience to avoid typing "taxonomicID", "scientificName",
+"taxonomicStatus", "acceptedNameUsageID", and "acceptedNameUsage",
+respectively, but the latter also work.
 }
 \details{
+Only one of \code{taxon_id} or \code{sci_name} needs to be entered. Either will
+work if as long as it makes a partial or full match to one row in the data.
+
 \code{usage_id} or \code{usage_name} should be provided if the new status is a synonym;
 either will work as it makes a partial or full match to one row in the data.
 
