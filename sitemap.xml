@@ -19,9 +19,6 @@
     <loc>https://joelnitta.github.io/dwctaxon/reference/dct_add_row.html</loc>
   </url>
   <url>
-    <loc>https://joelnitta.github.io/dwctaxon/reference/dct_change_status.html</loc>
-  </url>
-  <url>
     <loc>https://joelnitta.github.io/dwctaxon/reference/dct_check_mapping.html</loc>
   </url>
   <url>
@@ -38,6 +35,9 @@
   </url>
   <url>
     <loc>https://joelnitta.github.io/dwctaxon/reference/dct_fix_format.html</loc>
+  </url>
+  <url>
+    <loc>https://joelnitta.github.io/dwctaxon/reference/dct_modify_row.html</loc>
   </url>
   <url>
     <loc>https://joelnitta.github.io/dwctaxon/reference/dct_terms.html</loc>

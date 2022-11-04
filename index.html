@@ -196,7 +196,7 @@ data in compliance with Darwin Core standards in R.
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">filmy_taxonomy_fixed</span> <span class="op">|&gt;</span></span>
 <span>  <span class="co"># The modified entry is 'taxonomicStatus' of the second row. Slice to that so we can see it.</span></span>
-<span>  <span class="fu"><a href="reference/dct_change_status.html">dct_change_status</a></span><span class="op">(</span>taxon_id <span class="op">=</span> <span class="st">"54133783"</span>, new_status <span class="op">=</span> <span class="st">"accepted"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dct_change_status</span><span class="op">(</span>taxon_id <span class="op">=</span> <span class="st">"54133783"</span>, new_status <span class="op">=</span> <span class="st">"accepted"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice_head</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">taxonID</span>, <span class="va">taxonomicStatus</span>, <span class="va">scientificName</span>, <span class="va">modified</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # A tibble: 2 × 4</span></span>
@@ -212,7 +212,7 @@ data in compliance with Darwin Core standards in R.
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">filmy_taxonomy</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="reference/dct_fix_format.html">dct_fix_format</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="reference/dct_change_status.html">dct_change_status</a></span><span class="op">(</span>taxon_id <span class="op">=</span> <span class="st">"54133783"</span>, new_status <span class="op">=</span> <span class="st">"accepted"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dct_change_status</span><span class="op">(</span>taxon_id <span class="op">=</span> <span class="st">"54133783"</span>, new_status <span class="op">=</span> <span class="st">"accepted"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="reference/dct_add_row.html">dct_add_row</a></span><span class="op">(</span>sci_name <span class="op">=</span> <span class="st">"Hymenophyllum dwctaxonense Nitta"</span>, taxonomicStatus <span class="op">=</span> <span class="st">"accepted"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="reference/dct_validate.html">dct_validate</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Dropping the following non-standard columns: identifier, superfamily, source, description, isExtinct</span></span>
