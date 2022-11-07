@@ -24,7 +24,8 @@ test_that("can modify row without changing status", {
     "1", NA, "accepted", "foo"
   )
   expect_equal(
-    dct_modify_row(tax_dat, taxon_id = "1", sci_name = "bar"),
+    dct_modify_row(
+      tax_dat, taxon_id = "1", sci_name = "bar", stamp_modified = FALSE),
     tibble::tribble(
       ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
       "1", NA, "accepted", "bar"
@@ -223,7 +224,8 @@ test_that("attempt to update without changes returns original data", {
       dct_modify_row(
         dct_filmies,
         sci_name = "Cephalomanes atrovirens Presl",
-        tax_status = "accepted name"
+        tax_status = "accepted name",
+        stamp_modified = FALSE
       )
     ),
     dct_filmies
@@ -232,7 +234,8 @@ test_that("attempt to update without changes returns original data", {
     dct_modify_row(
       dct_filmies,
       sci_name = "Cephalomanes atrovirens Presl",
-      tax_status = "accepted name"
+      tax_status = "accepted name",
+      stamp_modified = FALSE
     ),
     paste0(
       "No change to taxonomicStatus or acceptedNameUsageID.*",
@@ -244,7 +247,8 @@ test_that("attempt to update without changes returns original data", {
       dct_filmies,
       sci_name = "Trichomanes crassum Copel.",
       usage_id = "54115097",
-      tax_status = "synonym"
+      tax_status = "synonym",
+      stamp_modified = FALSE
     ),
     paste0(
       "No change to taxonomicStatus or acceptedNameUsageID.*",

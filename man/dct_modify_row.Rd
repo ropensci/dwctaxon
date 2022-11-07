@@ -15,7 +15,7 @@ dct_modify_row(
   fill_usage_name = FALSE,
   remap_names = TRUE,
   remap_variant = FALSE,
-  stamp_modified = FALSE,
+  stamp_modified = TRUE,
   strict = FALSE,
   quiet = FALSE,
   args_tbl = NULL,
