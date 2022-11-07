@@ -2,11 +2,17 @@ Package: dwctaxon
 Title: Tools for Working with Darwin Core Taxon Data
 Version: 1.0.0.9000
 Authors@R: 
-    person(given = "Joel H.",
+    c(
+      person(given = "Joel H.",
            family = "Nitta",
            role = c("aut", "cre"),
            email = "joelnitta@gmail.com",
-           comment = c(ORCID = "0000-0003-4719-7472"))
+           comment = c(ORCID = "0000-0003-4719-7472")),
+      person(given = "Wataru",
+           family = "Iwasaki",
+           role = c("ctb"),
+           comment = c(ORCID = "0000-0002-9169-9245"))
+    )
 Description: Provides functions to create, manipulate, and validate taxonomic 
     data in compliance with Darwin Core standards 
     (Darwin Core "Taxon" class https://dwc.tdwg.org/terms/#taxon).
@@ -31,7 +37,8 @@ Imports:
     utils
 Suggests: 
     testthat (>= 3.0.0),
-    roxyglobals (>= 0.2.1)
+    roxyglobals (>= 0.2.1),
+    mockery
 Remotes: 
     anthonynorth/roxyglobals
 Depends: 
