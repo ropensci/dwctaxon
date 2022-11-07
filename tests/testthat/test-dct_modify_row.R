@@ -1,3 +1,25 @@
+test_that("sci_name works to identify or modify row", {
+  tax_dat <- tibble::tribble(
+    ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
+    "1", NA, "accepted", "foo")
+  expect_equal(
+    dct_modify_row(
+      tax_dat, sci_name = "foo", tax_status = "maybe accepted",
+      stamp_modified = FALSE),
+    tibble::tribble(
+      ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName, 
+      "1", NA, "maybe accepted", "foo")
+  )
+  expect_equal(
+    dct_modify_row(
+      tax_dat, taxon_id = "1", sci_name = "foobar",
+      stamp_modified = FALSE),
+    tibble::tribble(
+      ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName, 
+      "1", NA, "accepted", "foobar")
+  )
+})
+
 test_that("fill_usage_name arg works", {
   tax_dat <- tibble::tribble(
     ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
@@ -118,7 +140,6 @@ test_that("argument aliases work", {
     dct_modify_row(dat, sci_name = "bar", tax_status = "accepted"),
     dct_modify_row(dat, scientificName = "bar", tax_status = "accepted")
   )
-  # TODO make tax_status non-required
   expect_equal(
     dct_modify_row(
       dat, taxon_id = "2", usage_id = "3", tax_status = "synonym"),
@@ -141,7 +162,7 @@ test_that("argument aliases work", {
   )
 })
 
-test_that("varieties don't get remapped by default", {
+test_that("variants don't get remapped by default", {
   tax_dat <- tibble::tribble(
     ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
     "1", NA_character_, "accepted", "foo",
