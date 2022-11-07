@@ -1,0 +1,17 @@
+citHeader("To cite dwctaxon in publications use:")
+
+citEntry(
+  entry    = "Misc",
+  title    = "The dwctaxon R package for working with Darwin Core Taxon data",
+  author   = personList(
+               as.person("Joel H. Nitta"),
+               as.person("Wataru Iwasaki")
+             ),
+  year     = 2022,
+  url      = "https://github.com/joelnitta/dwctaxon",
+  textVersion = paste(
+    "Nitta and Iwasaki (2022).",
+    "The dwctaxon R package for working with Darwin Core Taxon data.",
+    "https://github.com/joelnitta/dwctaxon"
+  )
+)
