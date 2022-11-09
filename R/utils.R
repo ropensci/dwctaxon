@@ -46,17 +46,17 @@ drop_first <- function(x) {
 assert_dat <- function(...) {
   assertthat::assert_that(
     assertr::assert(
+      ...,
+      success_fun = assertr::success_logical,
+      error_fun = assertr::error_logical
+    ),
+    msg = utils::capture.output(
+      assertr::assert(
         ...,
         success_fun = assertr::success_logical,
-        error_fun = assertr::error_logical
-      ),
-    msg = utils::capture.output(
-            assertr::assert(
-              ...,
-              success_fun = assertr::success_logical,
-              error_fun = assertr::error_return
-            )
-          ) |>
+        error_fun = assertr::error_return
+      )
+    ) |>
       drop_first() |>
       paste(collapse = "\n")
   )
@@ -80,8 +80,12 @@ assert_dat <- function(...) {
 assert_that_d <- function(condition, data, msg = NULL, env = parent.frame()) {
   assert_res <- tryCatch(
     expr = assertthat::assert_that(condition, msg = msg),
-    error = function(e) return(e),
-    warning = function(w) return(w)
+    error = function(e) {
+      return(e)
+    },
+    warning = function(w) {
+      return(w)
+    }
   )
   if (isTRUE(assert_res)) {
     return(TRUE)
@@ -104,7 +108,7 @@ assert_that_d <- function(condition, data, msg = NULL, env = parent.frame()) {
 #'
 #' @noRd
 assert_col <- function(dat, col, class = NULL, req_by = NULL,
-  on_fail = "error", run = TRUE) {
+                       on_fail = "error", run = TRUE) {
   if (run == FALSE) {
     return(NULL)
   }
@@ -119,9 +123,9 @@ assert_col <- function(dat, col, class = NULL, req_by = NULL,
   # Format output
   if (on_fail == "error") {
     assertthat::assert_that(
-        req_col_exists,
-        msg = col_err_msg
-      )
+      req_col_exists,
+      msg = col_err_msg
+    )
   } else if (on_fail == "summary") {
     req_col_res <- assert_that_d(
       req_col_exists,
@@ -142,8 +146,8 @@ assert_col <- function(dat, col, class = NULL, req_by = NULL,
     # Format error message
     if (length(class) > 2) {
       class_list <- c(
-          class[seq_along(class) - 1], "or", class[length(class)]
-        )
+        class[seq_along(class) - 1], "or", class[length(class)]
+      )
       class_list <- paste(class_list, collapse = ", ") |>
         gsub("or,", "or", x = _)
     } else if (length(class) == 2) {
@@ -234,11 +238,16 @@ null_transformer <- function(str = "NULL") {
 #'   after it).
 #' @noRd
 make_msg <- function(bad_col, values, is_last = FALSE) {
-  if (is.null(values)) return(NULL)
-  if (length(values) == 0) return(NULL)
+  if (is.null(values)) {
+    return(NULL)
+  }
+  if (length(values) == 0) {
+    return(NULL)
+  }
   glue::glue(
     "Bad {bad_col}: {paste(values, collapse = ', ')}{txt}",
-    txt = ifelse(is_last, "", "\n"))
+    txt = ifelse(is_last, "", "\n")
+  )
 }
 
 #' Helper function to get value from a dataframe
@@ -252,4 +261,35 @@ make_msg <- function(bad_col, values, is_last = FALSE) {
 #' @noRd
 val_if_in_dat <- function(df, col, i) {
   ifelse(col %in% colnames(df), df[[col]][[i]], NA)
+}
+
+#' Replace one column in a dataframe with another
+convert_col <- function(df, col_keep, col_replace) {
+  if (col_replace %in% colnames(df)) {
+    colnames(df)[colnames(df) == col_replace] <- col_keep
+  }
+  df
+}
+
+make_taxon_id_from_sci_name_1 <- function(taxon_id, sci_name, max_len = 8) {
+  if (!is.na(taxon_id)) {
+    return(taxon_id)
+  }
+  assertthat::assert_that(
+    !is.na(sci_name),
+    msg = "Cannot generate taxon_id from sci_name because sci_name is NA"
+  )
+  digest::digest(sci_name) |>
+    substr(1, max_len)
+}
+
+make_taxon_id_from_sci_name <- function(taxon_id, sci_name, max_len = 8) {
+  purrr::map2(
+    taxon_id, sci_name,
+    ~ make_taxon_id_from_sci_name_1(
+      taxon_id = .x,
+      sci_name = .y,
+      max_len = max_len
+    )
+  )
 }

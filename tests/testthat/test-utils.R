@@ -69,7 +69,8 @@ test_that("assert_col() detects missing column", {
   expect_equal(
     suppressWarnings(
       assert_col(
-        data.frame(a = 1), "b", req_by = "some_func", on_fail = "summary"
+        data.frame(a = 1), "b",
+        req_by = "some_func", on_fail = "summary"
       )
     ),
     tibble::tibble(
@@ -81,7 +82,8 @@ test_that("assert_col() detects missing column", {
   expect_equal(
     suppressWarnings(
       assert_col(
-        data.frame(a = 1), "b", on_fail = "summary"
+        data.frame(a = 1), "b",
+        on_fail = "summary"
       )
     ),
     tibble::tibble(
@@ -91,8 +93,9 @@ test_that("assert_col() detects missing column", {
   # on_fail = "summary" issues warning
   expect_warning(
     assert_col(
-        data.frame(a = 1), "b", req_by = "some_func", on_fail = "summary"
-      ),
+      data.frame(a = 1), "b",
+      req_by = "some_func", on_fail = "summary"
+    ),
     "some_func requires column b in input data"
   )
   # on_fail = "error" issues error
@@ -108,7 +111,8 @@ test_that("assert_col() detects column of wrong class", {
     suppressWarnings(
       assert_col(
         data.frame(a = 1), "a", "character",
-        req_by = "some_fun", on_fail = "summary")
+        req_by = "some_fun", on_fail = "summary"
+      )
     ),
     tibble::tibble(
       check = "some_fun",
@@ -119,7 +123,9 @@ test_that("assert_col() detects column of wrong class", {
   expect_equal(
     suppressWarnings(
       assert_col(
-        data.frame(a = 1), "a", "character", on_fail = "summary")
+        data.frame(a = 1), "a", "character",
+        on_fail = "summary"
+      )
     ),
     tibble::tibble(
       error = "Column a must be of class character"
@@ -241,5 +247,40 @@ test_that("val_if_in_dat() works", {
       "b", 1
     ),
     NA
+  )
+})
+
+test_that("convert_col() works", {
+  expect_equal(
+    data.frame(a = 1, b = 2),
+    convert_col(
+      data.frame(alpha = 1, b = 2),
+      "a",
+      "alpha"
+    )
+  )
+})
+
+test_that("make_taxon_id_from_sci_name() works", {
+  expect_equal(
+    make_taxon_id_from_sci_name(
+      c(NA, NA),
+      c("foo", "bar")
+    ),
+    c("bd40ef6d", "cbd21009")
+  )
+  expect_equal(
+    make_taxon_id_from_sci_name(
+      c(NA, "bat"),
+      c("foo", "bar")
+    ),
+    c("bd40ef6d", "bat")
+  )
+  expect_error(
+    make_taxon_id_from_sci_name(
+      c(NA, "bat"),
+      c(NA, "bar")
+    ),
+    "Cannot generate taxon_id from sci_name because sci_name is NA"
   )
 })

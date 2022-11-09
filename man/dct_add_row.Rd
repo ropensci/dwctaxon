@@ -2,30 +2,40 @@
 % Please edit documentation in R/dct_add_row.R
 \name{dct_add_row}
 \alias{dct_add_row}
-\title{Add one entry to a taxonomic database}
+\title{Add row(s) to a taxonomic database}
 \usage{
-dct_add_row(tax_dat, taxon_id = NULL, sci_name, strict = FALSE, ...)
+dct_add_row(
+  tax_dat,
+  taxon_id = NULL,
+  sci_name,
+  strict = FALSE,
+  args_tbl = NULL,
+  ...
+)
 }
 \arguments{
-\item{tax_dat}{Dataframe; taxonomic database in Darwin Core format}
+\item{tax_dat}{Dataframe; taxonomic database in DWC format}
 
-\item{taxon_id}{taxonID to use for new entry; optional, will be
+\item{taxon_id}{taxonID to use for new row; optional, will be
 assigned automatically if not provided.}
 
-\item{sci_name}{scientificName to use for new entry}
+\item{sci_name}{scientificName to use for new row}
 
 \item{strict}{Logical; should taxonomic checks be run on the updated
 taxonomic database?}
 
+\item{args_tbl}{A dataframe with columns that are named by DWC terms.
+All rows will be added at once.}
+
 \item{...}{Additional data to include, specified as sets of named
 character strings; e.g., \code{parentNameUsageID = "6SH4"}. The name of
-each string must be a valid column name for data in Darwin Core format.}
+each string must be a valid column name for data in DWC format.}
 }
 \value{
-Dataframe; taxonomic database in Darwin Core format
+Dataframe; taxonomic database in DWC format
 }
 \description{
-Add one entry to a taxonomic database
+Add one or more rows to a taxonomic database in Darwin Core (DWC) format.
 }
 \examples{
 tibble::tibble(
