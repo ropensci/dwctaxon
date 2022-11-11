@@ -7,6 +7,20 @@ repos:
     -   id: style-files
         args: [--style_pkg=styler, --style_fun=tidyverse_style]    
     -   id: roxygenize
+        # roxygen requires loading pkg -> add dependencies from DESCRIPTION
+        additional_dependencies:
+        -    assertr
+        -    assertthat
+        -    digest
+        -    dplyr
+        -    glue
+        -    methods
+        -    purrr
+        -    stringr
+        -    tibble
+        -    tidyr
+        -    utils
+        -    anthonynorth/roxyglobals
     # codemeta must be above use-tidy-description when both are used
     -   id: codemeta-description-updated
     -   id: use-tidy-description
