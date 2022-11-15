@@ -20,9 +20,7 @@ dct_modify_row_single <- function(tax_dat,
                                   stamp_modified = TRUE,
                                   strict = FALSE,
                                   quiet = FALSE,
-                                  other_terms = NULL
-                                  ) {
-
+                                  other_terms = NULL) {
   # Convert any NA input (from args_tbl) to NULL
   if (!is.null(taxon_id) && is.na(taxon_id)) taxon_id <- NULL
   if (!is.null(sci_name) && is.na(sci_name)) sci_name <- NULL
@@ -38,8 +36,10 @@ dct_modify_row_single <- function(tax_dat,
   }
   # Convert missing logicals to FALSE
   if (is.null(clear_usage_id) || is.na(clear_usage_id)) clear_usage_id <- FALSE
-  if (is.null(fill_usage_name) || is.na(fill_usage_name)) fill_usage_name <-
-    FALSE
+  if (is.null(fill_usage_name) || is.na(fill_usage_name)) {
+    fill_usage_name <-
+      FALSE
+  }
   if (is.null(remap_names) || is.na(remap_names)) remap_names <- FALSE
   if (is.null(remap_variant) || is.na(remap_variant)) remap_variant <- FALSE
   if (is.null(stamp_modified) || is.na(stamp_modified)) stamp_modified <- FALSE
@@ -119,7 +119,8 @@ dct_modify_row_single <- function(tax_dat,
       # - sci_name
       assertthat::assert_that(
         sum(
-          !is.null(sci_name), "scientificName" %in% colnames(other_terms)) != 2,
+          !is.null(sci_name), "scientificName" %in% colnames(other_terms)
+        ) != 2,
         msg = "Must use either sci_name or scientificName"
       )
       if ("scientificName" %in% colnames(other_terms)) {
@@ -249,7 +250,8 @@ dct_modify_row_single <- function(tax_dat,
   # - add timestamp
   if (isTRUE(stamp_modified)) {
     new_row <- dplyr::mutate(
-      new_row, modified = as.character(Sys.time())
+      new_row,
+      modified = as.character(Sys.time())
     )
   }
 
@@ -261,13 +263,13 @@ dct_modify_row_single <- function(tax_dat,
     if (isTRUE(remap_variant)) {
       new_row_other <- dplyr::filter(
         tax_dat, acceptedNameUsageID == tax_dat_row$taxonID
-        )
+      )
     } else {
       new_row_other <- dplyr::filter(
         tax_dat,
         acceptedNameUsageID == tax_dat_row$taxonID,
         stringr::str_detect(taxonomicStatus, "variety", negate = TRUE)
-        )
+      )
     }
     # - update other rows affected
     if (nrow(new_row_other) > 0) {
@@ -364,7 +366,7 @@ dct_modify_row_single <- function(tax_dat,
 #'
 #' @param tax_dat Dataframe; taxonomic database in DWC format.
 #' @param taxon_id Character or numeric vector of length 1; taxonID of the row
-#' to be modified (the selected row). Can also use `taxonomicID`.
+#' to be modified (the selected row). Can also use `taxonID`.
 #' @param sci_name Character vector of length 1; scientificName of the row to
 #' be modified if `taxon_id` is `NULL`, OR the scientificName to assign to the
 #' selected row if `taxon_id` is provided (see Details).
@@ -421,7 +423,8 @@ dct_modify_row_single <- function(tax_dat,
 #'   dct_validate(
 #'     check_tax_status = FALSE,
 #'     check_mapping_strict = FALSE,
-#'     check_sci_name = FALSE)
+#'     check_sci_name = FALSE
+#'   )
 #'
 #' # Sometimes changing one name will affect others, if they map
 #' # to the new synonym
@@ -435,15 +438,19 @@ dct_modify_row_single <- function(tax_dat,
 #' # Apply a set of changes
 #' library(tibble)
 #' updates <- tibble(
-#'   sci_name = c("Cephalomanes atrovirens Presl",
-#'     "Cephalomanes crassum (Copel.) M. G. Price"),
+#'   sci_name = c(
+#'     "Cephalomanes atrovirens Presl",
+#'     "Cephalomanes crassum (Copel.) M. G. Price"
+#'   ),
 #'   tax_status = "synonym",
 #'   usage_name = "Trichomanes crassum Copel."
 #' )
 #' dct_filmies |>
 #'   dct_modify_row(args_tbl = updates) |>
-#'   dct_modify_row(sci_name = "Trichomanes crassum Copel.",
-#'     tax_status = "accepted")
+#'   dct_modify_row(
+#'     sci_name = "Trichomanes crassum Copel.",
+#'     tax_status = "accepted"
+#'   )
 dct_modify_row <- function(tax_dat,
                            taxon_id = NULL,
                            sci_name = NULL,

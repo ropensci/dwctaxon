@@ -26,7 +26,7 @@ dct_modify_row(
 \item{tax_dat}{Dataframe; taxonomic database in DWC format.}
 
 \item{taxon_id}{Character or numeric vector of length 1; taxonID of the row
-to be modified (the selected row). Can also use \code{taxonomicID}.}
+to be modified (the selected row). Can also use \code{taxonID}.}
 
 \item{sci_name}{Character vector of length 1; scientificName of the row to
 be modified if \code{taxon_id} is \code{NULL}, OR the scientificName to assign to the
