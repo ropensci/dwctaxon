@@ -9,6 +9,7 @@ Bartnik
 Bengtsson
 cff
 cffr
+dct
 de
 debian
 Denney
@@ -47,6 +48,8 @@ Nitta
 Noam
 Onkelinx
 orcid
+parentNameUsage
+parentNameUsageID
 Pre
 purrr
 Qiang
@@ -59,6 +62,7 @@ roxyglobals
 rstudio
 Schumacher
 scientificName
+scientificNameID
 Simko
 Stokely
 stringr
@@ -67,6 +71,7 @@ taxonID
 taxonomicID
 taxonomicStatus
 tdwg
+termID
 testthat
 Thierry
 tibble
