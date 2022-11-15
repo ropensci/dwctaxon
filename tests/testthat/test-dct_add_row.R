@@ -1,12 +1,37 @@
+library(mockery)
+
 # make data for sharing across tests
 base_dat <- tibble::tribble(
   ~taxonID, ~scientificName,
   "1", "foo"
 )
 
+# checks ----
+test_that("check for duplicated taxonID works", {
+  expect_error(
+    dct_add_row(base_dat, taxon_id = "1", sci_name = "bar"),
+    "taxonID in new data must be different from that in existing data"
+  )
+})
+
+# warnings ---
+test_that("warning about changing taxonID class works", {
+  expect_warning(
+    dct_add_row(
+      tibble::tribble(~taxonID, ~scientificName, 1, "foo"),
+      sci_name = "bar"
+    ),
+    paste(
+      "Class of taxonID column changed in either new_dat or tax_dat",
+      "so new data could be added"
+    )
+  )
+})
+
+# arguments ----
 test_that("basic adding works", {
   expect_equal(
-    dct_add_row(base_dat, taxon_id = "2"),
+    dct_add_row(base_dat, taxon_id = "2", stamp_modified = FALSE),
     tibble::tribble(
       ~taxonID, ~scientificName,
       "1", "foo",
@@ -24,7 +49,8 @@ test_that("new_dat argument works", {
         sci_name = c("bar", "bat"),
         usage_id = c("1", NA),
         tax_status = c("synonym", NA)
-      )
+      ),
+      stamp_modified = FALSE
     ),
     tibble::tribble(
       ~taxonID, ~scientificName, ~acceptedNameUsageID, ~taxonomicStatus,
@@ -40,7 +66,8 @@ test_that("argument aliases work", {
     dct_add_row(
       base_dat,
       taxon_id = "2", sci_name = "bar", usage_id = "1",
-      tax_status = "synonym"
+      tax_status = "synonym",
+      stamp_modified = FALSE
     ),
     tibble::tribble(
       ~taxonID, ~scientificName, ~acceptedNameUsageID, ~taxonomicStatus,
@@ -52,20 +79,25 @@ test_that("argument aliases work", {
     dct_add_row(
       base_dat,
       taxon_id = "2", sci_name = "bar", usage_id = "1",
-      tax_status = "synonym"
+      tax_status = "synonym",
+      stamp_modified = FALSE
     ),
     dct_add_row(
       base_dat,
       taxonID = "2", scientificName = "bar",
       acceptedNameUsageID = "1",
-      taxonomicStatus = "synonym"
+      taxonomicStatus = "synonym",
+      stamp_modified = FALSE
     )
   )
 })
 
 test_that("fill_taxon_id argument works", {
   expect_equal(
-    dct_add_row(base_dat, sci_name = c("bar", "bat")),
+    dct_add_row(base_dat,
+      sci_name = c("bar", "bat"),
+      stamp_modified = FALSE
+    ),
     tibble::tibble(
       taxonID = c(
         "1",
@@ -79,10 +111,72 @@ test_that("fill_taxon_id argument works", {
 
 test_that("fill_taxon_id warning works", {
   expect_warning(
-    dct_add_row(base_dat, sci_name = "bar", taxon_id = 1),
+    dct_add_row(base_dat, sci_name = "bar", taxon_id = 2),
     paste(
       "Class of taxonID column changed in either new_dat or tax_dat so",
       "new data could be added"
     )
   )
 })
+
+# fill_usage_id is TRUE by default
+test_that("fill_usage_id works", {
+  expect_snapshot(
+    tibble::tibble(
+      taxonID = "123",
+      scientificName = "Foogenus barspecies",
+      taxonomicStatus = "accepted"
+    ) |>
+      dct_add_row(
+        sci_name = "Bargenus foosp", tax_status = "accepted", usage_id = NA,
+        stamp_modified = FALSE
+      ) |>
+      dct_add_row(
+        sci_name = c("Foogenus boospecies", "Bargenus bkaspecies"),
+        usage_name = c("Foogenus barspecies", "Bargenus foosp"),
+        tax_status = "synonym",
+        stamp_modified = FALSE
+      )
+  )
+})
+
+test_that("fill_usage_id doesn't create acceptedUsageID column", {
+  expect_snapshot(
+    tibble::tibble(
+      taxonID = "123",
+      scientificName = "Foogenus barspecies",
+      taxonomicStatus = "accepted"
+    ) |>
+      dct_add_row(
+        sci_name = "Bargenus foosp", tax_status = "accepted",
+        stamp_modified = FALSE
+      ) |>
+      dct_add_row(
+        sci_name = c("Foogenus boospecies", "Bargenus bkaspecies"),
+        usage_name = c("Foogenus barspecies", "Bargenus foosp"),
+        tax_status = "synonym",
+        stamp_modified = FALSE
+      )
+  )
+})
+
+
+test_that("stamp_modified argument works", {
+  tax_dat <- tibble::tribble(
+    ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
+    "1", NA_character_, "accepted", "foo"
+  )
+  # Replace time stamp with date stamp for testing
+  stub(dct_add_row, "Sys.time", Sys.Date(), depth = 2)
+  expect_equal(
+    dct_add_row(tax_dat, taxon_id = "2"),
+    tibble::tribble(
+      ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
+      ~modified,
+      "1", NA_character_, "accepted", "foo", NA,
+      "2", NA_character_, NA, NA, as.character(Sys.Date())
+    )
+  )
+})
+
+rm(base_dat)

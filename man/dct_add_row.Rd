@@ -7,35 +7,76 @@
 dct_add_row(
   tax_dat,
   taxon_id = NULL,
-  sci_name,
+  sci_name = NULL,
+  tax_status = NULL,
+  usage_id = NULL,
+  usage_name = NULL,
+  new_dat = NULL,
+  fill_taxon_id = TRUE,
+  fill_usage_id = TRUE,
+  stamp_modified = TRUE,
   strict = FALSE,
-  args_tbl = NULL,
   ...
 )
 }
 \arguments{
-\item{tax_dat}{Dataframe; taxonomic database in DWC format}
+\item{tax_dat}{Dataframe; taxonomic database in DWC format.}
 
-\item{taxon_id}{taxonID to use for new row; optional, will be
-assigned automatically if not provided.}
+\item{taxon_id}{Character or numeric vector; values to add to taxonID column.
+Can also use \code{taxonomicID}. Ignored if \code{new_dat} is not \code{NULL}.}
 
-\item{sci_name}{scientificName to use for new row}
+\item{sci_name}{Character vector; values to add to scientificName column. Can
+also use \code{scientificName}. Ignored if \code{new_dat} is not \code{NULL}.}
 
-\item{strict}{Logical; should taxonomic checks be run on the updated
-taxonomic database?}
+\item{tax_status}{Character vector; values to add to taxonomicStatus column.
+Can also use \code{taxonomicStatus}. Ignored if \code{new_dat} is not \code{NULL}.}
 
-\item{args_tbl}{A dataframe with columns that are named by DWC terms.
-All rows will be added at once.}
+\item{usage_id}{Character or numeric vector; values to add to
+acceptedNameUsageID column. Can also use \code{acceptedNameUsageID}. Ignored if
+\code{new_dat} is not \code{NULL}.}
 
-\item{...}{Additional data to include, specified as sets of named
-character strings; e.g., \code{parentNameUsageID = "6SH4"}. The name of
-each string must be a valid column name for data in DWC format.}
+\item{usage_name}{Character vector; values to add to acceptedNameUsage
+column. Can also use \code{acceptedNameUsage}. Ignored if \code{new_dat} is not \code{NULL}.}
+
+\item{new_dat}{A dataframe including columns corresponding to one or more of
+the above arguments, except for \code{tax_dat}. Other DWC terms can also be
+included as additional columns. All rows in \code{new_dat} will be appended to the
+input data (\code{tax_dat}).}
+
+\item{fill_taxon_id}{Logical vector of length 1; if \code{taxon_id} is not
+provided, should values in the taxonID column be filled in by looking
+them up from the scientificName? Default \code{TRUE}.}
+
+\item{fill_usage_id}{Logical vector of length 1; if \code{usage_id} is not
+provided, should values in the acceptedNameUsageID column be filled in by
+matching acceptedNameUsage to scientificName? Default \code{TRUE}.}
+
+\item{stamp_modified}{Logical vector of length 1; should the \code{modified}
+column of any new row include a a timestamp with the date and time of its
+creation?}
+
+\item{strict}{Logical vector of length 1; should taxonomic checks be run on
+the updated taxonomic database? Default \code{FALSE}.}
+
+\item{...}{Additional data to add, specified as sets of named
+character or numeric vectors; e.g., \code{parentNameUsageID = "6SH4"}. The name of
+each must be a valid column name for data in DWC format. Ignored if \code{new_dat}
+is not \code{NULL}.}
 }
 \value{
-Dataframe; taxonomic database in DWC format
+Dataframe; taxonomic database in DWC format.
 }
 \description{
 Add one or more rows to a taxonomic database in Darwin Core (DWC) format.
+}
+\details{
+Arguments \code{taxon_id}, \code{sci_name}, \code{tax_status}, \code{usage_id}, and \code{usage_name}
+are provided as convenience to avoid typing the longer "taxonomicID",
+"scientificName", "taxonomicStatus", "acceptedNameUsageID", and
+"acceptedNameUsage", respectively, but the latter may be used instead.
+
+\code{fill_taxon_id} and \code{fill_usage_id} only act on the newly added data (they
+do not fill columns in \code{tax_dat}).
 }
 \examples{
 tibble::tibble(

@@ -1,3 +1,6 @@
+acceptedNameUsage
+acceptedNameUsageID
+acceptedUsageID
 anthony
 anthonynorth
 assertr
@@ -61,6 +64,8 @@ Stokely
 stringr
 Suruceanu
 taxonID
+taxonomicID
+taxonomicStatus
 tdwg
 testthat
 Thierry

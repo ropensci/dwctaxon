@@ -10,9 +10,11 @@
 #' @param ... Strings to paste
 #' @param sep Character used to separate pasted strings
 #' @noRd
+#' @autoglobal
+#' @global paste3
 paste3 <- function(..., sep = " ") {
-  L <- list(...)
-  L <- lapply(L, function(x) {
+  my_list <- list(...)
+  my_list <- lapply(my_list, function(x) {
     x[is.na(x)] <- ""
     x
   })
@@ -20,7 +22,7 @@ paste3 <- function(..., sep = " ") {
     paste0("(^", sep, "|", sep, "$)"), "",
     gsub(
       paste0(sep, sep), sep,
-      do.call(paste, c(L, list(sep = sep)))
+      do.call(paste, c(my_list, list(sep = sep)))
     )
   )
   is.na(ret) <- ret == ""
@@ -31,6 +33,8 @@ paste3 <- function(..., sep = " ") {
 #'
 #' @param x Vector
 #' @noRd
+#' @autoglobal
+#' @global drop_first
 drop_first <- function(x) {
   x[-1]
 }
@@ -43,6 +47,8 @@ drop_first <- function(x) {
 #'
 #' @param ... Arguments passed to assertr::assert()
 #' @noRd
+#' @autoglobal
+#' @global assert_dat
 assert_dat <- function(...) {
   assertthat::assert_that(
     assertr::assert(
@@ -77,6 +83,8 @@ assert_dat <- function(...) {
 #'   the parent frame (function)
 #' @return TRUE if test is true or `data` if test is false
 #' @noRd
+#' @autoglobal
+#' @global assert_that_d
 assert_that_d <- function(condition, data, msg = NULL, env = parent.frame()) {
   assert_res <- tryCatch(
     expr = assertthat::assert_that(condition, msg = msg),
@@ -107,6 +115,8 @@ assert_that_d <- function(condition, data, msg = NULL, env = parent.frame()) {
 #' @param run Logical; should this check be run? If FALSE, return NULL
 #'
 #' @noRd
+#' @autoglobal
+#' @global assert_col
 assert_col <- function(dat, col, class = NULL, req_by = NULL,
                        on_fail = "error", run = TRUE) {
   if (run == FALSE) {
@@ -184,6 +194,8 @@ assert_col <- function(dat, col, class = NULL, req_by = NULL,
 #' that is not a dataframe with at least one row it will be excluded
 #' @param x List possibly including multiple dataframes
 #' @noRd
+#' @autoglobal
+#' @global bind_rows_f
 bind_rows_f <- function(x) {
   x <- x[sapply(x, function(y) inherits(y, "data.frame"))]
   x <- x[sapply(x, function(y) nrow(y) > 0)]
@@ -196,6 +208,8 @@ bind_rows_f <- function(x) {
 #'
 #' @param x Dataframe
 #' @noRd
+#' @autoglobal
+#' @global sort_cols_dwc
 sort_cols_dwc <- function(x) {
   # valid col names are those in DWC terms plus "error" and "check"
   val_cols <- c(dct_terms$term, "error", "check")
@@ -212,6 +226,8 @@ sort_cols_dwc <- function(x) {
 #' Check if any elements of a list are not TRUE
 #' @param x A list
 #' @noRd
+#' @autoglobal
+#' @global any_not_true
 any_not_true <- function(x) {
   sapply(x, function(y) !isTRUE(y)) |>
     any()
@@ -220,6 +236,8 @@ any_not_true <- function(x) {
 #' Transformer for glue
 #' @param str String to print for NULL in glue expressions
 #' @noRd
+#' @autoglobal
+#' @global null_transformer
 null_transformer <- function(str = "NULL") {
   function(text, envir) {
     out <- glue::identity_transformer(text, envir)
@@ -237,6 +255,8 @@ null_transformer <- function(str = "NULL") {
 #'   in an error message? (in which case it should not have a line break
 #'   after it).
 #' @noRd
+#' @autoglobal
+#' @global make_msg
 make_msg <- function(bad_col, values, is_last = FALSE) {
   if (is.null(values)) {
     return(NULL)
@@ -259,11 +279,22 @@ make_msg <- function(bad_col, values, is_last = FALSE) {
 #' @return The value at the selected index of the selected column, if
 #' that column exists; otherwise `NA`
 #' @noRd
+#' @autoglobal
+#' @global val_if_in_dat
 val_if_in_dat <- function(df, col, i) {
   ifelse(col %in% colnames(df), df[[col]][[i]], NA)
 }
 
 #' Replace one column in a dataframe with another
+#'
+#' @param df Dataframe
+#' @param col_keep Column name to keep
+#' @param col_replace Column name to replace
+#'
+#' @return Dataframe
+#' @noRd
+#' @autoglobal
+#' @global convert_col
 convert_col <- function(df, col_keep, col_replace) {
   if (col_replace %in% colnames(df)) {
     colnames(df)[colnames(df) == col_replace] <- col_keep
@@ -271,6 +302,15 @@ convert_col <- function(df, col_keep, col_replace) {
   df
 }
 
+#' Generate a taxonID from a scientific name, single version.
+#'
+#' @param taxon_id String or number; taxonID (may be NA).
+#' @param sci_name String; scientific name.
+#' @param max_len Number; number of characters to use for generated taxonID.
+#'
+#' @return String; a taxonID generated from the hash of the scientific name.
+#' @noRd
+#' @autoglobal
 make_taxon_id_from_sci_name_1 <- function(taxon_id, sci_name, max_len = 8) {
   if (!is.na(taxon_id)) {
     return(taxon_id)
@@ -283,6 +323,17 @@ make_taxon_id_from_sci_name_1 <- function(taxon_id, sci_name, max_len = 8) {
     substr(1, max_len)
 }
 
+#' Generate a taxonID from a scientific name, vectorized.
+#'
+#' @param taxon_id Character vector; taxonID (may be NA).
+#' @param sci_name Character vector; scientific name.
+#' @param max_len Numeric vector; number of characters to use for generated
+#'   taxonID.
+#'
+#' @return String: a taxonID generated from the hash of the scientific name.
+#' @noRd
+#' @autoglobal
+#' @global make_taxon_id_from_sci_name
 make_taxon_id_from_sci_name <- function(taxon_id, sci_name, max_len = 8) {
   purrr::map2(
     taxon_id, sci_name,
@@ -291,5 +342,44 @@ make_taxon_id_from_sci_name <- function(taxon_id, sci_name, max_len = 8) {
       sci_name = .y,
       max_len = max_len
     )
+  ) |>
+    unlist()
+}
+
+#' Are all values of a vector unique?
+#'
+#' @param x Vector.
+#' @param allow_na Logical; should NA values count when checking for
+#' uniqueness?.
+#'
+#' @return Logical vector of length 1.
+#' @noRd
+#' @autoglobal
+#' @global is_unique
+is_unique <- function(x, allow_na = TRUE) {
+  if (allow_na) {
+    x <- x[!is.na(x)]
+  }
+  !any(duplicated(x))
+}
+
+#' Assert that a dataframe only uses one of two possible column names
+#'
+#' @param df Dataframe.
+#' @param col_1 Name of first column.
+#' @param col_2 Name of second column.
+#'
+#' @return TRUE if assertion passes, error if not.
+#'
+#' @noRd
+#' @autoglobal
+#' @global assert_that_uses_one_name
+assert_that_uses_one_name <- function(df, col_1, col_2) {
+  assertthat::assert_that(
+    sum(
+      col_1 %in% colnames(df),
+      col_2 %in% colnames(df)
+    ) != 2,
+    msg = glue::glue("Must use either {col_1} or {col_2}")
   )
 }

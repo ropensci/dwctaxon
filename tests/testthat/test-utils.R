@@ -284,3 +284,41 @@ test_that("make_taxon_id_from_sci_name() works", {
     "Cannot generate taxon_id from sci_name because sci_name is NA"
   )
 })
+
+test_that("is_unique() works", {
+  expect_equal(
+    is_unique(c(1, 2, NA, NA)),
+    TRUE
+  )
+  expect_equal(
+    is_unique(c(1, 2, NA, NA), allow_na = FALSE),
+    FALSE
+  )
+  expect_equal(
+    is_unique(c(1, 2, 2, NA)),
+    FALSE
+  )
+  expect_equal(
+    is_unique(c(1, 2, 2, NA), allow_na = FALSE),
+    FALSE
+  )
+  expect_equal(
+    is_unique(NA),
+    TRUE
+  )
+  expect_equal(
+    is_unique(NA, allow_na = FALSE),
+    TRUE
+  )
+})
+
+test_that("assert_that_uses_one_name() works", {
+  expect_equal(
+    assert_that_uses_one_name(data.frame(a = 1, b = 2), "a", "A"),
+    TRUE
+  )
+  expect_error(
+    assert_that_uses_one_name(data.frame(a = 1, A = 2), "a", "A"),
+    "Must use either a or A"
+  )
+})
