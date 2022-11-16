@@ -43,7 +43,8 @@ test_that("Check for 'taxonomicStatus in valid values' works", {
       taxonomicStatus = "foo",
       error = paste(
         "taxonID detected whose taxonomicStatus is not in",
-        "valid_tax_status (accepted, synonym, variant, NA)"),
+        "valid_tax_status (accepted, synonym, variant, NA)"
+      ),
       check = "check_tax_status"
     )
   )
@@ -66,7 +67,8 @@ test_that("Check for 'taxonomicStatus in valid values' works", {
       taxonomicStatus = "foo",
       error = paste(
         "taxonID detected whose taxonomicStatus is not in",
-        "valid_tax_status (accepted, synonym, variant, NA)"),
+        "valid_tax_status (accepted, synonym, variant, NA)"
+      ),
       check = "check_tax_status"
     )
   )

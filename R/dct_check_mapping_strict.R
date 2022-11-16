@@ -8,30 +8,34 @@
 #' @inherit check_taxon_id_not_na
 #' @autoglobal
 #' @noRd
-check_mapping_strict_status <- function(
-  tax_dat,
-  on_fail = "error",
-  on_success = "data",
-  valid_tax_status,
-  run = TRUE) {
-
+check_mapping_strict_status <- function(tax_dat,
+                                        on_fail = "error",
+                                        on_success = "data",
+                                        valid_tax_status,
+                                        run = TRUE) {
   if (run == FALSE) {
     return(NULL)
   }
 
   # Check that valid_tax_status includes needed values
   valid_tax_status_lacks_syn <- !grepl(
-    "synonym", valid_tax_status, ignore.case = FALSE)
+    "synonym", valid_tax_status,
+    ignore.case = FALSE
+  )
   valid_tax_status_lacks_acc <- !grepl(
-    "accepted", valid_tax_status, ignore.case = FALSE)
+    "accepted", valid_tax_status,
+    ignore.case = FALSE
+  )
   valid_tax_status_lacks_var <- !grepl(
-    "variant", valid_tax_status, ignore.case = FALSE)
+    "variant", valid_tax_status,
+    ignore.case = FALSE
+  )
 
   missing_tax_status <- paste3(
     ifelse(valid_tax_status_lacks_syn, "synonym", NA_character_),
     ifelse(valid_tax_status_lacks_acc, "accepted", NA_character_),
     ifelse(valid_tax_status_lacks_var, "variant", NA_character_),
-  sep = ", "
+    sep = ", "
   )
 
   # Format results
@@ -64,7 +68,6 @@ check_mapping_strict_status <- function(
   if (on_success == "logical") {
     return(TRUE)
   }
-
 }
 
 #' check_mapping_strict sub-check: check that synonyms map to accepted
@@ -80,12 +83,10 @@ check_mapping_strict_status <- function(
 #' @inherit check_taxon_id_not_na
 #' @autoglobal
 #' @noRd
-check_syn_map_to_acc <- function(
-  tax_dat,
-  on_fail = "error",
-  on_success = "logical",
-  run = TRUE) {
-
+check_syn_map_to_acc <- function(tax_dat,
+                                 on_fail = "error",
+                                 on_success = "logical",
+                                 run = TRUE) {
   if (run == FALSE) {
     return(NULL)
   }
@@ -124,7 +125,7 @@ check_syn_map_to_acc <- function(
           {make_msg('taxonID', bad_taxon_id)}\\
           {make_msg('scientificName', bad_sci_name)}\\
           {make_msg('acceptedNameUsageID', bad_acc_id, is_last = TRUE)}",
-          .transformer = null_transformer("")
+        .transformer = null_transformer("")
       )
     )
   }
@@ -150,7 +151,6 @@ check_syn_map_to_acc <- function(
   if (on_success == "logical") {
     return(TRUE)
   }
-
 }
 
 #' check_mapping_strict sub-check: any row with acceptedNameUsageID must
@@ -163,27 +163,27 @@ check_syn_map_to_acc <- function(
 #' Required checks: none
 #' @noRd
 #' @autoglobal
-check_acc_id_has_tax_status <- function(
-  tax_dat,
-  on_fail = "error",
-  on_success = "data",
-  run = TRUE) {
-
+check_acc_id_has_tax_status <- function(tax_dat,
+                                        on_fail = "error",
+                                        on_success = "data",
+                                        run = TRUE) {
   if (run == FALSE) {
     return(NULL)
   }
 
   # Filter to names with acceptedNameUsageID
   tax_dat_with_acc_usage_id <- dplyr::filter(
-      tax_dat, !is.na(acceptedNameUsageID)
+    tax_dat, !is.na(acceptedNameUsageID)
   )
 
   tax_status_is_missing <- is.na(tax_dat_with_acc_usage_id$taxonomicStatus)
   bad_taxon_id <- tax_dat_with_acc_usage_id$taxonID[tax_status_is_missing]
   bad_sci_name <- tax_dat_with_acc_usage_id$scientificName[
-    tax_status_is_missing]
+    tax_status_is_missing
+  ]
   bad_acc_id <- tax_dat_with_acc_usage_id$acceptedNameUsageID[
-    tax_status_is_missing]
+    tax_status_is_missing
+  ]
 
   # Format results
   if (on_fail == "error") {
@@ -196,7 +196,7 @@ check_acc_id_has_tax_status <- function(
           {make_msg('taxonID', bad_taxon_id)}\\
           {make_msg('scientificName', bad_sci_name)}\\
           {make_msg('acceptedNameUsageID', bad_acc_id, is_last = TRUE)}",
-          .transformer = null_transformer("")
+        .transformer = null_transformer("")
       )
     )
   }
@@ -222,7 +222,6 @@ check_acc_id_has_tax_status <- function(
   if (on_success == "logical") {
     return(TRUE)
   }
-
 }
 
 #' check_mapping_strict_status sub-check: any row with acceptedNameUsageID must
@@ -235,34 +234,37 @@ check_acc_id_has_tax_status <- function(
 #' Required checks: none
 #' @noRd
 #' @autoglobal
-check_acc_id_valid_tax_status <- function(
-  tax_dat,
-  on_fail = "error",
-  on_success = "data",
-  run = TRUE) {
-
+check_acc_id_valid_tax_status <- function(tax_dat,
+                                          on_fail = "error",
+                                          on_success = "data",
+                                          run = TRUE) {
   if (run == FALSE) {
     return(NULL)
   }
 
   # Filter to names with acceptedNameUsageID
   tax_dat_with_acc_usage_id <- dplyr::filter(
-      tax_dat, !is.na(acceptedNameUsageID)
+    tax_dat, !is.na(acceptedNameUsageID)
   )
 
   # Don't count NA as non-valid, since these are caught separately by
   # check_acc_id_has_tax_status
-  acc_usage_id_is_not_valid <- !grepl("accepted|synonym|variant",
-    tax_dat_with_acc_usage_id$taxonomicStatus) &
+  acc_usage_id_is_not_valid <- !grepl(
+    "accepted|synonym|variant",
+    tax_dat_with_acc_usage_id$taxonomicStatus
+  ) &
     !is.na(tax_dat_with_acc_usage_id$taxonomicStatus)
 
   bad_taxon_id <- tax_dat_with_acc_usage_id$taxonID[acc_usage_id_is_not_valid]
   bad_sci_name <- tax_dat_with_acc_usage_id$scientificName[
-    acc_usage_id_is_not_valid]
+    acc_usage_id_is_not_valid
+  ]
   bad_tax_status <- tax_dat_with_acc_usage_id$taxonomicStatus[
-    acc_usage_id_is_not_valid]
+    acc_usage_id_is_not_valid
+  ]
   bad_acc_id <- tax_dat_with_acc_usage_id$acceptedNameUsageID[
-    acc_usage_id_is_not_valid]
+    acc_usage_id_is_not_valid
+  ]
 
   # Format results
   if (on_fail == "error") {
@@ -277,7 +279,7 @@ check_acc_id_valid_tax_status <- function(
           {make_msg('acceptedNameUsageID', bad_acc_id)}\\
           {make_msg('scientificName', bad_sci_name)}\\
           {make_msg('taxonomicStatus', bad_tax_status, is_last = TRUE)}",
-          .transformer = null_transformer("")
+        .transformer = null_transformer("")
       )
     )
   }
@@ -305,7 +307,6 @@ check_acc_id_valid_tax_status <- function(
   if (on_success == "logical") {
     return(TRUE)
   }
-
 }
 
 #' check_mapping_strict sub-check: variants cannot map to variants
@@ -319,12 +320,10 @@ check_acc_id_valid_tax_status <- function(
 #' Required checks: none
 #' @noRd
 #' @autoglobal
-check_variant_map_to_nonvar <- function(
-  tax_dat,
-  on_fail = "error",
-  on_success = "logical",
-  run = TRUE) {
-
+check_variant_map_to_nonvar <- function(tax_dat,
+                                        on_fail = "error",
+                                        on_success = "logical",
+                                        run = TRUE) {
   if (run == FALSE) {
     return(NULL)
   }
@@ -338,7 +337,7 @@ check_variant_map_to_nonvar <- function(
     )
 
   var_id_maps_to_var_id <- tax_dat_variants$acceptedNameUsageID %in%
-      tax_dat_variants$taxonID
+    tax_dat_variants$taxonID
 
   bad_taxon_id <- tax_dat_variants$taxonID[var_id_maps_to_var_id]
   bad_sci_name <- tax_dat_variants$scientificName[var_id_maps_to_var_id]
@@ -355,7 +354,7 @@ check_variant_map_to_nonvar <- function(
           {make_msg('taxonID', bad_taxon_id)}\\
           {make_msg('scientificName', bad_sci_name)}\\
           {make_msg('acceptedNameUsageID', bad_acc_id, is_last = TRUE)}",
-          .transformer = null_transformer("")
+        .transformer = null_transformer("")
       )
     )
   }
@@ -381,7 +380,6 @@ check_variant_map_to_nonvar <- function(
   if (on_success == "logical") {
     return(TRUE)
   }
-
 }
 
 #' check_mapping_strict sub-check: variants must map to something
@@ -393,12 +391,10 @@ check_variant_map_to_nonvar <- function(
 #' Required checks: none
 #' @noRd
 #' @autoglobal
-check_variant_map_to_something <- function(
-  tax_dat,
-  on_fail = "error",
-  on_success = "logical",
-  run = TRUE) {
-
+check_variant_map_to_something <- function(tax_dat,
+                                           on_fail = "error",
+                                           on_success = "logical",
+                                           run = TRUE) {
   if (run == FALSE) {
     return(NULL)
   }
@@ -424,7 +420,7 @@ check_variant_map_to_something <- function(
           variant(s) detected who lack an acceptedNameUsageID.
           {make_msg('taxonID', bad_taxon_id)}\\
           {make_msg('scientificName', bad_sci_name, is_last = TRUE)}",
-          .transformer = null_transformer("")
+        .transformer = null_transformer("")
       )
     )
   }
@@ -446,7 +442,6 @@ check_variant_map_to_something <- function(
   if (on_success == "logical") {
     return(TRUE)
   }
-
 }
 
 #' check_mapping_strict sub-check: accepted names can't map to anything
@@ -458,12 +453,10 @@ check_variant_map_to_something <- function(
 #' Required checks: none
 #' @noRd
 #' @autoglobal
-check_accepted_map_to_nothing <- function(
-  tax_dat,
-  on_fail = "error",
-  on_success = "logical",
-  run = TRUE) {
-
+check_accepted_map_to_nothing <- function(tax_dat,
+                                          on_fail = "error",
+                                          on_success = "logical",
+                                          run = TRUE) {
   if (run == FALSE) {
     return(NULL)
   }
@@ -490,7 +483,7 @@ check_accepted_map_to_nothing <- function(
           acceptedNameUsageID.
           {make_msg('taxonID', bad_taxon_id)}\\
           {make_msg('scientificName', bad_sci_name, is_last = TRUE)}",
-          .transformer = null_transformer("")
+        .transformer = null_transformer("")
       )
     )
   }
@@ -515,5 +508,4 @@ check_accepted_map_to_nothing <- function(
   if (on_success == "logical") {
     return(TRUE)
   }
-
 }

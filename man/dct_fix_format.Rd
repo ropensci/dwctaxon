@@ -2,7 +2,8 @@
 % Please edit documentation in R/dct_fix_format.R
 \name{dct_fix_format}
 \alias{dct_fix_format}
-\title{Fix the format of a taxonomic database to conform with Darwin Core Taxon standards}
+\title{Fix the format of a taxonomic database to conform with Darwin Core Taxon
+standards}
 \usage{
 dct_fix_format(tax_dat)
 }
@@ -14,5 +15,6 @@ Core format}
 Dataframe; taxonomic database in Darwin Core format
 }
 \description{
-Fix the format of a taxonomic database to conform with Darwin Core Taxon standards
+Fix the format of a taxonomic database to conform with Darwin Core Taxon
+standards
 }

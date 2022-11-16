@@ -1,7 +1,7 @@
 ## code to prepare `dct_terms` dataset goes here
 
 # Specify current URL with Darwin Core taxon terms
-dwc_taxon_url <- "https://raw.githubusercontent.com/tdwg/dwc/master/build/taxon_core_list.csv"
+dwc_taxon_url <- "https://raw.githubusercontent.com/tdwg/dwc/master/build/taxon_core_list.csv" # nolint
 
 dct_terms <-
   # Fetch the taxon terms from the official Darwin Core repo
@@ -12,7 +12,8 @@ dct_terms <-
     term = stringr::str_split(iri, "\\/") |> purrr::map_chr(dplyr::last),
     # Treat 'date' as 'character' to avoid hassle of formatting dates
     # same for 'uri'
-    type = tidyr::replace_na(type, "character") |> stringr::str_replace_all("date|uri", "character")
+    type = tidyr::replace_na(type, "character") |>
+      stringr::str_replace_all("date|uri", "character")
   ) |>
   dplyr::select(group, term, type)
 

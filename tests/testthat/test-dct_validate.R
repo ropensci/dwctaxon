@@ -142,7 +142,8 @@ test_that("Check for 'taxonomicStatus in valid values' works", {
       taxonomicStatus = "foo",
       error = paste(
         "taxonID detected whose taxonomicStatus is not in",
-        "valid_tax_status (accepted, synonym, variant, NA)"),
+        "valid_tax_status (accepted, synonym, variant, NA)"
+      ),
       check = "check_tax_status"
     )
   )
@@ -158,7 +159,7 @@ test_that("Setting valid taxonomic status via env var works", {
       check_status_diff = FALSE,
       check_col_names = FALSE,
       check_sci_name = FALSE
-      ),
+    ),
     paste0(
       "check_tax_status failed.*",
       "taxonID detected whose taxonomicStatus is not in valid_tax_status.*",
@@ -247,13 +248,14 @@ test_that("check for 'synonyms must map to accepted names' works", {
       taxonID = "1",
       acceptedNameUsageID = "2",
       taxonomicStatus = "synonym",
-      scientificName = "foo"),
+      scientificName = "foo"
+    ),
     data.frame(
       taxonID = "2",
       acceptedNameUsageID = NA_character_,
       taxonomicStatus = NA_character_,
       scientificName = "bar"
-      )
+    )
   )
   expect_error(
     dct_validate(bad_dat),
@@ -285,139 +287,148 @@ test_that("check for 'synonyms must map to accepted names' works", {
 
 
 test_that(
-  "check for 'acceptedNameUsageID must have non-NA taxonomicStatus' works", {
-  bad_dat <- tibble::tribble(
-    ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
-    "1", NA, "accepted", "Species bar",
-    "2", "1", NA, "foo",
-    "3", "1", "synonym", "Species bat"
-  )
-  expect_error(
-    dct_validate(bad_dat),
-    paste0(
-      "check_mapping_strict failed.*",
-      "rows detected whose acceptedNameUsageID value.*",
-      "is not missing, but have missing taxonomicStatus.*",
-      "Bad taxonID\\: 2.*",
-      "Bad scientificName\\: foo.*",
-      "Bad acceptedNameUsageID\\: 1"
+  "check for 'acceptedNameUsageID must have non-NA taxonomicStatus' works",
+  {
+    bad_dat <- tibble::tribble(
+      ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
+      "1", NA, "accepted", "Species bar",
+      "2", "1", NA, "foo",
+      "3", "1", "synonym", "Species bat"
     )
-  )
-  expect_equal(
-    suppressWarnings(
-      dct_validate(bad_dat, on_fail = "summary")
-    ),
-    tibble::tibble(
-      taxonID = "2",
-      acceptedNameUsageID = "1",
-      scientificName = "foo",
-      error = paste(
+    expect_error(
+      dct_validate(bad_dat),
+      paste0(
+        "check_mapping_strict failed.*",
+        "rows detected whose acceptedNameUsageID value.*",
+        "is not missing, but have missing taxonomicStatus.*",
+        "Bad taxonID\\: 2.*",
+        "Bad scientificName\\: foo.*",
+        "Bad acceptedNameUsageID\\: 1"
+      )
+    )
+    expect_equal(
+      suppressWarnings(
+        dct_validate(bad_dat, on_fail = "summary")
+      ),
+      tibble::tibble(
+        taxonID = "2",
+        acceptedNameUsageID = "1",
+        scientificName = "foo",
+        error = paste(
           "rows detected whose acceptedNameUsageID value",
-          "is not missing, but have missing taxonomicStatus"),
-      check = "check_mapping_strict"
+          "is not missing, but have missing taxonomicStatus"
+        ),
+        check = "check_mapping_strict"
+      )
     )
-  )
-})
+  }
+)
 
 test_that(
-  "check for 'variant must map to non-variant' works", {
-  bad_var_dat <- tibble::tribble(
-    ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
-    "1", "3", "variant", "Species bar",
-    "2", NA, "accepted", "foo",
-    "3", "2", "variant", "Species bat"
-  )
-  expect_error(
-    dct_validate(bad_var_dat),
-    paste0(
-      "check_mapping_strict failed.*",
-      "variant\\(s\\) detected whose acceptedNameUsageID value maps to.*",
-      "taxonID of a variant.*",
-      "Bad taxonID\\: 1.*",
-      "Bad scientificName\\: Species bar.*",
-      "Bad acceptedNameUsageID\\: 3"
+  "check for 'variant must map to non-variant' works",
+  {
+    bad_var_dat <- tibble::tribble(
+      ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
+      "1", "3", "variant", "Species bar",
+      "2", NA, "accepted", "foo",
+      "3", "2", "variant", "Species bat"
     )
-  )
-  expect_equal(
-    suppressWarnings(
-      dct_validate(bad_var_dat, on_fail = "summary")
-    ),
-    tibble::tibble(
-      taxonID = "1",
-      acceptedNameUsageID = "3",
-      scientificName = "Species bar",
-      error = paste(
-        "variant(s) detected whose acceptedNameUsageID value maps to",
-        "taxonID of a variant"
+    expect_error(
+      dct_validate(bad_var_dat),
+      paste0(
+        "check_mapping_strict failed.*",
+        "variant\\(s\\) detected whose acceptedNameUsageID value maps to.*",
+        "taxonID of a variant.*",
+        "Bad taxonID\\: 1.*",
+        "Bad scientificName\\: Species bar.*",
+        "Bad acceptedNameUsageID\\: 3"
+      )
+    )
+    expect_equal(
+      suppressWarnings(
+        dct_validate(bad_var_dat, on_fail = "summary")
       ),
-      check = "check_mapping_strict"
+      tibble::tibble(
+        taxonID = "1",
+        acceptedNameUsageID = "3",
+        scientificName = "Species bar",
+        error = paste(
+          "variant(s) detected whose acceptedNameUsageID value maps to",
+          "taxonID of a variant"
+        ),
+        check = "check_mapping_strict"
+      )
     )
-  )
-})
+  }
+)
 
 
 test_that(
-  "check for 'variant must map to something' works", {
-  bad_var_dat <- tibble::tribble(
-    ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
-    "1", NA, "accepted", "Species bar",
-    "2", "1", "synonym", "boo",
-    "3", NA, "variant", "Species bat"
-  )
-  expect_error(
-    dct_validate(bad_var_dat),
-    paste0(
-      "check_mapping_strict failed.*",
-      "variant\\(s\\) detected who lack an acceptedNameUsageID.*",
-      "Bad taxonID\\: 3.*",
-      "Bad scientificName\\: Species bat"
+  "check for 'variant must map to something' works",
+  {
+    bad_var_dat <- tibble::tribble(
+      ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
+      "1", NA, "accepted", "Species bar",
+      "2", "1", "synonym", "boo",
+      "3", NA, "variant", "Species bat"
     )
-  )
-  expect_equal(
-    suppressWarnings(
-      dct_validate(bad_var_dat, on_fail = "summary")
-    ),
-    tibble::tibble(
-      taxonID = "3",
-      scientificName = "Species bat",
-      error = "variant(s) detected who lack an acceptedNameUsageID",
-      check = "check_mapping_strict"
+    expect_error(
+      dct_validate(bad_var_dat),
+      paste0(
+        "check_mapping_strict failed.*",
+        "variant\\(s\\) detected who lack an acceptedNameUsageID.*",
+        "Bad taxonID\\: 3.*",
+        "Bad scientificName\\: Species bat"
+      )
     )
-  )
-})
-
-test_that(
-  "check for 'accepted names cannot map to anything' works", {
-  bad_acc_dat <- tibble::tribble(
-    ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
-    "1", "3", "accepted", "Species bar",
-    "3", NA, "accepted", "Species bat"
-  )
-  expect_error(
-    dct_validate(bad_acc_dat),
-    paste0(
-      "check_mapping_strict failed.*",
-      "accepted name\\(s\\) detected with a non\\-missing value for ",
-      "acceptedNameUsageID.*",
-      "Bad taxonID\\: 1.*",
-      "Bad scientificName\\: Species bar"
-    )
-  )
-  expect_equal(
-    suppressWarnings(
-      dct_validate(bad_acc_dat, on_fail = "summary")
-    ),
-    tibble::tibble(
-      taxonID = "1",
-      scientificName = "Species bar",
-      error = paste(
-        "accepted name(s) detected with a non-missing value for",
-        "acceptedNameUsageID"
+    expect_equal(
+      suppressWarnings(
+        dct_validate(bad_var_dat, on_fail = "summary")
       ),
-      check = "check_mapping_strict"
+      tibble::tibble(
+        taxonID = "3",
+        scientificName = "Species bat",
+        error = "variant(s) detected who lack an acceptedNameUsageID",
+        check = "check_mapping_strict"
+      )
     )
-  )
-})
+  }
+)
+
+test_that(
+  "check for 'accepted names cannot map to anything' works",
+  {
+    bad_acc_dat <- tibble::tribble(
+      ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
+      "1", "3", "accepted", "Species bar",
+      "3", NA, "accepted", "Species bat"
+    )
+    expect_error(
+      dct_validate(bad_acc_dat),
+      paste0(
+        "check_mapping_strict failed.*",
+        "accepted name\\(s\\) detected with a non\\-missing value for ",
+        "acceptedNameUsageID.*",
+        "Bad taxonID\\: 1.*",
+        "Bad scientificName\\: Species bar"
+      )
+    )
+    expect_equal(
+      suppressWarnings(
+        dct_validate(bad_acc_dat, on_fail = "summary")
+      ),
+      tibble::tibble(
+        taxonID = "1",
+        scientificName = "Species bar",
+        error = paste(
+          "accepted name(s) detected with a non-missing value for",
+          "acceptedNameUsageID"
+        ),
+        check = "check_mapping_strict"
+      )
+    )
+  }
+)
 
 test_that("Values like 'ambiguous synonym' work", {
   good_dat <- tibble::tribble(
@@ -430,7 +441,8 @@ test_that("Values like 'ambiguous synonym' work", {
   expect_no_error(
     dct_validate(
       good_dat,
-      valid_tax_status = "accepted, ambiguous synonym, variant, NA")
+      valid_tax_status = "accepted, ambiguous synonym, variant, NA"
+    )
   )
 })
 
@@ -457,8 +469,10 @@ test_that("check for 'each sci name has single status' works", {
   )
   expect_equal(
     suppressWarnings(
-      dct_validate(bad_dat, check_status_diff = TRUE, check_sci_name = FALSE,
-        on_fail = "summary")
+      dct_validate(bad_dat,
+        check_status_diff = TRUE, check_sci_name = FALSE,
+        on_fail = "summary"
+      )
     ),
     tibble::tibble(
       taxonID = c("1", "2", "5", "6"),
@@ -470,7 +484,7 @@ test_that("check for 'each sci name has single status' works", {
       error = rep(
         paste(
           "scientificName detected with multiple different values for",
-           "taxonomicStatus"
+          "taxonomicStatus"
         ), 4
       ),
       check = rep("check_status_diff", 4)
@@ -504,7 +518,8 @@ test_that("check for 'each sci name has single status' works", {
       dct_validate(
         bad_dat,
         check_sci_name = FALSE, check_status_diff = TRUE,
-        on_fail = "summary")
+        on_fail = "summary"
+      )
     ),
     tibble::tibble(
       taxonID = c("1", "2", "5", "6"),
@@ -516,7 +531,7 @@ test_that("check for 'each sci name has single status' works", {
       error = rep(
         paste(
           "scientificName detected with multiple different values for",
-           "taxonomicStatus"
+          "taxonomicStatus"
         ), 4
       ),
       check = rep("check_status_diff", 4)
@@ -580,8 +595,8 @@ test_that("combinations of failures get reported", {
         "taxonID detected whose taxonomicStatus is not in valid_tax_status (accepted, synonym, variant, NA)" # nolint
       ),
       check = c(
-       "check_mapping_strict", "check_mapping_strict", "check_sci_name",
-       "check_tax_status", "check_tax_status"
+        "check_mapping_strict", "check_mapping_strict", "check_sci_name",
+        "check_tax_status", "check_tax_status"
       )
     )
   )

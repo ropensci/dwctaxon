@@ -6,15 +6,14 @@
 #' @param valid_tax_status See dct_check_tax_status()
 #' @inherit check_taxon_id_not_na
 #' @noRd
-check_tax_status_valid <- function(
-  tax_dat,
-  on_fail = "error",
-  on_success = "data",
-  valid_tax_status = Sys.getenv(
-    "VALID_TAX_STATUS",
-    unset = "accepted, synonym, variant, NA"),
-  run = TRUE
-  ) {
+check_tax_status_valid <- function(tax_dat,
+                                   on_fail = "error",
+                                   on_success = "data",
+                                   valid_tax_status = Sys.getenv(
+                                     "VALID_TAX_STATUS",
+                                     unset = "accepted, synonym, variant, NA"
+                                   ),
+                                   run = TRUE) {
   # Early exit with NULL if req'd cols not present
   if (is.null(tax_dat$taxonomicStatus) || run == FALSE) {
     return(NULL)
@@ -43,7 +42,7 @@ check_tax_status_valid <- function(
           {make_msg('taxonID', bad_taxon_id)}\\
           {make_msg('scientificName', bad_sci_name)}\\
           {make_msg('taxonomicStatus', bad_tax_status, is_last = TRUE)}",
-          .transformer = null_transformer("")
+        .transformer = null_transformer("")
       )
     )
   }
@@ -57,7 +56,8 @@ check_tax_status_valid <- function(
           taxonomicStatus = bad_tax_status,
           error = as.character(glue::glue(
             "taxonID detected whose taxonomicStatus is not \\
-             in valid_tax_status ({valid_tax_status})")),
+             in valid_tax_status ({valid_tax_status})"
+          )),
           check = "check_tax_status"
         )
       )
@@ -69,7 +69,6 @@ check_tax_status_valid <- function(
   if (on_success == "logical") {
     return(TRUE)
   }
-
 }
 
 #' Check that taxonomicStatus is within valid values in
@@ -99,24 +98,22 @@ check_tax_status_valid <- function(
 #' # variable
 #' Sys.setenv(VALID_TAX_STATUS = "provisionally accepted, synonym, NA")
 #' tibble::tribble(
-#'    ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
-#'    "1", NA, "provisionally accepted", "Species foo",
-#'    "2", "1", "synonym", "Species bar",
-#'    "3", NA, NA, "Strange name"
-#'  ) |>
-#' dct_check_tax_status()
+#'   ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
+#'   "1", NA, "provisionally accepted", "Species foo",
+#'   "2", "1", "synonym", "Species bar",
+#'   "3", NA, NA, "Strange name"
+#' ) |>
+#'   dct_check_tax_status()
 #' Sys.unsetenv("VALID_TAX_STATUS")
 #'
 #' @export
-dct_check_tax_status  <- function(
-  tax_dat,
-  on_fail = "error",
-  on_success = "data",
-  valid_tax_status = Sys.getenv(
-    "VALID_TAX_STATUS",
-    unset = "accepted, synonym, variant, NA")
-  ) {
-
+dct_check_tax_status <- function(tax_dat,
+                                 on_fail = "error",
+                                 on_success = "data",
+                                 valid_tax_status = Sys.getenv(
+                                   "VALID_TAX_STATUS",
+                                   unset = "accepted, synonym, variant, NA"
+                                 )) {
   # Run main checks
   suppressWarnings(
     check_res <- list(
@@ -126,11 +123,10 @@ dct_check_tax_status  <- function(
         req_by = "check_tax_status", on_fail = on_fail
       ),
       # Check taxonomic status
-      check_tax_status_valid(tax_dat, on_fail = on_fail, on_success = "logical"
-    )
+      check_tax_status_valid(tax_dat, on_fail = on_fail, on_success = "logical")
     ) |>
-    # drop any NULL results
-    purrr::compact()
+      # drop any NULL results
+      purrr::compact()
   )
 
   # Format results
@@ -149,5 +145,4 @@ dct_check_tax_status  <- function(
   if (on_success == "logical") {
     return(TRUE)
   }
-
 }

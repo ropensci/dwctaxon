@@ -1,5 +1,5 @@
 test_that("Correctly formatted data does not error", {
- good_dat <- tibble::tribble(
+  good_dat <- tibble::tribble(
     ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
     "1", NA, "accepted", "Species foo",
     "2", "1", "synonym", "Species bar",

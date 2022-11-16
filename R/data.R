@@ -18,7 +18,8 @@
 
 #' Taxonomic data of filmy ferns
 #'
-#' Taxonomic data of filmy ferns (family Hymenophyllaceae) in Darwin Core format.
+#' Taxonomic data of filmy ferns (family Hymenophyllaceae) in Darwin Core
+#' format.
 #' Modified from data downloaded from the [Catalog of
 #' Life](https://www.catalogueoflife.org/) under the [Creative Commons
 #' Attribution (CC BY) 4.0](https://creativecommons.org/licenses/by/4.0/)

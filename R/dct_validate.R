@@ -49,8 +49,10 @@
 #'   dct_filmies,
 #'   check_sci_name = FALSE,
 #'   valid_tax_status =
-#'     paste("accepted name, ambiguous synonym, provisionally accepted name,",
-#'           "synonym, variant")
+#'     paste(
+#'       "accepted name, ambiguous synonym, provisionally accepted name,",
+#'       "synonym, variant"
+#'     )
 #' )
 #'
 dct_validate <- function(tax_dat,
@@ -62,12 +64,11 @@ dct_validate <- function(tax_dat,
                          check_status_diff = !check_sci_name,
                          check_col_names = TRUE,
                          valid_tax_status = Sys.getenv(
-                          "VALID_TAX_STATUS",
-                          unset = "accepted, synonym, variant, NA"),
+                           "VALID_TAX_STATUS",
+                           unset = "accepted, synonym, variant, NA"
+                         ),
                          on_success = "data",
-                         on_fail = "error"
- ) {
-
+                         on_fail = "error") {
   # Check input format
   # - tax_dat must be a dataframe
   assertthat::assert_that(
@@ -99,18 +100,22 @@ dct_validate <- function(tax_dat,
   if (check_mapping_strict) {
     assertthat::assert_that(
       check_taxon_id,
-      msg = "check_mapping_strict requires check_taxon_id to be TRUE")
+      msg = "check_mapping_strict requires check_taxon_id to be TRUE"
+    )
     assertthat::assert_that(
       check_mapping,
-      msg = "check_mapping_strict requires check_mapping to be TRUE")
+      msg = "check_mapping_strict requires check_mapping to be TRUE"
+    )
     assertthat::assert_that(
       check_tax_status,
-      msg = "check_mapping_strict requires check_tax_status to be TRUE")
+      msg = "check_mapping_strict requires check_tax_status to be TRUE"
+    )
   }
   if (check_mapping) {
     assertthat::assert_that(
       check_taxon_id,
-      msg = "check_mapping requires check_taxon_id to be TRUE")
+      msg = "check_mapping requires check_taxon_id to be TRUE"
+    )
   }
 
   # Run main checks ----
@@ -118,29 +123,29 @@ dct_validate <- function(tax_dat,
     check_res <- list(
       # Required column checks ----
       assert_col(
-          tax_dat, "taxonID", c("character", "numeric", "integer"),
-          req_by = "check_taxon_id",
-          run = check_taxon_id
+        tax_dat, "taxonID", c("character", "numeric", "integer"),
+        req_by = "check_taxon_id",
+        run = check_taxon_id
       ),
       assert_col(
-          tax_dat, "taxonID", c("character", "numeric", "integer"),
-          req_by = "check_mapping",
-          run = check_mapping
+        tax_dat, "taxonID", c("character", "numeric", "integer"),
+        req_by = "check_mapping",
+        run = check_mapping
       ),
       assert_col(
-          tax_dat, "taxonID", c("character", "numeric", "integer"),
-          req_by = "check_mapping_strict",
-          run = check_mapping_strict
+        tax_dat, "taxonID", c("character", "numeric", "integer"),
+        req_by = "check_mapping_strict",
+        run = check_mapping_strict
       ),
       assert_col(
-          tax_dat, "acceptedNameUsageID", c("character", "numeric", "integer"),
-          req_by = "check_mapping",
-          run = check_mapping
+        tax_dat, "acceptedNameUsageID", c("character", "numeric", "integer"),
+        req_by = "check_mapping",
+        run = check_mapping
       ),
       assert_col(
-          tax_dat, "acceptedNameUsageID", c("character", "numeric", "integer"),
-          req_by = "check_mapping_strict",
-          run = check_mapping_strict
+        tax_dat, "acceptedNameUsageID", c("character", "numeric", "integer"),
+        req_by = "check_mapping_strict",
+        run = check_mapping_strict
       ),
       assert_col(
         tax_dat, "taxonomicStatus", "character",
@@ -170,98 +175,115 @@ dct_validate <- function(tax_dat,
       # taxonID ----
       # - taxonID not NA
       check_taxon_id_not_na(
-        tax_dat, on_fail = on_fail, on_success = "logical",
+        tax_dat,
+        on_fail = on_fail, on_success = "logical",
         run = check_taxon_id
       ),
       # - each taxonID is unique
       check_taxon_id_is_uniq(
-        tax_dat, on_fail = on_fail, on_success = "logical",
+        tax_dat,
+        on_fail = on_fail, on_success = "logical",
         run = check_taxon_id
       ),
       # Taxonomic status ----
       check_tax_status_valid(
-        tax_dat, on_fail = on_fail, on_success = "logical",
+        tax_dat,
+        on_fail = on_fail, on_success = "logical",
         valid_tax_status = valid_tax_status,
         run = check_tax_status
       ),
       # Basic mapping ----
       # - no names map to self
       check_mapping_to_self(
-        tax_dat, on_fail = on_fail, on_success = "logical",
+        tax_dat,
+        on_fail = on_fail, on_success = "logical",
         run = check_mapping
       ),
       # - all names have matching taxonID for acceptedNameUsageID
       check_mapping_exists(
-        tax_dat, on_fail = on_fail, on_success = "logical",
+        tax_dat,
+        on_fail = on_fail, on_success = "logical",
         run = check_mapping
       ),
       # Strict mapping ----
       # - taxonomicStatus includes needed values
       check_mapping_strict_status(
-        tax_dat, on_fail = on_fail, on_success = "logical",
+        tax_dat,
+        on_fail = on_fail, on_success = "logical",
         run = check_mapping_strict,
         valid_tax_status = valid_tax_status
       ),
       # - synonyms map to accepted names
       check_syn_map_to_acc(
-        tax_dat, on_fail = on_fail, on_success = "logical",
+        tax_dat,
+        on_fail = on_fail, on_success = "logical",
         run = check_mapping_strict
       ),
       # - any row with acceptedNameUsageID must have non-missing taxonomicStatus
       check_acc_id_has_tax_status(
-        tax_dat, on_fail = on_fail, on_success = "logical",
+        tax_dat,
+        on_fail = on_fail, on_success = "logical",
         run = check_mapping_strict
       ),
       # - any row with acceptedNameUsageID must have valid taxonomicStatus
       check_acc_id_valid_tax_status(
-        tax_dat, on_fail = on_fail, on_success = "logical",
+        tax_dat,
+        on_fail = on_fail, on_success = "logical",
         run = check_mapping_strict
       ),
       # - variants cannot map to variants
       check_variant_map_to_nonvar(
-        tax_dat, on_fail = on_fail, on_success = "logical",
+        tax_dat,
+        on_fail = on_fail, on_success = "logical",
         run = check_mapping_strict
       ),
       # - variants must map to something
       check_variant_map_to_something(
-        tax_dat, on_fail = on_fail, on_success = "logical",
+        tax_dat,
+        on_fail = on_fail, on_success = "logical",
         run = check_mapping_strict
       ),
       # - accepted names can't map to anything
       check_accepted_map_to_nothing(
-        tax_dat, on_fail = on_fail, on_success = "logical",
+        tax_dat,
+        on_fail = on_fail, on_success = "logical",
         run = check_mapping_strict
       ),
       # Scientific name ----
       # - scientificName in not NA
       check_sci_name_not_na(
-        tax_dat, on_fail = on_fail, on_success = "logical",
+        tax_dat,
+        on_fail = on_fail, on_success = "logical",
         run = check_sci_name
       ),
       # - scientificName is unique
       check_sci_name_is_uniq(
-        tax_dat, on_fail = on_fail, on_success = "logical",
+        tax_dat,
+        on_fail = on_fail, on_success = "logical",
         run = check_sci_name
       ),
       # Taxonomic status of sci name -----
       # - Different status for each instance of name
       check_status_diff_p(
-        tax_dat, on_fail = on_fail, on_success = "logical",
+        tax_dat,
+        on_fail = on_fail, on_success = "logical",
         run = check_status_diff
       ),
       # Column names ----
       check_col_names_p(
-        tax_dat, on_fail = on_fail, on_success = "logical",
+        tax_dat,
+        on_fail = on_fail, on_success = "logical",
         run = check_col_names
       )
     ) |>
-    # drop any NULL results
-    purrr::compact()
+      # drop any NULL results
+      purrr::compact()
   )
 
   # Delete any empty dataframes
   empty_df <- sapply(
-    check_res, function(y) inherits(y, "data.frame") && nrow(y) == 0)
+    check_res, function(y) inherits(y, "data.frame") && nrow(y) == 0
+  )
   check_res <- check_res[!empty_df]
 
   # Format results

@@ -59,12 +59,12 @@ suppressWarnings(
 # variable
 Sys.setenv(VALID_TAX_STATUS = "provisionally accepted, synonym, NA")
 tibble::tribble(
-   ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
-   "1", NA, "provisionally accepted", "Species foo",
-   "2", "1", "synonym", "Species bar",
-   "3", NA, NA, "Strange name"
- ) |>
-dct_check_tax_status()
+  ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
+  "1", NA, "provisionally accepted", "Species foo",
+  "2", "1", "synonym", "Species bar",
+  "3", NA, NA, "Strange name"
+) |>
+  dct_check_tax_status()
 Sys.unsetenv("VALID_TAX_STATUS")
 
 }

@@ -6,12 +6,10 @@
 #' @inherit check_taxon_id_not_na
 #' @autoglobal
 #' @noRd
-check_col_names_p <- function(
-  tax_dat,
-  on_fail = "error",
-  on_success = "data",
-  run = TRUE) {
-
+check_col_names_p <- function(tax_dat,
+                              on_fail = "error",
+                              on_success = "data",
+                              run = TRUE) {
   if (run == FALSE) {
     return(NULL)
   }
@@ -48,5 +46,4 @@ check_col_names_p <- function(
   if (on_success == "logical") {
     return(TRUE)
   }
-
 }

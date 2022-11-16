@@ -24,6 +24,14 @@
       "@id": "https://orcid.org/0000-0003-4719-7472"
     }
   ],
+  "contributor": [
+    {
+      "@type": "Person",
+      "givenName": "Wataru",
+      "familyName": "Iwasaki",
+      "@id": "https://orcid.org/0000-0002-9169-9245"
+    }
+  ],
   "maintainer": [
     {
       "@type": "Person",
@@ -53,6 +61,42 @@
       "name": "roxyglobals",
       "version": ">= 0.2.1",
       "sameAs": "https://github.com/anthonynorth/roxyglobals"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "mockery",
+      "name": "mockery",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=mockery"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "readr",
+      "name": "readr",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=readr"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "usethis",
+      "name": "usethis",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=usethis"
     }
   ],
   "softwareRequirements": {
@@ -182,7 +226,27 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "326.972KB",
+  "fileSize": "384.823KB",
+  "citation": [
+    {
+      "@type": "CreativeWork",
+      "datePublished": "2022",
+      "author": [
+        {
+          "@type": "Person",
+          "givenName": ["Joel", "H."],
+          "familyName": "Nitta"
+        },
+        {
+          "@type": "Person",
+          "givenName": "Wataru",
+          "familyName": "Iwasaki"
+        }
+      ],
+      "name": "The dwctaxon R package for working with Darwin Core Taxon data",
+      "url": "https://github.com/joelnitta/dwctaxon"
+    }
+  ],
   "readme": "https://github.com/joelnitta/dwctaxon/blob/main/README.md",
   "developmentStatus": "https://www.repostatus.org/#wip"
 }

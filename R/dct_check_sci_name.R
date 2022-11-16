@@ -5,13 +5,10 @@
 #' @param run Logical; should this check be run? If FALSE, return NULL
 #' @noRd
 #' @autoglobal
-check_sci_name_not_na <- function(
-  tax_dat,
-  on_fail,
-  on_success,
-  run = TRUE
-) {
-
+check_sci_name_not_na <- function(tax_dat,
+                                  on_fail,
+                                  on_success,
+                                  run = TRUE) {
   # Early exit with NULL if req'd cols not present
   if (is.null(tax_dat$scientificName) || run == FALSE) {
     return(NULL)
@@ -28,7 +25,8 @@ check_sci_name_not_na <- function(
         "check_sci_name failed
          scientificName detected with missing value
          {make_msg('scientificName', missing_sci_name)}
-      ")
+      "
+      )
     )
   }
   if (on_fail == "summary") {
@@ -55,20 +53,19 @@ check_sci_name_not_na <- function(
 #' @inherit check_sci_name_not_na
 #' @noRd
 #' @autoglobal
-check_sci_name_is_uniq <- function(
-  tax_dat,
-  on_fail,
-  on_success,
-  run = TRUE
-) {
-
+check_sci_name_is_uniq <- function(tax_dat,
+                                   on_fail,
+                                   on_success,
+                                   run = TRUE) {
   # Early exit with NULL if req'd cols not present
   if (is.null(tax_dat$scientificName) || run == FALSE) {
     return(NULL)
   }
 
   # Check for duplicated ID
-  duplicated_sci_name <- tax_dat$scientificName[duplicated(tax_dat$scientificName)]
+  duplicated_sci_name <- tax_dat$scientificName[
+    duplicated(tax_dat$scientificName)
+  ]
 
   # Format results
   if (on_fail == "error") {
@@ -78,7 +75,8 @@ check_sci_name_is_uniq <- function(
         "check_sci_name failed
          scientificName detected with duplicated value
          {make_msg('scientificName', duplicated_sci_name)}
-      ")
+      "
+      )
     )
   }
   if (on_fail == "summary") {
@@ -115,17 +113,16 @@ check_sci_name_is_uniq <- function(
 #' suppressWarnings(
 #'   dct_check_sci_name(
 #'     data.frame(scientificName = NA_character_),
-#'     on_fail = "summary")
+#'     on_fail = "summary"
+#'   )
 #' )
 #' dct_check_sci_name(data.frame(scientificName = "a"))
 #' @autoglobal
 #' @export
 #'
-dct_check_sci_name <- function(
-  tax_dat,
-  on_fail = "error",
-  on_success = "data") {
-
+dct_check_sci_name <- function(tax_dat,
+                               on_fail = "error",
+                               on_success = "data") {
   # Check input format
   assertthat::assert_that(
     inherits(tax_dat, "data.frame"),
@@ -155,8 +152,8 @@ dct_check_sci_name <- function(
       # Check taxonID is unique
       check_sci_name_is_uniq(tax_dat, on_fail = on_fail, on_success = "logical")
     ) |>
-    # drop any NULL results
-    purrr::compact()
+      # drop any NULL results
+      purrr::compact()
   )
 
   # Format results
@@ -172,5 +169,4 @@ dct_check_sci_name <- function(
   if (on_success == "logical") {
     return(TRUE)
   }
-
 }

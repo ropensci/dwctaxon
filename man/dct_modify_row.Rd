@@ -128,7 +128,8 @@ dct_filmies |>
   dct_validate(
     check_tax_status = FALSE,
     check_mapping_strict = FALSE,
-    check_sci_name = FALSE)
+    check_sci_name = FALSE
+  )
 
 # Sometimes changing one name will affect others, if they map
 # to the new synonym
@@ -142,13 +143,17 @@ dct_modify_row(
 # Apply a set of changes
 library(tibble)
 updates <- tibble(
-  sci_name = c("Cephalomanes atrovirens Presl",
-    "Cephalomanes crassum (Copel.) M. G. Price"),
+  sci_name = c(
+    "Cephalomanes atrovirens Presl",
+    "Cephalomanes crassum (Copel.) M. G. Price"
+  ),
   tax_status = "synonym",
   usage_name = "Trichomanes crassum Copel."
 )
 dct_filmies |>
   dct_modify_row(args_tbl = updates) |>
-  dct_modify_row(sci_name = "Trichomanes crassum Copel.",
-    tax_status = "accepted")
+  dct_modify_row(
+    sci_name = "Trichomanes crassum Copel.",
+    tax_status = "accepted"
+  )
 }

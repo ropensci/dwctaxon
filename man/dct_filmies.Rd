@@ -16,7 +16,8 @@ Dataframe (tibble), with 2729 rows and
 dct_filmies
 }
 \description{
-Taxonomic data of filmy ferns (family Hymenophyllaceae) in Darwin Core format.
+Taxonomic data of filmy ferns (family Hymenophyllaceae) in Darwin Core
+format.
 Modified from data downloaded from the \href{https://www.catalogueoflife.org/}{Catalog of Life} under the \href{https://creativecommons.org/licenses/by/4.0/}{Creative Commons Attribution (CC BY) 4.0}
 license.
 }

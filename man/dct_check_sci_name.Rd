@@ -41,7 +41,8 @@ The following rules are enforced:
 suppressWarnings(
   dct_check_sci_name(
     data.frame(scientificName = NA_character_),
-    on_fail = "summary")
+    on_fail = "summary"
+  )
 )
 dct_check_sci_name(data.frame(scientificName = "a"))
 }

@@ -5,11 +5,16 @@ anthony
 anthonynorth
 assertr
 assertthat
+aut
 Bartnik
 Bengtsson
 bootswatch
+BugReports
 cff
 cffr
+Config
+cre
+ctb
 dct
 de
 debian
@@ -34,6 +39,7 @@ Hannes
 Hornik
 href
 https
+Hymenophyllaceae
 io
 Iwasaki
 Jarek
@@ -43,6 +49,7 @@ Kendon
 Kirill
 Kou
 krlmlr
+LazyData
 lionel
 Lukasz
 Muehleisen
@@ -59,9 +66,14 @@ purrr
 Qiang
 Queljoe
 Radford
+readr
+roclet
+roclets
 Romain
 ropensci
 Roxgen
+Roxygen
+RoxygenNote
 roxyglobals
 rstudio
 Schumacher
@@ -82,6 +94,7 @@ tibble
 tidyr
 Tuszynski
 Urbanek
+usethis
 Viliam
 Wataru
 Wickham
