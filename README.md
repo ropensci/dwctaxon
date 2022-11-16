@@ -44,171 +44,205 @@ remotes::install_github("joelnitta/dwctaxon")
 First, load packages and a dataset to work with:
 
 ``` r
-library(taxastand)
-library(tibble)
-library(dplyr)
-#> 
-#> Attaching package: 'dplyr'
-#> The following objects are masked from 'package:stats':
-#> 
-#>     filter, lag
-#> The following objects are masked from 'package:base':
-#> 
-#>     intersect, setdiff, setequal, union
+library(tibble) # recommended for pretty printing of tibbles
 library(dwctaxon)
 
-filmy_taxonomy
-#> # A tibble: 2,729 × 31
-#>     taxonID identifier   datas…¹ datas…² accep…³ paren…⁴ taxon…⁵ taxon…⁶ verba…⁷
-#>       <dbl> <chr>          <dbl> <chr>     <dbl>   <dbl> <chr>   <chr>   <chr>  
-#>  1 54115096 f5950556e57…     140 World … NA       5.48e7 accept… species <NA>   
-#>  2 54133783 <NA>             140 World …  5.41e7 NA      synonym species <NA>   
-#>  3 54115097 bb5e2f01763…     140 World … NA       5.48e7 accept… species <NA>   
-#>  4 54133784 <NA>             140 World …  5.41e7 NA      synonym species <NA>   
-#>  5 54115098 002e095eec0…     140 World … NA       5.48e7 accept… species <NA>   
-#>  6 54133785 <NA>             140 World …  5.41e7 NA      synonym species <NA>   
-#>  7 54115099 4bd27cdc1fd…     140 World … NA       5.48e7 provis… species <NA>   
-#>  8 54133786 <NA>             140 World …  5.41e7 NA      synonym species <NA>   
-#>  9 54133787 <NA>             140 World …  5.41e7 NA      synonym species <NA>   
-#> 10 54133788 <NA>             140 World …  5.41e7 NA      synonym species <NA>   
-#> # … with 2,719 more rows, 22 more variables: scientificName <chr>,
-#> #   kingdom <chr>, phylum <chr>, class <chr>, order <chr>, superfamily <lgl>,
-#> #   family <chr>, genericName <chr>, genus <chr>, subgenus <lgl>,
-#> #   specificEpithet <chr>, infraspecificEpithet <chr>,
-#> #   scientificNameAuthorship <chr>, source <lgl>, namePublishedIn <lgl>,
-#> #   nameAccordingTo <chr>, modified <chr>, description <chr>,
-#> #   taxonConceptID <lgl>, scientificNameID <chr>, references <chr>, …
+dct_filmies
+#> # A tibble: 2,451 × 5
+#>    taxonID  acceptedNameUsageID taxonomicStatus taxonRank scientificName                            
+#>    <chr>    <chr>               <chr>           <chr>     <chr>                                     
+#>  1 54115096 <NA>                accepted        species   Cephalomanes atrovirens Presl             
+#>  2 54133783 54115097            synonym         species   Trichomanes crassum Copel.                
+#>  3 54115097 <NA>                accepted        species   Cephalomanes crassum (Copel.) M. G. Price 
+#>  4 54133784 54115098            synonym         species   Trichomanes densinervium Copel.           
+#>  5 54115098 <NA>                accepted        species   Cephalomanes densinervium (Copel.) Copel. 
+#>  6 54133786 54115100            synonym         species   Cephalomanes curvatum (J. Sm.) V. D. Bosch
+#>  7 54133787 54115100            synonym         species   Cephalomanes javanica (Bl.) V. D. Bosch   
+#>  8 54133788 54115100            synonym         species   Cephalomanes oblongifolium Presl          
+#>  9 54133789 54115100            synonym         species   Cephalomanes zollingeri V. D. Bosch       
+#> 10 54133790 54115100            synonym         species   Lacostea javanica (Bl.) Prantl            
+#> # … with 2,441 more rows
 ```
 
-`filmy_taxonomy` is a taxonomic dataset of filmy ferns included in the
-`taxastand` package.
+`dct_filmies` is a taxonomic dataset of filmy ferns included in
+dwctaxon.
 
-All functions in the `dwctaxon` package start with `dct_`.
-
-### Validate taxonomy
+For demonstration purposes, we will just use the first five rows:
 
 ``` r
-# Data not meeting Darwin Core Taxon standards will error
-dct_validate(filmy_taxonomy)
-#> Error: `check_col_names` failed. Invalid column names present: identifier, superfamily, source, description, isExtinct. See dct_terms for valid column names.
+filmies_small <- head(dct_filmies, 5)
 ```
 
-### Fix taxonomy
+All functions in dwctaxon start with `dct_`.
+
+### Edit data
+
+`dct_add_row()` adds one or more rows, automatically providing values
+for `taxonID`.
 
 ``` r
-filmy_taxonomy_fixed <- dct_fix_format(filmy_taxonomy)
-#> Dropping the following non-standard columns: identifier, superfamily, source, description, isExtinct
-#> Coercing column taxonID from numeric to character
-#> Coercing column datasetID from numeric to character
-#> Coercing column acceptedNameUsageID from numeric to character
-#> Coercing column parentNameUsageID from numeric to character
-#> Coercing column subgenus from logical to character
-#> Coercing column namePublishedIn from logical to character
-#> Coercing column taxonConceptID from logical to character
-
-# Now the validation passes
-dct_validate(filmy_taxonomy_fixed)
-#> # A tibble: 2,729 × 26
-#>    taxonID  datasetID datasetN…¹ accep…² paren…³ taxon…⁴ taxon…⁵ verba…⁶ scien…⁷
-#>    <chr>    <chr>     <chr>      <chr>   <chr>   <chr>   <chr>   <chr>   <chr>  
-#>  1 54115096 140       World Fer… <NA>    548303… accept… species <NA>    Cephal…
-#>  2 54133783 140       World Fer… 541150… <NA>    synonym species <NA>    Tricho…
-#>  3 54115097 140       World Fer… <NA>    548303… accept… species <NA>    Cephal…
-#>  4 54133784 140       World Fer… 541150… <NA>    synonym species <NA>    Tricho…
-#>  5 54115098 140       World Fer… <NA>    548303… accept… species <NA>    Cephal…
-#>  6 54133785 140       World Fer… 541150… <NA>    synonym species <NA>    Tricho…
-#>  7 54115099 140       World Fer… <NA>    548303… provis… species <NA>    Cephal…
-#>  8 54133786 140       World Fer… 541151… <NA>    synonym species <NA>    Cephal…
-#>  9 54133787 140       World Fer… 541151… <NA>    synonym species <NA>    Cephal…
-#> 10 54133788 140       World Fer… 541151… <NA>    synonym species <NA>    Cephal…
-#> # … with 2,719 more rows, 17 more variables: kingdom <chr>, phylum <chr>,
-#> #   class <chr>, order <chr>, family <chr>, genericName <chr>, genus <chr>,
-#> #   subgenus <chr>, specificEpithet <chr>, infraspecificEpithet <chr>,
-#> #   scientificNameAuthorship <chr>, namePublishedIn <chr>,
-#> #   nameAccordingTo <chr>, modified <chr>, taxonConceptID <chr>,
-#> #   scientificNameID <chr>, references <chr>, and abbreviated variable names
-#> #   ¹​datasetName, ²​acceptedNameUsageID, ³​parentNameUsageID, ⁴​taxonomicStatus, …
+filmies_small |>
+  dct_add_row(
+    sci_name = "Hymenophyllum dwctaxonense Nitta",
+    taxonomicStatus = "accepted"
+  )
+#> # A tibble: 6 × 6
+#>   taxonID  acceptedNameUsageID taxonomicStatus taxonRank scientificName                            modified           
+#>   <chr>    <chr>               <chr>           <chr>     <chr>                                     <chr>              
+#> 1 54115096 <NA>                accepted        species   Cephalomanes atrovirens Presl             <NA>               
+#> 2 54133783 54115097            synonym         species   Trichomanes crassum Copel.                <NA>               
+#> 3 54115097 <NA>                accepted        species   Cephalomanes crassum (Copel.) M. G. Price <NA>               
+#> 4 54133784 54115098            synonym         species   Trichomanes densinervium Copel.           <NA>               
+#> 5 54115098 <NA>                accepted        species   Cephalomanes densinervium (Copel.) Copel. <NA>               
+#> 6 193e2011 <NA>                accepted        <NA>      Hymenophyllum dwctaxonense Nitta          2022-11-16 16:14:36
 ```
 
-### Add rows
+`dct_modify_row()` modifies a row, automatically re-mapping synonyms if
+needed.
 
 ``` r
-filmy_taxonomy_fixed |>
-  dct_add_row(sci_name = "Hymenophyllum dwctaxonense Nitta", taxonomicStatus = "accepted") |>
-  # The new row is added at the end. Slice to that so we can see it.
-  slice_tail(n = 1) |>
-  select(taxonID, taxonomicStatus, scientificName, modified)
-#> # A tibble: 1 × 4
-#>   taxonID                          taxonomicStatus scientificName        modif…¹
-#>   <chr>                            <chr>           <chr>                 <chr>  
-#> 1 193e2011c8ace0ed138af91f41a335cc accepted        Hymenophyllum dwctax… 2022-1…
-#> # … with abbreviated variable name ¹​modified
+# Change C. densinervium to a synonym of C. crassum
+filmies_small |>
+  dct_modify_row(
+    sci_name = "Cephalomanes densinervium (Copel.) Copel.",
+    tax_status = "synonym",
+    usage_name = "Cephalomanes crassum (Copel.) M. G. Price"
+  )
+#> # A tibble: 5 × 6
+#>   taxonID  acceptedNameUsageID taxonomicStatus taxonRank scientificName                            modified           
+#>   <chr>    <chr>               <chr>           <chr>     <chr>                                     <chr>              
+#> 1 54115096 <NA>                accepted        species   Cephalomanes atrovirens Presl             <NA>               
+#> 2 54133783 54115097            synonym         species   Trichomanes crassum Copel.                <NA>               
+#> 3 54115097 <NA>                accepted        species   Cephalomanes crassum (Copel.) M. G. Price <NA>               
+#> 4 54133784 54115097            synonym         species   Trichomanes densinervium Copel.           2022-11-16 16:14:36
+#> 5 54115098 54115097            synonym         species   Cephalomanes densinervium (Copel.) Copel. 2022-11-16 16:14:36
 ```
 
-### Change status
+`dct_fill_col()` fills in values for columns that have “term” - “termID”
+pairs (e.g., `acceptedNameUsage` and `acceptedNameUsageID`).
 
 ``` r
-filmy_taxonomy_fixed |>
-  # The modified entry is 'taxonomicStatus' of the second row. Slice to that so we can see it.
-  dct_change_status(taxon_id = "54133783", new_status = "accepted") |>
-  slice_head(n = 2) |>
-  select(taxonID, taxonomicStatus, scientificName, modified)
-#> # A tibble: 2 × 4
-#>   taxonID  taxonomicStatus scientificName                modified           
-#>   <chr>    <chr>           <chr>                         <chr>              
-#> 1 54115096 accepted name   Cephalomanes atrovirens Presl Nov 2018           
-#> 2 54133783 accepted        Trichomanes crassum Copel.    2022-10-20 16:33:10
+# Fill-in the acceptedNameUsage column with scientific names
+filmies_small |>
+  dct_fill_col(
+    fill_to = "acceptedNameUsage",
+    fill_from = "scientificName",
+    match_to = "taxonID",
+    match_from = "acceptedNameUsageID"
+  )
+#> # A tibble: 5 × 6
+#>   taxonID  acceptedNameUsageID taxonomicStatus taxonRank scientificName                            acceptedNameUsage                        
+#>   <chr>    <chr>               <chr>           <chr>     <chr>                                     <chr>                                    
+#> 1 54115096 <NA>                accepted        species   Cephalomanes atrovirens Presl             <NA>                                     
+#> 2 54133783 54115097            synonym         species   Trichomanes crassum Copel.                Cephalomanes crassum (Copel.) M. G. Price
+#> 3 54115097 <NA>                accepted        species   Cephalomanes crassum (Copel.) M. G. Price <NA>                                     
+#> 4 54133784 54115098            synonym         species   Trichomanes densinervium Copel.           Cephalomanes densinervium (Copel.) Copel.
+#> 5 54115098 <NA>                accepted        species   Cephalomanes densinervium (Copel.) Copel. <NA>
 ```
+
+### Validate data
+
+`dct_validate()` is the main function for validation, and automatically
+conducts a series of checks. The individual checks can be run with
+`dct_check_*()` functions.
+
+The `dct_filmies` dataset is already well-formatted, so it will pass
+validation:
+
+``` r
+# Default behavior is to return the original dataset if checks pass
+# For this example, return TRUE instead
+dct_validate(dct_filmies, on_success = "logical")
+#> [1] TRUE
+```
+
+For demonstration purposes, let’s mess up the data:
+
+``` r
+# Start by duplicating some data
+filmies_dirty <- rbind(head(dct_filmies), head(dct_filmies, 2))
+# Replace some values of `acceptedNameUsageID` with random letters
+filmies_dirty$acceptedNameUsageID[sample(1:8, 5)] <- sample(letters, 5)
+```
+
+By default, `dct_validate()` will stop with an error on the first check
+that fails:
+
+``` r
+dct_validate(filmies_dirty)
+#> Error: check_taxon_id failed
+#>    taxonID detected with duplicated value
+#>    Bad taxonID: 54115096, 54133783
+```
+
+But it may be useful to get an overview of all the checks that failed.
+This can be done by setting `on_fail` to `"summary"`:
+
+``` r
+dct_validate(filmies_dirty, on_fail = "summary")
+```
+
+    #> Warning in dct_validate(filmies_dirty, on_fail = "summary"): check_mapping failed
+    #> # A tibble: 14 × 5
+    #>    taxonID  acceptedNameUsageID scientificName                             error                                    check               
+    #>    <chr>    <chr>               <chr>                                      <chr>                                    <chr>               
+    #>  1 54115096 b                   Cephalomanes atrovirens Presl              taxonID detected whose acceptedNameUs... check_mapping       
+    #>  2 54133783 k                   Trichomanes crassum Copel.                 taxonID detected whose acceptedNameUs... check_mapping       
+    #>  3 54115097 s                   Cephalomanes crassum (Copel.) M. G. Price  taxonID detected whose acceptedNameUs... check_mapping       
+    #>  4 54133786 n                   Cephalomanes curvatum (J. Sm.) V. D. Bosch taxonID detected whose acceptedNameUs... check_mapping       
+    #>  5 54133783 p                   Trichomanes crassum Copel.                 taxonID detected whose acceptedNameUs... check_mapping       
+    #>  6 54115096 <NA>                Cephalomanes atrovirens Presl              accepted name(s) detected with a non-... check_mapping_strict
+    #>  7 54115097 <NA>                Cephalomanes crassum (Copel.) M. G. Price  accepted name(s) detected with a non-... check_mapping_strict
+    #>  8 54133783 k                   Trichomanes crassum Copel.                 synonym detected whose acceptedNameUs... check_mapping_strict
+    #>  9 54133786 n                   Cephalomanes curvatum (J. Sm.) V. D. Bosch synonym detected whose acceptedNameUs... check_mapping_strict
+    #> 10 54133783 p                   Trichomanes crassum Copel.                 synonym detected whose acceptedNameUs... check_mapping_strict
+    #> 11 <NA>     <NA>                Cephalomanes atrovirens Presl              scientificName detected with duplicat... check_sci_name      
+    #> 12 <NA>     <NA>                Trichomanes crassum Copel.                 scientificName detected with duplicat... check_sci_name      
+    #> 13 54115096 <NA>                <NA>                                       taxonID detected with duplicated value   check_taxon_id      
+    #> 14 54133783 <NA>                <NA>                                       taxonID detected with duplicated value   check_taxon_id
 
 ### Piping
 
-All the functions in dwctaxon take a dataframe as their first argument,
-so they are “pipe-friendly” and can be chained together:
+All the functions in dwctaxon take a dataframe as their first argument
+and return a dataframe by default, so they are “pipe-friendly” and can
+be chained together:
 
 ``` r
-filmy_taxonomy |>
-  dct_fix_format() |>
-  dct_change_status(taxon_id = "54133783", new_status = "accepted") |>
-  dct_add_row(sci_name = "Hymenophyllum dwctaxonense Nitta", taxonomicStatus = "accepted") |>
+dct_filmies |>
+  dct_modify_row(
+    taxon_id = "54133783",
+    tax_status = "accepted"
+  ) |>
+  dct_add_row(
+    sci_name = "Hymenophyllum dwctaxonense Nitta",
+    taxonomicStatus = "accepted"
+  ) |>
   dct_validate()
-#> Dropping the following non-standard columns: identifier, superfamily, source, description, isExtinct
-#> Coercing column taxonID from numeric to character
-#> Coercing column datasetID from numeric to character
-#> Coercing column acceptedNameUsageID from numeric to character
-#> Coercing column parentNameUsageID from numeric to character
-#> Coercing column subgenus from logical to character
-#> Coercing column namePublishedIn from logical to character
-#> Coercing column taxonConceptID from logical to character
-#> # A tibble: 2,730 × 26
-#>    taxonID  datasetID datasetN…¹ accep…² paren…³ taxon…⁴ taxon…⁵ verba…⁶ scien…⁷
-#>    <chr>    <chr>     <chr>      <chr>   <chr>   <chr>   <chr>   <chr>   <chr>  
-#>  1 54115096 140       World Fer… <NA>    548303… accept… species <NA>    Cephal…
-#>  2 54133783 140       World Fer… <NA>    <NA>    accept… species <NA>    Tricho…
-#>  3 54115097 140       World Fer… <NA>    548303… accept… species <NA>    Cephal…
-#>  4 54133784 140       World Fer… 541150… <NA>    synonym species <NA>    Tricho…
-#>  5 54115098 140       World Fer… <NA>    548303… accept… species <NA>    Cephal…
-#>  6 54133785 140       World Fer… 541150… <NA>    synonym species <NA>    Tricho…
-#>  7 54115099 140       World Fer… <NA>    548303… provis… species <NA>    Cephal…
-#>  8 54133786 140       World Fer… 541151… <NA>    synonym species <NA>    Cephal…
-#>  9 54133787 140       World Fer… 541151… <NA>    synonym species <NA>    Cephal…
-#> 10 54133788 140       World Fer… 541151… <NA>    synonym species <NA>    Cephal…
-#> # … with 2,720 more rows, 17 more variables: kingdom <chr>, phylum <chr>,
-#> #   class <chr>, order <chr>, family <chr>, genericName <chr>, genus <chr>,
-#> #   subgenus <chr>, specificEpithet <chr>, infraspecificEpithet <chr>,
-#> #   scientificNameAuthorship <chr>, namePublishedIn <chr>,
-#> #   nameAccordingTo <chr>, modified <chr>, taxonConceptID <chr>,
-#> #   scientificNameID <chr>, references <chr>, and abbreviated variable names
-#> #   ¹​datasetName, ²​acceptedNameUsageID, ³​parentNameUsageID, ⁴​taxonomicStatus, …
+#> # A tibble: 2,452 × 6
+#>    taxonID  acceptedNameUsageID taxonomicStatus taxonRank scientificName                             modified           
+#>    <chr>    <chr>               <chr>           <chr>     <chr>                                      <chr>              
+#>  1 54115096 <NA>                accepted        species   Cephalomanes atrovirens Presl              <NA>               
+#>  2 54133783 <NA>                accepted        species   Trichomanes crassum Copel.                 2022-11-16 16:14:36
+#>  3 54115097 <NA>                accepted        species   Cephalomanes crassum (Copel.) M. G. Price  <NA>               
+#>  4 54133784 54115098            synonym         species   Trichomanes densinervium Copel.            <NA>               
+#>  5 54115098 <NA>                accepted        species   Cephalomanes densinervium (Copel.) Copel.  <NA>               
+#>  6 54133786 54115100            synonym         species   Cephalomanes curvatum (J. Sm.) V. D. Bosch <NA>               
+#>  7 54133787 54115100            synonym         species   Cephalomanes javanica (Bl.) V. D. Bosch    <NA>               
+#>  8 54133788 54115100            synonym         species   Cephalomanes oblongifolium Presl           <NA>               
+#>  9 54133789 54115100            synonym         species   Cephalomanes zollingeri V. D. Bosch        <NA>               
+#> 10 54133790 54115100            synonym         species   Lacostea javanica (Bl.) Prantl             <NA>               
+#> # … with 2,442 more rows
 ```
 
-It’s often a good idea to include `dct_validate()` to make sure the
-modified taxonomic database is still correctly formatted.
+It’s often a good idea to include `dct_validate()` at the end of a chain
+to make sure the modified taxonomic database is still correctly
+formatted.
 
 ## Citing this package
 
 If you use this package, please cite it! Here is an example:
 
-    Nitta, JH (2021) dwctaxon: Tools for working with Darwin Core Taxon data in R. https://doi.org/10.5281/zenodo.6388271
+    Nitta, JH (2022) dwctaxon: Tools for working with Darwin Core Taxon data in R. https://doi.org/10.5281/zenodo.6388271
 
 The example DOI above is for the overall package.
 

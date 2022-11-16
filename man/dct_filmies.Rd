@@ -5,7 +5,7 @@
 \alias{dct_filmies}
 \title{Taxonomic data of filmy ferns}
 \format{
-Dataframe (tibble), with 2729 rows and
+Dataframe (tibble), with 2451 rows and
 5 columns. For details about data format, see
 \url{https://dwc.tdwg.org/terms/#taxon}.
 }

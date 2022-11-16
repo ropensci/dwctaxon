@@ -12,6 +12,11 @@ knitr::opts_chunk$set(
   comment = "#>",
   fig.path = "man/figures/"
 )
+
+# Increase width for printing tibbles
+options(width = 140)
+
+set.seed(12345)
 ```
 
 # dwctaxon <img src="man/figures/logo.png" align="right" alt="" width="120" />
@@ -42,79 +47,126 @@ OR
 remotes::install_github("joelnitta/dwctaxon")
 ```
 
-
 ## Usage
 
 First, load packages and a dataset to work with:
 
-```{r load-pkg-data}
-library(taxastand)
-library(tibble)
-library(dplyr)
+```{r load-pkg-data, message = FALSE}
+library(tibble) # recommended for pretty printing of tibbles
 library(dwctaxon)
 
-filmy_taxonomy
+dct_filmies
 ```
 
-`filmy_taxonomy` is a taxonomic dataset of filmy ferns included in the `taxastand` package.
+`dct_filmies` is a taxonomic dataset of filmy ferns included in dwctaxon.
 
-All functions in the `dwctaxon` package start with `dct_`.
+For demonstration purposes, we will just use the first five rows:
 
-### Validate taxonomy
-
-```{r validate, error = TRUE}
-# Data not meeting Darwin Core Taxon standards will error
-dct_validate(filmy_taxonomy)
+```{r filmies-small}
+filmies_small <- head(dct_filmies, 5)
 ```
 
-### Fix taxonomy
+All functions in dwctaxon start with `dct_`.
 
-```{r fix}
-filmy_taxonomy_fixed <- dct_fix_format(filmy_taxonomy)
+### Edit data
 
-# Now the validation passes
-dct_validate(filmy_taxonomy_fixed)
-```
-
-### Add rows
+`dct_add_row()` adds one or more rows, automatically providing values for `taxonID`.
 
 ```{r add-row}
-filmy_taxonomy_fixed |>
-  dct_add_row(sci_name = "Hymenophyllum dwctaxonense Nitta", taxonomicStatus = "accepted") |>
-  # The new row is added at the end. Slice to that so we can see it.
-  slice_tail(n = 1) |>
-  select(taxonID, taxonomicStatus, scientificName, modified)
+filmies_small |>
+  dct_add_row(
+    sci_name = "Hymenophyllum dwctaxonense Nitta",
+    taxonomicStatus = "accepted"
+  )
 ```
 
-### Change status
+`dct_modify_row()` modifies a row, automatically re-mapping synonyms if needed.
 
-```{r change-status}
-filmy_taxonomy_fixed |>
-  # The modified entry is 'taxonomicStatus' of the second row. Slice to that so we can see it.
-  dct_change_status(taxon_id = "54133783", new_status = "accepted") |>
-  slice_head(n = 2) |>
-  select(taxonID, taxonomicStatus, scientificName, modified)
+```{r modify-row}
+# Change C. densinervium to a synonym of C. crassum
+filmies_small |>
+  dct_modify_row(
+    sci_name = "Cephalomanes densinervium (Copel.) Copel.",
+    tax_status = "synonym",
+    usage_name = "Cephalomanes crassum (Copel.) M. G. Price"
+  )
+```
+
+`dct_fill_col()` fills in values for columns that have "term" - "termID" pairs (e.g., `acceptedNameUsage` and `acceptedNameUsageID`).
+
+```{r fill-col}
+# Fill-in the acceptedNameUsage column with scientific names
+filmies_small |>
+  dct_fill_col(
+    fill_to = "acceptedNameUsage",
+    fill_from = "scientificName",
+    match_to = "taxonID",
+    match_from = "acceptedNameUsageID"
+  )
+```
+
+### Validate data
+
+`dct_validate()` is the main function for validation, and automatically conducts a series of checks. The individual checks can be run with `dct_check_*()` functions.
+
+The `dct_filmies` dataset is already well-formatted, so it will pass validation:
+
+```{r validate-pass}
+# Default behavior is to return the original dataset if checks pass
+# For this example, return TRUE instead
+dct_validate(dct_filmies, on_success = "logical")
+```
+
+For demonstration purposes, let's mess up the data:
+
+```{r make-dirty-filmies}
+# Start by duplicating some data
+filmies_dirty <- rbind(head(dct_filmies), head(dct_filmies, 2))
+# Replace some values of `acceptedNameUsageID` with random letters
+filmies_dirty$acceptedNameUsageID[sample(1:8, 5)] <- sample(letters, 5)
+```
+
+By default, `dct_validate()` will stop with an error on the first check that fails:
+
+```{r validate-error, error = TRUE}
+dct_validate(filmies_dirty)
+```
+
+But it may be useful to get an overview of all the checks that failed. This can be done by setting `on_fail` to `"summary"`:
+
+```{r validate-summary-show, eval = FALSE, echo = TRUE}
+dct_validate(filmies_dirty, on_fail = "summary")
+```
+
+```{r validate-summary-print, echo = FALSE, message = FALSE}
+dct_validate(filmies_dirty, on_fail = "summary") |>
+  dplyr::mutate(error = stringr::str_trunc(error, 40, "right"))
 ```
 
 ### Piping
 
-All the functions in dwctaxon take a dataframe as their first argument, so they are "pipe-friendly" and can be chained together:
+All the functions in dwctaxon take a dataframe as their first argument and return a dataframe by default, so they are "pipe-friendly" and can be chained together:
 
 ```{r pipe}
-filmy_taxonomy |>
-  dct_fix_format() |>
-  dct_change_status(taxon_id = "54133783", new_status = "accepted") |>
-  dct_add_row(sci_name = "Hymenophyllum dwctaxonense Nitta", taxonomicStatus = "accepted") |>
+dct_filmies |>
+  dct_modify_row(
+    taxon_id = "54133783",
+    tax_status = "accepted"
+  ) |>
+  dct_add_row(
+    sci_name = "Hymenophyllum dwctaxonense Nitta",
+    taxonomicStatus = "accepted"
+  ) |>
   dct_validate()
 ```
 
-It's often a good idea to include `dct_validate()` to make sure the modified taxonomic database is still correctly formatted.
+It's often a good idea to include `dct_validate()` at the end of a chain to make sure the modified taxonomic database is still correctly formatted.
 
 ## Citing this package
 
 If you use this package, please cite it! Here is an example:
 
-    Nitta, JH (2021) dwctaxon: Tools for working with Darwin Core Taxon data in R. https://doi.org/10.5281/zenodo.6388271
+    Nitta, JH (2022) dwctaxon: Tools for working with Darwin Core Taxon data in R. https://doi.org/10.5281/zenodo.6388271
 
 The example DOI above is for the overall package.
 

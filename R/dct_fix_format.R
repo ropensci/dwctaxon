@@ -32,7 +32,7 @@ dct_fix_format <- function(tax_dat) {
     dplyr::filter(input_type != type)
 
   if (nrow(bad_col_types) > 0) {
-    for (i in seq_len(bad_col_types)) {
+    for (i in seq_len(nrow(bad_col_types))) {
       message(
         glue::glue(
           "Coercing column {bad_col_types$term[[i]]} from \\

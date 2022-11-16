@@ -24,6 +24,8 @@ dct
 de
 debian
 Denney
+DOI
+DOIs
 dplyr
 dwc
 dwctaxon
@@ -96,6 +98,7 @@ Simko
 Stokely
 stringr
 Suruceanu
+taxastand
 taxonID
 taxonomicID
 taxonomicStatus
@@ -105,6 +108,7 @@ testthat
 Thierry
 tibble
 tidyr
+tidyverse
 Trichomanes
 Tuszynski
 Urbanek
@@ -113,5 +117,6 @@ VignetteBuilder
 Viliam
 Wataru
 Wickham
+WIP
 Wush
 www

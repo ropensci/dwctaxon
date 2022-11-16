@@ -436,7 +436,7 @@ test_that("attempt to update without changes returns original data", {
       dct_modify_row(
         dct_filmies,
         sci_name = "Cephalomanes atrovirens Presl",
-        tax_status = "accepted name",
+        tax_status = "accepted",
         stamp_modified = FALSE
       )
     ),
@@ -446,7 +446,7 @@ test_that("attempt to update without changes returns original data", {
     dct_modify_row(
       dct_filmies,
       sci_name = "Cephalomanes atrovirens Presl",
-      tax_status = "accepted name",
+      tax_status = "accepted",
       stamp_modified = FALSE
     ),
     paste0(

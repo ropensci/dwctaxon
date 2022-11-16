@@ -42,7 +42,8 @@ Suggests:
     readr,
     usethis,
     knitr,
-    rmarkdown
+    rmarkdown,
+    tidyverse
 Remotes: 
     anthonynorth/roxyglobals
 Depends: 
