@@ -59,7 +59,7 @@
 <span>  fill_usage_name <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  remap_names <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  remap_variant <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  stamp_modified <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  stamp_modified <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  strict <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  quiet <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  args_tbl <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -204,20 +204,21 @@ to the taxonomic database if the input is supplied as a dataframe via
 <span class="r-in"><span>    check_tax_status <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
 <span class="r-in"><span>    check_mapping_strict <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
 <span class="r-in"><span>    check_sci_name <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2,729 × 5</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    taxonID  acceptedNameUsageID taxonomicStatus             taxonRank scientif…¹</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 54115096 <span style="color: #BB0000;">NA</span>                  accepted name               species   Cephaloma…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 54133783 <span style="color: #BB0000;">NA</span>                  accepted                    species   Trichoman…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 54115097 54133783            synonym                     species   Cephaloma…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 54133784 54115098            synonym                     species   Trichoman…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 54115098 <span style="color: #BB0000;">NA</span>                  accepted name               species   Cephaloma…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 54133785 54115099            synonym                     species   Trichoman…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 54115099 <span style="color: #BB0000;">NA</span>                  provisionally accepted name species   Cephaloma…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 54133786 54115100            synonym                     species   Cephaloma…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 54133787 54115100            synonym                     species   Cephaloma…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 54133788 54115100            synonym                     species   Cephaloma…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 2,719 more rows, and abbreviated variable name ¹​scientificName</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2,729 × 6</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    taxonID  acceptedNameUsageID taxonomicStatus          taxon…¹ scien…² modif…³</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 54115096 <span style="color: #BB0000;">NA</span>                  accepted name            species Cephal… <span style="color: #BB0000;">NA</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 54133783 <span style="color: #BB0000;">NA</span>                  accepted                 species Tricho… 2022-1…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 54115097 54133783            synonym                  species Cephal… 2022-1…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 54133784 54115098            synonym                  species Tricho… <span style="color: #BB0000;">NA</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 54115098 <span style="color: #BB0000;">NA</span>                  accepted name            species Cephal… <span style="color: #BB0000;">NA</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 54133785 54115099            synonym                  species Tricho… <span style="color: #BB0000;">NA</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 54115099 <span style="color: #BB0000;">NA</span>                  provisionally accepted … species Cephal… <span style="color: #BB0000;">NA</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 54133786 54115100            synonym                  species Cephal… <span style="color: #BB0000;">NA</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 54133787 54115100            synonym                  species Cephal… <span style="color: #BB0000;">NA</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 54133788 54115100            synonym                  species Cephal… <span style="color: #BB0000;">NA</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 2,719 more rows, and abbreviated variable names ¹​taxonRank,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   ²​scientificName, ³​modified</span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Sometimes changing one name will affect others, if they map</span></span></span>
 <span class="r-in"><span><span class="co"># to the new synonym</span></span></span>
@@ -227,15 +228,16 @@ to the taxonomic database if the input is supplied as a dataframe via
 <span class="r-in"><span>  tax_status <span class="op">=</span> <span class="st">"synonym"</span>,</span></span>
 <span class="r-in"><span>  usage_name <span class="op">=</span> <span class="st">"Cephalomanes densinervium (Copel.) Copel."</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 6 × 5</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   taxonID  acceptedNameUsageID taxonomicStatus taxonRank scientificName         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 54115096 <span style="color: #BB0000;">NA</span>                  accepted name   species   Cephalomanes atroviren…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 54133783 54115098            synonym         species   Trichomanes crassum Co…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 54115097 54115098            synonym         species   Cephalomanes crassum (…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> 54133784 54115098            synonym         species   Trichomanes densinervi…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> 54115098 <span style="color: #BB0000;">NA</span>                  accepted name   species   Cephalomanes densinerv…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> 54133785 54115099            synonym         species   Trichomanes infundibul…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 6 × 6</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   taxonID  acceptedNameUsageID taxonomicStatus taxonRank scientificName  modif…¹</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 54115096 <span style="color: #BB0000;">NA</span>                  accepted name   species   Cephalomanes a… <span style="color: #BB0000;">NA</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 54133783 54115098            synonym         species   Trichomanes cr… 2022-1…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 54115097 54115098            synonym         species   Cephalomanes c… 2022-1…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> 54133784 54115098            synonym         species   Trichomanes de… <span style="color: #BB0000;">NA</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> 54115098 <span style="color: #BB0000;">NA</span>                  accepted name   species   Cephalomanes d… <span style="color: #BB0000;">NA</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> 54133785 54115099            synonym         species   Trichomanes in… <span style="color: #BB0000;">NA</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with abbreviated variable name ¹​modified</span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Apply a set of changes</span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tibble.tidyverse.org/" class="external-link">tibble</a></span><span class="op">)</span></span></span>
@@ -249,20 +251,21 @@ to the taxonomic database if the input is supplied as a dataframe via
 <span class="r-in"><span>  <span class="fu">dct_modify_row</span><span class="op">(</span>args_tbl <span class="op">=</span> <span class="va">updates</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu">dct_modify_row</span><span class="op">(</span>sci_name <span class="op">=</span> <span class="st">"Trichomanes crassum Copel."</span>,</span></span>
 <span class="r-in"><span>    tax_status <span class="op">=</span> <span class="st">"accepted"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2,729 × 5</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    taxonID  acceptedNameUsageID taxonomicStatus             taxonRank scientif…¹</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 54115096 54133783            synonym                     species   Cephaloma…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 54133783 <span style="color: #BB0000;">NA</span>                  accepted                    species   Trichoman…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 54115097 54133783            synonym                     species   Cephaloma…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 54133784 54115098            synonym                     species   Trichoman…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 54115098 <span style="color: #BB0000;">NA</span>                  accepted name               species   Cephaloma…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 54133785 54115099            synonym                     species   Trichoman…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 54115099 <span style="color: #BB0000;">NA</span>                  provisionally accepted name species   Cephaloma…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 54133786 54115100            synonym                     species   Cephaloma…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 54133787 54115100            synonym                     species   Cephaloma…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 54133788 54115100            synonym                     species   Cephaloma…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 2,719 more rows, and abbreviated variable name ¹​scientificName</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2,729 × 6</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    taxonID  acceptedNameUsageID taxonomicStatus          taxon…¹ scien…² modif…³</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 54115096 54133783            synonym                  species Cephal… <span style="color: #BB0000;">NA</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 54133783 <span style="color: #BB0000;">NA</span>                  accepted                 species Tricho… 2022-1…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 54115097 54133783            synonym                  species Cephal… <span style="color: #BB0000;">NA</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 54133784 54115098            synonym                  species Tricho… <span style="color: #BB0000;">NA</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 54115098 <span style="color: #BB0000;">NA</span>                  accepted name            species Cephal… <span style="color: #BB0000;">NA</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 54133785 54115099            synonym                  species Tricho… <span style="color: #BB0000;">NA</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 54115099 <span style="color: #BB0000;">NA</span>                  provisionally accepted … species Cephal… <span style="color: #BB0000;">NA</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 54133786 54115100            synonym                  species Cephal… <span style="color: #BB0000;">NA</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 54133787 54115100            synonym                  species Cephal… <span style="color: #BB0000;">NA</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 54133788 54115100            synonym                  species Cephal… <span style="color: #BB0000;">NA</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 2,719 more rows, and abbreviated variable names ¹​taxonRank,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   ²​scientificName, ³​modified</span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
