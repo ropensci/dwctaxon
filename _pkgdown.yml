@@ -29,3 +29,10 @@ reference:
 - contents:
   - dct_filmies
   - dct_terms
+articles:
+- title: Articles
+  navbar: ~
+  contents:
+  - what-is-dwc
+  - editing
+  - validation

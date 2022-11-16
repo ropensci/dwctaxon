@@ -33,12 +33,18 @@ dwctaxon comes with an example dataset, taxonomic data of filmy ferns (family Hy
 dct_filmies
 ```
 
-Although DWC taxon format includes a large number of terms (columns)^[See `dct_terms` for a list], a typical database does not use all of them. `dct_filmies` only includes `r ncol(dct_filmies)` columns. Their usage should mostly be clear to someone familiar with taxonomy, but two columns need more explanation. `taxonID` is a unique ID for each row (name), and `acceptedNameUsageID` is only provided for synonyms; it indicates the `taxonID` of the accepted name.
+Although DWC taxon format includes a large number of terms (columns)^[See `dct_terms` for a list], a typical database does not use all of them. `dct_filmies` only includes `r ncol(dct_filmies)` columns. Their usage should mostly be clear to someone familiar with taxonomy, but two columns need more explanation. `taxonID` is a unique ID for each row (name), and `acceptedNameUsageID` is only provided for synonyms; it indicates the `taxonID` of the accepted name. For more information on DWC taxon format, see `vignette("what-is-dwc")`.
 
 The rest of the vignette will consist of modifying this dataset.
 
 ## Adding rows
 
+(coming soon!)
+
 ## Modifying rows
 
+(coming soon!)
+
 ## Filling columns
+
+(coming soon!)
