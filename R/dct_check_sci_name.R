@@ -109,14 +109,7 @@ check_sci_name_is_uniq <- function(tax_dat,
 #' @inheritParams dct_check_taxon_id
 #' @inherit dct_check_taxon_id return
 #'
-#' @examples
-#' suppressWarnings(
-#'   dct_check_sci_name(
-#'     data.frame(scientificName = NA_character_),
-#'     on_fail = "summary"
-#'   )
-#' )
-#' dct_check_sci_name(data.frame(scientificName = "a"))
+#' @example inst/examples/dct_check_sci_name.R
 #' @autoglobal
 #' @export
 #'

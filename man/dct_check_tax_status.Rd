@@ -66,7 +66,6 @@ tibble::tribble(
 ) |>
   dct_check_tax_status()
 Sys.unsetenv("VALID_TAX_STATUS")
-
 }
 \references{
 \url{https://dwc.tdwg.org/terms/#dwc:taxonomicStatus}

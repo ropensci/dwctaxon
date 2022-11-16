@@ -146,18 +146,7 @@ check_mapping_exists <- function(tax_dat,
 #' @inheritParams dct_check_taxon_id
 #' @inherit dct_check_taxon_id return
 #' @export
-#' @examples
-#' # The bad data has an acceptedNameUsageID (third row, "4") that lacks a
-#' # corresponding taxonID
-#' bad_dat <- tibble::tribble(
-#'   ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
-#'   "1", NA, "accepted", "Species foo",
-#'   "2", "1", "synonym", "Species bar",
-#'   "3", "4", "synonym", "Species bat"
-#' )
-#' suppressWarnings(
-#'   dct_check_mapping(bad_dat, on_fail = "summary")
-#' )
+#' @example inst/examples/dct_check_mapping.R
 dct_check_mapping <- function(tax_dat,
                               on_fail = "error",
                               on_success = "data") {

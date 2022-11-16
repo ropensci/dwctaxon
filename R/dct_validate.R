@@ -43,17 +43,7 @@
 #'
 #' @autoglobal
 #' @export
-#' @examples
-#'
-#' dct_validate(
-#'   dct_filmies,
-#'   check_sci_name = FALSE,
-#'   valid_tax_status =
-#'     paste(
-#'       "accepted name, ambiguous synonym, provisionally accepted name,",
-#'       "synonym, variant"
-#'     )
-#' )
+#' @example inst/examples/dct_validate.R
 #'
 dct_validate <- function(tax_dat,
                          check_taxon_id = TRUE,

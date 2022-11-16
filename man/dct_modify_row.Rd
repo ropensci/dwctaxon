@@ -130,7 +130,6 @@ dct_filmies |>
     check_mapping_strict = FALSE,
     check_sci_name = FALSE
   )
-
 # Sometimes changing one name will affect others, if they map
 # to the new synonym
 dct_modify_row(
@@ -139,7 +138,6 @@ dct_modify_row(
   tax_status = "synonym",
   usage_name = "Cephalomanes densinervium (Copel.) Copel."
 )
-
 # Apply a set of changes
 library(tibble)
 updates <- tibble(

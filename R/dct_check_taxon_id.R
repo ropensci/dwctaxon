@@ -115,14 +115,7 @@ check_taxon_id_is_uniq <- function(tax_dat,
 #' - If the check fails and `on_fail` is "summary", issue a warning and
 #'   return a dataframe with a summary of the reasons for failure
 #'
-#' @examples
-#' suppressWarnings(
-#'   dct_check_taxon_id(
-#'     data.frame(taxonID = NA_character_),
-#'     on_fail = "summary"
-#'   )
-#' )
-#' dct_check_taxon_id(data.frame(taxonID = 1))
+#' @example inst/examples/dct_check_taxon_id.R
 #' @export
 #'
 dct_check_taxon_id <- function(tax_dat,
