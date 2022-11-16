@@ -1,0 +1,95 @@
+---
+title: "What is DWC?"
+description: >
+  Brief explanation of the Darwin Core data standard
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{What is DWC?}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+dwctaxon is all about handling taxonomic data in the [Darwin Core (DWC) taxon format](https://dwc.tdwg.org/terms/#taxon).
+
+But what is DWC?
+
+## DWC is a standard for biodiversity data
+
+According to the [official documentation](https://dwc.tdwg.org/),
+
+> Darwin Core is a standard maintained by the [Darwin Core Maintenance Interest Group](https://www.tdwg.org/standards/dwc/#maintenance%20group). It includes a glossary of terms (in other contexts these might be called properties, elements, fields, columns, attributes, or concepts) intended to facilitate the sharing of information about biological diversity by providing identifiers, labels, and definitions. Darwin Core is primarily based on taxa, their occurrence in nature as documented by observations, specimens, samples, and related information.
+
+The "terms" referred to are typically encountered as columns in rectangular data (spreadsheets), such as `scientificName` (scientific name of a taxon), `lifeStage` (life stage of an organism when it was observed), etc. By providing a controlled vocabulary and clear definitions of terms, DWC greatly facilitates collection and sharing of biological data. For example, the [Global Biodiversity Information Facility (GBIF)](https://www.gbif.org/), which synthesizes biodiversity data on a global scale, [uses DWC](https://www.gbif.org/darwin-core).
+
+In practice, a given set of DWC data are contained in an archive (zip file) including multiple spreadsheets (CSV files) and XML files with additional metadata. The spreadsheets typically include datasets like occurrences, taxonomy, and collection events.
+
+While other parts of DWC such as organism and occurrence data are clearly important, they are out of the scope of dwctaxon, which only focuses on taxonomic data.
+
+## Features of the DWC taxon format
+
+Now that we have covered the overall purpose of DWC, let's learn about some particular features of the DWC format for taxonomic data ("DWC taxon").
+
+### Vertically oriented
+
+The [Linnaean system of taxonomy](https://en.wikipedia.org/wiki/Linnaean_taxonomy) organizes taxa into a hierarchy, so we may be used to working with taxonomic data in "wide" format, such as this:
+
+```{r taxon-wide, echo = FALSE}
+taxon_wide <- tibble::tribble(
+  ~species, ~genus, ~family, ~order,
+  "Crepidomanes minutum", "Crepidomanes", "Hymenophyllaceae", "Hymenophyllales",
+  "Polypodium ensiforme", "Polypodium", "Polypodiaceae", "Polypodiales"
+)
+knitr::kable(taxon_wide)
+```
+
+In DWC taxon, higher taxonomic levels like `genus`, `family`, and `order` are valid terms^[`species` is not a valid DWC term, and only used here for illustrative purposes.] and may be used.
+
+However, each row of a DWC taxonomic database is a single name **of any rank**, not just species. So it is typical for data to be oriented vertically ("long" format):
+
+```{r taxon-long, echo = FALSE}
+tidyr::pivot_longer(
+  taxon_wide,
+  names_to = "taxonRank",
+  values_to = "scientificName",
+  everything()
+) |>
+  knitr::kable()
+```
+
+### Machine and human friendly
+
+If you browse through the DWC taxon [terms](https://dwc.tdwg.org/terms/#taxon), you will notice many pairs of similar terms such as `acceptedNameUsage` and `acceptedNameUsageID`, `parentNameUsage` and `parentNameUsageID`, etc. These each are used for similar purposes, but one is a value that is easy for humans to understand while the other is useful for machines (computer programs).
+
+For example, `acceptedNameUsage` is the accepted name of a synonym (e.g., *Picea abies* (L.) H. Karst as the accepted name of *Pinus abies* L.), and `acceptedNameUsageID` is the unique ID (typically, `taxonID`) of the accepted name (typically some short sequence of letters and numbers, but this depends on the dataset).
+
+This makes the data format somewhat redundant, but it is also easier for a human to parse if they can see the actual accepted name of a synonym immediately, instead of having to look it up by `taxonID`. On the other hand, `scientificName` can include duplicates (in rare cases if the same name was published twice, etc.), so referring to an accepted name that way has the risk of not being exact.
+
+We can see how this works in the example dataset that comes with dwctaxon, `dct_filmies`:
+
+```{r filmies}
+head(dct_filmies)
+```
+
+Here, *Trichomanes crassum* Copel. is a synonym of *Cephalomanes atrovirens* Presl (notice how the `acceptedNameUsageID` of *Trichomanes crassum* Copel. matches the `taxonID` of *Cephalomanes atrovirens* Presl).
+
+In this dataset, only `acceptedNameUsageID` is used, but it would be valid to add a column with `acceptedNameUsage`. To learn more about how to do so, please see the `vignette("editing")`.
+
+### Extensible
+
+```{r count-terms, echo = FALSE}
+n_taxon_terms <-
+  dct_terms$term[dct_terms$group == "taxon"] |>
+  unique() |>
+  length()
+```
+
+There are many terms listed in the DWC taxon [documentation](https://dwc.tdwg.org/terms/#taxon) -- `r n_taxon_terms` by my count! However, it is unlikely a given taxonomic database uses all of them; in fact, most that I've encountered only use a subset of the terms, and there are none that are strictly required. But in practice you typically want at least `scientificName` (scientific name of the taxon, including author if known) and `taxonID` (a unique identifier for each row in the dataset).
+
+Furthermore, some of the terms are likely to have restricted vocabularies. For example, a given dataset may only use a limited set of words to describe `taxonomicStatus` like "accepted", "synonym", and "doubtful". This is in contrast to a term that could be (nearly) anything, like `scientificName`. DWC does not provide any official set of vocabularies; it is left to the database manager to determine that. One feature of dwctaxon is to verify that only the values you want to allow are used for a given term. To learn more about that, please see `vignette("validation")`.

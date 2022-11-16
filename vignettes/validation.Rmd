@@ -1,0 +1,57 @@
+---
+title: "Validation"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Validation}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+dwctaxon has two major purposes, (1) editing and (2) validation of taxonomic data in [Darwin Core (DWC)](https://dwc.tdwg.org/terms/#taxon) format. This vignette is about the latter.
+
+## Setup
+
+Start by loading packages and setting the random number generator seed since this vignette involves some random samples.
+
+```{r setup, message = FALSE}
+library(dwctaxon)
+library(tidyverse) # for tidy data wrangling
+
+set.seed(12345)
+```
+
+## The data
+
+As before, we will use the example dataset that comes with dwctaxon, `dct_filmies`:
+
+```{r filmy-data}
+dct_filmies
+```
+
+However, `dct_filmies` already is well-formatted and would pass all validation checks! So lets introduce some noise to make things more interesting.
+
+```{r filmy-data-mess}
+filmies_dirty <-
+  dct_filmies |>
+  # Duplicate some rows at the end
+  bind_rows(tail(dct_filmies)) |>
+  # Insert bad values for `acceptedNameUsageID` of 5 random rows
+  rows_update(
+    tibble(
+      taxonID = sample(dct_filmies$taxonID, 5),
+      acceptedNameUsageID = sample(letters, 5)
+    ),
+    by = "taxonID"
+  )
+
+filmies_dirty
+```
+
+The first few rows may look the same, but we know that these data now have some problems.

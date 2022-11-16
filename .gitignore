@@ -7,3 +7,6 @@ working
 docs
 .vscode
 pkgdown
+inst/doc
+/doc/
+/Meta/

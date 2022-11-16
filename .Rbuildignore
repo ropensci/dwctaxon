@@ -1,5 +1,6 @@
 ^CITATION\.cff$
 ^LICENSE\.md$
+^Meta$
 ^README\.Rmd$
 ^\.Rproj\.user$
 ^\.github$
@@ -9,6 +10,7 @@
 ^_pkgdown\.yml$
 ^codemeta\.json$
 ^data-raw$
+^doc$
 ^docs$
 ^dwctaxon\.Rproj$
 ^pkgdown$

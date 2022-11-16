@@ -1,0 +1,44 @@
+---
+title: "Editing"
+description: >
+  Editing taxonomic databases in Darwin Core format
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Editing}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+dwctaxon has two major purposes, (1) editing and (2) validation of taxonomic data in [Darwin Core (DWC)](https://dwc.tdwg.org/terms/#taxon) format. This vignette is about the first. Although you could use dwctaxon to build a taxonomic database from scratch, it is more likely you will be using it to modify an existing database, so we will focus on that kind of use-case.
+
+We start by loading packages needed for this vignette:
+
+```{r setup}
+library(dwctaxon)
+library(tibble) # recommended for pretty-printing of tibbles
+```
+
+## The data
+
+dwctaxon comes with an example dataset, taxonomic data of filmy ferns (family Hymenophyllaceae). Let's take a quick look at the data:
+
+```{r filmy-data}
+dct_filmies
+```
+
+Although DWC taxon format includes a large number of terms (columns)^[See `dct_terms` for a list], a typical database does not use all of them. `dct_filmies` only includes `r ncol(dct_filmies)` columns. Their usage should mostly be clear to someone familiar with taxonomy, but two columns need more explanation. `taxonID` is a unique ID for each row (name), and `acceptedNameUsageID` is only provided for synonyms; it indicates the `taxonID` of the accepted name.
+
+The rest of the vignette will consist of modifying this dataset.
+
+## Adding rows
+
+## Modifying rows
+
+## Filling columns
