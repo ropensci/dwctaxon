@@ -49,6 +49,14 @@ data in compliance with Darwin Core standards in R.
 <li class="nav-item">
   <a class="nav-link" href="reference/index.html">Reference</a>
 </li>
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="articles/what-is-dwc.html">What is DWC?</a>
+    <a class="dropdown-item" href="articles/editing.html">Editing</a>
+    <a class="dropdown-item" href="articles/validation.html">Validation</a>
+  </div>
+</li>
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="search.json" id="search-input" placeholder="Search for" autocomplete="off">
@@ -94,163 +102,165 @@ data in compliance with Darwin Core standards in R.
 </h2>
 <p>First, load packages and a dataset to work with:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">taxastand</span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tibble.tidyverse.org/" class="external-link">tibble</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Attaching package: 'dplyr'</span></span>
-<span><span class="co">#&gt; The following objects are masked from 'package:stats':</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     filter, lag</span></span>
-<span><span class="co">#&gt; The following objects are masked from 'package:base':</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     intersect, setdiff, setequal, union</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tibble.tidyverse.org/" class="external-link">tibble</a></span><span class="op">)</span> <span class="co"># recommended for pretty printing of tibbles</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://joelnitta.github.io/dwctaxon/">dwctaxon</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">filmy_taxonomy</span></span>
-<span><span class="co">#&gt; # A tibble: 2,729 × 31</span></span>
-<span><span class="co">#&gt;     taxonID identifier   datas…¹ datas…² accep…³ paren…⁴ taxon…⁵ taxon…⁶ verba…⁷</span></span>
-<span><span class="co">#&gt;       &lt;dbl&gt; &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;  </span></span>
-<span><span class="co">#&gt;  1 54115096 f5950556e57…     140 World … NA       5.48e7 accept… species &lt;NA&gt;   </span></span>
-<span><span class="co">#&gt;  2 54133783 &lt;NA&gt;             140 World …  5.41e7 NA      synonym species &lt;NA&gt;   </span></span>
-<span><span class="co">#&gt;  3 54115097 bb5e2f01763…     140 World … NA       5.48e7 accept… species &lt;NA&gt;   </span></span>
-<span><span class="co">#&gt;  4 54133784 &lt;NA&gt;             140 World …  5.41e7 NA      synonym species &lt;NA&gt;   </span></span>
-<span><span class="co">#&gt;  5 54115098 002e095eec0…     140 World … NA       5.48e7 accept… species &lt;NA&gt;   </span></span>
-<span><span class="co">#&gt;  6 54133785 &lt;NA&gt;             140 World …  5.41e7 NA      synonym species &lt;NA&gt;   </span></span>
-<span><span class="co">#&gt;  7 54115099 4bd27cdc1fd…     140 World … NA       5.48e7 provis… species &lt;NA&gt;   </span></span>
-<span><span class="co">#&gt;  8 54133786 &lt;NA&gt;             140 World …  5.41e7 NA      synonym species &lt;NA&gt;   </span></span>
-<span><span class="co">#&gt;  9 54133787 &lt;NA&gt;             140 World …  5.41e7 NA      synonym species &lt;NA&gt;   </span></span>
-<span><span class="co">#&gt; 10 54133788 &lt;NA&gt;             140 World …  5.41e7 NA      synonym species &lt;NA&gt;   </span></span>
-<span><span class="co">#&gt; # … with 2,719 more rows, 22 more variables: scientificName &lt;chr&gt;,</span></span>
-<span><span class="co">#&gt; #   kingdom &lt;chr&gt;, phylum &lt;chr&gt;, class &lt;chr&gt;, order &lt;chr&gt;, superfamily &lt;lgl&gt;,</span></span>
-<span><span class="co">#&gt; #   family &lt;chr&gt;, genericName &lt;chr&gt;, genus &lt;chr&gt;, subgenus &lt;lgl&gt;,</span></span>
-<span><span class="co">#&gt; #   specificEpithet &lt;chr&gt;, infraspecificEpithet &lt;chr&gt;,</span></span>
-<span><span class="co">#&gt; #   scientificNameAuthorship &lt;chr&gt;, source &lt;lgl&gt;, namePublishedIn &lt;lgl&gt;,</span></span>
-<span><span class="co">#&gt; #   nameAccordingTo &lt;chr&gt;, modified &lt;chr&gt;, description &lt;chr&gt;,</span></span>
-<span><span class="co">#&gt; #   taxonConceptID &lt;lgl&gt;, scientificNameID &lt;chr&gt;, references &lt;chr&gt;, …</span></span></code></pre></div>
-<p><code>filmy_taxonomy</code> is a taxonomic dataset of filmy ferns included in the <code>taxastand</code> package.</p>
-<p>All functions in the <code>dwctaxon</code> package start with <code>dct_</code>.</p>
-<div class="section level3">
-<h3 id="validate-taxonomy">Validate taxonomy<a class="anchor" aria-label="anchor" href="#validate-taxonomy"></a>
-</h3>
+<span><span class="va">dct_filmies</span></span>
+<span><span class="co">#&gt; # A tibble: 2,451 × 5</span></span>
+<span><span class="co">#&gt;    taxonID  acceptedNameUsageID taxonomicStatus taxonRank scientificName                            </span></span>
+<span><span class="co">#&gt;    &lt;chr&gt;    &lt;chr&gt;               &lt;chr&gt;           &lt;chr&gt;     &lt;chr&gt;                                     </span></span>
+<span><span class="co">#&gt;  1 54115096 &lt;NA&gt;                accepted        species   Cephalomanes atrovirens Presl             </span></span>
+<span><span class="co">#&gt;  2 54133783 54115097            synonym         species   Trichomanes crassum Copel.                </span></span>
+<span><span class="co">#&gt;  3 54115097 &lt;NA&gt;                accepted        species   Cephalomanes crassum (Copel.) M. G. Price </span></span>
+<span><span class="co">#&gt;  4 54133784 54115098            synonym         species   Trichomanes densinervium Copel.           </span></span>
+<span><span class="co">#&gt;  5 54115098 &lt;NA&gt;                accepted        species   Cephalomanes densinervium (Copel.) Copel. </span></span>
+<span><span class="co">#&gt;  6 54133786 54115100            synonym         species   Cephalomanes curvatum (J. Sm.) V. D. Bosch</span></span>
+<span><span class="co">#&gt;  7 54133787 54115100            synonym         species   Cephalomanes javanica (Bl.) V. D. Bosch   </span></span>
+<span><span class="co">#&gt;  8 54133788 54115100            synonym         species   Cephalomanes oblongifolium Presl          </span></span>
+<span><span class="co">#&gt;  9 54133789 54115100            synonym         species   Cephalomanes zollingeri V. D. Bosch       </span></span>
+<span><span class="co">#&gt; 10 54133790 54115100            synonym         species   Lacostea javanica (Bl.) Prantl            </span></span>
+<span><span class="co">#&gt; # … with 2,441 more rows</span></span></code></pre></div>
+<p><code>dct_filmies</code> is a taxonomic dataset of filmy ferns included in dwctaxon.</p>
+<p>For demonstration purposes, we will just use the first five rows:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Data not meeting Darwin Core Taxon standards will error</span></span>
-<span><span class="fu"><a href="reference/dct_validate.html">dct_validate</a></span><span class="op">(</span><span class="va">filmy_taxonomy</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error: `check_col_names` failed. Invalid column names present: identifier, superfamily, source, description, isExtinct. See dct_terms for valid column names.</span></span></code></pre></div>
-</div>
+<code class="sourceCode R"><span><span class="va">filmies_small</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">dct_filmies</span>, <span class="fl">5</span><span class="op">)</span></span></code></pre></div>
+<p>All functions in dwctaxon start with <code>dct_</code>.</p>
 <div class="section level3">
-<h3 id="fix-taxonomy">Fix taxonomy<a class="anchor" aria-label="anchor" href="#fix-taxonomy"></a>
+<h3 id="edit-data">Edit data<a class="anchor" aria-label="anchor" href="#edit-data"></a>
 </h3>
+<p><code><a href="reference/dct_add_row.html">dct_add_row()</a></code> adds one or more rows, automatically providing values for <code>taxonID</code>.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">filmy_taxonomy_fixed</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dct_fix_format.html">dct_fix_format</a></span><span class="op">(</span><span class="va">filmy_taxonomy</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Dropping the following non-standard columns: identifier, superfamily, source, description, isExtinct</span></span>
-<span><span class="co">#&gt; Coercing column taxonID from numeric to character</span></span>
-<span><span class="co">#&gt; Coercing column datasetID from numeric to character</span></span>
-<span><span class="co">#&gt; Coercing column acceptedNameUsageID from numeric to character</span></span>
-<span><span class="co">#&gt; Coercing column parentNameUsageID from numeric to character</span></span>
-<span><span class="co">#&gt; Coercing column subgenus from logical to character</span></span>
-<span><span class="co">#&gt; Coercing column namePublishedIn from logical to character</span></span>
-<span><span class="co">#&gt; Coercing column taxonConceptID from logical to character</span></span>
-<span></span>
-<span><span class="co"># Now the validation passes</span></span>
-<span><span class="fu"><a href="reference/dct_validate.html">dct_validate</a></span><span class="op">(</span><span class="va">filmy_taxonomy_fixed</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 2,729 × 26</span></span>
-<span><span class="co">#&gt;    taxonID  datasetID datasetN…¹ accep…² paren…³ taxon…⁴ taxon…⁵ verba…⁶ scien…⁷</span></span>
-<span><span class="co">#&gt;    &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;      &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;  </span></span>
-<span><span class="co">#&gt;  1 54115096 140       World Fer… &lt;NA&gt;    548303… accept… species &lt;NA&gt;    Cephal…</span></span>
-<span><span class="co">#&gt;  2 54133783 140       World Fer… 541150… &lt;NA&gt;    synonym species &lt;NA&gt;    Tricho…</span></span>
-<span><span class="co">#&gt;  3 54115097 140       World Fer… &lt;NA&gt;    548303… accept… species &lt;NA&gt;    Cephal…</span></span>
-<span><span class="co">#&gt;  4 54133784 140       World Fer… 541150… &lt;NA&gt;    synonym species &lt;NA&gt;    Tricho…</span></span>
-<span><span class="co">#&gt;  5 54115098 140       World Fer… &lt;NA&gt;    548303… accept… species &lt;NA&gt;    Cephal…</span></span>
-<span><span class="co">#&gt;  6 54133785 140       World Fer… 541150… &lt;NA&gt;    synonym species &lt;NA&gt;    Tricho…</span></span>
-<span><span class="co">#&gt;  7 54115099 140       World Fer… &lt;NA&gt;    548303… provis… species &lt;NA&gt;    Cephal…</span></span>
-<span><span class="co">#&gt;  8 54133786 140       World Fer… 541151… &lt;NA&gt;    synonym species &lt;NA&gt;    Cephal…</span></span>
-<span><span class="co">#&gt;  9 54133787 140       World Fer… 541151… &lt;NA&gt;    synonym species &lt;NA&gt;    Cephal…</span></span>
-<span><span class="co">#&gt; 10 54133788 140       World Fer… 541151… &lt;NA&gt;    synonym species &lt;NA&gt;    Cephal…</span></span>
-<span><span class="co">#&gt; # … with 2,719 more rows, 17 more variables: kingdom &lt;chr&gt;, phylum &lt;chr&gt;,</span></span>
-<span><span class="co">#&gt; #   class &lt;chr&gt;, order &lt;chr&gt;, family &lt;chr&gt;, genericName &lt;chr&gt;, genus &lt;chr&gt;,</span></span>
-<span><span class="co">#&gt; #   subgenus &lt;chr&gt;, specificEpithet &lt;chr&gt;, infraspecificEpithet &lt;chr&gt;,</span></span>
-<span><span class="co">#&gt; #   scientificNameAuthorship &lt;chr&gt;, namePublishedIn &lt;chr&gt;,</span></span>
-<span><span class="co">#&gt; #   nameAccordingTo &lt;chr&gt;, modified &lt;chr&gt;, taxonConceptID &lt;chr&gt;,</span></span>
-<span><span class="co">#&gt; #   scientificNameID &lt;chr&gt;, references &lt;chr&gt;, and abbreviated variable names</span></span>
-<span><span class="co">#&gt; #   ¹​datasetName, ²​acceptedNameUsageID, ³​parentNameUsageID, ⁴​taxonomicStatus, …</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="add-rows">Add rows<a class="anchor" aria-label="anchor" href="#add-rows"></a>
-</h3>
+<code class="sourceCode R"><span><span class="va">filmies_small</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="reference/dct_add_row.html">dct_add_row</a></span><span class="op">(</span></span>
+<span>    sci_name <span class="op">=</span> <span class="st">"Hymenophyllum dwctaxonense Nitta"</span>,</span>
+<span>    taxonomicStatus <span class="op">=</span> <span class="st">"accepted"</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 6 × 6</span></span>
+<span><span class="co">#&gt;   taxonID  acceptedNameUsageID taxonomicStatus taxonRank scientificName                            modified           </span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;    &lt;chr&gt;               &lt;chr&gt;           &lt;chr&gt;     &lt;chr&gt;                                     &lt;chr&gt;              </span></span>
+<span><span class="co">#&gt; 1 54115096 &lt;NA&gt;                accepted        species   Cephalomanes atrovirens Presl             &lt;NA&gt;               </span></span>
+<span><span class="co">#&gt; 2 54133783 54115097            synonym         species   Trichomanes crassum Copel.                &lt;NA&gt;               </span></span>
+<span><span class="co">#&gt; 3 54115097 &lt;NA&gt;                accepted        species   Cephalomanes crassum (Copel.) M. G. Price &lt;NA&gt;               </span></span>
+<span><span class="co">#&gt; 4 54133784 54115098            synonym         species   Trichomanes densinervium Copel.           &lt;NA&gt;               </span></span>
+<span><span class="co">#&gt; 5 54115098 &lt;NA&gt;                accepted        species   Cephalomanes densinervium (Copel.) Copel. &lt;NA&gt;               </span></span>
+<span><span class="co">#&gt; 6 193e2011 &lt;NA&gt;                accepted        &lt;NA&gt;      Hymenophyllum dwctaxonense Nitta          2022-11-16 16:14:36</span></span></code></pre></div>
+<p><code><a href="reference/dct_modify_row.html">dct_modify_row()</a></code> modifies a row, automatically re-mapping synonyms if needed.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">filmy_taxonomy_fixed</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="reference/dct_add_row.html">dct_add_row</a></span><span class="op">(</span>sci_name <span class="op">=</span> <span class="st">"Hymenophyllum dwctaxonense Nitta"</span>, taxonomicStatus <span class="op">=</span> <span class="st">"accepted"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="co"># The new row is added at the end. Slice to that so we can see it.</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice_tail</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">taxonID</span>, <span class="va">taxonomicStatus</span>, <span class="va">scientificName</span>, <span class="va">modified</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 1 × 4</span></span>
-<span><span class="co">#&gt;   taxonID                          taxonomicStatus scientificName        modif…¹</span></span>
-<span><span class="co">#&gt;   &lt;chr&gt;                            &lt;chr&gt;           &lt;chr&gt;                 &lt;chr&gt;  </span></span>
-<span><span class="co">#&gt; 1 193e2011c8ace0ed138af91f41a335cc accepted        Hymenophyllum dwctax… 2022-1…</span></span>
-<span><span class="co">#&gt; # … with abbreviated variable name ¹​modified</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># Change C. densinervium to a synonym of C. crassum</span></span>
+<span><span class="va">filmies_small</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="reference/dct_modify_row.html">dct_modify_row</a></span><span class="op">(</span></span>
+<span>    sci_name <span class="op">=</span> <span class="st">"Cephalomanes densinervium (Copel.) Copel."</span>,</span>
+<span>    tax_status <span class="op">=</span> <span class="st">"synonym"</span>,</span>
+<span>    usage_name <span class="op">=</span> <span class="st">"Cephalomanes crassum (Copel.) M. G. Price"</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 5 × 6</span></span>
+<span><span class="co">#&gt;   taxonID  acceptedNameUsageID taxonomicStatus taxonRank scientificName                            modified           </span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;    &lt;chr&gt;               &lt;chr&gt;           &lt;chr&gt;     &lt;chr&gt;                                     &lt;chr&gt;              </span></span>
+<span><span class="co">#&gt; 1 54115096 &lt;NA&gt;                accepted        species   Cephalomanes atrovirens Presl             &lt;NA&gt;               </span></span>
+<span><span class="co">#&gt; 2 54133783 54115097            synonym         species   Trichomanes crassum Copel.                &lt;NA&gt;               </span></span>
+<span><span class="co">#&gt; 3 54115097 &lt;NA&gt;                accepted        species   Cephalomanes crassum (Copel.) M. G. Price &lt;NA&gt;               </span></span>
+<span><span class="co">#&gt; 4 54133784 54115097            synonym         species   Trichomanes densinervium Copel.           2022-11-16 16:14:36</span></span>
+<span><span class="co">#&gt; 5 54115098 54115097            synonym         species   Cephalomanes densinervium (Copel.) Copel. 2022-11-16 16:14:36</span></span></code></pre></div>
+<p><code><a href="reference/dct_fill_col.html">dct_fill_col()</a></code> fills in values for columns that have “term” - “termID” pairs (e.g., <code>acceptedNameUsage</code> and <code>acceptedNameUsageID</code>).</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Fill-in the acceptedNameUsage column with scientific names</span></span>
+<span><span class="va">filmies_small</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="reference/dct_fill_col.html">dct_fill_col</a></span><span class="op">(</span></span>
+<span>    fill_to <span class="op">=</span> <span class="st">"acceptedNameUsage"</span>,</span>
+<span>    fill_from <span class="op">=</span> <span class="st">"scientificName"</span>,</span>
+<span>    match_to <span class="op">=</span> <span class="st">"taxonID"</span>,</span>
+<span>    match_from <span class="op">=</span> <span class="st">"acceptedNameUsageID"</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 5 × 6</span></span>
+<span><span class="co">#&gt;   taxonID  acceptedNameUsageID taxonomicStatus taxonRank scientificName                            acceptedNameUsage                        </span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;    &lt;chr&gt;               &lt;chr&gt;           &lt;chr&gt;     &lt;chr&gt;                                     &lt;chr&gt;                                    </span></span>
+<span><span class="co">#&gt; 1 54115096 &lt;NA&gt;                accepted        species   Cephalomanes atrovirens Presl             &lt;NA&gt;                                     </span></span>
+<span><span class="co">#&gt; 2 54133783 54115097            synonym         species   Trichomanes crassum Copel.                Cephalomanes crassum (Copel.) M. G. Price</span></span>
+<span><span class="co">#&gt; 3 54115097 &lt;NA&gt;                accepted        species   Cephalomanes crassum (Copel.) M. G. Price &lt;NA&gt;                                     </span></span>
+<span><span class="co">#&gt; 4 54133784 54115098            synonym         species   Trichomanes densinervium Copel.           Cephalomanes densinervium (Copel.) Copel.</span></span>
+<span><span class="co">#&gt; 5 54115098 &lt;NA&gt;                accepted        species   Cephalomanes densinervium (Copel.) Copel. &lt;NA&gt;</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="change-status">Change status<a class="anchor" aria-label="anchor" href="#change-status"></a>
+<h3 id="validate-data">Validate data<a class="anchor" aria-label="anchor" href="#validate-data"></a>
 </h3>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">filmy_taxonomy_fixed</span> <span class="op">|&gt;</span></span>
-<span>  <span class="co"># The modified entry is 'taxonomicStatus' of the second row. Slice to that so we can see it.</span></span>
-<span>  <span class="fu">dct_change_status</span><span class="op">(</span>taxon_id <span class="op">=</span> <span class="st">"54133783"</span>, new_status <span class="op">=</span> <span class="st">"accepted"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice_head</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">taxonID</span>, <span class="va">taxonomicStatus</span>, <span class="va">scientificName</span>, <span class="va">modified</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 2 × 4</span></span>
-<span><span class="co">#&gt;   taxonID  taxonomicStatus scientificName                modified           </span></span>
-<span><span class="co">#&gt;   &lt;chr&gt;    &lt;chr&gt;           &lt;chr&gt;                         &lt;chr&gt;              </span></span>
-<span><span class="co">#&gt; 1 54115096 accepted name   Cephalomanes atrovirens Presl Nov 2018           </span></span>
-<span><span class="co">#&gt; 2 54133783 accepted        Trichomanes crassum Copel.    2022-10-20 16:33:10</span></span></code></pre></div>
+<p><code><a href="reference/dct_validate.html">dct_validate()</a></code> is the main function for validation, and automatically conducts a series of checks. The individual checks can be run with <code>dct_check_*()</code> functions.</p>
+<p>The <code>dct_filmies</code> dataset is already well-formatted, so it will pass validation:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Default behavior is to return the original dataset if checks pass</span></span>
+<span><span class="co"># For this example, return TRUE instead</span></span>
+<span><span class="fu"><a href="reference/dct_validate.html">dct_validate</a></span><span class="op">(</span><span class="va">dct_filmies</span>, on_success <span class="op">=</span> <span class="st">"logical"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
+<p>For demonstration purposes, let’s mess up the data:</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Start by duplicating some data</span></span>
+<span><span class="va">filmies_dirty</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">dct_filmies</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">dct_filmies</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co"># Replace some values of `acceptedNameUsageID` with random letters</span></span>
+<span><span class="va">filmies_dirty</span><span class="op">$</span><span class="va">acceptedNameUsageID</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">8</span>, <span class="fl">5</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="va">letters</span>, <span class="fl">5</span><span class="op">)</span></span></code></pre></div>
+<p>By default, <code><a href="reference/dct_validate.html">dct_validate()</a></code> will stop with an error on the first check that fails:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="reference/dct_validate.html">dct_validate</a></span><span class="op">(</span><span class="va">filmies_dirty</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Error: check_taxon_id failed</span></span>
+<span><span class="co">#&gt;    taxonID detected with duplicated value</span></span>
+<span><span class="co">#&gt;    Bad taxonID: 54115096, 54133783</span></span></code></pre></div>
+<p>But it may be useful to get an overview of all the checks that failed. This can be done by setting <code>on_fail</code> to <code>"summary"</code>:</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="reference/dct_validate.html">dct_validate</a></span><span class="op">(</span><span class="va">filmies_dirty</span>, on_fail <span class="op">=</span> <span class="st">"summary"</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning in dct_validate(filmies_dirty, on_fail = "summary"): check_mapping failed</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 14 × 5</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    taxonID  acceptedNameUsageID scientificName                             error                                    check               </span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    &lt;chr&gt;    &lt;chr&gt;               &lt;chr&gt;                                      &lt;chr&gt;                                    &lt;chr&gt;               </span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  1 54115096 b                   Cephalomanes atrovirens Presl              taxonID detected whose acceptedNameUs... check_mapping       </span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  2 54133783 k                   Trichomanes crassum Copel.                 taxonID detected whose acceptedNameUs... check_mapping       </span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  3 54115097 s                   Cephalomanes crassum (Copel.) M. G. Price  taxonID detected whose acceptedNameUs... check_mapping       </span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  4 54133786 n                   Cephalomanes curvatum (J. Sm.) V. D. Bosch taxonID detected whose acceptedNameUs... check_mapping       </span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  5 54133783 p                   Trichomanes crassum Copel.                 taxonID detected whose acceptedNameUs... check_mapping       </span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  6 54115096 &lt;NA&gt;                Cephalomanes atrovirens Presl              accepted name(s) detected with a non-... check_mapping_strict</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  7 54115097 &lt;NA&gt;                Cephalomanes crassum (Copel.) M. G. Price  accepted name(s) detected with a non-... check_mapping_strict</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  8 54133783 k                   Trichomanes crassum Copel.                 synonym detected whose acceptedNameUs... check_mapping_strict</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  9 54133786 n                   Cephalomanes curvatum (J. Sm.) V. D. Bosch synonym detected whose acceptedNameUs... check_mapping_strict</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 10 54133783 p                   Trichomanes crassum Copel.                 synonym detected whose acceptedNameUs... check_mapping_strict</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 11 &lt;NA&gt;     &lt;NA&gt;                Cephalomanes atrovirens Presl              scientificName detected with duplicat... check_sci_name      </span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 12 &lt;NA&gt;     &lt;NA&gt;                Trichomanes crassum Copel.                 scientificName detected with duplicat... check_sci_name      </span></span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 13 54115096 &lt;NA&gt;                &lt;NA&gt;                                       taxonID detected with duplicated value   check_taxon_id      </span></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 14 54133783 &lt;NA&gt;                &lt;NA&gt;                                       taxonID detected with duplicated value   check_taxon_id</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="piping">Piping<a class="anchor" aria-label="anchor" href="#piping"></a>
 </h3>
-<p>All the functions in dwctaxon take a dataframe as their first argument, so they are “pipe-friendly” and can be chained together:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">filmy_taxonomy</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="reference/dct_fix_format.html">dct_fix_format</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">dct_change_status</span><span class="op">(</span>taxon_id <span class="op">=</span> <span class="st">"54133783"</span>, new_status <span class="op">=</span> <span class="st">"accepted"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="reference/dct_add_row.html">dct_add_row</a></span><span class="op">(</span>sci_name <span class="op">=</span> <span class="st">"Hymenophyllum dwctaxonense Nitta"</span>, taxonomicStatus <span class="op">=</span> <span class="st">"accepted"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<p>All the functions in dwctaxon take a dataframe as their first argument and return a dataframe by default, so they are “pipe-friendly” and can be chained together:</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dct_filmies</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="reference/dct_modify_row.html">dct_modify_row</a></span><span class="op">(</span></span>
+<span>    taxon_id <span class="op">=</span> <span class="st">"54133783"</span>,</span>
+<span>    tax_status <span class="op">=</span> <span class="st">"accepted"</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="reference/dct_add_row.html">dct_add_row</a></span><span class="op">(</span></span>
+<span>    sci_name <span class="op">=</span> <span class="st">"Hymenophyllum dwctaxonense Nitta"</span>,</span>
+<span>    taxonomicStatus <span class="op">=</span> <span class="st">"accepted"</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="reference/dct_validate.html">dct_validate</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Dropping the following non-standard columns: identifier, superfamily, source, description, isExtinct</span></span>
-<span><span class="co">#&gt; Coercing column taxonID from numeric to character</span></span>
-<span><span class="co">#&gt; Coercing column datasetID from numeric to character</span></span>
-<span><span class="co">#&gt; Coercing column acceptedNameUsageID from numeric to character</span></span>
-<span><span class="co">#&gt; Coercing column parentNameUsageID from numeric to character</span></span>
-<span><span class="co">#&gt; Coercing column subgenus from logical to character</span></span>
-<span><span class="co">#&gt; Coercing column namePublishedIn from logical to character</span></span>
-<span><span class="co">#&gt; Coercing column taxonConceptID from logical to character</span></span>
-<span><span class="co">#&gt; # A tibble: 2,730 × 26</span></span>
-<span><span class="co">#&gt;    taxonID  datasetID datasetN…¹ accep…² paren…³ taxon…⁴ taxon…⁵ verba…⁶ scien…⁷</span></span>
-<span><span class="co">#&gt;    &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;      &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;  </span></span>
-<span><span class="co">#&gt;  1 54115096 140       World Fer… &lt;NA&gt;    548303… accept… species &lt;NA&gt;    Cephal…</span></span>
-<span><span class="co">#&gt;  2 54133783 140       World Fer… &lt;NA&gt;    &lt;NA&gt;    accept… species &lt;NA&gt;    Tricho…</span></span>
-<span><span class="co">#&gt;  3 54115097 140       World Fer… &lt;NA&gt;    548303… accept… species &lt;NA&gt;    Cephal…</span></span>
-<span><span class="co">#&gt;  4 54133784 140       World Fer… 541150… &lt;NA&gt;    synonym species &lt;NA&gt;    Tricho…</span></span>
-<span><span class="co">#&gt;  5 54115098 140       World Fer… &lt;NA&gt;    548303… accept… species &lt;NA&gt;    Cephal…</span></span>
-<span><span class="co">#&gt;  6 54133785 140       World Fer… 541150… &lt;NA&gt;    synonym species &lt;NA&gt;    Tricho…</span></span>
-<span><span class="co">#&gt;  7 54115099 140       World Fer… &lt;NA&gt;    548303… provis… species &lt;NA&gt;    Cephal…</span></span>
-<span><span class="co">#&gt;  8 54133786 140       World Fer… 541151… &lt;NA&gt;    synonym species &lt;NA&gt;    Cephal…</span></span>
-<span><span class="co">#&gt;  9 54133787 140       World Fer… 541151… &lt;NA&gt;    synonym species &lt;NA&gt;    Cephal…</span></span>
-<span><span class="co">#&gt; 10 54133788 140       World Fer… 541151… &lt;NA&gt;    synonym species &lt;NA&gt;    Cephal…</span></span>
-<span><span class="co">#&gt; # … with 2,720 more rows, 17 more variables: kingdom &lt;chr&gt;, phylum &lt;chr&gt;,</span></span>
-<span><span class="co">#&gt; #   class &lt;chr&gt;, order &lt;chr&gt;, family &lt;chr&gt;, genericName &lt;chr&gt;, genus &lt;chr&gt;,</span></span>
-<span><span class="co">#&gt; #   subgenus &lt;chr&gt;, specificEpithet &lt;chr&gt;, infraspecificEpithet &lt;chr&gt;,</span></span>
-<span><span class="co">#&gt; #   scientificNameAuthorship &lt;chr&gt;, namePublishedIn &lt;chr&gt;,</span></span>
-<span><span class="co">#&gt; #   nameAccordingTo &lt;chr&gt;, modified &lt;chr&gt;, taxonConceptID &lt;chr&gt;,</span></span>
-<span><span class="co">#&gt; #   scientificNameID &lt;chr&gt;, references &lt;chr&gt;, and abbreviated variable names</span></span>
-<span><span class="co">#&gt; #   ¹​datasetName, ²​acceptedNameUsageID, ³​parentNameUsageID, ⁴​taxonomicStatus, …</span></span></code></pre></div>
-<p>It’s often a good idea to include <code><a href="reference/dct_validate.html">dct_validate()</a></code> to make sure the modified taxonomic database is still correctly formatted.</p>
+<span><span class="co">#&gt; # A tibble: 2,452 × 6</span></span>
+<span><span class="co">#&gt;    taxonID  acceptedNameUsageID taxonomicStatus taxonRank scientificName                             modified           </span></span>
+<span><span class="co">#&gt;    &lt;chr&gt;    &lt;chr&gt;               &lt;chr&gt;           &lt;chr&gt;     &lt;chr&gt;                                      &lt;chr&gt;              </span></span>
+<span><span class="co">#&gt;  1 54115096 &lt;NA&gt;                accepted        species   Cephalomanes atrovirens Presl              &lt;NA&gt;               </span></span>
+<span><span class="co">#&gt;  2 54133783 &lt;NA&gt;                accepted        species   Trichomanes crassum Copel.                 2022-11-16 16:14:36</span></span>
+<span><span class="co">#&gt;  3 54115097 &lt;NA&gt;                accepted        species   Cephalomanes crassum (Copel.) M. G. Price  &lt;NA&gt;               </span></span>
+<span><span class="co">#&gt;  4 54133784 54115098            synonym         species   Trichomanes densinervium Copel.            &lt;NA&gt;               </span></span>
+<span><span class="co">#&gt;  5 54115098 &lt;NA&gt;                accepted        species   Cephalomanes densinervium (Copel.) Copel.  &lt;NA&gt;               </span></span>
+<span><span class="co">#&gt;  6 54133786 54115100            synonym         species   Cephalomanes curvatum (J. Sm.) V. D. Bosch &lt;NA&gt;               </span></span>
+<span><span class="co">#&gt;  7 54133787 54115100            synonym         species   Cephalomanes javanica (Bl.) V. D. Bosch    &lt;NA&gt;               </span></span>
+<span><span class="co">#&gt;  8 54133788 54115100            synonym         species   Cephalomanes oblongifolium Presl           &lt;NA&gt;               </span></span>
+<span><span class="co">#&gt;  9 54133789 54115100            synonym         species   Cephalomanes zollingeri V. D. Bosch        &lt;NA&gt;               </span></span>
+<span><span class="co">#&gt; 10 54133790 54115100            synonym         species   Lacostea javanica (Bl.) Prantl             &lt;NA&gt;               </span></span>
+<span><span class="co">#&gt; # … with 2,442 more rows</span></span></code></pre></div>
+<p>It’s often a good idea to include <code><a href="reference/dct_validate.html">dct_validate()</a></code> at the end of a chain to make sure the modified taxonomic database is still correctly formatted.</p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="citing-this-package">Citing this package<a class="anchor" aria-label="anchor" href="#citing-this-package"></a>
 </h2>
 <p>If you use this package, please cite it! Here is an example:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>Nitta, <span class="fu">JH</span> (<span class="dv">2021</span>) dwctaxon<span class="sc">:</span> Tools <span class="cf">for</span> working with Darwin Core Taxon data <span class="cf">in</span> R. https<span class="sc">:</span><span class="er">//</span>doi.org<span class="sc">/</span><span class="fl">10.5281</span><span class="sc">/</span>zenodo<span class="fl">.6388271</span></span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>Nitta, <span class="fu">JH</span> (<span class="dv">2022</span>) dwctaxon<span class="sc">:</span> Tools <span class="cf">for</span> working with Darwin Core Taxon data <span class="cf">in</span> R. https<span class="sc">:</span><span class="er">//</span>doi.org<span class="sc">/</span><span class="fl">10.5281</span><span class="sc">/</span>zenodo<span class="fl">.6388271</span></span></code></pre></div>
 <p>The example DOI above is for the overall package.</p>
 <p>Here is the latest DOI, which you should use if you are using the latest version of the package:</p>
 <p><a href="https://zenodo.org/badge/latestdoi/434126221" class="external-link"><img src="https://zenodo.org/badge/434126221.svg" alt="DOI"></a></p>

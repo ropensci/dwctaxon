@@ -21,6 +21,14 @@
       <ul class="navbar-nav me-auto"><li class="active nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/what-is-dwc.html">What is DWC?</a>
+    <a class="dropdown-item" href="../articles/editing.html">Editing</a>
+    <a class="dropdown-item" href="../articles/validation.html">Validation</a>
+  </div>
+</li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -89,7 +97,8 @@ return a dataframe with a summary of the reasons for failure</p></li>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="fu">dct_check_taxon_id</span><span class="op">(</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>taxonID <span class="op">=</span> <span class="cn">NA_character_</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>    on_fail <span class="op">=</span> <span class="st">"summary"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    on_fail <span class="op">=</span> <span class="st">"summary"</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 3</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   taxonID error                               check         </span>

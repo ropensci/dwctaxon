@@ -25,6 +25,14 @@ species level."><meta property="og:image" content="https://joelnitta.github.io/d
       <ul class="navbar-nav me-auto"><li class="active nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/what-is-dwc.html">What is DWC?</a>
+    <a class="dropdown-item" href="../articles/editing.html">Editing</a>
+    <a class="dropdown-item" href="../articles/validation.html">Validation</a>
+  </div>
+</li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -162,29 +170,24 @@ for <code>acceptedNameUsageID</code></p></li>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">dct_validate</span><span class="op">(</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">dct_validate</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">dct_filmies</span>,</span></span>
-<span class="r-in"><span>  check_sci_name <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
-<span class="r-in"><span>  valid_tax_status <span class="op">=</span></span></span>
-<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"accepted name, ambiguous synonym, provisionally accepted name,"</span>,</span></span>
-<span class="r-in"><span>          <span class="st">"synonym, variant"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  check_sci_name <span class="op">=</span> <span class="cn">FALSE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2,729 × 5</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    taxonID  acceptedNameUsageID taxonomicStatus             taxonRank scientif…¹</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 54115096 <span style="color: #BB0000;">NA</span>                  accepted name               species   Cephaloma…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 54133783 54115097            synonym                     species   Trichoman…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 54115097 <span style="color: #BB0000;">NA</span>                  accepted name               species   Cephaloma…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 54133784 54115098            synonym                     species   Trichoman…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 54115098 <span style="color: #BB0000;">NA</span>                  accepted name               species   Cephaloma…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 54133785 54115099            synonym                     species   Trichoman…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 54115099 <span style="color: #BB0000;">NA</span>                  provisionally accepted name species   Cephaloma…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 54133786 54115100            synonym                     species   Cephaloma…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 54133787 54115100            synonym                     species   Cephaloma…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 54133788 54115100            synonym                     species   Cephaloma…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 2,719 more rows, and abbreviated variable name ¹​scientificName</span></span>
-<span class="r-in"><span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2,451 × 5</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    taxonID  acceptedNameUsageID taxonomicStatus taxonRank scientificName        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 54115096 <span style="color: #BB0000;">NA</span>                  accepted        species   Cephalomanes atrovire…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 54133783 54115097            synonym         species   Trichomanes crassum C…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 54115097 <span style="color: #BB0000;">NA</span>                  accepted        species   Cephalomanes crassum …</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 54133784 54115098            synonym         species   Trichomanes densinerv…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 54115098 <span style="color: #BB0000;">NA</span>                  accepted        species   Cephalomanes densiner…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 54133786 54115100            synonym         species   Cephalomanes curvatum…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 54133787 54115100            synonym         species   Cephalomanes javanica…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 54133788 54115100            synonym         species   Cephalomanes oblongif…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 54133789 54115100            synonym         species   Cephalomanes zollinge…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 54133790 54115100            synonym         species   Lacostea javanica (Bl…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 2,441 more rows</span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
