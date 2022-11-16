@@ -53,6 +53,7 @@ repos:
           (.*/|)WORDLIST|
           \.github/workflows/.*|
           data/.*|
+          codemeta\.json|
           )$
     -   id: lintr
     -   id: readme-rmd-rendered
