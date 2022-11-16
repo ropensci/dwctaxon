@@ -6,17 +6,15 @@
 #'
 #' @inherit check_taxon_id_not_na
 #' @noRd
-check_mapping_to_self <- function(
-  tax_dat,
-  on_fail = "error",
-  on_success = "data",
-  run = TRUE) {
-
+check_mapping_to_self <- function(tax_dat,
+                                  on_fail = "error",
+                                  on_success = "data",
+                                  run = TRUE) {
   # Early exit with NULL if req'd cols not present
   if (
     is.null(tax_dat$taxonID) ||
-    is.null(tax_dat$acceptedNameUsageID) ||
-    run == FALSE
+      is.null(tax_dat$acceptedNameUsageID) ||
+      run == FALSE
   ) {
     return(NULL)
   }
@@ -41,7 +39,7 @@ check_mapping_to_self <- function(
           {make_msg('taxonID', bad_taxon_id)}\\
           {make_msg('scientificName', bad_sci_name)}\\
           {make_msg('acceptedNameUsageID', bad_acc_id, is_last = TRUE)}",
-          .transformer = null_transformer("")
+        .transformer = null_transformer("")
       )
     )
   }
@@ -63,7 +61,6 @@ check_mapping_to_self <- function(
   if (on_success == "logical") {
     return(TRUE)
   }
-
 }
 
 #' check_mapping sub-check: check that no acceptedNameUsageID are missing
@@ -75,17 +72,15 @@ check_mapping_to_self <- function(
 #'
 #' @inherit check_taxon_id_not_na
 #' @noRd
-check_mapping_exists <- function(
-  tax_dat,
-  on_fail = "error",
-  on_success = "data",
-  run = TRUE) {
-
+check_mapping_exists <- function(tax_dat,
+                                 on_fail = "error",
+                                 on_success = "data",
+                                 run = TRUE) {
   # Early exit with NULL if req'd cols not present
   if (
     is.null(tax_dat$taxonID) ||
-    is.null(tax_dat$acceptedNameUsageID) ||
-    run == FALSE
+      is.null(tax_dat$acceptedNameUsageID) ||
+      run == FALSE
   ) {
     return(NULL)
   }
@@ -111,7 +106,7 @@ check_mapping_exists <- function(
           {make_msg('taxonID', bad_taxon_id)}\\
           {make_msg('scientificName', bad_sci_name)}\\
           {make_msg('acceptedNameUsageID', bad_acc_id, is_last = TRUE)}",
-          .transformer = null_transformer("")
+        .transformer = null_transformer("")
       )
     )
   }
@@ -137,7 +132,6 @@ check_mapping_exists <- function(
   if (on_success == "logical") {
     return(TRUE)
   }
-
 }
 
 #' Check mapping of usage names
@@ -164,11 +158,9 @@ check_mapping_exists <- function(
 #' suppressWarnings(
 #'   dct_check_mapping(bad_dat, on_fail = "summary")
 #' )
-dct_check_mapping <- function(
-  tax_dat,
-  on_fail = "error",
-  on_success = "data") {
-
+dct_check_mapping <- function(tax_dat,
+                              on_fail = "error",
+                              on_success = "data") {
   # Check input format
   assertthat::assert_that(
     inherits(tax_dat, "data.frame"),
@@ -190,25 +182,27 @@ dct_check_mapping <- function(
     check_res <- list(
       # Check for required columns
       assert_col(
-          tax_dat, "taxonID", c("character", "numeric", "integer"),
-          req_by = "check_mapping", on_fail = on_fail
-        ),
+        tax_dat, "taxonID", c("character", "numeric", "integer"),
+        req_by = "check_mapping", on_fail = on_fail
+      ),
       assert_col(
-          tax_dat, "acceptedNameUsageID", c("character", "numeric", "integer"),
-          req_by = "check_mapping", on_fail = on_fail
-        ),
+        tax_dat, "acceptedNameUsageID", c("character", "numeric", "integer"),
+        req_by = "check_mapping", on_fail = on_fail
+      ),
       # Check taxonID not NA
       check_taxon_id_not_na(tax_dat, on_fail = on_fail, on_success = "logical"),
       # Check taxonID is unique
       check_taxon_id_is_uniq(
-        tax_dat, on_fail = on_fail, on_success = "logical"),
+        tax_dat,
+        on_fail = on_fail, on_success = "logical"
+      ),
       # Check no names map to self
       check_mapping_to_self(tax_dat, on_fail = on_fail, on_success = "logical"),
       # Check all names have matching taxonID for acceptedNameUsageID
       check_mapping_exists(tax_dat, on_fail = on_fail, on_success = "logical")
     ) |>
-    # drop any NULL results
-    purrr::compact()
+      # drop any NULL results
+      purrr::compact()
   )
 
   # Format results
@@ -227,5 +221,4 @@ dct_check_mapping <- function(
   if (on_success == "logical") {
     return(TRUE)
   }
-
 }

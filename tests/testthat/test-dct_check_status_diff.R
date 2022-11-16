@@ -31,7 +31,7 @@ test_that("check for 'each sci name has single status' works", {
       error = rep(
         paste(
           "scientificName detected with multiple different values for",
-           "taxonomicStatus"
+          "taxonomicStatus"
         ), 4
       ),
       check = rep("check_status_diff", 4)

@@ -61,7 +61,8 @@ test_that("check for correctly formatted columns works", {
   expect_equal(
     suppressWarnings(
       dct_check_taxon_id(
-        data.frame(taxonID = complex(1)), on_fail = "summary"
+        data.frame(taxonID = complex(1)),
+        on_fail = "summary"
       )
     ),
     tibble::tibble(

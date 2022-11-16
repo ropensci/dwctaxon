@@ -53,12 +53,14 @@ test_that("check for correctly formatted columns works", {
     ),
     tibble::tibble(
       check = "check_sci_name",
-      error = "check_sci_name requires column scientificName in input data")
+      error = "check_sci_name requires column scientificName in input data"
+    )
   )
   expect_equal(
     suppressWarnings(
       dct_check_sci_name(
-        data.frame(scientificName = 1), on_fail = "summary"
+        data.frame(scientificName = 1),
+        on_fail = "summary"
       )
     ),
     tibble::tibble(
@@ -141,6 +143,7 @@ test_that("check for 'sci name cannot be duplicated' works", {
     tibble::tibble(
       scientificName = "Species bar",
       check = "check_sci_name",
-      error = "scientificName detected with duplicated value")
+      error = "scientificName detected with duplicated value"
+    )
   )
 })

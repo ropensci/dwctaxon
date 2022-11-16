@@ -4,13 +4,10 @@
 #' @inherit dct_check_taxon_id
 #' @param run Logical; should this check be run? If FALSE, return NULL
 #' @noRd
-check_taxon_id_not_na <- function(
-  tax_dat,
-  on_fail,
-  on_success,
-  run = TRUE
-) {
-
+check_taxon_id_not_na <- function(tax_dat,
+                                  on_fail,
+                                  on_success,
+                                  run = TRUE) {
   # Early exit with NULL if req'd cols not present
   if (is.null(tax_dat$taxonID) || run == FALSE) {
     return(NULL)
@@ -27,7 +24,8 @@ check_taxon_id_not_na <- function(
         "check_taxon_id failed
          taxonID detected with missing value
          {make_msg('taxonID', missing_tax_id)}
-      ")
+      "
+      )
     )
   }
   if (on_fail == "summary") {
@@ -53,13 +51,10 @@ check_taxon_id_not_na <- function(
 #' - taxonID
 #' @inherit check_taxon_id_not_na
 #' @noRd
-check_taxon_id_is_uniq <- function(
-  tax_dat,
-  on_fail,
-  on_success,
-  run = TRUE
-) {
-
+check_taxon_id_is_uniq <- function(tax_dat,
+                                   on_fail,
+                                   on_success,
+                                   run = TRUE) {
   # Early exit with NULL if req'd cols not present
   if (is.null(tax_dat$taxonID) || run == FALSE) {
     return(NULL)
@@ -76,7 +71,8 @@ check_taxon_id_is_uniq <- function(
         "check_taxon_id failed
          taxonID detected with duplicated value
          {make_msg('taxonID', duplicated_tax_id)}
-      ")
+      "
+      )
     )
   }
   if (on_fail == "summary") {
@@ -123,16 +119,15 @@ check_taxon_id_is_uniq <- function(
 #' suppressWarnings(
 #'   dct_check_taxon_id(
 #'     data.frame(taxonID = NA_character_),
-#'     on_fail = "summary")
+#'     on_fail = "summary"
+#'   )
 #' )
 #' dct_check_taxon_id(data.frame(taxonID = 1))
 #' @export
 #'
-dct_check_taxon_id <- function(
-  tax_dat,
-  on_fail = "error",
-  on_success = "data") {
-
+dct_check_taxon_id <- function(tax_dat,
+                               on_fail = "error",
+                               on_success = "data") {
   # Check input format
   assertthat::assert_that(
     inherits(tax_dat, "data.frame"),
@@ -162,8 +157,8 @@ dct_check_taxon_id <- function(
       # Check taxonID is unique
       check_taxon_id_is_uniq(tax_dat, on_fail = on_fail, on_success = "logical")
     ) |>
-    # drop any NULL results
-    purrr::compact()
+      # drop any NULL results
+      purrr::compact()
   )
 
   # Format results
@@ -182,5 +177,4 @@ dct_check_taxon_id <- function(
   if (on_success == "logical") {
     return(TRUE)
   }
-
 }

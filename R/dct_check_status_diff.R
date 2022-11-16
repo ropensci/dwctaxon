@@ -10,12 +10,10 @@
 #' @inherit check_taxon_id_not_na
 #' @autoglobal
 #' @noRd
-check_status_diff_p <- function(
-  tax_dat,
-  on_fail = "error",
-  on_success = "data",
-  run = TRUE) {
-
+check_status_diff_p <- function(tax_dat,
+                                on_fail = "error",
+                                on_success = "data",
+                                run = TRUE) {
   if (run == FALSE) {
     return(NULL)
   }
@@ -23,13 +21,14 @@ check_status_diff_p <- function(
   # Count number of taxonomicStatus per sci name
   tax_status_tally <-
     tax_dat |>
-      dplyr::group_by(scientificName) |>
-      dplyr::count(taxonomicStatus) |>
-      dplyr::ungroup() |>
-      dplyr::count(scientificName)
+    dplyr::group_by(scientificName) |>
+    dplyr::count(taxonomicStatus) |>
+    dplyr::ungroup() |>
+    dplyr::count(scientificName)
 
   bad_sci_name_uniq <- tax_status_tally$scientificName[
-    tax_status_tally$n != 1]
+    tax_status_tally$n != 1
+  ]
 
   bad_sci_name <- tax_dat$scientificName[
     tax_dat$scientificName %in% bad_sci_name_uniq
@@ -74,5 +73,4 @@ check_status_diff_p <- function(
   if (on_success == "logical") {
     return(TRUE)
   }
-
 }
