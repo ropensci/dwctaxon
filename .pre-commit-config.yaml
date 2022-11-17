@@ -55,7 +55,6 @@ repos:
           data/.*|
           codemeta\.json|
           )$
-    -   id: lintr
     -   id: readme-rmd-rendered
     -   id: parsable-R
     -   id: no-browser-statement
@@ -87,6 +86,13 @@ repos:
         language: fail
         files: '\.(Rhistory|RData|Rds|rds)$'
         # `exclude: <regex>` to allow committing specific files
+-   repo: local
+    hooks:
+    -   id: local-lintr
+        name: Run lintr with global R environment
+        entry: Rscript -e "devtools::load_all(); output <- lintr::lint(commandArgs(trailingOnly=TRUE)); print(output); if (length(output) > 0) stop('Files not lint free')"
+        language: system
+        files: '(\.[rR]profile|\.R|\.Rmd|\.Rnw|\.r|\.rmd|\.rnw)$'
 
 ci:
     autoupdate_schedule: monthly
