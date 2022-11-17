@@ -2,6 +2,7 @@
 ^LICENSE\.md$
 ^Meta$
 ^README\.Rmd$
+^\.Rprofile$
 ^\.Rproj\.user$
 ^\.github$
 ^\.lintr$
