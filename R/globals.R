@@ -22,21 +22,6 @@ utils::globalVariables(c(
   "taxonomicStatus", # <dct_modify_row_single>
   "check", # <dct_validate>
   "error", # <dct_validate>
-  "paste3", # <paste3>
-  "drop_first", # <drop_first>
-  "assert_dat", # <assert_dat>
-  "assert_that_d", # <assert_that_d>
-  "assert_col", # <assert_col>
-  "bind_rows_f", # <bind_rows_f>
-  "sort_cols_dwc", # <sort_cols_dwc>
   "dct_terms", # <sort_cols_dwc>
-  "any_not_true", # <any_not_true>
-  "null_transformer", # <null_transformer>
-  "make_msg", # <make_msg>
-  "val_if_in_dat", # <val_if_in_dat>
-  "convert_col", # <convert_col>
-  "make_taxon_id_from_sci_name", # <make_taxon_id_from_sci_name>
-  "is_unique", # <is_unique>
-  "assert_that_uses_one_name", # <assert_that_uses_one_name>
   NULL
 ))

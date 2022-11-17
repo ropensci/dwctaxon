@@ -11,7 +11,6 @@
 #' @param sep Character used to separate pasted strings
 #' @noRd
 #' @autoglobal
-#' @global paste3
 paste3 <- function(..., sep = " ") {
   my_list <- list(...)
   my_list <- lapply(my_list, function(x) {
@@ -34,7 +33,6 @@ paste3 <- function(..., sep = " ") {
 #' @param x Vector
 #' @noRd
 #' @autoglobal
-#' @global drop_first
 drop_first <- function(x) {
   x[-1]
 }
@@ -48,7 +46,6 @@ drop_first <- function(x) {
 #' @param ... Arguments passed to assertr::assert()
 #' @noRd
 #' @autoglobal
-#' @global assert_dat
 assert_dat <- function(...) {
   assertthat::assert_that(
     assertr::assert(
@@ -84,7 +81,6 @@ assert_dat <- function(...) {
 #' @return TRUE if test is true or `data` if test is false
 #' @noRd
 #' @autoglobal
-#' @global assert_that_d
 assert_that_d <- function(condition, data, msg = NULL, env = parent.frame()) {
   assert_res <- tryCatch(
     expr = assertthat::assert_that(condition, msg = msg),
@@ -116,7 +112,6 @@ assert_that_d <- function(condition, data, msg = NULL, env = parent.frame()) {
 #'
 #' @noRd
 #' @autoglobal
-#' @global assert_col
 assert_col <- function(dat, col, class = NULL, req_by = NULL,
                        on_fail = "error", run = TRUE) {
   if (run == FALSE) {
@@ -195,7 +190,6 @@ assert_col <- function(dat, col, class = NULL, req_by = NULL,
 #' @param x List possibly including multiple dataframes
 #' @noRd
 #' @autoglobal
-#' @global bind_rows_f
 bind_rows_f <- function(x) {
   x <- x[sapply(x, function(y) inherits(y, "data.frame"))]
   x <- x[sapply(x, function(y) nrow(y) > 0)]
@@ -209,7 +203,6 @@ bind_rows_f <- function(x) {
 #' @param x Dataframe
 #' @noRd
 #' @autoglobal
-#' @global sort_cols_dwc
 sort_cols_dwc <- function(x) {
   # valid col names are those in DWC terms plus "error" and "check"
   val_cols <- c(dct_terms$term, "error", "check")
@@ -227,7 +220,6 @@ sort_cols_dwc <- function(x) {
 #' @param x A list
 #' @noRd
 #' @autoglobal
-#' @global any_not_true
 any_not_true <- function(x) {
   sapply(x, function(y) !isTRUE(y)) |>
     any()
@@ -237,7 +229,6 @@ any_not_true <- function(x) {
 #' @param str String to print for NULL in glue expressions
 #' @noRd
 #' @autoglobal
-#' @global null_transformer
 null_transformer <- function(str = "NULL") {
   function(text, envir) {
     out <- glue::identity_transformer(text, envir)
@@ -256,7 +247,6 @@ null_transformer <- function(str = "NULL") {
 #'   after it).
 #' @noRd
 #' @autoglobal
-#' @global make_msg
 make_msg <- function(bad_col, values, is_last = FALSE) {
   if (is.null(values)) {
     return(NULL)
@@ -280,7 +270,6 @@ make_msg <- function(bad_col, values, is_last = FALSE) {
 #' that column exists; otherwise `NA`
 #' @noRd
 #' @autoglobal
-#' @global val_if_in_dat
 val_if_in_dat <- function(df, col, i) {
   ifelse(col %in% colnames(df), df[[col]][[i]], NA)
 }
@@ -294,7 +283,6 @@ val_if_in_dat <- function(df, col, i) {
 #' @return Dataframe
 #' @noRd
 #' @autoglobal
-#' @global convert_col
 convert_col <- function(df, col_keep, col_replace) {
   if (col_replace %in% colnames(df)) {
     colnames(df)[colnames(df) == col_replace] <- col_keep
@@ -333,7 +321,6 @@ make_taxon_id_from_sci_name_1 <- function(taxon_id, sci_name, max_len = 8) {
 #' @return String: a taxonID generated from the hash of the scientific name.
 #' @noRd
 #' @autoglobal
-#' @global make_taxon_id_from_sci_name
 make_taxon_id_from_sci_name <- function(taxon_id, sci_name, max_len = 8) {
   purrr::map2(
     taxon_id, sci_name,
@@ -355,7 +342,6 @@ make_taxon_id_from_sci_name <- function(taxon_id, sci_name, max_len = 8) {
 #' @return Logical vector of length 1.
 #' @noRd
 #' @autoglobal
-#' @global is_unique
 is_unique <- function(x, allow_na = TRUE) {
   if (allow_na) {
     x <- x[!is.na(x)]
@@ -373,7 +359,6 @@ is_unique <- function(x, allow_na = TRUE) {
 #'
 #' @noRd
 #' @autoglobal
-#' @global assert_that_uses_one_name
 assert_that_uses_one_name <- function(df, col_1, col_2) {
   assertthat::assert_that(
     sum(
