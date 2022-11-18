@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="description" content="dwctaxon">
-<title>Validation • dwctaxon</title>
+<title>Validating DWC taxon data • dwctaxon</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
@@ -17,7 +17,7 @@
 <link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Validation">
+<!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Validating DWC taxon data">
 <meta property="og:description" content="dwctaxon">
 <meta property="og:image" content="https://joelnitta.github.io/dwctaxon/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -49,8 +49,8 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/what-is-dwc.html">What is DWC?</a>
-    <a class="dropdown-item" href="../articles/editing.html">Editing</a>
-    <a class="dropdown-item" href="../articles/validation.html">Validation</a>
+    <a class="dropdown-item" href="../articles/editing.html">Editing DWC taxon data</a>
+    <a class="dropdown-item" href="../articles/validation.html">Validating DWC taxon data</a>
   </div>
 </li>
       </ul>
@@ -77,7 +77,7 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="../logo.png" class="logo" alt=""><h1>Validation</h1>
+      <img src="../logo.png" class="logo" alt=""><h1>Validating DWC taxon data</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/joelnitta/dwctaxon/blob/HEAD/vignettes/validation.Rmd" class="external-link"><code>vignettes/validation.Rmd</code></a></small>
@@ -108,18 +108,18 @@ seed since this vignette involves some random samples.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dct_filmies</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2,451 × 5</span></span></span>
-<span><span class="co">#&gt;    taxonID  acceptedNameUsageID taxonomicStatus taxonRank scientificName        </span></span>
-<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 54115096 <span style="color: #BB0000;">NA</span>                  accepted        species   Cephalomanes atrovire…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 54133783 54115097            synonym         species   Trichomanes crassum C…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 54115097 <span style="color: #BB0000;">NA</span>                  accepted        species   Cephalomanes crassum …</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 54133784 54115098            synonym         species   Trichomanes densinerv…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 54115098 <span style="color: #BB0000;">NA</span>                  accepted        species   Cephalomanes densiner…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 54133786 54115100            synonym         species   Cephalomanes curvatum…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 54133787 54115100            synonym         species   Cephalomanes javanica…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 54133788 54115100            synonym         species   Cephalomanes oblongif…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 54133789 54115100            synonym         species   Cephalomanes zollinge…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 54133790 54115100            synonym         species   Lacostea javanica (Bl…</span></span>
+<span><span class="co">#&gt;    taxonID  acceptedNameUsageID taxonomicStatus taxonRank scientificName                            </span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 54115096 <span style="color: #BB0000;">NA</span>                  accepted        species   Cephalomanes atrovirens Presl             </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 54133783 54115097            synonym         species   Trichomanes crassum Copel.                </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 54115097 <span style="color: #BB0000;">NA</span>                  accepted        species   Cephalomanes crassum (Copel.) M. G. Price </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 54133784 54115098            synonym         species   Trichomanes densinervium Copel.           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 54115098 <span style="color: #BB0000;">NA</span>                  accepted        species   Cephalomanes densinervium (Copel.) Copel. </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 54133786 54115100            synonym         species   Cephalomanes curvatum (J. Sm.) V. D. Bosch</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 54133787 54115100            synonym         species   Cephalomanes javanica (Bl.) V. D. Bosch   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 54133788 54115100            synonym         species   Cephalomanes oblongifolium Presl          </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 54133789 54115100            synonym         species   Cephalomanes zollingeri V. D. Bosch       </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 54133790 54115100            synonym         species   Lacostea javanica (Bl.) Prantl            </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># … with 2,441 more rows</span></span></span></code></pre></div>
 <p>However, <code>dct_filmies</code> already is well-formatted and would
 pass all validation checks! So lets introduce some noise to make things
@@ -140,23 +140,124 @@ more interesting.</p>
 <span></span>
 <span><span class="va">filmies_dirty</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2,457 × 5</span></span></span>
-<span><span class="co">#&gt;    taxonID  acceptedNameUsageID taxonomicStatus taxonRank scientificName        </span></span>
-<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 54115096 <span style="color: #BB0000;">NA</span>                  accepted        species   Cephalomanes atrovire…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 54133783 54115097            synonym         species   Trichomanes crassum C…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 54115097 <span style="color: #BB0000;">NA</span>                  accepted        species   Cephalomanes crassum …</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 54133784 54115098            synonym         species   Trichomanes densinerv…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 54115098 <span style="color: #BB0000;">NA</span>                  accepted        species   Cephalomanes densiner…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 54133786 54115100            synonym         species   Cephalomanes curvatum…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 54133787 54115100            synonym         species   Cephalomanes javanica…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 54133788 54115100            synonym         species   Cephalomanes oblongif…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 54133789 54115100            synonym         species   Cephalomanes zollinge…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 54133790 54115100            synonym         species   Lacostea javanica (Bl…</span></span>
+<span><span class="co">#&gt;    taxonID  acceptedNameUsageID taxonomicStatus taxonRank scientificName                            </span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 54115096 <span style="color: #BB0000;">NA</span>                  accepted        species   Cephalomanes atrovirens Presl             </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 54133783 54115097            synonym         species   Trichomanes crassum Copel.                </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 54115097 <span style="color: #BB0000;">NA</span>                  accepted        species   Cephalomanes crassum (Copel.) M. G. Price </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 54133784 54115098            synonym         species   Trichomanes densinervium Copel.           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 54115098 <span style="color: #BB0000;">NA</span>                  accepted        species   Cephalomanes densinervium (Copel.) Copel. </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 54133786 54115100            synonym         species   Cephalomanes curvatum (J. Sm.) V. D. Bosch</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 54133787 54115100            synonym         species   Cephalomanes javanica (Bl.) V. D. Bosch   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 54133788 54115100            synonym         species   Cephalomanes oblongifolium Presl          </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 54133789 54115100            synonym         species   Cephalomanes zollingeri V. D. Bosch       </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 54133790 54115100            synonym         species   Lacostea javanica (Bl.) Prantl            </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># … with 2,447 more rows</span></span></span></code></pre></div>
 <p>The first few rows may look the same, but we know that these data now
 have some problems.</p>
-<p>(rest coming soon!)</p>
 </div>
+<div class="section level2">
+<h2 id="error-on-failure">Error on failure<a class="anchor" aria-label="anchor" href="#error-on-failure"></a>
+</h2>
+<p><code><a href="../reference/dct_validate.html">dct_validate()</a></code> is the workhorse function for validating
+DWC data.</p>
+<p>In default mode, <code><a href="../reference/dct_validate.html">dct_validate()</a></code> will issue an error the
+first time it finds something wrong with the data (in other words, on
+the first check that fails):</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/dct_validate.html">dct_validate</a></span><span class="op">(</span><span class="va">filmies_dirty</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Error: check_taxon_id failed</span></span>
+<span><span class="co">#&gt;    taxonID detected with duplicated value</span></span>
+<span><span class="co">#&gt;    Bad taxonID: 54126747, 54135528, 54135530, 54135531, 54126748, 54126749</span></span></code></pre></div>
+<p>dwctaxon tries to provide useful error messages that help you
+determine what in the data is causing the problem. Here, we see that
+rows with <code>taxonID</code> 54126747, 54135528, 54135530, 54135531,
+54126748, and 54126749 are duplicated. Here of course we know that’s
+because we duplicated them on purpose; in a real dataset, you could use
+this information to search out the duplicated values and fix them.</p>
+</div>
+<div class="section level2">
+<h2 id="summary-on-failure">Summary on failure<a class="anchor" aria-label="anchor" href="#summary-on-failure"></a>
+</h2>
+<p>If you are troubleshooting a DWC taxon dataset, it may be more useful
+to know about all of the problems at once instead of fixing them one at
+a time. In that case, set the <code>on_fail</code> argument to
+<code>"summary"</code> (<code>on_fail</code> can be either its default
+value <code>"error"</code> or <code>"summary"</code>):</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/dct_validate.html">dct_validate</a></span><span class="op">(</span><span class="va">filmies_dirty</span>, on_fail <span class="op">=</span> <span class="st">"summary"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning in dct_validate(filmies_dirty, on_fail = "summary"): check_mapping failed</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 22 × 5</span></span></span>
+<span><span class="co">#&gt;    taxonID  acceptedNameUsageID scientificName                           error                                                                                         check               </span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                                                                         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 54133841 k                   Trichomanes cumingii (Presl) C. Chr.     taxonID detected whose acceptedNameUsageID value does not map to taxonID of an existing name. check_mapping       </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 54134450 z                   Trichomanes omphalodes (Vieill.) C. Chr. taxonID detected whose acceptedNameUsageID value does not map to taxonID of an existing name. check_mapping       </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 54134462 b                   Trichomanes amabile Nakai                taxonID detected whose acceptedNameUsageID value does not map to taxonID of an existing name. check_mapping       </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 54134950 v                   Mecodium atrovirens (Col.) Copel.        taxonID detected whose acceptedNameUsageID value does not map to taxonID of an existing name. check_mapping       </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 54135730 x                   Leptocionium attenuatum (Hook.) Bosch    taxonID detected whose acceptedNameUsageID value does not map to taxonID of an existing name. check_mapping       </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 54133841 k                   Trichomanes cumingii (Presl) C. Chr.     synonym detected whose acceptedNameUsageID value does not map to taxonID of an accepted name  check_mapping_strict</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 54134450 z                   Trichomanes omphalodes (Vieill.) C. Chr. synonym detected whose acceptedNameUsageID value does not map to taxonID of an accepted name  check_mapping_strict</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 54134462 b                   Trichomanes amabile Nakai                synonym detected whose acceptedNameUsageID value does not map to taxonID of an accepted name  check_mapping_strict</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 54134950 v                   Mecodium atrovirens (Col.) Copel.        synonym detected whose acceptedNameUsageID value does not map to taxonID of an accepted name  check_mapping_strict</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 54135730 x                   Leptocionium attenuatum (Hook.) Bosch    synonym detected whose acceptedNameUsageID value does not map to taxonID of an accepted name  check_mapping_strict</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># … with 12 more rows</span></span></span></code></pre></div>
+<p>(You may need to scroll to the right in the output below to see all
+the text).</p>
+<p>In this case, <code><a href="../reference/dct_validate.html">dct_validate()</a></code> still issues a warning to
+let us know validation did not pass. The <code>error</code> and
+<code>check</code> columns describe what went wrong; the other columns
+tell us where in the data to find the errors.</p>
+<p>With this detailed summary, we should definitely be able to hunt down
+the bugs in this dataset!</p>
+</div>
+<div class="section level2">
+<h2 id="checks">Checks<a class="anchor" aria-label="anchor" href="#checks"></a>
+</h2>
+<p>You may be wondering, why the separate “error” and “check” columns in
+the summary output?</p>
+<p>That is because <code><a href="../reference/dct_validate.html">dct_validate()</a></code> conducts many smaller
+checks, each of which can be turned on or off. For a complete
+description, run <code>?dct_validate()</code>. In turn, the checks can
+each identify different particular problems; the most granular
+description is given in the “error” column.</p>
+<p>Furthermore, each of the checks run by <code><a href="../reference/dct_validate.html">dct_validate()</a></code>
+can also be run as an individual function. For example, let’s just check
+that all values of <code>acceptedUsageID</code> have a corresponding
+<code>taxonID</code> (in other words, that all synonyms map
+properly):</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">filmies_dirty</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/dct_check_mapping.html">dct_check_mapping</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Error: check_taxon_id failed</span></span>
+<span><span class="co">#&gt;    taxonID detected with duplicated value</span></span>
+<span><span class="co">#&gt;    Bad taxonID: 54126747, 54135528, 54135530, 54135531, 54126748, 54126749</span></span></code></pre></div>
+<p>It is important to note that not all checks are compatible with each
+other. For example, <code>check_sci_name</code> checks that all
+scientific names (DWC term <code>scientificName</code>) are non-missing
+and unique; <code>check_status_diff</code> checks that in cases of
+<em>identical</em> scientific names, the taxonomic status of each name
+is different. The default settings for <code><a href="../reference/dct_validate.html">dct_validate()</a></code> are
+to use the former but not the latter. Whether you expect all scientific
+names to be unique or not depends on how you set up your data<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content='&lt;p&gt;According to the rules of taxonomic nomenclature, of
+course each full scientific name &lt;em&gt;should&lt;/em&gt; be unique, but there &lt;a href="https://www.iapt-taxon.org/nomen/pages/main/art_31.html?zoom_highlight=identical" class="external-link"&gt;have
+been errors in the past&lt;/a&gt; where the same author published the same
+name more than once!&lt;/p&gt;'><sup>1</sup></a>.</p>
+</div>
+<div class="section level2">
+<h2 id="controlled-vocabularies">Controlled vocabularies<a class="anchor" aria-label="anchor" href="#controlled-vocabularies"></a>
+</h2>
+<p>Some DWC taxon terms are expected only to take a small number values
+from a controlled vocabulary. For example, <code>taxonStatus</code>
+(taxonomic status of a scientific name) may only be expected to include
+the values “accepted”, “synonym”, etc. This is unlike, e.g.,
+<code>scientificName</code>, where we would not try to control the range
+of possible values.</p>
+<p>However, although DWC recommends using a controlled vocabulary for
+such terms, it does not specify the actual values! So dwctaxon lets you
+set those yourself (and tries to employ reasonable defaults).</p>
+<p>(more soon!)</p>
+</div>
+
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
 </div>

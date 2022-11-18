@@ -25,8 +25,8 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/what-is-dwc.html">What is DWC?</a>
-    <a class="dropdown-item" href="../articles/editing.html">Editing</a>
-    <a class="dropdown-item" href="../articles/validation.html">Validation</a>
+    <a class="dropdown-item" href="../articles/editing.html">Editing DWC taxon data</a>
+    <a class="dropdown-item" href="../articles/validation.html">Validating DWC taxon data</a>
   </div>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
@@ -64,10 +64,10 @@
 <span>  usage_id <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  usage_name <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  new_dat <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  fill_taxon_id <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  fill_usage_id <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  stamp_modified <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  strict <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  <span class="va">fill_taxon_id</span>,</span>
+<span>  <span class="va">fill_usage_id</span>,</span>
+<span>  <span class="va">stamp_modified</span>,</span>
+<span>  <span class="va">strict</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -112,26 +112,19 @@ input data (<code>tax_dat</code>).</p></dd>
 
 
 <dt>fill_taxon_id</dt>
-<dd><p>Logical vector of length 1; if <code>taxon_id</code> is not
-provided, should values in the taxonID column be filled in by looking
-them up from the scientificName? Default <code>TRUE</code>.</p></dd>
+<dd><p>Logical vector of length 1; if <code>taxon_id</code> is not provided, should values in the taxonID column be filled in by looking them up from the scientificName? Default <code>TRUE</code>.</p></dd>
 
 
 <dt>fill_usage_id</dt>
-<dd><p>Logical vector of length 1; if <code>usage_id</code> is not
-provided, should values in the acceptedNameUsageID column be filled in by
-matching acceptedNameUsage to scientificName? Default <code>TRUE</code>.</p></dd>
+<dd><p>Logical vector of length 1; if <code>usage_id</code> is not provided, should values in the acceptedNameUsageID column be filled in by matching acceptedNameUsage to scientificName? Default <code>TRUE</code>.</p></dd>
 
 
 <dt>stamp_modified</dt>
-<dd><p>Logical vector of length 1; should the <code>modified</code>
-column of any new row include a a timestamp with the date and time of its
-creation?</p></dd>
+<dd><p>Logical vector of length 1; should the <code>modified</code> column of any newly created or modified row include a timestamp with the date and time of its creation/modification? Default <code>TRUE</code>.</p></dd>
 
 
 <dt>strict</dt>
-<dd><p>Logical vector of length 1; should taxonomic checks be run on
-the updated taxonomic database? Default <code>FALSE</code>.</p></dd>
+<dd><p>Logical vector of length 1; should taxonomic checks be run on the updated taxonomic database? Default <code>FALSE</code>.</p></dd>
 
 
 <dt>...</dt>
@@ -155,6 +148,8 @@ are provided as convenience to avoid typing the longer "taxonomicID",
 "acceptedNameUsage", respectively, but the latter may be used instead.</p>
 <p><code>fill_taxon_id</code> and <code>fill_usage_id</code> only act on the newly added data (they
 do not fill columns in <code>tax_dat</code>).</p>
+<p>To modify settings used for validation if <code>strict</code> is <code>TRUE</code>,
+use <code><a href="dct_options.html">dct_options()</a></code>.</p>
     </div>
 
     <div class="section level2">

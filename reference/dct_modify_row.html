@@ -25,8 +25,8 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/what-is-dwc.html">What is DWC?</a>
-    <a class="dropdown-item" href="../articles/editing.html">Editing</a>
-    <a class="dropdown-item" href="../articles/validation.html">Validation</a>
+    <a class="dropdown-item" href="../articles/editing.html">Editing DWC taxon data</a>
+    <a class="dropdown-item" href="../articles/validation.html">Validating DWC taxon data</a>
   </div>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
@@ -63,13 +63,14 @@
 <span>  tax_status <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  usage_id <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  usage_name <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  clear_usage_id <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  fill_usage_name <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  remap_names <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  remap_variant <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  stamp_modified <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  strict <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  quiet <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  <span class="va">clear_usage_id</span>,</span>
+<span>  <span class="va">clear_usage_name</span>,</span>
+<span>  <span class="va">fill_usage_name</span>,</span>
+<span>  <span class="va">remap_names</span>,</span>
+<span>  <span class="va">remap_variant</span>,</span>
+<span>  <span class="va">stamp_modified</span>,</span>
+<span>  <span class="va">strict</span>,</span>
+<span>  <span class="va">quiet</span>,</span>
 <span>  args_tbl <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -109,41 +110,35 @@ to the selected row. Can also use <code>acceptedNameUsage</code>.</p></dd>
 
 
 <dt>clear_usage_id</dt>
-<dd><p>Logical vector of length 1; should
-acceptedNameUsageID of the selected row be set to <code>NA</code>? Default: <code>TRUE</code> if
-<code>tax_status</code> matches "accepted" (case insensitive).</p></dd>
+<dd><p>Logical vector of length 1; should acceptedNameUsageID of the selected row be set to <code>NA</code> if the word "accepted" is detected in tax_status (not case-sensitive)? Default <code>TRUE</code>.</p></dd>
+
+
+<dt>clear_usage_name</dt>
+<dd><p>Logical vector of length 1; should acceptedNameUsageID of the selected row be set to <code>NA</code> if the word "accepted" is detected in tax_status (not case-sensitive)? Default <code>TRUE</code>.</p></dd>
 
 
 <dt>fill_usage_name</dt>
-<dd><p>Logical vector of length 1; should the
-acceptedNameUsage of the selected row be set to the
-scientificName corresponding to its acceptedNameUsageID? Default <code>FALSE</code>.</p></dd>
+<dd><p>Logical vector of length 1; should the acceptedNameUsage of the selected row be set to the scientificName corresponding to its acceptedNameUsageID? Default <code>TRUE</code>.</p></dd>
 
 
 <dt>remap_names</dt>
-<dd><p>Logical vector of length 1; should the
-acceptedNameUsageID be updated (remapped) for rows with the same
-acceptedNameUsageID as the taxonID of the row to be modified? Default <code>TRUE</code>.</p></dd>
+<dd><p>Logical vector of length 1; should the acceptedNameUsageID be updated (remapped) for rows with the same acceptedNameUsageID as the taxonID of the row to be modified? Default <code>TRUE</code>.</p></dd>
 
 
 <dt>remap_variant</dt>
-<dd><p>Same as <code>remap_names</code>, but applies specifically to
-rows with taxonomicStatus of "variant". Default <code>FALSE</code>.</p></dd>
+<dd><p>Same as <code>remap_names</code>, but applies specifically to rows with taxonomicStatus of "variant". Default <code>FALSE</code>.</p></dd>
 
 
 <dt>stamp_modified</dt>
-<dd><p>Logical vector of length 1; should the <code>modified</code>
-column of any modified row be assigned a timestamp with the date and time
-of modification?</p></dd>
+<dd><p>Logical vector of length 1; should the <code>modified</code> column of any newly created or modified row include a timestamp with the date and time of its creation/modification? Default <code>TRUE</code>.</p></dd>
 
 
 <dt>strict</dt>
-<dd><p>Logical vector of length 1; should taxonomic checks be run on
-the updated taxonomic database?</p></dd>
+<dd><p>Logical vector of length 1; should taxonomic checks be run on the updated taxonomic database? Default <code>FALSE</code>..</p></dd>
 
 
 <dt>quiet</dt>
-<dd><p>Logical vector of length 1; should warnings be silenced?</p></dd>
+<dd><p>Logical vector of length 1; should warnings be silenced? Default <code>FALSE</code>..</p></dd>
 
 
 <dt>args_tbl</dt>
@@ -177,7 +172,11 @@ modified. <code>sci_name</code> can be used in the same way if <code>taxon_id</c
 provided (as long as <code>sci_name</code> matches a single row). If both <code>taxon_id</code> and
 <code>sci_name</code> are provided, <code>sci_name</code> will be assigned to the scientificName of
 the row identified by <code>taxon_id</code>, replacing any value that already exists.</p>
-<p><code>tax_status</code>, <code>usage_id</code>, <code>usage_name</code>, and any other arguments provided that
+<p><code>usage_id</code> and <code>usage_name</code> must match existing values of acceptedNameUsageID
+and acceptedNameUsage in the input data (<code>tax_dat</code>). On default settings,
+either can be used and the other will be filled in automatically
+(<code>fill_usage_id</code> and <code>fill_usage_name</code> are both <code>TRUE</code>).</p>
+<p><code>tax_status</code> any other arguments provided that
 are DWC terms will be assigned to the selected row (i.e., they will
 modify the row).</p>
 <p>If <code>remap_names</code> is <code>TRUE</code> (default) and <code>usage_id</code> (i.e.,
@@ -187,6 +186,10 @@ also have their acceptedNameUsageID replaced with the new
 acceptedNameUsageID. This behavior is not applied to names with
 taxonomicStatus of "variant" by default, but can be turned on for such names
 with <code>remap_variant</code>.</p>
+<p>If <code>clear_usage_id</code> or <code>clear_usage_name</code> is <code>TRUE</code> and <code>tax_status</code>
+(or <code>taxonomicStatus</code>) includes the word "accepted", acceptedNameUsageID
+or acceptedNameUsage will be set to NA respectively, regardless of the
+values of <code>usage_id</code>, <code>usage_name</code>, or <code>fill_usage_name</code>.</p>
 <p>Can either modify a single row in the input taxonomic database if each
 argument is supplied as a vector of length 1, or can apply a set of changes
 to the taxonomic database if the input is supplied as a dataframe via
