@@ -160,7 +160,6 @@ test_that("fill_usage_id doesn't create acceptedUsageID column", {
   )
 })
 
-
 test_that("stamp_modified argument works", {
   tax_dat <- tibble::tribble(
     ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
@@ -177,6 +176,26 @@ test_that("stamp_modified argument works", {
       "2", NA_character_, NA, NA, as.character(Sys.Date())
     )
   )
+})
+
+# options ----
+
+test_that("setting validation args via options works", {
+  add_dat <- data.frame(
+    sci_name = "foo",
+    usage_id = NA_character_,
+    usage_name = NA_character_,
+    tax_status = NA_character_
+  )
+  expect_error(
+    dct_add_row(base_dat, new_dat = add_dat, strict = TRUE),
+    "scientificName detected with duplicated value"
+  )
+  dct_options(check_sci_name = FALSE, stamp_modified = FALSE)
+  expect_snapshot({
+    (expect_no_error(dct_add_row(base_dat, new_dat = add_dat, strict = TRUE)))
+  })
+  dct_options(reset = TRUE)
 })
 
 rm(base_dat)

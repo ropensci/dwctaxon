@@ -33,3 +33,14 @@
       3 442c4d2d Foogenus boospecies synonym         Foogenus barspecies
       4 42e72bd3 Bargenus bkaspecies synonym         Bargenus foosp     
 
+# setting validation args via options works
+
+    Code
+      (expect_no_error(dct_add_row(base_dat, new_dat = add_dat, strict = TRUE)))
+    Output
+      # A tibble: 2 x 5
+        taxonID  scientificName acceptedNameUsageID acceptedNameUsage taxonomicStatus
+        <chr>    <chr>          <chr>               <chr>             <chr>          
+      1 1        foo            <NA>                <NA>              <NA>           
+      2 bd40ef6d foo            <NA>                <NA>              <NA>           
+
