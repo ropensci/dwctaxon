@@ -322,3 +322,13 @@ test_that("assert_that_uses_one_name() works", {
     "Must use either a or A"
   )
 })
+
+test_that("check_fill_usage_id_name() works", {
+  expect_no_error(check_fill_usage_id_name())
+  dct_options(clear_usage_name = FALSE)
+  expect_error(
+    check_fill_usage_id_name(),
+    "clear_usage_name and clear_usage_id are both not TRUE"
+  )
+  dct_options(reset = TRUE)
+})

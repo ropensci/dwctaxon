@@ -5,28 +5,16 @@
 \title{Check that taxonomicStatus is within valid values in
 Darwin Core taxonomic data}
 \usage{
-dct_check_tax_status(
-  tax_dat,
-  on_fail = "error",
-  on_success = "data",
-  valid_tax_status = Sys.getenv("VALID_TAX_STATUS", unset =
-    "accepted, synonym, variant, NA")
-)
+dct_check_tax_status(tax_dat, on_fail, on_success, valid_tax_status)
 }
 \arguments{
-\item{tax_dat}{Dataframe; taxonomic database in Darwin Core format.}
+\item{tax_dat}{Dataframe; taxonomic database in DWC format.}
 
-\item{on_fail}{Character vector of length 1, either "error" or "summary".
-Describes what to do if the check fails. Default "error".}
+\item{on_fail}{Character vector of length 1, either "error" or "summary". Describes what to do if the check fails. Default \code{"error"}.}
 
-\item{on_success}{Character vector of length 1, either  "logical" or "data".
-Describes what to do if the check passes. Default "data".}
+\item{on_success}{`r param_on_success}
 
-\item{valid_tax_status}{Character vector of length 1; valid values for
-\code{taxonomicStatus}. Each value must be separated by a comma. Default
-\code{"accepted, synonym, variant, NA"}. \code{"NA"} indicates that missing (NA)
-values are valid. Case-sensitive. Can also be set with the environmental
-variable \code{"VALID_TAX_STATUS"} (see Examples).}
+\item{valid_tax_status}{Character vector of length 1; valid values for \code{taxonomicStatus}. Each value must be separated by a comma. Default \verb{accepted, synonym, variant, NA}. \code{"NA"} indicates that missing (NA) values are valid. Case-sensitive. Can also be set with \code{dct_options()}. (see Examples).}
 }
 \value{
 Depends on the result of the check and on values of \code{on_fail} and
@@ -55,9 +43,8 @@ bad_dat <- tibble::tribble(
 suppressWarnings(
   dct_check_tax_status(bad_dat, on_fail = "summary")
 )
-# Example of setting valid values of taxonomicStatus via an environmental
-# variable
-Sys.setenv(VALID_TAX_STATUS = "provisionally accepted, synonym, NA")
+# Example of setting valid values of taxonomicStatus via dct_options()
+dct_options(valid_tax_status = "provisionally accepted, synonym, NA")
 tibble::tribble(
   ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
   "1", NA, "provisionally accepted", "Species foo",
@@ -65,7 +52,9 @@ tibble::tribble(
   "3", NA, NA, "Strange name"
 ) |>
   dct_check_tax_status()
-Sys.unsetenv("VALID_TAX_STATUS")
+
+# Reset options to defaults
+dct_options(reset = TRUE)
 }
 \references{
 \url{https://dwc.tdwg.org/terms/#dwc:taxonomicStatus}

@@ -11,13 +11,14 @@ dct_modify_row(
   tax_status = NULL,
   usage_id = NULL,
   usage_name = NULL,
-  clear_usage_id = NULL,
-  fill_usage_name = FALSE,
-  remap_names = TRUE,
-  remap_variant = FALSE,
-  stamp_modified = TRUE,
-  strict = FALSE,
-  quiet = FALSE,
+  clear_usage_id,
+  clear_usage_name,
+  fill_usage_name,
+  remap_names,
+  remap_variant,
+  stamp_modified,
+  strict,
+  quiet,
   args_tbl = NULL,
   ...
 )
@@ -42,29 +43,21 @@ to assign to the selected row. Can also use \code{acceptedNameUsageID}}
 \item{usage_name}{Character vector of length 1; acceptedNameUsage to assign
 to the selected row. Can also use \code{acceptedNameUsage}.}
 
-\item{clear_usage_id}{Logical vector of length 1; should
-acceptedNameUsageID of the selected row be set to \code{NA}? Default: \code{TRUE} if
-\code{tax_status} matches "accepted" (case insensitive).}
+\item{clear_usage_id}{Logical vector of length 1; should acceptedNameUsageID of the selected row be set to \code{NA} if the word "accepted" is detected in tax_status (not case-sensitive)? Default \code{TRUE}.}
 
-\item{fill_usage_name}{Logical vector of length 1; should the
-acceptedNameUsage of the selected row be set to the
-scientificName corresponding to its acceptedNameUsageID? Default \code{FALSE}.}
+\item{clear_usage_name}{Logical vector of length 1; should acceptedNameUsageID of the selected row be set to \code{NA} if the word "accepted" is detected in tax_status (not case-sensitive)? Default \code{TRUE}.}
 
-\item{remap_names}{Logical vector of length 1; should the
-acceptedNameUsageID be updated (remapped) for rows with the same
-acceptedNameUsageID as the taxonID of the row to be modified? Default \code{TRUE}.}
+\item{fill_usage_name}{Logical vector of length 1; should the acceptedNameUsage of the selected row be set to the scientificName corresponding to its acceptedNameUsageID? Default \code{TRUE}.}
 
-\item{remap_variant}{Same as \code{remap_names}, but applies specifically to
-rows with taxonomicStatus of "variant". Default \code{FALSE}.}
+\item{remap_names}{Logical vector of length 1; should the acceptedNameUsageID be updated (remapped) for rows with the same acceptedNameUsageID as the taxonID of the row to be modified? Default \code{TRUE}.}
 
-\item{stamp_modified}{Logical vector of length 1; should the \code{modified}
-column of any modified row be assigned a timestamp with the date and time
-of modification?}
+\item{remap_variant}{Same as \code{remap_names}, but applies specifically to rows with taxonomicStatus of "variant". Default \code{FALSE}.}
 
-\item{strict}{Logical vector of length 1; should taxonomic checks be run on
-the updated taxonomic database?}
+\item{stamp_modified}{Logical vector of length 1; should the \code{modified} column of any newly created or modified row include a timestamp with the date and time of its creation/modification? Default \code{TRUE}.}
 
-\item{quiet}{Logical vector of length 1; should warnings be silenced?}
+\item{strict}{Logical vector of length 1; should taxonomic checks be run on the updated taxonomic database? Default \code{FALSE}..}
+
+\item{quiet}{Logical vector of length 1; should warnings be silenced? Default \code{FALSE}..}
 
 \item{args_tbl}{A dataframe including columns corresponding to one or more of
 the above arguments, except for \code{tax_dat}. In this case, the input taxonomic
@@ -94,7 +87,12 @@ provided (as long as \code{sci_name} matches a single row). If both \code{taxon_
 \code{sci_name} are provided, \code{sci_name} will be assigned to the scientificName of
 the row identified by \code{taxon_id}, replacing any value that already exists.
 
-\code{tax_status}, \code{usage_id}, \code{usage_name}, and any other arguments provided that
+\code{usage_id} and \code{usage_name} must match existing values of acceptedNameUsageID
+and acceptedNameUsage in the input data (\code{tax_dat}). On default settings,
+either can be used and the other will be filled in automatically
+(\code{fill_usage_id} and \code{fill_usage_name} are both \code{TRUE}).
+
+\code{tax_status} any other arguments provided that
 are DWC terms will be assigned to the selected row (i.e., they will
 modify the row).
 
@@ -105,6 +103,11 @@ also have their acceptedNameUsageID replaced with the new
 acceptedNameUsageID. This behavior is not applied to names with
 taxonomicStatus of "variant" by default, but can be turned on for such names
 with \code{remap_variant}.
+
+If \code{clear_usage_id} or \code{clear_usage_name} is \code{TRUE} and \code{tax_status}
+(or \code{taxonomicStatus}) includes the word "accepted", acceptedNameUsageID
+or acceptedNameUsage will be set to NA respectively, regardless of the
+values of \code{usage_id}, \code{usage_name}, or \code{fill_usage_name}.
 
 Can either modify a single row in the input taxonomic database if each
 argument is supplied as a vector of length 1, or can apply a set of changes

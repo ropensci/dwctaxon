@@ -9,9 +9,8 @@ bad_dat <- tibble::tribble(
 suppressWarnings(
   dct_check_tax_status(bad_dat, on_fail = "summary")
 )
-# Example of setting valid values of taxonomicStatus via an environmental
-# variable
-Sys.setenv(VALID_TAX_STATUS = "provisionally accepted, synonym, NA")
+# Example of setting valid values of taxonomicStatus via dct_options()
+dct_options(valid_tax_status = "provisionally accepted, synonym, NA")
 tibble::tribble(
   ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
   "1", NA, "provisionally accepted", "Species foo",
@@ -19,4 +18,6 @@ tibble::tribble(
   "3", NA, NA, "Strange name"
 ) |>
   dct_check_tax_status()
-Sys.unsetenv("VALID_TAX_STATUS")
+
+# Reset options to defaults
+dct_options(reset = TRUE)

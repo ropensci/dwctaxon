@@ -9,10 +9,20 @@
 #' @autoglobal
 #' @noRd
 check_mapping_strict_status <- function(tax_dat,
-                                        on_fail = "error",
-                                        on_success = "data",
+                                        on_fail,
+                                        on_success,
                                         valid_tax_status,
                                         run = TRUE) {
+  # Set defaults ----
+  if (missing(valid_tax_status)) {
+    valid_tax_status <- get_dct_opt("valid_tax_status")
+  }
+  if (missing(on_success)) {
+    on_success <- get_dct_opt("on_success")
+  }
+  if (missing(on_fail)) {
+    on_fail <- get_dct_opt("on_fail")
+  }
   if (run == FALSE) {
     return(NULL)
   }
@@ -84,9 +94,17 @@ check_mapping_strict_status <- function(tax_dat,
 #' @autoglobal
 #' @noRd
 check_syn_map_to_acc <- function(tax_dat,
-                                 on_fail = "error",
-                                 on_success = "logical",
+                                 on_fail,
+                                 on_success,
                                  run = TRUE) {
+  # Set defaults ----
+  if (missing(on_success)) {
+    on_success <- get_dct_opt("on_success")
+  }
+  if (missing(on_fail)) {
+    on_fail <- get_dct_opt("on_fail")
+  }
+
   if (run == FALSE) {
     return(NULL)
   }
@@ -164,9 +182,17 @@ check_syn_map_to_acc <- function(tax_dat,
 #' @noRd
 #' @autoglobal
 check_acc_id_has_tax_status <- function(tax_dat,
-                                        on_fail = "error",
-                                        on_success = "data",
+                                        on_fail,
+                                        on_success,
                                         run = TRUE) {
+  # Set defaults ----
+  if (missing(on_success)) {
+    on_success <- get_dct_opt("on_success")
+  }
+  if (missing(on_fail)) {
+    on_fail <- get_dct_opt("on_fail")
+  }
+
   if (run == FALSE) {
     return(NULL)
   }
@@ -235,9 +261,17 @@ check_acc_id_has_tax_status <- function(tax_dat,
 #' @noRd
 #' @autoglobal
 check_acc_id_valid_tax_status <- function(tax_dat,
-                                          on_fail = "error",
-                                          on_success = "data",
+                                          on_fail,
+                                          on_success,
                                           run = TRUE) {
+  # Set defaults ----
+  if (missing(on_success)) {
+    on_success <- get_dct_opt("on_success")
+  }
+  if (missing(on_fail)) {
+    on_fail <- get_dct_opt("on_fail")
+  }
+
   if (run == FALSE) {
     return(NULL)
   }
@@ -321,9 +355,17 @@ check_acc_id_valid_tax_status <- function(tax_dat,
 #' @noRd
 #' @autoglobal
 check_variant_map_to_nonvar <- function(tax_dat,
-                                        on_fail = "error",
-                                        on_success = "logical",
+                                        on_fail,
+                                        on_success,
                                         run = TRUE) {
+  # Set defaults ----
+  if (missing(on_success)) {
+    on_success <- get_dct_opt("on_success")
+  }
+  if (missing(on_fail)) {
+    on_fail <- get_dct_opt("on_fail")
+  }
+
   if (run == FALSE) {
     return(NULL)
   }
@@ -392,9 +434,17 @@ check_variant_map_to_nonvar <- function(tax_dat,
 #' @noRd
 #' @autoglobal
 check_variant_map_to_something <- function(tax_dat,
-                                           on_fail = "error",
-                                           on_success = "logical",
+                                           on_fail,
+                                           on_success,
                                            run = TRUE) {
+  # Set defaults ----
+  if (missing(on_success)) {
+    on_success <- get_dct_opt("on_success")
+  }
+  if (missing(on_fail)) {
+    on_fail <- get_dct_opt("on_fail")
+  }
+
   if (run == FALSE) {
     return(NULL)
   }
@@ -454,9 +504,17 @@ check_variant_map_to_something <- function(tax_dat,
 #' @noRd
 #' @autoglobal
 check_accepted_map_to_nothing <- function(tax_dat,
-                                          on_fail = "error",
-                                          on_success = "logical",
+                                          on_fail,
+                                          on_success,
                                           run = TRUE) {
+  # Set defaults ----
+  if (missing(on_success)) {
+    on_success <- get_dct_opt("on_success")
+  }
+  if (missing(on_fail)) {
+    on_fail <- get_dct_opt("on_fail")
+  }
+
   if (run == FALSE) {
     return(NULL)
   }

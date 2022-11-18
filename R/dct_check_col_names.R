@@ -7,9 +7,17 @@
 #' @autoglobal
 #' @noRd
 check_col_names_p <- function(tax_dat,
-                              on_fail = "error",
-                              on_success = "data",
+                              on_fail,
+                              on_success,
                               run = TRUE) {
+  # Set defaults ----
+  if (missing(on_success)) {
+    on_success <- get_dct_opt("on_success")
+  }
+  if (missing(on_fail)) {
+    on_fail <- get_dct_opt("on_fail")
+  }
+
   if (run == FALSE) {
     return(NULL)
   }

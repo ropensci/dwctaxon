@@ -215,6 +215,18 @@
     },
     "8": {
       "@type": "SoftwareApplication",
+      "identifier": "settings",
+      "name": "settings",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=settings"
+    },
+    "9": {
+      "@type": "SoftwareApplication",
       "identifier": "stringr",
       "name": "stringr",
       "provider": {
@@ -225,7 +237,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=stringr"
     },
-    "9": {
+    "10": {
       "@type": "SoftwareApplication",
       "identifier": "tibble",
       "name": "tibble",
@@ -237,7 +249,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=tibble"
     },
-    "10": {
+    "11": {
       "@type": "SoftwareApplication",
       "identifier": "tidyr",
       "name": "tidyr",
@@ -249,12 +261,12 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=tidyr"
     },
-    "11": {
+    "12": {
       "@type": "SoftwareApplication",
       "identifier": "utils",
       "name": "utils"
     },
-    "12": {
+    "13": {
       "@type": "SoftwareApplication",
       "identifier": "R",
       "name": "R",
@@ -262,7 +274,7 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "391.801KB",
+  "fileSize": "445.682KB",
   "citation": [
     {
       "@type": "CreativeWork",

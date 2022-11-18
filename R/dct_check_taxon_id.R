@@ -8,6 +8,13 @@ check_taxon_id_not_na <- function(tax_dat,
                                   on_fail,
                                   on_success,
                                   run = TRUE) {
+  # Set defaults ----
+  if (missing(on_success)) {
+    on_success <- get_dct_opt("on_success")
+  }
+  if (missing(on_fail)) {
+    on_fail <- get_dct_opt("on_fail")
+  }
   # Early exit with NULL if req'd cols not present
   if (is.null(tax_dat$taxonID) || run == FALSE) {
     return(NULL)
@@ -55,6 +62,14 @@ check_taxon_id_is_uniq <- function(tax_dat,
                                    on_fail,
                                    on_success,
                                    run = TRUE) {
+  # Set defaults ----
+  if (missing(on_success)) {
+    on_success <- get_dct_opt("on_success")
+  }
+  if (missing(on_fail)) {
+    on_fail <- get_dct_opt("on_fail")
+  }
+
   # Early exit with NULL if req'd cols not present
   if (is.null(tax_dat$taxonID) || run == FALSE) {
     return(NULL)
@@ -101,11 +116,9 @@ check_taxon_id_is_uniq <- function(tax_dat,
 #' - taxonID may not be missing (NA)
 #' - taxonID must be unique
 #'
-#' @param tax_dat Dataframe; taxonomic database in Darwin Core format.
-#' @param on_fail Character vector of length 1, either "error" or "summary".
-#'  Describes what to do if the check fails. Default "error".
-#' @param on_success Character vector of length 1, either  "logical" or "data".
-#'  Describes what to do if the check passes. Default "data".
+#' @param tax_dat `r param_tax_dat`
+#' @param on_fail `r param_on_fail`
+#' @param on_success `r param_on_success`
 #'
 #' @return Depends on the result of the check and on values of `on_fail` and
 #' `on_success`:
@@ -119,8 +132,16 @@ check_taxon_id_is_uniq <- function(tax_dat,
 #' @export
 #'
 dct_check_taxon_id <- function(tax_dat,
-                               on_fail = "error",
-                               on_success = "data") {
+                               on_fail,
+                               on_success) {
+  # Set defaults ----
+  if (missing(on_success)) {
+    on_success <- get_dct_opt("on_success")
+  }
+  if (missing(on_fail)) {
+    on_fail <- get_dct_opt("on_fail")
+  }
+
   # Check input format
   assertthat::assert_that(
     inherits(tax_dat, "data.frame"),

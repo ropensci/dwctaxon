@@ -7,9 +7,17 @@
 #' @inherit check_taxon_id_not_na
 #' @noRd
 check_mapping_to_self <- function(tax_dat,
-                                  on_fail = "error",
-                                  on_success = "data",
+                                  on_fail,
+                                  on_success,
                                   run = TRUE) {
+  # Set defaults ----
+  if (missing(on_success)) {
+    on_success <- get_dct_opt("on_success")
+  }
+  if (missing(on_fail)) {
+    on_fail <- get_dct_opt("on_fail")
+  }
+
   # Early exit with NULL if req'd cols not present
   if (
     is.null(tax_dat$taxonID) ||
@@ -73,9 +81,17 @@ check_mapping_to_self <- function(tax_dat,
 #' @inherit check_taxon_id_not_na
 #' @noRd
 check_mapping_exists <- function(tax_dat,
-                                 on_fail = "error",
-                                 on_success = "data",
+                                 on_fail,
+                                 on_success,
                                  run = TRUE) {
+  # Set defaults ----
+  if (missing(on_success)) {
+    on_success <- get_dct_opt("on_success")
+  }
+  if (missing(on_fail)) {
+    on_fail <- get_dct_opt("on_fail")
+  }
+
   # Early exit with NULL if req'd cols not present
   if (
     is.null(tax_dat$taxonID) ||
@@ -143,13 +159,25 @@ check_mapping_exists <- function(tax_dat,
 #' - taxonID may not be identical to acceptedNameUsageID within a single row
 #' - Every acceptedNameUsageID must have a corresponding taxonID
 #'
-#' @inheritParams dct_check_taxon_id
+#' @param tax_dat `r param_tax_dat`
+#' @param on_fail `r param_on_fail`
+#' @param on_success `r param_on_success`
+#'
 #' @inherit dct_check_taxon_id return
-#' @export
 #' @example inst/examples/dct_check_mapping.R
+#' @autoglobal
+#' @export
+#'
 dct_check_mapping <- function(tax_dat,
-                              on_fail = "error",
-                              on_success = "data") {
+                              on_fail,
+                              on_success) {
+  # Set defaults ----
+  if (missing(on_success)) {
+    on_success <- get_dct_opt("on_success")
+  }
+  if (missing(on_fail)) {
+    on_fail <- get_dct_opt("on_fail")
+  }
   # Check input format
   assertthat::assert_that(
     inherits(tax_dat, "data.frame"),

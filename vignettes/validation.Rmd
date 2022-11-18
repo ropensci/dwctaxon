@@ -112,3 +112,5 @@ It is important to note that not all checks are compatible with each other. For 
 Some DWC taxon terms are expected only to take a small number values from a controlled vocabulary. For example, `taxonStatus` (taxonomic status of a scientific name) may only be expected to include the values "accepted", "synonym", etc. This is unlike, e.g., `scientificName`, where we would not try to control the range of possible values.
 
 However, although DWC recommends using a controlled vocabulary for such terms, it does not specify the actual values! So dwctaxon lets you set those yourself (and tries to employ reasonable defaults).
+
+(more soon!)

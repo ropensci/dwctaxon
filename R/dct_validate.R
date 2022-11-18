@@ -1,13 +1,12 @@
-#' Check that a taxonomic database is correctly formatted
+#' Validate a taxonomic database
 #'
-#' Stops with an error if any check fails. Most checks are geared towards being
-#' able to use the taxonomic database for taxonomic name resolution at the
-#' species level.
+#' Runs a series of automated checks on a taxonomic database in Darwin Core
+#' (DWC) format.
 #'
 #' For `check_mapping_strict` and `check_status_diff`, "accepted", "synonym",
 #' and "variant" are determined by string matching of `taxonomicStatus`; so
 #' "provisionally accepted" is counted as "accepted", "ambiguous synonym" is
-#' counted as "synonym", etc (case-sensitive).
+#' counted as "synonym", etc. (case-sensitive).
 #'
 #' For `check_mapping_strict`, the following rules are enforced:
 #' - Rows with `taxonomicStatus` of "synonym" (synonyms) must have an
@@ -21,44 +20,68 @@
 #' - Rows with a value for `acceptedNameUsageID` must have a valid value for
 #'   `taxonomicStatus`.
 #'
-#' @inheritParams dct_check_taxon_id
-#' @inheritParams dct_check_tax_status
-#' @inherit dct_check_taxon_id return
-#' @param check_taxon_id Logical; should all instances of `taxonID` be required
-#' to be non-missing and unique?
-#' @param check_tax_status Logical; should all taxonomic names be required
-#'   to include a valid value for taxonomic status (by default, "accepted",
-#'   "synonym", or "variant")?
-#' @param check_mapping Logical; should all values of `acceptedNameUsageID` be
-#' required to map to the `taxonID` of an existing name?
-#' @param check_mapping_strict Logical; should rules about mapping of variants
-#'   and synonyms be enforced? (see Details)
-#' @param check_sci_name Logical; should all instances of `scientificName` be
-#' required to be non-missing and unique?
-#' @param check_status_diff Logical; should each scientific name be allowed
-#'   to have only one taxonomic status? Default FALSE if `check_sci_name`
-#'   is TRUE, since `check_sci_name` makes this check redundant.
-#' @param check_col_names Logical; should all column names be required to
-#' be a valid Darwin Core term?
+#' Default settings of all arguments can be modified with `dct_options()` (see
+#' Examples).
 #'
+#' @param tax_dat `r param_tax_dat`
+#' @param check_taxon_id `r param_check_taxon_id`
+#' @param check_tax_status `r param_check_tax_status`
+#' @param check_mapping `r param_check_mapping`
+#' @param check_mapping_strict `r param_check_mapping_strict` (see Details)
+#' @param check_sci_name `r param_check_sci_name`
+#' @param check_status_diff `r param_check_status_diff`
+#' @param check_col_names `r param_check_col_names`
+#' @param valid_tax_status `r param_valid_tax_status`
+#' @param on_success `r param_on_success`
+#' @param on_fail `r param_on_fail`
+#'
+#' @inherit dct_check_taxon_id return
 #' @autoglobal
-#' @export
 #' @example inst/examples/dct_validate.R
+#' @export
 #'
 dct_validate <- function(tax_dat,
-                         check_taxon_id = TRUE,
-                         check_tax_status = TRUE,
-                         check_mapping = TRUE,
-                         check_mapping_strict = TRUE,
-                         check_sci_name = TRUE,
-                         check_status_diff = !check_sci_name,
-                         check_col_names = TRUE,
-                         valid_tax_status = Sys.getenv(
-                           "VALID_TAX_STATUS",
-                           unset = "accepted, synonym, variant, NA"
-                         ),
-                         on_success = "data",
-                         on_fail = "error") {
+                         check_taxon_id,
+                         check_tax_status,
+                         check_mapping,
+                         check_mapping_strict,
+                         check_sci_name,
+                         check_status_diff,
+                         check_col_names,
+                         valid_tax_status,
+                         on_success,
+                         on_fail) {
+  # Set defaults ----
+  if (missing(check_taxon_id)) {
+    check_taxon_id <- get_dct_opt("check_taxon_id")
+  }
+  if (missing(check_tax_status)) {
+    check_tax_status <- get_dct_opt("check_tax_status")
+  }
+  if (missing(check_mapping)) {
+    check_mapping <- get_dct_opt("check_mapping")
+  }
+  if (missing(check_mapping_strict)) {
+    check_mapping_strict <- get_dct_opt("check_mapping_strict")
+  }
+  if (missing(check_sci_name)) {
+    check_sci_name <- get_dct_opt("check_sci_name")
+  }
+  if (missing(check_status_diff)) {
+    check_status_diff <- get_dct_opt("check_status_diff")
+  }
+  if (missing(check_col_names)) {
+    check_col_names <- get_dct_opt("check_col_names")
+  }
+  if (missing(valid_tax_status)) {
+    valid_tax_status <- get_dct_opt("valid_tax_status")
+  }
+  if (missing(on_success)) {
+    on_success <- get_dct_opt("on_success")
+  }
+  if (missing(on_fail)) {
+    on_fail <- get_dct_opt("on_fail")
+  }
   # Check input format
   # - tax_dat must be a dataframe
   assertthat::assert_that(

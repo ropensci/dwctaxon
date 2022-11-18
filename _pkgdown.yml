@@ -29,6 +29,9 @@ reference:
 - contents:
   - dct_filmies
   - dct_terms
+- title: Options
+- contents:
+  - dct_options
 articles:
 - title: Articles
   navbar: ~

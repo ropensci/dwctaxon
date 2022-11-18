@@ -10,6 +10,9 @@
 #' `fill_taxon_id` and `fill_usage_id` only act on the newly added data (they
 #' do not fill columns in `tax_dat`).
 #'
+#' To modify settings used for validation if `strict` is `TRUE`,
+#' use `dct_options()`.
+#'
 #' @param tax_dat `r param_tax_dat`
 #' @param taxon_id Character or numeric vector; values to add to taxonID column.
 #' Can also use `taxonomicID`. Ignored if `new_dat` is not `NULL`.
@@ -26,17 +29,10 @@
 #' the above arguments, except for `tax_dat`. Other DWC terms can also be
 #' included as additional columns. All rows in `new_dat` will be appended to the
 #' input data (`tax_dat`).
-#' @param fill_taxon_id Logical vector of length 1; if `taxon_id` is not
-#' provided, should values in the taxonID column be filled in by looking
-#' them up from the scientificName? Default `TRUE`.
-#' @param fill_usage_id Logical vector of length 1; if `usage_id` is not
-#' provided, should values in the acceptedNameUsageID column be filled in by
-#' matching acceptedNameUsage to scientificName? Default `TRUE`.
-#' @param stamp_modified Logical vector of length 1; should the `modified`
-#' column of any new row include a a timestamp with the date and time of its
-#' creation?
-#' @param strict Logical vector of length 1; should taxonomic checks be run on
-#' the updated taxonomic database? Default `FALSE`.
+#' @param fill_taxon_id `r param_fill_taxon_id`
+#' @param fill_usage_id `r param_fill_usage_id`
+#' @param stamp_modified `r param_stamp_modified`
+#' @param strict `r param_strict`
 #' @param ... Additional data to add, specified as sets of named
 #' character or numeric vectors; e.g., `parentNameUsageID = "6SH4"`. The name of
 #' each must be a valid column name for data in DWC format. Ignored if `new_dat`
@@ -53,11 +49,24 @@ dct_add_row <- function(tax_dat,
                         usage_id = NULL,
                         usage_name = NULL,
                         new_dat = NULL,
-                        fill_taxon_id = TRUE,
-                        fill_usage_id = TRUE,
-                        stamp_modified = TRUE,
-                        strict = FALSE,
+                        fill_taxon_id,
+                        fill_usage_id,
+                        stamp_modified,
+                        strict,
                         ...) {
+  # Set defaults ----
+  if (missing(fill_taxon_id)) {
+    fill_taxon_id <- get_dct_opt("fill_taxon_id")
+  }
+  if (missing(fill_usage_id)) {
+    fill_usage_id <- get_dct_opt("fill_usage_id")
+  }
+  if (missing(stamp_modified)) {
+    stamp_modified <- get_dct_opt("stamp_modified")
+  }
+  if (missing(strict)) {
+    strict <- get_dct_opt("strict")
+  }
   # Check if new_dat overlaps with abbreviated terms and convert
   if (!is.null(new_dat)) {
     # - taxon_id

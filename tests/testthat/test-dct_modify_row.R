@@ -108,9 +108,11 @@ test_that("clear_usage_id argument works", {
 test_that("fill_usage_name argument works", {
   tax_dat <- tibble::tribble(
     ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
-    "1", NA, "accepted", "foo",
-    "2", NA, "accepted", "bar"
+    ~acceptedNameUsage,
+    "1", NA, "accepted", "foo", NA_character_,
+    "2", NA, "accepted", "bar", NA
   )
+  # fills if acceptedNameUsage col in tax_dat
   expect_equal(
     dct_modify_row(
       tax_dat,
@@ -124,15 +126,29 @@ test_that("fill_usage_name argument works", {
       "2", "1", "synonym", "bar", "foo"
     )
   )
+  # doesn't fill if not
+  expect_equal(
+    dct_modify_row(
+      tax_dat[, colnames(tax_dat) != "acceptedNameUsage"],
+      taxon_id = "2", tax_status = "synonym", usage_id = "1",
+      fill_usage_name = TRUE, stamp_modified = FALSE
+    ),
+    tibble::tribble(
+      ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
+      "1", NA, "accepted", "foo",
+      "2", "1", "synonym", "bar"
+    )
+  )
 })
 
 # - remap_names
 test_that("fill_usage_name works with remap_names", {
   tax_dat <- tibble::tribble(
     ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
-    "1", NA, "accepted", "foo",
-    "2", NA, "accepted", "bar",
-    "3", "2", "synonym", "bat"
+    ~acceptedNameUsage,
+    "1", NA, "accepted", "foo", NA_character_,
+    "2", NA, "accepted", "bar", NA,
+    "3", "2", "synonym", "bat", NA
   )
   expect_equal(
     dct_modify_row(

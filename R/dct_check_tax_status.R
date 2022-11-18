@@ -7,13 +7,21 @@
 #' @inherit check_taxon_id_not_na
 #' @noRd
 check_tax_status_valid <- function(tax_dat,
-                                   on_fail = "error",
-                                   on_success = "data",
-                                   valid_tax_status = Sys.getenv(
-                                     "VALID_TAX_STATUS",
-                                     unset = "accepted, synonym, variant, NA"
-                                   ),
+                                   on_fail,
+                                   on_success,
+                                   valid_tax_status,
                                    run = TRUE) {
+  # Set defaults ----
+  if (missing(valid_tax_status)) {
+    valid_tax_status <- get_dct_opt("valid_tax_status")
+  }
+  if (missing(on_success)) {
+    on_success <- get_dct_opt("on_success")
+  }
+  if (missing(on_fail)) {
+    on_fail <- get_dct_opt("on_fail")
+  }
+
   # Early exit with NULL if req'd cols not present
   if (is.null(tax_dat$taxonomicStatus) || run == FALSE) {
     return(NULL)
@@ -74,23 +82,31 @@ check_tax_status_valid <- function(tax_dat,
 #' Check that taxonomicStatus is within valid values in
 #' Darwin Core taxonomic data
 #'
-#' @param valid_tax_status Character vector of length 1; valid values for
-#'   `taxonomicStatus`. Each value must be separated by a comma. Default
-#'   `"accepted, synonym, variant, NA"`. `"NA"` indicates that missing (NA)
-#'   values are valid. Case-sensitive. Can also be set with the environmental
-#'   variable `"VALID_TAX_STATUS"` (see Examples).
-#' @inheritParams dct_check_taxon_id
+#' @param tax_dat `r param_tax_dat`
+#' @param on_fail `r param_on_fail`
+#' @param on_success `r param_on_success
+#' @param valid_tax_status `r param_valid_tax_status` (see Examples).
+#'
 #' @inherit dct_check_taxon_id return
 #' @references <https://dwc.tdwg.org/terms/#dwc:taxonomicStatus>
 #' @example inst/examples/dct_check_tax_status.R
+#' @autoglobal
 #' @export
+#'
 dct_check_tax_status <- function(tax_dat,
-                                 on_fail = "error",
-                                 on_success = "data",
-                                 valid_tax_status = Sys.getenv(
-                                   "VALID_TAX_STATUS",
-                                   unset = "accepted, synonym, variant, NA"
-                                 )) {
+                                 on_fail,
+                                 on_success,
+                                 valid_tax_status) {
+  # Set defaults ----
+  if (missing(valid_tax_status)) {
+    valid_tax_status <- get_dct_opt("valid_tax_status")
+  }
+  if (missing(on_success)) {
+    on_success <- get_dct_opt("on_success")
+  }
+  if (missing(on_fail)) {
+    on_fail <- get_dct_opt("on_fail")
+  }
   # Run main checks
   suppressWarnings(
     check_res <- list(
@@ -100,7 +116,11 @@ dct_check_tax_status <- function(tax_dat,
         req_by = "check_tax_status", on_fail = on_fail
       ),
       # Check taxonomic status
-      check_tax_status_valid(tax_dat, on_fail = on_fail, on_success = "logical")
+      check_tax_status_valid(
+        tax_dat,
+        on_fail = on_fail, on_success = "logical",
+        valid_tax_status = valid_tax_status
+      )
     ) |>
       # drop any NULL results
       purrr::compact()

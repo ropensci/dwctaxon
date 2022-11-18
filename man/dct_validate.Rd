@@ -2,60 +2,44 @@
 % Please edit documentation in R/dct_validate.R
 \name{dct_validate}
 \alias{dct_validate}
-\title{Check that a taxonomic database is correctly formatted}
+\title{Validate a taxonomic database}
 \usage{
 dct_validate(
   tax_dat,
-  check_taxon_id = TRUE,
-  check_tax_status = TRUE,
-  check_mapping = TRUE,
-  check_mapping_strict = TRUE,
-  check_sci_name = TRUE,
-  check_status_diff = !check_sci_name,
-  check_col_names = TRUE,
-  valid_tax_status = Sys.getenv("VALID_TAX_STATUS", unset =
-    "accepted, synonym, variant, NA"),
-  on_success = "data",
-  on_fail = "error"
+  check_taxon_id,
+  check_tax_status,
+  check_mapping,
+  check_mapping_strict,
+  check_sci_name,
+  check_status_diff,
+  check_col_names,
+  valid_tax_status,
+  on_success,
+  on_fail
 )
 }
 \arguments{
-\item{tax_dat}{Dataframe; taxonomic database in Darwin Core format.}
+\item{tax_dat}{Dataframe; taxonomic database in DWC format.}
 
-\item{check_taxon_id}{Logical; should all instances of \code{taxonID} be required
-to be non-missing and unique?}
+\item{check_taxon_id}{Logical vector of length 1; should all instances of  \code{taxonID} be required to be non-missing and unique? Default \code{TRUE}.}
 
-\item{check_tax_status}{Logical; should all taxonomic names be required
-to include a valid value for taxonomic status (by default, "accepted",
-"synonym", or "variant")?}
+\item{check_tax_status}{Logical vector of length 1; should all taxonomic names be required to have a valid value for taxonomic status (by default, "accepted", "synonym", or "variant")? Default \code{TRUE}.}
 
-\item{check_mapping}{Logical; should all values of \code{acceptedNameUsageID} be
-required to map to the \code{taxonID} of an existing name?}
+\item{check_mapping}{Logical vector of length 1; should all values of \code{acceptedNameUsageID} be required to map to the \code{taxonID} of an existing name? Default \code{TRUE}.}
 
-\item{check_mapping_strict}{Logical; should rules about mapping of variants
-and synonyms be enforced? (see Details)}
+\item{check_mapping_strict}{Logical vector of length 1; should rules about mapping of variants and synonyms be enforced? Default \code{TRUE}. (see Details)}
 
-\item{check_sci_name}{Logical; should all instances of \code{scientificName} be
-required to be non-missing and unique?}
+\item{check_sci_name}{Logical vector of length 1; should all instances of \code{scientificName} be required to be non-missing and unique? Default \code{TRUE}.}
 
-\item{check_status_diff}{Logical; should each scientific name be allowed
-to have only one taxonomic status? Default FALSE if \code{check_sci_name}
-is TRUE, since \code{check_sci_name} makes this check redundant.}
+\item{check_status_diff}{Logical vector of length 1; should each scientific name be allowed to have only one taxonomic status? Default \code{FALSE}.}
 
-\item{check_col_names}{Logical; should all column names be required to
-be a valid Darwin Core term?}
+\item{check_col_names}{Logical vector of length 1; should all column names be required to be a valid Darwin Core term? Default \code{TRUE}.}
 
-\item{valid_tax_status}{Character vector of length 1; valid values for
-\code{taxonomicStatus}. Each value must be separated by a comma. Default
-\code{"accepted, synonym, variant, NA"}. \code{"NA"} indicates that missing (NA)
-values are valid. Case-sensitive. Can also be set with the environmental
-variable \code{"VALID_TAX_STATUS"} (see Examples).}
+\item{valid_tax_status}{Character vector of length 1; valid values for \code{taxonomicStatus}. Each value must be separated by a comma. Default \verb{accepted, synonym, variant, NA}. \code{"NA"} indicates that missing (NA) values are valid. Case-sensitive. Can also be set with \code{dct_options()}.}
 
-\item{on_success}{Character vector of length 1, either  "logical" or "data".
-Describes what to do if the check passes. Default "data".}
+\item{on_success}{Character vector of length 1, either "logical" or "data". Describes what to do if the check passes. Default \code{"data"}.}
 
-\item{on_fail}{Character vector of length 1, either "error" or "summary".
-Describes what to do if the check fails. Default "error".}
+\item{on_fail}{Character vector of length 1, either "error" or "summary". Describes what to do if the check fails. Default \code{"error"}.}
 }
 \value{
 Depends on the result of the check and on values of \code{on_fail} and
@@ -69,15 +53,14 @@ return a dataframe with a summary of the reasons for failure
 }
 }
 \description{
-Stops with an error if any check fails. Most checks are geared towards being
-able to use the taxonomic database for taxonomic name resolution at the
-species level.
+Runs a series of automated checks on a taxonomic database in Darwin Core
+(DWC) format.
 }
 \details{
 For \code{check_mapping_strict} and \code{check_status_diff}, "accepted", "synonym",
 and "variant" are determined by string matching of \code{taxonomicStatus}; so
 "provisionally accepted" is counted as "accepted", "ambiguous synonym" is
-counted as "synonym", etc (case-sensitive).
+counted as "synonym", etc. (case-sensitive).
 
 For \code{check_mapping_strict}, the following rules are enforced:
 \itemize{
@@ -92,10 +75,37 @@ for \code{acceptedNameUsageID}
 \item Rows with a value for \code{acceptedNameUsageID} must have a valid value for
 \code{taxonomicStatus}.
 }
+
+Default settings of all arguments can be modified with \code{dct_options()} (see
+Examples).
 }
 \examples{
-dct_validate(
-  dct_filmies,
-  check_sci_name = FALSE
-)
+# The example dataset dct_filmies is already correctly formatted and passes
+# validation
+dct_validate(dct_filmies)
+
+# So make some bad data on purpose with a duplicated scientific name
+bad_dat <- dct_filmies
+bad_dat$scientificName[1] <- bad_dat$scientificName[2]
+
+# The incorrectly formatted data won't pass (example produces an error, so
+# not run by default)
+if (FALSE) {
+  dct_validate(bad_dat)
+}
+
+# It will pass if we allow duplicated scientific names though
+dct_validate(bad_dat, check_sci_name = FALSE)
+
+# Individual checks can also be turned or off with dct_options()
+
+# Let's allow duplicated scientific names by default
+dct_options(check_sci_name = FALSE)
+
+# The data passes validation as before, but we don't have to specify
+# `check_sci_name = FALSE` in the function call
+dct_validate(bad_dat)
+
+# Reset options to their defaults
+dct_options(reset = TRUE)
 }

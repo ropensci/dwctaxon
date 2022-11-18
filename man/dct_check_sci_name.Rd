@@ -4,16 +4,14 @@
 \alias{dct_check_sci_name}
 \title{Check scientificName}
 \usage{
-dct_check_sci_name(tax_dat, on_fail = "error", on_success = "data")
+dct_check_sci_name(tax_dat, on_fail, on_success)
 }
 \arguments{
-\item{tax_dat}{Dataframe; taxonomic database in Darwin Core format.}
+\item{tax_dat}{Dataframe; taxonomic database in DWC format.}
 
-\item{on_fail}{Character vector of length 1, either "error" or "summary".
-Describes what to do if the check fails. Default "error".}
+\item{on_fail}{Character vector of length 1, either "error" or "summary". Describes what to do if the check fails. Default \code{"error"}.}
 
-\item{on_success}{Character vector of length 1, either  "logical" or "data".
-Describes what to do if the check passes. Default "data".}
+\item{on_success}{Character vector of length 1, either "logical" or "data". Describes what to do if the check passes. Default \code{"data"}.}
 }
 \value{
 Depends on the result of the check and on values of \code{on_fail} and

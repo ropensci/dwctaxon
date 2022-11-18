@@ -149,8 +149,8 @@ test_that("Check for 'taxonomicStatus in valid values' works", {
   )
 })
 
-test_that("Setting valid taxonomic status via env var works", {
-  Sys.setenv(VALID_TAX_STATUS = "accepted")
+test_that("Setting valid taxonomic status via dct_options() works", {
+  dct_options(valid_tax_status = "accepted")
   expect_error(
     dct_validate(
       data.frame(taxonID = 1, taxonomicStatus = "synonym"),
@@ -168,8 +168,7 @@ test_that("Setting valid taxonomic status via env var works", {
       "Bad taxonomicStatus\\: synonym"
     )
   )
-  # reset
-  Sys.unsetenv("VALID_TAX_STATUS")
+  dct_options(reset = TRUE)
 })
 
 # check_mapping -----

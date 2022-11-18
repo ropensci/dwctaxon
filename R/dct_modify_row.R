@@ -13,14 +13,41 @@ dct_modify_row_single <- function(tax_dat,
                                   tax_status = NULL,
                                   usage_id = NULL,
                                   usage_name = NULL,
-                                  clear_usage_id = FALSE,
-                                  fill_usage_name = FALSE,
-                                  remap_names = TRUE,
-                                  remap_variant = FALSE,
-                                  stamp_modified = TRUE,
-                                  strict = FALSE,
-                                  quiet = FALSE,
+                                  clear_usage_id,
+                                  clear_usage_name,
+                                  fill_usage_name,
+                                  remap_names,
+                                  remap_variant,
+                                  stamp_modified,
+                                  strict,
+                                  quiet,
                                   other_terms = NULL) {
+  # Set defaults ----
+  if (missing(clear_usage_id)) {
+    clear_usage_id <- get_dct_opt("clear_usage_id")
+  }
+  if (missing(clear_usage_name)) {
+    clear_usage_name <- get_dct_opt("clear_usage_name")
+  }
+  if (missing(fill_usage_name)) {
+    fill_usage_name <- get_dct_opt("fill_usage_name")
+  }
+  if (missing(remap_names)) {
+    remap_names <- get_dct_opt("remap_names")
+  }
+  if (missing(remap_variant)) {
+    remap_variant <- get_dct_opt("remap_variant")
+  }
+  if (missing(stamp_modified)) {
+    stamp_modified <- get_dct_opt("stamp_modified")
+  }
+  if (missing(strict)) {
+    strict <- get_dct_opt("strict")
+  }
+  if (missing(quiet)) {
+    quiet <- get_dct_opt("quiet")
+  }
+
   # Convert any NA input (from args_tbl) to NULL
   if (!is.null(taxon_id) && is.na(taxon_id)) taxon_id <- NULL
   if (!is.null(sci_name) && is.na(sci_name)) sci_name <- NULL
@@ -28,23 +55,6 @@ dct_modify_row_single <- function(tax_dat,
   if (!is.null(usage_id) && is.na(usage_id)) usage_id <- NULL
   if (!is.null(usage_name) && is.na(usage_name)) usage_name <- NULL
   if (!is.null(other_terms) && isTRUE(is.na(other_terms))) other_terms <- NULL
-
-  # Set clear_usage_id to TRUE if tax_status is "accepted" and clear_usage_id
-  # not set
-  if (!is.null(tax_status) && is.null(clear_usage_id)) {
-    clear_usage_id <- grepl("accepted", tax_status, ignore.case = TRUE)
-  }
-  # Convert missing logicals to FALSE
-  if (is.null(clear_usage_id) || is.na(clear_usage_id)) clear_usage_id <- FALSE
-  if (is.null(fill_usage_name) || is.na(fill_usage_name)) {
-    fill_usage_name <-
-      FALSE
-  }
-  if (is.null(remap_names) || is.na(remap_names)) remap_names <- FALSE
-  if (is.null(remap_variant) || is.na(remap_variant)) remap_variant <- FALSE
-  if (is.null(stamp_modified) || is.na(stamp_modified)) stamp_modified <- FALSE
-  if (is.null(strict) || is.na(strict)) strict <- FALSE
-  if (is.null(quiet) || is.na(quiet)) quiet <- FALSE
 
   # Check input classes ----
   if (!is.null(taxon_id)) {
@@ -73,17 +83,7 @@ dct_modify_row_single <- function(tax_dat,
   assertthat::assert_that(assertthat::is.flag(stamp_modified))
   assertthat::assert_that(assertthat::is.flag(strict))
   assertthat::assert_that(assertthat::is.flag(quiet))
-
   # Other input checks ----
-  # - clear_usage_id should not be FALSE if usage_id or usage_name are
-  # provided
-  if (isTRUE(clear_usage_id)) {
-    assertthat::assert_that(
-      is.null(usage_id) && is.null(usage_name),
-      msg =
-        "clear_usage_id cannot be TRUE if usage_id or usage_name is non-NULL"
-    )
-  }
   # - usage_name must exist in input data
   if (!is.null(usage_name)) {
     assertthat::assert_that(
@@ -98,13 +98,8 @@ dct_modify_row_single <- function(tax_dat,
       msg = "`usage_id` not detected in `tax_dat$taxonID`"
     )
   }
-  # - clear_usage_id and fill_usage_name cannot both be TRUE
-  assertthat::assert_that(
-    sum(c(fill_usage_name, clear_usage_id)) < 2,
-    msg = "fill_usage_name and clear_usage_id cannot both be TRUE"
-  )
 
-  # Check if other_terms overlaps with abbreviated terms and convert
+  # Convert aliases ----
   if (!is.null(other_terms)) {
     if (nrow(other_terms) > 0) {
       # - taxon_id
@@ -166,7 +161,8 @@ dct_modify_row_single <- function(tax_dat,
     }
   }
 
-  # Isolate row to change by sci_name or taxon_id
+  # Isolate row to change ----
+  # by sci_name or taxon_id
   assertthat::assert_that(
     !(is.null(sci_name) && is.null(taxon_id)),
     msg = "Must provide one or both of sci_name and taxon_id"
@@ -204,7 +200,7 @@ dct_modify_row_single <- function(tax_dat,
     usage_id <- usage_id_match
   }
 
-  # Create new row by modification
+  # Create new row by modification ----
   new_row <- tax_dat_row
   # - modify taxonomicStatus
   if (!is.null(tax_status)) {
@@ -214,29 +210,56 @@ dct_modify_row_single <- function(tax_dat,
   if (!is.null(sci_name) && !is.null(taxon_id)) {
     new_row <- dplyr::mutate(new_row, scientificName = sci_name)
   }
-  # - modify or clear acceptedNameUsageID
+  # - modify acceptedNameUsageID
   if (!is.null(usage_id)) {
     new_row <- dplyr::mutate(new_row, acceptedNameUsageID = usage_id)
   }
-  if (isTRUE(clear_usage_id)) {
-    if (inherits(tax_dat_row$acceptedNameUsageID, "character")) {
+  # - clear acceptedNameUsageID if taxonomicStatus includes "accepted"
+  # (so if usage_id is provided and taxonomicStatus includes "accepted",
+  # the acceptedNameUsageID will be cleared)
+  if (isTRUE(clear_usage_id) &&
+    "taxonomicStatus" %in% colnames(new_row) &&
+    "acceptedNameUsageID" %in% colnames(new_row) &&
+    "acceptedNameUsageID" %in% colnames(tax_dat_row)) {
+    is_acc <- grepl("accepted", new_row$taxonomicStatus, ignore.case = TRUE)
+    if (inherits(tax_dat_row$acceptedNameUsageID, "character") && is_acc) {
       new_row <- dplyr::mutate(new_row, acceptedNameUsageID = NA_character_)
     }
-    if (inherits(tax_dat_row$acceptedNameUsageID, "numeric")) {
+    if (inherits(tax_dat_row$acceptedNameUsageID, "numeric") && is_acc) {
       new_row <- dplyr::mutate(new_row, acceptedNameUsageID = NaN)
     }
   }
   # - fill usage name
-  if (isTRUE(fill_usage_name)) {
+  usage_name_match <- NULL
+  if (isTRUE(fill_usage_name) &&
+    !is.null(usage_id) &&
+    "scientificName" %in% colnames(tax_dat) &&
+    "taxonID" %in% colnames(tax_dat) &&
+    "acceptedNameUsage" %in% colnames(tax_dat_row)) {
     usage_name_match <- tax_dat$scientificName[tax_dat$taxonID == usage_id]
     assertthat::assert_that(
-      length(usage_name_match) == 1,
+      isTRUE(length(usage_name_match) == 1),
       msg = glue::glue(
         "Not exactly one scientificName matches acceptedNameUsageID \\
         '{usage_id}'"
       )
     )
     new_row <- dplyr::mutate(new_row, acceptedNameUsage = usage_name_match)
+  }
+  # - clear acceptedNameUsage if taxonomicStatus includes "accepted"
+  # (so if usage_name is provided and taxonomicStatus includes "accepted",
+  # the acceptedNameUsage will be cleared)
+  if (isTRUE(clear_usage_name) &&
+    "taxonomicStatus" %in% colnames(new_row) &&
+    "acceptedNameUsage" %in% colnames(new_row) &&
+    "acceptedNameUsage" %in% colnames(tax_dat_row)) {
+    is_acc <- grepl("accepted", new_row$taxonomicStatus, ignore.case = TRUE)
+    if (inherits(tax_dat_row$acceptedNameUsage, "character") && is_acc) {
+      new_row <- dplyr::mutate(new_row, acceptedNameUsage = NA_character_)
+    }
+    if (inherits(tax_dat_row$acceptedNameUsage, "numeric") && is_acc) {
+      new_row <- dplyr::mutate(new_row, acceptedNameUsage = NaN)
+    }
   }
   # - add other DWC terms, overwriting existing values
   if (!is.null(other_terms)) {
@@ -255,6 +278,7 @@ dct_modify_row_single <- function(tax_dat,
     )
   }
 
+  # Change other rows -----
   # For change to synonym or variety (acceptedNameUsageID not NA),
   # check if other names will be affected
   new_row_other <- NULL
@@ -277,7 +301,7 @@ dct_modify_row_single <- function(tax_dat,
         new_row_other,
         acceptedNameUsageID = usage_id
       )
-      if (isTRUE(fill_usage_name)) {
+      if (isTRUE(fill_usage_name) && !is.null(usage_name_match)) {
         new_row_other <- dplyr::mutate(
           new_row_other,
           acceptedNameUsage = usage_name_match
@@ -292,6 +316,7 @@ dct_modify_row_single <- function(tax_dat,
     }
   }
 
+  # Format output ----
   # Return input if update doesn't modify changes anything
   if (isTRUE(all.equal(tax_dat_row, new_row))) {
     if (quiet == FALSE) {
@@ -347,7 +372,13 @@ dct_modify_row_single <- function(tax_dat,
 #' `sci_name` are provided, `sci_name` will be assigned to the scientificName of
 #' the row identified by `taxon_id`, replacing any value that already exists.
 #'
-#' `tax_status`, `usage_id`, `usage_name`, and any other arguments provided that
+#' `usage_id` and `usage_name` must match existing values of acceptedNameUsageID
+#' and acceptedNameUsage in the input data (`tax_dat`). On default settings,
+#' either can be used and the other will be filled in automatically
+#' (`fill_usage_id` and `fill_usage_name` are both `TRUE`).
+#' `r check_fill_usage_id_name()`
+#'
+#' `tax_status` any other arguments provided that
 #' are DWC terms will be assigned to the selected row (i.e., they will
 #' modify the row).
 #'
@@ -358,6 +389,11 @@ dct_modify_row_single <- function(tax_dat,
 #' acceptedNameUsageID. This behavior is not applied to names with
 #' taxonomicStatus of "variant" by default, but can be turned on for such names
 #' with `remap_variant`.
+#'
+#' If `clear_usage_id` or `clear_usage_name` is `TRUE` and `tax_status`
+#' (or `taxonomicStatus`) includes the word "accepted", acceptedNameUsageID
+#' or acceptedNameUsage will be set to NA respectively, regardless of the
+#' values of `usage_id`, `usage_name`, or `fill_usage_name`.
 #'
 #' Can either modify a single row in the input taxonomic database if each
 #' argument is supplied as a vector of length 1, or can apply a set of changes
@@ -377,23 +413,14 @@ dct_modify_row_single <- function(tax_dat,
 #' to assign to the selected row. Can also use `acceptedNameUsageID`
 #' @param usage_name Character vector of length 1; acceptedNameUsage to assign
 #' to the selected row. Can also use `acceptedNameUsage`.
-#' @param clear_usage_id Logical vector of length 1; should
-#' acceptedNameUsageID of the selected row be set to `NA`? Default: `TRUE` if
-#' `tax_status` matches "accepted" (case insensitive).
-#' @param fill_usage_name Logical vector of length 1; should the
-#' acceptedNameUsage of the selected row be set to the
-#' scientificName corresponding to its acceptedNameUsageID? Default `FALSE`.
-#' @param remap_names Logical vector of length 1; should the
-#' acceptedNameUsageID be updated (remapped) for rows with the same
-#' acceptedNameUsageID as the taxonID of the row to be modified? Default `TRUE`.
-#' @param remap_variant Same as `remap_names`, but applies specifically to
-#' rows with taxonomicStatus of "variant". Default `FALSE`.
-#' @param stamp_modified Logical vector of length 1; should the `modified`
-#' column of any modified row be assigned a timestamp with the date and time
-#' of modification?
-#' @param strict Logical vector of length 1; should taxonomic checks be run on
-#' the updated taxonomic database?
-#' @param quiet Logical vector of length 1; should warnings be silenced?
+#' @param clear_usage_id `r param_clear_usage_id`
+#' @param clear_usage_name `r param_clear_usage_id`
+#' @param fill_usage_name `r param_fill_usage_name`
+#' @param remap_names `r param_remap_names`
+#' @param remap_variant `r param_remap_variant`
+#' @param stamp_modified `r param_stamp_modified`
+#' @param strict `r param_strict`.
+#' @param quiet `r param_quiet`.
 #' @param args_tbl A dataframe including columns corresponding to one or more of
 #' the above arguments, except for `tax_dat`. In this case, the input taxonomic
 #' database will be modified sequentially over each row of input in `args_tbl`.
@@ -413,20 +440,40 @@ dct_modify_row <- function(tax_dat,
                            tax_status = NULL,
                            usage_id = NULL,
                            usage_name = NULL,
-                           clear_usage_id = NULL,
-                           fill_usage_name = FALSE,
-                           remap_names = TRUE,
-                           remap_variant = FALSE,
-                           stamp_modified = TRUE,
-                           strict = FALSE,
-                           quiet = FALSE,
+                           clear_usage_id,
+                           clear_usage_name,
+                           fill_usage_name,
+                           remap_names,
+                           remap_variant,
+                           stamp_modified,
+                           strict,
+                           quiet,
                            args_tbl = NULL,
                            ...) {
-  # Set default values ----
-  # - when using args_tbl and others default,
-  # clear_usage_id will be 0 length logical, so change to FALSE
-  if (length(clear_usage_id) == 0 && !is.null(args_tbl)) {
-    clear_usage_id <- FALSE
+  # Set defaults ----
+  if (missing(clear_usage_id)) {
+    clear_usage_id <- get_dct_opt("clear_usage_id")
+  }
+  if (missing(clear_usage_name)) {
+    clear_usage_name <- get_dct_opt("clear_usage_name")
+  }
+  if (missing(fill_usage_name)) {
+    fill_usage_name <- get_dct_opt("fill_usage_name")
+  }
+  if (missing(remap_names)) {
+    remap_names <- get_dct_opt("remap_names")
+  }
+  if (missing(remap_variant)) {
+    remap_variant <- get_dct_opt("remap_variant")
+  }
+  if (missing(stamp_modified)) {
+    stamp_modified <- get_dct_opt("stamp_modified")
+  }
+  if (missing(strict)) {
+    strict <- get_dct_opt("strict")
+  }
+  if (missing(quiet)) {
+    quiet <- get_dct_opt("quiet")
   }
 
   # Check input ----
@@ -447,12 +494,8 @@ dct_modify_row <- function(tax_dat,
   # - others checked at level of dct_modify_row_single()
 
   # define standard arguments to exclude from other_terms
-  std_args <- c(
-    "tax_dat", "taxon_id", "sci_name", "tax_status",
-    "usage_id", "usage_name", "clear_usage_id", "fill_usage_name",
-    "remap_names", "remap_variant",
-    "stamp_modified", "strict", "quiet"
-  )
+  std_args <- formals(dct_modify_row) |>
+    names()
 
   # If input is args_tbl, loop over tax_dat, using the previous output of each
   # iteration as input into the next iteration
@@ -466,6 +509,7 @@ dct_modify_row <- function(tax_dat,
         usage_id = val_if_in_dat(args_tbl, "usage_id", i),
         usage_name = val_if_in_dat(args_tbl, "usage_name", i),
         clear_usage_id = val_if_in_dat(args_tbl, "clear_usage_id", i),
+        clear_usage_name = val_if_in_dat(args_tbl, "clear_usage_name", i),
         fill_usage_name = val_if_in_dat(args_tbl, "fill_usage_name", i),
         remap_names = val_if_in_dat(args_tbl, "remap_names", i),
         remap_variant = val_if_in_dat(args_tbl, "remap_variant", i),
@@ -487,6 +531,7 @@ dct_modify_row <- function(tax_dat,
     usage_id = usage_id,
     usage_name = usage_name,
     clear_usage_id = clear_usage_id,
+    clear_usage_name = clear_usage_name,
     fill_usage_name = fill_usage_name,
     remap_names = remap_names,
     remap_variant = remap_variant,

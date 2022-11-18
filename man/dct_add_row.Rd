@@ -12,10 +12,10 @@ dct_add_row(
   usage_id = NULL,
   usage_name = NULL,
   new_dat = NULL,
-  fill_taxon_id = TRUE,
-  fill_usage_id = TRUE,
-  stamp_modified = TRUE,
-  strict = FALSE,
+  fill_taxon_id,
+  fill_usage_id,
+  stamp_modified,
+  strict,
   ...
 )
 }
@@ -43,20 +43,13 @@ the above arguments, except for \code{tax_dat}. Other DWC terms can also be
 included as additional columns. All rows in \code{new_dat} will be appended to the
 input data (\code{tax_dat}).}
 
-\item{fill_taxon_id}{Logical vector of length 1; if \code{taxon_id} is not
-provided, should values in the taxonID column be filled in by looking
-them up from the scientificName? Default \code{TRUE}.}
+\item{fill_taxon_id}{Logical vector of length 1; if \code{taxon_id} is not provided, should values in the taxonID column be filled in by looking them up from the scientificName? Default \code{TRUE}.}
 
-\item{fill_usage_id}{Logical vector of length 1; if \code{usage_id} is not
-provided, should values in the acceptedNameUsageID column be filled in by
-matching acceptedNameUsage to scientificName? Default \code{TRUE}.}
+\item{fill_usage_id}{Logical vector of length 1; if \code{usage_id} is not provided, should values in the acceptedNameUsageID column be filled in by matching acceptedNameUsage to scientificName? Default \code{TRUE}.}
 
-\item{stamp_modified}{Logical vector of length 1; should the \code{modified}
-column of any new row include a a timestamp with the date and time of its
-creation?}
+\item{stamp_modified}{Logical vector of length 1; should the \code{modified} column of any newly created or modified row include a timestamp with the date and time of its creation/modification? Default \code{TRUE}.}
 
-\item{strict}{Logical vector of length 1; should taxonomic checks be run on
-the updated taxonomic database? Default \code{FALSE}.}
+\item{strict}{Logical vector of length 1; should taxonomic checks be run on the updated taxonomic database? Default \code{FALSE}.}
 
 \item{...}{Additional data to add, specified as sets of named
 character or numeric vectors; e.g., \code{parentNameUsageID = "6SH4"}. The name of
@@ -77,6 +70,9 @@ are provided as convenience to avoid typing the longer "taxonomicID",
 
 \code{fill_taxon_id} and \code{fill_usage_id} only act on the newly added data (they
 do not fill columns in \code{tax_dat}).
+
+To modify settings used for validation if \code{strict} is \code{TRUE},
+use \code{dct_options()}.
 }
 \examples{
 tibble::tibble(
