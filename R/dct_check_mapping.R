@@ -2,13 +2,16 @@
 #'
 #' Required columns:
 #' - taxonID
-#' - acceptedNameUsageID
+#' - select column
 #'
 #' @inherit check_taxon_id_not_na
+#' @autoglobal
+#' @importFrom rlang :=
 #' @noRd
 check_mapping_to_self <- function(tax_dat,
                                   on_fail,
                                   on_success,
+                                  col_select = "acceptedNameUsageID",
                                   run = TRUE) {
   # Set defaults ----
   if (missing(on_success)) {
@@ -21,21 +24,21 @@ check_mapping_to_self <- function(tax_dat,
   # Early exit with NULL if req'd cols not present
   if (
     is.null(tax_dat$taxonID) ||
-      is.null(tax_dat$acceptedNameUsageID) ||
+      is.null(tax_dat[[col_select]]) ||
       run == FALSE
   ) {
     return(NULL)
   }
 
   # Check for names that lack a taxonID for acceptedNameUsageID
-  map_to_self <- tax_dat$acceptedNameUsageID == tax_dat$taxonID
-  map_id_is_na <- is.na(tax_dat$acceptedNameUsageID)
+  map_to_self <- tax_dat[[col_select]] == tax_dat$taxonID
+  map_id_is_na <- is.na(tax_dat[[col_select]])
   map_id_is_bad <- !map_id_is_na & map_to_self
 
   # Get vectors of bad values
   bad_taxon_id <- tax_dat$taxonID[map_id_is_bad]
   bad_sci_name <- tax_dat$scientificName[map_id_is_bad]
-  bad_acc_id <- tax_dat$acceptedNameUsageID[map_id_is_bad]
+  bad_acc_id <- tax_dat[[col_select]][map_id_is_bad]
 
   # Format results
   if (on_fail == "error") {
@@ -43,10 +46,10 @@ check_mapping_to_self <- function(tax_dat,
       sum(map_id_is_bad) == 0,
       msg = glue::glue(
         "check_mapping failed.
-          taxonID detected with identical acceptedNameUsageID.
+          taxonID detected with identical {col_select}.
           {make_msg('taxonID', bad_taxon_id)}\\
           {make_msg('scientificName', bad_sci_name)}\\
-          {make_msg('acceptedNameUsageID', bad_acc_id, is_last = TRUE)}",
+          {make_msg(col_select, bad_acc_id, is_last = TRUE)}",
         .transformer = null_transformer("")
       )
     )
@@ -57,8 +60,8 @@ check_mapping_to_self <- function(tax_dat,
       data = tibble::tibble(
         taxonID = bad_taxon_id,
         scientificName = bad_sci_name,
-        acceptedNameUsageID = bad_acc_id,
-        error = "taxonID detected with identical acceptedNameUsageID",
+        {{ col_select }} := bad_acc_id,
+        error = glue::glue("taxonID detected with identical {col_select}"),
         check = "check_mapping"
       )
     )
