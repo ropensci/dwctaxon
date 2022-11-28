@@ -2,9 +2,14 @@
 % Please edit documentation in R/dct_check_mapping.R
 \name{dct_check_mapping}
 \alias{dct_check_mapping}
-\title{Check mapping of usage names}
+\title{Check mapping of usage taxonomic IDs}
 \usage{
-dct_check_mapping(tax_dat, on_fail, on_success)
+dct_check_mapping(
+  tax_dat,
+  on_fail,
+  on_success,
+  col_select = "acceptedNameUsageID"
+)
 }
 \arguments{
 \item{tax_dat}{Dataframe; taxonomic database in DWC format.}
@@ -12,6 +17,9 @@ dct_check_mapping(tax_dat, on_fail, on_success)
 \item{on_fail}{Character vector of length 1, either "error" or "summary". Describes what to do if the check fails. Default \code{"error"}.}
 
 \item{on_success}{Character vector of length 1, either "logical" or "data". Describes what to do if the check passes. Default \code{"data"}.}
+
+\item{col_select}{Character vector of length 1; the name of the column
+(DWC term) to check. Default \code{"acceptedNameUsageID"}.}
 }
 \value{
 Depends on the result of the check and on values of \code{on_fail} and
@@ -25,14 +33,26 @@ return a dataframe with a summary of the reasons for failure
 }
 }
 \description{
-Check that names with acceptedUsageID map properly to taxonID in
-Darwin Core taxonomic data
+Check that values of terms like 'acceptedUsageID' map properly to taxonID in
+Darwin Core (DWC) taxonomic data.
 }
 \details{
 The following rules are enforced:
 \itemize{
-\item taxonID may not be identical to acceptedNameUsageID within a single row
-\item Every acceptedNameUsageID must have a corresponding taxonID
+\item Values of taxonID must be non-missing and unique.
+\item Value of taxonID may not be identical to that of the selected column within
+a single row (in other words, a name cannot be its own accepted name,
+parent taxon, or basionym).
+\item Every value in the selected column must have a corresponding taxonID.
+}
+
+\code{col_select} can take one of the following values:
+\itemize{
+\item \code{"acceptedNameUsageID"}: taxonID corresponding to the accepted name (of
+a synonym).
+\item \code{"parentNameUsageID"}: taxonID corresponding to the immediate parent taxon
+of a name (for example, for a species, this would be the genus).
+\item \code{"originalNameUsageID"}: taxonID corresponding to the basionym of a name.
 }
 }
 \examples{

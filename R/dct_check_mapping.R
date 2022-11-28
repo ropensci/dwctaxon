@@ -55,15 +55,17 @@ check_mapping_to_self <- function(tax_dat,
     )
   }
   if (on_fail == "summary") {
+    error_msg <- glue::glue("taxonID detected with identical {col_select}")
     assert_that_d(
       sum(map_id_is_bad) == 0,
       data = tibble::tibble(
         taxonID = bad_taxon_id,
         scientificName = bad_sci_name,
         {{ col_select }} := bad_acc_id,
-        error = glue::glue("taxonID detected with identical {col_select}"),
+        error = error_msg,
         check = "check_mapping"
-      )
+      ),
+      msg = error_msg
     )
   }
   if (on_success == "data") {
@@ -86,6 +88,7 @@ check_mapping_to_self <- function(tax_dat,
 check_mapping_exists <- function(tax_dat,
                                  on_fail,
                                  on_success,
+                                 col_select = "acceptedNameUsageID",
                                  run = TRUE) {
   # Set defaults ----
   if (missing(on_success)) {
@@ -98,21 +101,21 @@ check_mapping_exists <- function(tax_dat,
   # Early exit with NULL if req'd cols not present
   if (
     is.null(tax_dat$taxonID) ||
-      is.null(tax_dat$acceptedNameUsageID) ||
+      is.null(tax_dat[[col_select]]) ||
       run == FALSE
   ) {
     return(NULL)
   }
 
   # Check for names that lack a taxonID for acceptedNameUsageID
-  map_id_is_good <- tax_dat$acceptedNameUsageID %in% tax_dat$taxonID
-  map_id_is_na <- is.na(tax_dat$acceptedNameUsageID)
+  map_id_is_good <- tax_dat[[col_select]] %in% tax_dat$taxonID
+  map_id_is_na <- is.na(tax_dat[[col_select]])
   map_id_is_bad <- !map_id_is_na & !map_id_is_good
 
   # Get vectors of bad values
   bad_taxon_id <- tax_dat$taxonID[map_id_is_bad]
   bad_sci_name <- tax_dat$scientificName[map_id_is_bad]
-  bad_acc_id <- tax_dat$acceptedNameUsageID[map_id_is_bad]
+  bad_acc_id <- tax_dat[[col_select]][map_id_is_bad]
 
   # Format results
   if (on_fail == "error") {
@@ -120,28 +123,30 @@ check_mapping_exists <- function(tax_dat,
       sum(map_id_is_bad) == 0,
       msg = glue::glue(
         "check_mapping failed.
-          taxonID detected whose acceptedNameUsageID value does not \\
+          taxonID detected whose {col_select} value does not \\
           map to taxonID of an existing name.
           {make_msg('taxonID', bad_taxon_id)}\\
           {make_msg('scientificName', bad_sci_name)}\\
-          {make_msg('acceptedNameUsageID', bad_acc_id, is_last = TRUE)}",
+          {make_msg(col_select, bad_acc_id, is_last = TRUE)}",
         .transformer = null_transformer("")
       )
     )
   }
   if (on_fail == "summary") {
+    error_msg <- glue::glue(
+      "taxonID detected whose {col_select} value does not \\
+      map to taxonID of an existing name."
+    )
     assert_that_d(
       sum(map_id_is_bad) == 0,
       data = tibble::tibble(
         taxonID = bad_taxon_id,
         scientificName = bad_sci_name,
-        acceptedNameUsageID = bad_acc_id,
-        error = paste(
-          "taxonID detected whose acceptedNameUsageID value does not",
-          "map to taxonID of an existing name."
-        ),
+        {{ col_select }} := bad_acc_id,
+        error = error_msg,
         check = "check_mapping"
-      )
+      ),
+      msg = error_msg
     )
   }
 
@@ -153,18 +158,30 @@ check_mapping_exists <- function(tax_dat,
   }
 }
 
-#' Check mapping of usage names
+#' Check mapping of usage taxonomic IDs
 #'
-#' Check that names with acceptedUsageID map properly to taxonID in
-#' Darwin Core taxonomic data
+#' Check that values of terms like 'acceptedUsageID' map properly to taxonID in
+#' Darwin Core (DWC) taxonomic data.
 #'
 #' The following rules are enforced:
-#' - taxonID may not be identical to acceptedNameUsageID within a single row
-#' - Every acceptedNameUsageID must have a corresponding taxonID
+#' - Values of taxonID must be non-missing and unique.
+#' - Value of taxonID may not be identical to that of the selected column within
+#' a single row (in other words, a name cannot be its own accepted name,
+#' parent taxon, or basionym).
+#' - Every value in the selected column must have a corresponding taxonID.
+#'
+#' `col_select` can take one of the following values:
+#' - `"acceptedNameUsageID"`: taxonID corresponding to the accepted name (of
+#' a synonym).
+#' - `"parentNameUsageID"`: taxonID corresponding to the immediate parent taxon
+#' of a name (for example, for a species, this would be the genus).
+#' - `"originalNameUsageID"`: taxonID corresponding to the basionym of a name.
 #'
 #' @param tax_dat `r param_tax_dat`
 #' @param on_fail `r param_on_fail`
 #' @param on_success `r param_on_success`
+#' @param col_select Character vector of length 1; the name of the column
+#' (DWC term) to check. Default `"acceptedNameUsageID"`.
 #'
 #' @inherit dct_check_taxon_id return
 #' @example inst/examples/dct_check_mapping.R
@@ -173,7 +190,8 @@ check_mapping_exists <- function(tax_dat,
 #'
 dct_check_mapping <- function(tax_dat,
                               on_fail,
-                              on_success) {
+                              on_success,
+                              col_select = "acceptedNameUsageID") {
   # Set defaults ----
   if (missing(on_success)) {
     on_success <- get_dct_opt("on_success")
@@ -188,6 +206,7 @@ dct_check_mapping <- function(tax_dat,
   )
   assertthat::assert_that(assertthat::is.string(on_fail))
   assertthat::assert_that(assertthat::is.string(on_success))
+  assertthat::assert_that(assertthat::is.string(col_select))
   assertthat::assert_that(
     on_fail %in% c("error", "summary"),
     msg = "on_fail must be one of 'error' or 'summary'"
@@ -196,19 +215,22 @@ dct_check_mapping <- function(tax_dat,
     on_success %in% c("data", "logical"),
     msg = "on_success must be one of 'data' or 'logical'"
   )
+  valid_col_select <- c(
+    "acceptedNameUsageID", "parentNameUsageID", "originalNameUsageID"
+  )
+  valid_col_select_str <- glue::glue_collapse(
+    valid_col_select, "', '",
+    last = "', or '"
+  )
+  valid_col_select_str <- paste0("'", valid_col_select_str, "'")
+  assertthat::assert_that(
+    col_select %in% valid_col_select,
+    msg = glue::glue("on_fail must be one of {valid_col_select_str}")
+  )
 
   # Run main checks
   suppressWarnings(
     check_res <- list(
-      # Check for required columns
-      assert_col(
-        tax_dat, "taxonID", c("character", "numeric", "integer"),
-        req_by = "check_mapping", on_fail = on_fail
-      ),
-      assert_col(
-        tax_dat, "acceptedNameUsageID", c("character", "numeric", "integer"),
-        req_by = "check_mapping", on_fail = on_fail
-      ),
       # Check taxonID not NA
       check_taxon_id_not_na(tax_dat, on_fail = on_fail, on_success = "logical"),
       # Check taxonID is unique
@@ -217,9 +239,17 @@ dct_check_mapping <- function(tax_dat,
         on_fail = on_fail, on_success = "logical"
       ),
       # Check no names map to self
-      check_mapping_to_self(tax_dat, on_fail = on_fail, on_success = "logical"),
-      # Check all names have matching taxonID for acceptedNameUsageID
-      check_mapping_exists(tax_dat, on_fail = on_fail, on_success = "logical")
+      check_mapping_to_self(
+        tax_dat,
+        on_fail = on_fail, on_success = "logical",
+        col_select = col_select
+      ),
+      # Check all names have matching taxonID for selected column
+      check_mapping_exists(
+        tax_dat,
+        on_fail = on_fail, on_success = "logical",
+        col_select = col_select
+      )
     ) |>
       # drop any NULL results
       purrr::compact()

@@ -83,7 +83,7 @@ assert_dat <- function(...) {
 #' @autoglobal
 assert_that_d <- function(condition, data, msg = NULL, env = parent.frame()) {
   assert_res <- tryCatch(
-    expr = assertthat::assert_that(condition, msg = msg),
+    expr = assertthat::assert_that(isTRUE(condition), msg = msg),
     error = function(e) {
       return(e)
     },

@@ -133,6 +133,18 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=tidyverse"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "patrick",
+      "name": "patrick",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=patrick"
     }
   ],
   "softwareRequirements": {
@@ -286,7 +298,7 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "455.928KB",
+  "fileSize": "469.534KB",
   "citation": [
     {
       "@type": "CreativeWork",
