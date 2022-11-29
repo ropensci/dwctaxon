@@ -37,11 +37,10 @@ test_that("assert_that_d() works", {
     assert_that_d_wrapper(1 == 2, data = data.frame(error = "1 not equal to 2"))
   )
   expect_equal(
-    suppressWarnings(
-      assert_that_d_wrapper(
-        1 == 2,
-        data = data.frame(error = "1 not equal to 2"), msg = "1 not equal to 2"
-      )
+    assert_that_d_wrapper(
+      1 == 2,
+      data = data.frame(error = "1 not equal to 2"), msg = "1 not equal to 2",
+      quiet = TRUE
     ),
     data.frame(error = "1 not equal to 2")
   )
@@ -67,11 +66,9 @@ test_that("assert_col() don't error on correct data", {
 test_that("assert_col() detects missing column", {
   # on_fail = "summary" returns df
   expect_equal(
-    suppressWarnings(
-      assert_col(
-        data.frame(a = 1), "b",
-        req_by = "some_func", on_fail = "summary"
-      )
+    assert_col(
+      data.frame(a = 1), "b",
+      req_by = "some_func", on_fail = "summary", quiet = TRUE
     ),
     tibble::tibble(
       check = "some_func",
@@ -80,11 +77,9 @@ test_that("assert_col() detects missing column", {
   )
   # `req_by` is optional
   expect_equal(
-    suppressWarnings(
-      assert_col(
-        data.frame(a = 1), "b",
-        on_fail = "summary"
-      )
+    assert_col(
+      data.frame(a = 1), "b",
+      on_fail = "summary", quiet = TRUE
     ),
     tibble::tibble(
       error = "Column b required in input data"
@@ -108,11 +103,9 @@ test_that("assert_col() detects missing column", {
 test_that("assert_col() detects column of wrong class", {
   # on_fail = "summary" returns df
   expect_equal(
-    suppressWarnings(
-      assert_col(
-        data.frame(a = 1), "a", "character",
-        req_by = "some_fun", on_fail = "summary"
-      )
+    assert_col(
+      data.frame(a = 1), "a", "character",
+      req_by = "some_fun", on_fail = "summary", quiet = TRUE
     ),
     tibble::tibble(
       check = "some_fun",
@@ -121,11 +114,9 @@ test_that("assert_col() detects column of wrong class", {
   )
   # `req_by` is optional
   expect_equal(
-    suppressWarnings(
-      assert_col(
-        data.frame(a = 1), "a", "character",
-        on_fail = "summary"
-      )
+    assert_col(
+      data.frame(a = 1), "a", "character",
+      on_fail = "summary", quiet = TRUE
     ),
     tibble::tibble(
       error = "Column a must be of class character"

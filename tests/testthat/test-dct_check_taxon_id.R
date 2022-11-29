@@ -40,11 +40,9 @@ test_that("check for correctly formatted columns works", {
     "check_taxon_id requires column taxonID in input data"
   )
   expect_equal(
-    suppressWarnings(
-      dct_check_taxon_id(
-        data.frame(scientificName = "foo bar"),
-        on_fail = "summary"
-      )
+    dct_check_taxon_id(
+      data.frame(scientificName = "foo bar"),
+      on_fail = "summary", quiet = TRUE
     ),
     tibble::tibble(
       error = "check_taxon_id requires column taxonID in input data",
@@ -59,11 +57,9 @@ test_that("check for correctly formatted columns works", {
     "Column taxonID must be of class character, numeric, or integer"
   )
   expect_equal(
-    suppressWarnings(
-      dct_check_taxon_id(
-        data.frame(taxonID = complex(1)),
-        on_fail = "summary"
-      )
+    dct_check_taxon_id(
+      data.frame(taxonID = complex(1)),
+      on_fail = "summary", quiet = TRUE
     ),
     tibble::tibble(
       error = "Column taxonID must be of class character, numeric, or integer",
@@ -88,9 +84,7 @@ test_that("check for 'taxonID cannot be missing' works", {
     )
   )
   expect_equal(
-    suppressWarnings(
-      check_taxon_id_not_na(bad_dat, on_fail = "summary")
-    ),
+    check_taxon_id_not_na(bad_dat, on_fail = "summary", quiet = TRUE),
     tibble::tibble(
       taxonID = NA_character_,
       check = "check_taxon_id",
@@ -106,9 +100,7 @@ test_that("check for 'taxonID cannot be missing' works", {
     )
   )
   expect_equal(
-    suppressWarnings(
-      dct_check_taxon_id(bad_dat, on_fail = "summary")
-    ),
+    dct_check_taxon_id(bad_dat, on_fail = "summary", quiet = TRUE),
     tibble::tibble(
       taxonID = NA_character_,
       error = "taxonID detected with missing value",
@@ -135,7 +127,7 @@ test_that("check for 'taxonID cannot be duplicated' works", {
     )
   )
   expect_equal(
-    suppressWarnings(check_taxon_id_is_uniq(bad_dat, on_fail = "summary")),
+    check_taxon_id_is_uniq(bad_dat, on_fail = "summary", quiet = TRUE),
     tibble::tibble(
       taxonID = as.character(rep(3, 2)),
       check = rep("check_taxon_id", 2),
@@ -151,7 +143,7 @@ test_that("check for 'taxonID cannot be duplicated' works", {
     )
   )
   expect_equal(
-    suppressWarnings(dct_check_taxon_id(bad_dat, on_fail = "summary")),
+    dct_check_taxon_id(bad_dat, on_fail = "summary", quiet = TRUE),
     tibble::tibble(
       taxonID = as.character(rep(3, 2)),
       error = rep("taxonID detected with duplicated value", 2),

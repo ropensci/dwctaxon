@@ -42,9 +42,9 @@ bad_dat <- tibble::tribble(
   "2", "1", "synonym", "Species bar",
   "3", NA, "foo", "Species bat"
 )
-suppressWarnings(
-  dct_check_tax_status(bad_dat, on_fail = "summary")
-)
+
+dct_check_tax_status(bad_dat, on_fail = "summary", quiet = TRUE)
+
 # Example of setting valid values of taxonomicStatus via dct_options()
 dct_options(valid_tax_status = "provisionally accepted, synonym, NA")
 tibble::tribble(

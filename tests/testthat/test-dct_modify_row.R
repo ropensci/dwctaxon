@@ -448,13 +448,11 @@ test_that("argument aliases work", {
 
 test_that("attempt to update without changes returns original data", {
   expect_equal(
-    suppressWarnings(
-      dct_modify_row(
-        dct_filmies,
-        sci_name = "Cephalomanes atrovirens Presl",
-        tax_status = "accepted",
-        stamp_modified = FALSE
-      )
+    dct_modify_row(
+      dct_filmies,
+      sci_name = "Cephalomanes atrovirens Presl",
+      tax_status = "accepted",
+      stamp_modified = FALSE, quiet = TRUE
     ),
     dct_filmies
   )
