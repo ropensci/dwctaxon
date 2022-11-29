@@ -117,7 +117,13 @@ check_syn_map_to_acc <- function(tax_dat,
     quiet <- get_dct_opt("quiet")
   }
 
-  if (run == FALSE) {
+  # Early exit with NULL if req'd cols not present
+  if (
+    !"taxonID" %in% colnames(tax_dat) ||
+      !"acceptedNameUsageID" %in% colnames(tax_dat) ||
+      !"taxonomicStatus" %in% colnames(tax_dat) ||
+      run == FALSE
+  ) {
     return(NULL)
   }
 
@@ -141,8 +147,11 @@ check_syn_map_to_acc <- function(tax_dat,
   syn_id_not_in_acc_id <- !tax_dat_synonyms$acceptedNameUsageID %in%
     tax_dat_accepted$taxonID
   bad_taxon_id <- tax_dat_synonyms$taxonID[syn_id_not_in_acc_id]
-  bad_sci_name <- tax_dat_synonyms$scientificName[syn_id_not_in_acc_id]
   bad_acc_id <- tax_dat_synonyms$acceptedNameUsageID[syn_id_not_in_acc_id]
+  bad_sci_name <- NULL
+  if ("scientificName" %in% colnames(tax_dat_synonyms)) {
+    bad_sci_name <- tax_dat_synonyms$scientificName[syn_id_not_in_acc_id]
+  }
 
   # Format results
   if (on_fail == "error") {
@@ -212,7 +221,13 @@ check_acc_id_has_tax_status <- function(tax_dat,
     quiet <- get_dct_opt("quiet")
   }
 
-  if (run == FALSE) {
+  # Early exit with NULL if req'd cols not present
+  if (
+    !"taxonID" %in% colnames(tax_dat) ||
+      !"acceptedNameUsageID" %in% colnames(tax_dat) ||
+      !"taxonomicStatus" %in% colnames(tax_dat) ||
+      run == FALSE
+  ) {
     return(NULL)
   }
 
@@ -223,12 +238,15 @@ check_acc_id_has_tax_status <- function(tax_dat,
 
   tax_status_is_missing <- is.na(tax_dat_with_acc_usage_id$taxonomicStatus)
   bad_taxon_id <- tax_dat_with_acc_usage_id$taxonID[tax_status_is_missing]
-  bad_sci_name <- tax_dat_with_acc_usage_id$scientificName[
-    tax_status_is_missing
-  ]
   bad_acc_id <- tax_dat_with_acc_usage_id$acceptedNameUsageID[
     tax_status_is_missing
   ]
+  bad_sci_name <- NULL
+  if ("scientificName" %in% colnames(tax_dat_with_acc_usage_id)) {
+    bad_sci_name <- tax_dat_with_acc_usage_id$scientificName[
+      tax_status_is_missing
+    ]
+  }
 
   # Format results
   if (on_fail == "error") {
@@ -298,7 +316,13 @@ check_acc_id_valid_tax_status <- function(tax_dat,
     quiet <- get_dct_opt("quiet")
   }
 
-  if (run == FALSE) {
+  # Early exit with NULL if req'd cols not present
+  if (
+    !"taxonID" %in% colnames(tax_dat) ||
+      !"acceptedNameUsageID" %in% colnames(tax_dat) ||
+      !"taxonomicStatus" %in% colnames(tax_dat) ||
+      run == FALSE
+  ) {
     return(NULL)
   }
 
@@ -316,15 +340,18 @@ check_acc_id_valid_tax_status <- function(tax_dat,
     !is.na(tax_dat_with_acc_usage_id$taxonomicStatus)
 
   bad_taxon_id <- tax_dat_with_acc_usage_id$taxonID[acc_usage_id_is_not_valid]
-  bad_sci_name <- tax_dat_with_acc_usage_id$scientificName[
-    acc_usage_id_is_not_valid
-  ]
   bad_tax_status <- tax_dat_with_acc_usage_id$taxonomicStatus[
     acc_usage_id_is_not_valid
   ]
   bad_acc_id <- tax_dat_with_acc_usage_id$acceptedNameUsageID[
     acc_usage_id_is_not_valid
   ]
+  bad_sci_name <- NULL
+  if ("scientificName" %in% colnames(tax_dat_with_acc_usage_id)) {
+    bad_sci_name <- tax_dat_with_acc_usage_id$scientificName[
+      acc_usage_id_is_not_valid
+    ]
+  }
 
   # Format results
   if (on_fail == "error") {
@@ -399,7 +426,13 @@ check_variant_map_to_nonvar <- function(tax_dat,
     quiet <- get_dct_opt("quiet")
   }
 
-  if (run == FALSE) {
+  # Early exit with NULL if req'd cols not present
+  if (
+    !"taxonID" %in% colnames(tax_dat) ||
+      !"acceptedNameUsageID" %in% colnames(tax_dat) ||
+      !"taxonomicStatus" %in% colnames(tax_dat) ||
+      run == FALSE
+  ) {
     return(NULL)
   }
 
@@ -415,8 +448,12 @@ check_variant_map_to_nonvar <- function(tax_dat,
     tax_dat_variants$taxonID
 
   bad_taxon_id <- tax_dat_variants$taxonID[var_id_maps_to_var_id]
-  bad_sci_name <- tax_dat_variants$scientificName[var_id_maps_to_var_id]
   bad_acc_id <- tax_dat_variants$acceptedNameUsageID[var_id_maps_to_var_id]
+
+  bad_sci_name <- NULL
+  if ("scientificName" %in% colnames(tax_dat_variants)) {
+    bad_sci_name <- tax_dat_variants$scientificName[var_id_maps_to_var_id]
+  }
 
   # Format results
   if (on_fail == "error") {
@@ -485,7 +522,13 @@ check_variant_map_to_something <- function(tax_dat,
     quiet <- get_dct_opt("quiet")
   }
 
-  if (run == FALSE) {
+  # Early exit with NULL if req'd cols not present
+  if (
+    !"taxonID" %in% colnames(tax_dat) ||
+      !"acceptedNameUsageID" %in% colnames(tax_dat) ||
+      !"taxonomicStatus" %in% colnames(tax_dat) ||
+      run == FALSE
+  ) {
     return(NULL)
   }
 
@@ -499,7 +542,11 @@ check_variant_map_to_something <- function(tax_dat,
 
   var_id_no_acc_id <- is.na(tax_dat_variants$acceptedNameUsageID)
   bad_taxon_id <- tax_dat_variants$taxonID[var_id_no_acc_id]
-  bad_sci_name <- tax_dat_variants$scientificName[var_id_no_acc_id]
+
+  bad_sci_name <- NULL
+  if ("scientificName" %in% colnames(tax_dat_variants)) {
+    bad_sci_name <- tax_dat_variants$scientificName[var_id_no_acc_id]
+  }
 
   # Format results
   if (on_fail == "error") {
@@ -562,7 +609,13 @@ check_accepted_map_to_nothing <- function(tax_dat,
     quiet <- get_dct_opt("quiet")
   }
 
-  if (run == FALSE) {
+  # Early exit with NULL if req'd cols not present
+  if (
+    !"taxonID" %in% colnames(tax_dat) ||
+      !"acceptedNameUsageID" %in% colnames(tax_dat) ||
+      !"taxonomicStatus" %in% colnames(tax_dat) ||
+      run == FALSE
+  ) {
     return(NULL)
   }
 
@@ -576,7 +629,11 @@ check_accepted_map_to_nothing <- function(tax_dat,
 
   acc_id_map_to_something <- !is.na(tax_dat_accepted$acceptedNameUsageID)
   bad_taxon_id <- tax_dat_accepted$taxonID[acc_id_map_to_something]
-  bad_sci_name <- tax_dat_accepted$scientificName[acc_id_map_to_something]
+
+  bad_sci_name <- NULL
+  if ("scientificName" %in% colnames(tax_dat_accepted)) {
+    bad_sci_name <- tax_dat_accepted$scientificName[acc_id_map_to_something]
+  }
 
   # Format results
   if (on_fail == "error") {

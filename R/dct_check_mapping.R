@@ -28,7 +28,8 @@ check_mapping_to_self <- function(tax_dat,
   # Early exit with NULL if req'd cols not present
   if (
     !"taxonID" %in% colnames(tax_dat) ||
-      is.null(tax_dat[[col_select]]) ||
+      !"scientificName" %in% colnames(tax_dat) ||
+      !col_select %in% colnames(tax_dat) ||
       run == FALSE
   ) {
     return(NULL)
@@ -110,7 +111,8 @@ check_mapping_exists <- function(tax_dat,
   # Early exit with NULL if req'd cols not present
   if (
     !"taxonID" %in% colnames(tax_dat) ||
-      is.null(tax_dat[[col_select]]) ||
+      !"scientificName" %in% colnames(tax_dat) ||
+      !col_select %in% colnames(tax_dat) ||
       run == FALSE
   ) {
     return(NULL)

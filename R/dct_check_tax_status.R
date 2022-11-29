@@ -27,7 +27,9 @@ check_tax_status_valid <- function(tax_dat,
   }
 
   # Early exit with NULL if req'd cols not present
-  if (!"taxonomicStatus" %in% colnames(tax_dat) || run == FALSE) {
+  if (
+    !"taxonomicStatus" %in% colnames(tax_dat) ||
+      run == FALSE) {
     return(NULL)
   }
 
@@ -39,9 +41,15 @@ check_tax_status_valid <- function(tax_dat,
   tax_status_is_bad <- !tax_dat$taxonomicStatus %in% valid_tax_status_v
 
   # Get vectors of bad values
-  bad_taxon_id <- tax_dat$taxonID[tax_status_is_bad]
-  bad_sci_name <- tax_dat$scientificName[tax_status_is_bad]
   bad_tax_status <- tax_dat$taxonomicStatus[tax_status_is_bad]
+  bad_taxon_id <- NULL
+  if ("taxonID" %in% colnames(tax_dat)) {
+    bad_taxon_id <- tax_dat$taxonID[tax_status_is_bad]
+  }
+  bad_sci_name <- NULL
+  if ("scientificName" %in% colnames(tax_dat)) {
+    bad_sci_name <- tax_dat$scientificName[tax_status_is_bad]
+  }
 
   # Format results
   if (on_fail == "error") {

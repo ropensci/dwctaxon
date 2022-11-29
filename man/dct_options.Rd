@@ -38,6 +38,8 @@ The arguments that can be set with this function are as follows:
 \item \code{check_status_diff}: Logical vector of length 1; should each scientific name be allowed to have only one taxonomic status? Default \code{FALSE}.
 \item \code{check_col_names}: Logical vector of length 1; should all column names be required to be a valid Darwin Core term? Default \code{TRUE}.
 \item \code{valid_tax_status}: Character vector of length 1; valid values for \code{taxonomicStatus}. Each value must be separated by a comma. Default \verb{accepted, synonym, variant, NA}. \code{"NA"} indicates that missing (NA) values are valid. Case-sensitive.
+\item \code{skip_missing_cols}: Logical vector of length 1; should checks be silently skipped if any of the
+columns they inspect are missing? Default \code{FALSE}.
 \item \code{on_success}: Character vector of length 1, either "logical" or "data". Describes what to do if the check passes. Default \code{"data"}.
 \item \code{on_fail}: Character vector of length 1, either "error" or "summary". Describes what to do if the check fails. Default \code{"error"}.
 }
