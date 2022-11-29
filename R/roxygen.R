@@ -64,8 +64,7 @@ param_valid_tax_status <- glue::glue(
   'Character vector of length 1; valid values for \\
   `taxonomicStatus`. Each value must be separated by a comma. \\
   {print_default("valid_tax_status")}. \\
-  `"NA"` indicates that missing (NA) values are valid. Case-sensitive. \\
-  Can also be set with `dct_options()`.'
+  `"NA"` indicates that missing (NA) values are valid. Case-sensitive.'
 )
 
 param_on_fail <- glue::glue(

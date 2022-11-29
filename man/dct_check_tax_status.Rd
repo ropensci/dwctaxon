@@ -14,7 +14,7 @@ dct_check_tax_status(tax_dat, on_fail, on_success, valid_tax_status)
 
 \item{on_success}{`r param_on_success}
 
-\item{valid_tax_status}{Character vector of length 1; valid values for \code{taxonomicStatus}. Each value must be separated by a comma. Default \verb{accepted, synonym, variant, NA}. \code{"NA"} indicates that missing (NA) values are valid. Case-sensitive. Can also be set with \code{dct_options()}. (see Examples).}
+\item{valid_tax_status}{Character vector of length 1; valid values for \code{taxonomicStatus}. Each value must be separated by a comma. Default \verb{accepted, synonym, variant, NA}. \code{"NA"} indicates that missing (NA) values are valid. Case-sensitive. (see Examples).}
 }
 \value{
 Depends on the result of the check and on values of \code{on_fail} and

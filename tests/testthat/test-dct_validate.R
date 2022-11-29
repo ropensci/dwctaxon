@@ -252,10 +252,7 @@ test_that("check for 'target taxonID exists' works", {
 
 # check_mapping_accepted_status ----
 
-dct_options(
-  check_tax_status = FALSE,
-  check_mapping_accepted_status = FALSE
-)
+dct_options(check_tax_status = FALSE)
 with_parameters_test_that("check_mapping_* works for dup taxid",
   {
     expect_snapshot({
@@ -290,6 +287,9 @@ with_parameters_test_that("check_mapping_* works for missing taxid",
   bad_dat = bad_dat_missing_taxid
 )
 dct_options(reset = TRUE)
+
+# check_mapping_accepted_status tests
+dct_options(check_mapping_accepted_status = TRUE)
 
 test_that("check for 'synonyms must map to accepted names' works", {
   bad_dat <- rbind(
@@ -333,7 +333,6 @@ test_that("check for 'synonyms must map to accepted names' works", {
     )
   )
 })
-
 
 test_that(
   "check for 'acceptedNameUsageID must have non-NA taxonomicStatus' works",
@@ -411,7 +410,6 @@ test_that(
   }
 )
 
-
 test_that(
   "check for 'variant must map to something' works",
   {
@@ -453,7 +451,7 @@ test_that(
       "3", NA, "accepted", "Species bat"
     )
     expect_error(
-      dct_validate(bad_acc_dat),
+      dct_validate(bad_acc_dat, check_mapping_accepted_status = TRUE),
       paste0(
         "check_mapping_accepted_status failed.*",
         "accepted name\\(s\\) detected with a non\\-missing value for ",
@@ -464,7 +462,11 @@ test_that(
     )
     expect_equal(
       suppressWarnings(
-        dct_validate(bad_acc_dat, on_fail = "summary")
+        dct_validate(
+          bad_acc_dat,
+          check_mapping_accepted_status = TRUE,
+          on_fail = "summary"
+        )
       ),
       tibble::tibble(
         taxonID = "1",
@@ -494,6 +496,8 @@ test_that("Values like 'ambiguous synonym' work", {
     )
   )
 })
+
+dct_options(reset = TRUE)
 
 # check_sci_name ----
 
@@ -618,6 +622,8 @@ test_that("check for 'all columns must have valid names' works", {
 
 # Other tests -----
 
+dct_options(check_mapping_accepted_status = TRUE)
+
 test_that("combinations of failures get reported", {
   bad_dat <- tibble::tribble(
     ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
@@ -650,3 +656,5 @@ test_that("combinations of failures get reported", {
     )
   )
 })
+
+dct_options(reset = TRUE)

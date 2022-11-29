@@ -33,8 +33,8 @@ dct_validate(
 
 \item{check_mapping_original}{Logical vector of length 1; should all values of \code{originalNameUsageID} be required to map to the \code{taxonID} of an existing name? Default \code{TRUE}.}
 
-\item{check_mapping_accepted_status}{Logical vector of length 1; should rules about mapping of variants and synonyms be enforced? Default \code{TRUE}.
-(see Details)}
+\item{check_mapping_accepted_status}{Logical vector of length 1; should rules about mapping of variants and synonyms be enforced? Default \code{FALSE}.
+(see Details).}
 
 \item{check_sci_name}{Logical vector of length 1; should all instances of \code{scientificName} be required to be non-missing and unique? Default \code{TRUE}.}
 
@@ -42,7 +42,7 @@ dct_validate(
 
 \item{check_col_names}{Logical vector of length 1; should all column names be required to be a valid Darwin Core term? Default \code{TRUE}.}
 
-\item{valid_tax_status}{Character vector of length 1; valid values for \code{taxonomicStatus}. Each value must be separated by a comma. Default \verb{accepted, synonym, variant, NA}. \code{"NA"} indicates that missing (NA) values are valid. Case-sensitive. Can also be set with \code{dct_options()}.}
+\item{valid_tax_status}{Character vector of length 1; valid values for \code{taxonomicStatus}. Each value must be separated by a comma. Default \verb{accepted, synonym, variant, NA}. \code{"NA"} indicates that missing (NA) values are valid. Case-sensitive.}
 
 \item{on_success}{Character vector of length 1, either "logical" or "data". Describes what to do if the check passes. Default \code{"data"}.}
 
@@ -72,8 +72,8 @@ For \code{check_mapping_accepted_status} and \code{check_status_diff}, "accepted
 For \code{check_mapping_accepted_status}, the following rules are enforced:
 \itemize{
 \item Rows with \code{taxonomicStatus} of "synonym" (synonyms) must have an
-\code{acceptedNameUsageID} matching the \code{taxonID} of an accepted name (
-\code{taxonomicStatus} of "accepted")
+\code{acceptedNameUsageID} matching the \code{taxonID} of an accepted name
+(\code{taxonomicStatus} of "accepted")
 \item Rows with \code{taxonomicStatus} of "variant" (orthographic variants) must
 have an \code{acceptedNameUsageID} matching the \code{taxonID} of an accepted name or
 synonym (but not another variant)

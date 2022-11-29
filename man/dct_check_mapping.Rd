@@ -39,7 +39,6 @@ Darwin Core (DWC) taxonomic data.
 \details{
 The following rules are enforced:
 \itemize{
-\item Values of taxonID must be non-missing and unique.
 \item Value of taxonID may not be identical to that of the selected column within
 a single row (in other words, a name cannot be its own accepted name,
 parent taxon, or basionym).

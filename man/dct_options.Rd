@@ -32,12 +32,12 @@ The arguments that can be set with this function are as follows:
 \item \code{check_mapping_accepted}: Logical vector of length 1; should all values of \code{acceptedNameUsageID} be required to map to the \code{taxonID} of an existing name? Default \code{TRUE}.
 \item \code{check_mapping_parent}: Logical vector of length 1; should all values of \code{parentNameUsageID} be required to map to the \code{taxonID} of an existing name? Default \code{TRUE}.
 \item \code{check_mapping_original}: Logical vector of length 1; should all values of \code{originalNameUsageID} be required to map to the \code{taxonID} of an existing name? Default \code{TRUE}.
-\item \code{check_mapping_accepted_status}: Logical vector of length 1; should rules about mapping of variants and synonyms be enforced? Default \code{TRUE}.
-(See \code{dct_validate()})
+\item \code{check_mapping_accepted_status}: Logical vector of length 1; should rules about mapping of variants and synonyms be enforced? Default \code{FALSE}.
+(See \code{dct_validate()}).
 \item \code{check_sci_name}: Logical vector of length 1; should all instances of \code{scientificName} be required to be non-missing and unique? Default \code{TRUE}.
 \item \code{check_status_diff}: Logical vector of length 1; should each scientific name be allowed to have only one taxonomic status? Default \code{FALSE}.
 \item \code{check_col_names}: Logical vector of length 1; should all column names be required to be a valid Darwin Core term? Default \code{TRUE}.
-\item \code{valid_tax_status}: Character vector of length 1; valid values for \code{taxonomicStatus}. Each value must be separated by a comma. Default \verb{accepted, synonym, variant, NA}. \code{"NA"} indicates that missing (NA) values are valid. Case-sensitive. Can also be set with \code{dct_options()}.
+\item \code{valid_tax_status}: Character vector of length 1; valid values for \code{taxonomicStatus}. Each value must be separated by a comma. Default \verb{accepted, synonym, variant, NA}. \code{"NA"} indicates that missing (NA) values are valid. Case-sensitive.
 \item \code{on_success}: Character vector of length 1, either "logical" or "data". Describes what to do if the check passes. Default \code{"data"}.
 \item \code{on_fail}: Character vector of length 1, either "error" or "summary". Describes what to do if the check fails. Default \code{"error"}.
 }

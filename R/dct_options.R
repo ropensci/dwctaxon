@@ -15,7 +15,7 @@
 #' - `check_mapping_parent`: `r param_check_mapping_parent`
 #' - `check_mapping_original`: `r param_check_mapping_original`
 #' - `check_mapping_accepted_status`: `r param_check_mapping_accepted_status`
-#' (See `dct_validate()`)
+#' (See `dct_validate()`).
 #' - `check_sci_name`: `r param_check_sci_name`
 #' - `check_status_diff`: `r param_check_status_diff`
 #' - `check_col_names`: `r param_check_col_names`
@@ -66,7 +66,7 @@ dct_opts <- settings::options_manager(
   check_mapping_accepted = TRUE,
   check_mapping_parent = TRUE,
   check_mapping_original = TRUE,
-  check_mapping_accepted_status = TRUE,
+  check_mapping_accepted_status = FALSE,
   check_sci_name = TRUE,
   check_status_diff = FALSE,
   check_col_names = TRUE,

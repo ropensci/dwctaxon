@@ -10,8 +10,8 @@
 #'
 #' For `check_mapping_accepted_status`, the following rules are enforced:
 #' - Rows with `taxonomicStatus` of "synonym" (synonyms) must have an
-#'   `acceptedNameUsageID` matching the `taxonID` of an accepted name (
-#'   `taxonomicStatus` of "accepted")
+#'   `acceptedNameUsageID` matching the `taxonID` of an accepted name
+#'   (`taxonomicStatus` of "accepted")
 #' - Rows with `taxonomicStatus` of "variant" (orthographic variants) must
 #'   have an `acceptedNameUsageID` matching the `taxonID` of an accepted name or
 #'   synonym (but not another variant)
@@ -30,7 +30,7 @@
 #' @param check_mapping_parent `r param_check_mapping_parent`
 #' @param check_mapping_original `r param_check_mapping_original`
 #' @param check_mapping_accepted_status `r param_check_mapping_accepted_status`
-#' (see Details)
+#' (see Details).
 #' @param check_sci_name `r param_check_sci_name`
 #' @param check_status_diff `r param_check_status_diff`
 #' @param check_col_names `r param_check_col_names`
