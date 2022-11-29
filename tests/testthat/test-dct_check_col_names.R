@@ -14,9 +14,7 @@ test_that("check for 'all columns must have valid names' works", {
     )
   )
   expect_equal(
-    suppressWarnings(
-      check_col_names_p(data.frame(a = 1), on_fail = "summary")
-    ),
+    check_col_names_p(data.frame(a = 1), on_fail = "summary", quiet = TRUE),
     tibble::tibble(
       error = "Invalid column names detected: a",
       check = "check_col_names"

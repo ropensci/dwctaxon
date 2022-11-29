@@ -45,11 +45,9 @@ test_that("check for correctly formatted columns works", {
     "Column scientificName must be of class character"
   )
   expect_equal(
-    suppressWarnings(
-      dct_check_sci_name(
-        data.frame(taxonID = "foo bar"),
-        on_fail = "summary"
-      )
+    dct_check_sci_name(
+      data.frame(taxonID = "foo bar"),
+      on_fail = "summary", quiet = TRUE
     ),
     tibble::tibble(
       check = "check_sci_name",
@@ -57,11 +55,9 @@ test_that("check for correctly formatted columns works", {
     )
   )
   expect_equal(
-    suppressWarnings(
-      dct_check_sci_name(
-        data.frame(scientificName = 1),
-        on_fail = "summary"
-      )
+    dct_check_sci_name(
+      data.frame(scientificName = 1),
+      on_fail = "summary", quiet = TRUE
     ),
     tibble::tibble(
       check = "check_sci_name",
@@ -86,9 +82,7 @@ test_that("check for 'sci name cannot have missing values' works", {
     )
   )
   expect_equal(
-    suppressWarnings(
-      check_sci_name_not_na(bad_dat, on_fail = "summary")
-    ),
+    check_sci_name_not_na(bad_dat, on_fail = "summary", quiet = TRUE),
     tibble::tibble(
       scientificName = NA_character_,
       check = "check_sci_name",
@@ -104,9 +98,7 @@ test_that("check for 'sci name cannot have missing values' works", {
     )
   )
   expect_equal(
-    suppressWarnings(
-      dct_check_sci_name(bad_dat, on_fail = "summary")
-    ),
+    dct_check_sci_name(bad_dat, on_fail = "summary", quiet = TRUE),
     tibble::tibble(
       scientificName = NA_character_,
       check = "check_sci_name",
@@ -139,7 +131,7 @@ test_that("check for 'sci name cannot be duplicated' works", {
     )
   )
   expect_equal(
-    suppressWarnings(dct_check_sci_name(bad_dat, on_fail = "summary")),
+    dct_check_sci_name(bad_dat, on_fail = "summary", quiet = TRUE),
     tibble::tibble(
       scientificName = "Species bar",
       check = "check_sci_name",

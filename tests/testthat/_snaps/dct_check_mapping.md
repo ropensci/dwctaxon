@@ -12,7 +12,8 @@
 ---
 
     Code
-      suppressWarnings(check_mapping_to_self(bad_dat, col_select = bad_col, on_fail = "summary"))
+      check_mapping_to_self(bad_dat, col_select = bad_col, on_fail = "summary",
+        quiet = TRUE)
     Output
       # A tibble: 1 x 5
         taxonID scientificName acceptedNameUsageID error                         check
@@ -33,7 +34,7 @@
 ---
 
     Code
-      suppressWarnings(dct_check_mapping(bad_dat, col_select = bad_col, on_fail = "summary"))
+      dct_check_mapping(bad_dat, col_select = bad_col, on_fail = "summary", quiet = TRUE)
     Output
       # A tibble: 1 x 5
         taxonID acceptedNameUsageID scientificName error                         check
@@ -54,7 +55,8 @@
 ---
 
     Code
-      suppressWarnings(check_mapping_to_self(bad_dat, col_select = bad_col, on_fail = "summary"))
+      check_mapping_to_self(bad_dat, col_select = bad_col, on_fail = "summary",
+        quiet = TRUE)
     Output
       # A tibble: 1 x 5
         taxonID scientificName parentNameUsageID error                           check
@@ -75,7 +77,7 @@
 ---
 
     Code
-      suppressWarnings(dct_check_mapping(bad_dat, col_select = bad_col, on_fail = "summary"))
+      dct_check_mapping(bad_dat, col_select = bad_col, on_fail = "summary", quiet = TRUE)
     Output
       # A tibble: 1 x 5
         taxonID parentNameUsageID scientificName error                           check
@@ -96,7 +98,8 @@
 ---
 
     Code
-      suppressWarnings(check_mapping_to_self(bad_dat, col_select = bad_col, on_fail = "summary"))
+      check_mapping_to_self(bad_dat, col_select = bad_col, on_fail = "summary",
+        quiet = TRUE)
     Output
       # A tibble: 1 x 5
         taxonID scientificName originalNameUsageID error                         check
@@ -117,7 +120,7 @@
 ---
 
     Code
-      suppressWarnings(dct_check_mapping(bad_dat, col_select = bad_col, on_fail = "summary"))
+      dct_check_mapping(bad_dat, col_select = bad_col, on_fail = "summary", quiet = TRUE)
     Output
       # A tibble: 1 x 5
         taxonID originalNameUsageID scientificName error                         check
@@ -138,7 +141,7 @@
 ---
 
     Code
-      suppressWarnings(check_mapping_exists(bad_dat, col_select = bad_col, on_fail = "summary"))
+      check_mapping_exists(bad_dat, col_select = bad_col, on_fail = "summary", quiet = TRUE)
     Output
       # A tibble: 1 x 5
         taxonID scientificName acceptedNameUsageID error                         check
@@ -159,7 +162,7 @@
 ---
 
     Code
-      suppressWarnings(dct_check_mapping(bad_dat, col_select = bad_col, on_fail = "summary"))
+      dct_check_mapping(bad_dat, col_select = bad_col, on_fail = "summary", quiet = TRUE)
     Output
       # A tibble: 1 x 5
         taxonID acceptedNameUsageID scientificName error                         check
@@ -180,7 +183,7 @@
 ---
 
     Code
-      suppressWarnings(check_mapping_exists(bad_dat, col_select = bad_col, on_fail = "summary"))
+      check_mapping_exists(bad_dat, col_select = bad_col, on_fail = "summary", quiet = TRUE)
     Output
       # A tibble: 1 x 5
         taxonID scientificName parentNameUsageID error                           check
@@ -201,7 +204,7 @@
 ---
 
     Code
-      suppressWarnings(dct_check_mapping(bad_dat, col_select = bad_col, on_fail = "summary"))
+      dct_check_mapping(bad_dat, col_select = bad_col, on_fail = "summary", quiet = TRUE)
     Output
       # A tibble: 1 x 5
         taxonID parentNameUsageID scientificName error                           check
@@ -222,7 +225,7 @@
 ---
 
     Code
-      suppressWarnings(check_mapping_exists(bad_dat, col_select = bad_col, on_fail = "summary"))
+      check_mapping_exists(bad_dat, col_select = bad_col, on_fail = "summary", quiet = TRUE)
     Output
       # A tibble: 1 x 5
         taxonID scientificName originalNameUsageID error                         check
@@ -243,7 +246,7 @@
 ---
 
     Code
-      suppressWarnings(dct_check_mapping(bad_dat, col_select = bad_col, on_fail = "summary"))
+      dct_check_mapping(bad_dat, col_select = bad_col, on_fail = "summary", quiet = TRUE)
     Output
       # A tibble: 1 x 5
         taxonID originalNameUsageID scientificName error                         check

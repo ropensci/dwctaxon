@@ -136,9 +136,7 @@ test_that("Check for 'taxonomicStatus in valid values' works", {
     )
   )
   expect_equal(
-    suppressWarnings(
-      dct_validate(bad_dat, on_fail = "summary")
-    ),
+    dct_validate(bad_dat, on_fail = "summary", quiet = TRUE),
     tibble::tibble(
       taxonID = "3",
       scientificName = "Species bat",
@@ -194,11 +192,9 @@ test_that("check for 'no mapping to self' works", {
     )
   )
   expect_equal(
-    suppressWarnings(
-      dct_validate(
-        bad_dat,
-        check_mapping_accepted_status = FALSE, on_fail = "summary"
-      )
+    dct_validate(
+      bad_dat,
+      check_mapping_accepted_status = FALSE, on_fail = "summary", quiet = TRUE
     ),
     tibble::tibble(
       taxonID = "3",
@@ -229,11 +225,9 @@ test_that("check for 'target taxonID exists' works", {
     )
   )
   expect_equal(
-    suppressWarnings(
-      dct_validate(
-        bad_dat,
-        check_mapping_accepted_status = FALSE, on_fail = "summary"
-      )
+    dct_validate(
+      bad_dat,
+      check_mapping_accepted_status = FALSE, on_fail = "summary", quiet = TRUE
     ),
     tibble::tibble(
       taxonID = "3",
@@ -312,9 +306,7 @@ test_that("check for 'synonyms must map to accepted names' works", {
     )
   )
   expect_equal(
-    suppressWarnings(
-      dct_validate(bad_dat, on_fail = "summary")
-    ),
+    dct_validate(bad_dat, on_fail = "summary", quiet = TRUE),
     tibble::tibble(
       taxonID = "1",
       acceptedNameUsageID = "2",
@@ -349,9 +341,7 @@ test_that(
       )
     )
     expect_equal(
-      suppressWarnings(
-        dct_validate(bad_dat, on_fail = "summary")
-      ),
+      dct_validate(bad_dat, on_fail = "summary", quiet = TRUE),
       tibble::tibble(
         taxonID = "2",
         acceptedNameUsageID = "1",
@@ -387,9 +377,7 @@ test_that(
       )
     )
     expect_equal(
-      suppressWarnings(
-        dct_validate(bad_var_dat, on_fail = "summary")
-      ),
+      dct_validate(bad_var_dat, on_fail = "summary", quiet = TRUE),
       tibble::tibble(
         taxonID = "1",
         acceptedNameUsageID = "3",
@@ -423,9 +411,7 @@ test_that(
       )
     )
     expect_equal(
-      suppressWarnings(
-        dct_validate(bad_var_dat, on_fail = "summary")
-      ),
+      dct_validate(bad_var_dat, on_fail = "summary", quiet = TRUE),
       tibble::tibble(
         taxonID = "3",
         scientificName = "Species bat",
@@ -455,12 +441,10 @@ test_that(
       )
     )
     expect_equal(
-      suppressWarnings(
-        dct_validate(
-          bad_acc_dat,
-          check_mapping_accepted_status = TRUE,
-          on_fail = "summary"
-        )
+      dct_validate(
+        bad_acc_dat,
+        check_mapping_accepted_status = TRUE,
+        on_fail = "summary", quiet = TRUE
       ),
       tibble::tibble(
         taxonID = "1",
@@ -515,11 +499,9 @@ test_that("check for 'each sci name has single status' works", {
     )
   )
   expect_equal(
-    suppressWarnings(
-      dct_validate(bad_dat,
-        check_status_diff = TRUE, check_sci_name = FALSE,
-        on_fail = "summary"
-      )
+    dct_validate(bad_dat,
+      check_status_diff = TRUE, check_sci_name = FALSE,
+      on_fail = "summary", quiet = TRUE
     ),
     tibble::tibble(
       taxonID = c("1", "2", "5", "6"),
@@ -561,12 +543,10 @@ test_that("check for 'each sci name has single status' works", {
     )
   )
   expect_equal(
-    suppressWarnings(
-      dct_validate(
-        bad_dat,
-        check_sci_name = FALSE, check_status_diff = TRUE,
-        on_fail = "summary"
-      )
+    dct_validate(
+      bad_dat,
+      check_sci_name = FALSE, check_status_diff = TRUE,
+      on_fail = "summary", quiet = TRUE
     ),
     tibble::tibble(
       taxonID = c("1", "2", "5", "6"),
@@ -604,9 +584,7 @@ test_that("check for 'all columns must have valid names' works", {
     )
   )
   expect_equal(
-    suppressWarnings(
-      dct_validate(bad_dat, on_fail = "summary")
-    ),
+    dct_validate(bad_dat, on_fail = "summary", quiet = TRUE),
     tibble::tibble(
       error = "Invalid column names detected: a",
       check = "check_col_names"
@@ -628,9 +606,7 @@ test_that("combinations of failures get reported", {
   )
   # TODO fix missing values in summary output
   expect_equal(
-    suppressWarnings(
-      dct_validate(bad_dat, on_fail = "summary")
-    ),
+    dct_validate(bad_dat, on_fail = "summary", quiet = TRUE),
     tibble::tibble(
       taxonID = c("1", "2", NA, "3", "4"),
       acceptedNameUsageID = rep(NA_character_, 5),

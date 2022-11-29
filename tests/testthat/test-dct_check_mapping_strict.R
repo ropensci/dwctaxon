@@ -11,12 +11,10 @@ test_that("check for 'valid_tax_status must include required values' works", {
     )
   )
   expect_equal(
-    suppressWarnings(
-      check_mapping_strict_status(
-        data.frame(a = 1),
-        valid_tax_status = "foo",
-        on_fail = "summary"
-      )
+    check_mapping_strict_status(
+      data.frame(a = 1),
+      valid_tax_status = "foo",
+      on_fail = "summary", quiet = TRUE
     ),
     tibble::tibble(
       error = paste(
@@ -70,9 +68,7 @@ test_that("check for 'synonyms must map to accepted names' works", {
     )
   )
   expect_equal(
-    suppressWarnings(
-      check_syn_map_to_acc(bad_dat, on_fail = "summary")
-    ),
+    check_syn_map_to_acc(bad_dat, on_fail = "summary", quiet = TRUE),
     tibble::tibble(
       taxonID = "1",
       scientificName = "foo",
@@ -112,9 +108,7 @@ test_that(
       )
     )
     expect_equal(
-      suppressWarnings(
-        check_acc_id_has_tax_status(bad_dat, on_fail = "summary")
-      ),
+      check_acc_id_has_tax_status(bad_dat, on_fail = "summary", quiet = TRUE),
       tibble::tibble(
         taxonID = "2",
         scientificName = "foo",
@@ -156,9 +150,7 @@ test_that(
       )
     )
     expect_equal(
-      suppressWarnings(
-        check_acc_id_valid_tax_status(bad_dat, on_fail = "summary")
-      ),
+      check_acc_id_valid_tax_status(bad_dat, on_fail = "summary", quiet = TRUE),
       tibble::tibble(
         taxonID = "2",
         acceptedNameUsageID = "1",
@@ -195,8 +187,9 @@ test_that(
       )
     )
     expect_equal(
-      suppressWarnings(
-        check_variant_map_to_nonvar(bad_var_dat, on_fail = "summary")
+      check_variant_map_to_nonvar(bad_var_dat,
+        on_fail = "summary",
+        quiet = TRUE
       ),
       tibble::tibble(
         taxonID = "1",
@@ -237,8 +230,9 @@ test_that(
       )
     )
     expect_equal(
-      suppressWarnings(
-        check_variant_map_to_something(bad_var_dat, on_fail = "summary")
+      check_variant_map_to_something(bad_var_dat,
+        on_fail = "summary",
+        quiet = TRUE
       ),
       tibble::tibble(
         taxonID = "3",
@@ -273,8 +267,9 @@ test_that(
       )
     )
     expect_equal(
-      suppressWarnings(
-        check_accepted_map_to_nothing(bad_acc_dat, on_fail = "summary")
+      check_accepted_map_to_nothing(bad_acc_dat,
+        on_fail = "summary",
+        quiet = TRUE
       ),
       tibble::tibble(
         taxonID = "1",
@@ -295,6 +290,3 @@ test_that(
     )
   }
 )
-
-# Clear default value for VALID_TAX_STATUS
-Sys.unsetenv("VALID_TAX_STATUS")

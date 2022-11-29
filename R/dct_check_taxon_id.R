@@ -179,7 +179,7 @@ dct_check_taxon_id <- function(tax_dat,
     # Check for required columns
     assert_col(
       tax_dat, "taxonID", c("character", "numeric", "integer"),
-      req_by = "check_taxon_id", on_fail = on_fail
+      req_by = "check_taxon_id", on_fail = on_fail, quiet = quiet
     ),
     # Check taxonID not NA
     check_taxon_id_not_na(

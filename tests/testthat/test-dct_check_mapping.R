@@ -42,11 +42,9 @@ with_parameters_test_that("check_mapping_to_self works",
       (expect_error(check_mapping_to_self(bad_dat, col_select = bad_col)))
     })
     expect_snapshot({
-      suppressWarnings(
-        check_mapping_to_self(
-          bad_dat,
-          col_select = bad_col, on_fail = "summary"
-        )
+      check_mapping_to_self(
+        bad_dat,
+        col_select = bad_col, on_fail = "summary", quiet = TRUE
       )
     })
     # main check: dct_check_mapping
@@ -54,8 +52,9 @@ with_parameters_test_that("check_mapping_to_self works",
       (expect_error(dct_check_mapping(bad_dat, col_select = bad_col)))
     })
     expect_snapshot({
-      suppressWarnings(
-        dct_check_mapping(bad_dat, col_select = bad_col, on_fail = "summary")
+      dct_check_mapping(
+        bad_dat,
+        col_select = bad_col, on_fail = "summary", quiet = TRUE
       )
     })
   },
@@ -70,11 +69,9 @@ with_parameters_test_that("check_mapping_exists works",
       (expect_error(check_mapping_exists(bad_dat, col_select = bad_col)))
     })
     expect_snapshot({
-      suppressWarnings(
-        check_mapping_exists(
-          bad_dat,
-          col_select = bad_col, on_fail = "summary"
-        )
+      check_mapping_exists(
+        bad_dat,
+        col_select = bad_col, on_fail = "summary", quiet = TRUE
       )
     })
     # main: dct_check_mapping
@@ -82,11 +79,9 @@ with_parameters_test_that("check_mapping_exists works",
       (expect_error(dct_check_mapping(bad_dat, col_select = bad_col)))
     })
     expect_snapshot({
-      suppressWarnings(
-        dct_check_mapping(
-          bad_dat,
-          col_select = bad_col, on_fail = "summary"
-        )
+      dct_check_mapping(
+        bad_dat,
+        col_select = bad_col, on_fail = "summary", quiet = TRUE
       )
     })
   },
@@ -112,9 +107,7 @@ test_that("check for 'no mapping to self' works", {
     )
   )
   expect_equal(
-    suppressWarnings(
-      dct_check_mapping(bad_dat, on_fail = "summary")
-    ),
+    dct_check_mapping(bad_dat, on_fail = "summary", quiet = TRUE),
     tibble::tibble(
       taxonID = "3",
       acceptedNameUsageID = "3",
@@ -144,9 +137,7 @@ test_that("check for 'target taxonID exists' works", {
     )
   )
   expect_equal(
-    suppressWarnings(
-      check_mapping_exists(bad_dat, on_fail = "summary")
-    ),
+    check_mapping_exists(bad_dat, on_fail = "summary", quiet = TRUE),
     tibble::tibble(
       taxonID = "3",
       scientificName = "Species bat",
@@ -170,9 +161,7 @@ test_that("check for 'target taxonID exists' works", {
     )
   )
   expect_equal(
-    suppressWarnings(
-      dct_check_mapping(bad_dat, on_fail = "summary")
-    ),
+    dct_check_mapping(bad_dat, on_fail = "summary", quiet = TRUE),
     tibble::tibble(
       taxonID = "3",
       acceptedNameUsageID = "4",

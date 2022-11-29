@@ -18,9 +18,7 @@ test_that("check for 'each sci name has single status' works", {
     )
   )
   expect_equal(
-    suppressWarnings(
-      check_status_diff_p(bad_dat, on_fail = "summary")
-    ),
+    check_status_diff_p(bad_dat, on_fail = "summary", quiet = TRUE),
     tibble::tibble(
       taxonID = c("1", "2", "5", "6"),
       scientificName = c(

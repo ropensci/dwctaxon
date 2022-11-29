@@ -27,9 +27,7 @@ test_that("Check for 'taxonomicStatus in valid values' works", {
     )
   )
   expect_equal(
-    suppressWarnings(
-      dct_check_tax_status(bad_dat, on_fail = "summary")
-    ),
+    dct_check_tax_status(bad_dat, on_fail = "summary", quiet = TRUE),
     tibble::tibble(
       taxonID = "3",
       scientificName = "Species bat",
