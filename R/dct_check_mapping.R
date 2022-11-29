@@ -164,7 +164,6 @@ check_mapping_exists <- function(tax_dat,
 #' Darwin Core (DWC) taxonomic data.
 #'
 #' The following rules are enforced:
-#' - Values of taxonID must be non-missing and unique.
 #' - Value of taxonID may not be identical to that of the selected column within
 #' a single row (in other words, a name cannot be its own accepted name,
 #' parent taxon, or basionym).
@@ -231,13 +230,6 @@ dct_check_mapping <- function(tax_dat,
   # Run main checks
   suppressWarnings(
     check_res <- list(
-      # Check taxonID not NA
-      check_taxon_id_not_na(tax_dat, on_fail = on_fail, on_success = "logical"),
-      # Check taxonID is unique
-      check_taxon_id_is_uniq(
-        tax_dat,
-        on_fail = on_fail, on_success = "logical"
-      ),
       # Check no names map to self
       check_mapping_to_self(
         tax_dat,

@@ -186,20 +186,13 @@ test_that("check for 'target taxonID exists' works", {
   )
 })
 
-test_that("bad taxonID also causes failure", {
+test_that("duplicated taxonID does not cause failure", {
   # Duplicated taxonID
-  bad_dat <- tibble::tribble(
+  dup_taxid_dat <- tibble::tribble(
     ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
     "1", NA, "accepted", "Species foo",
     "3", "1", "accepted", "Species bar",
     "3", NA, "accepted", "Species bat"
   )
-  expect_error(
-    dct_check_mapping(bad_dat),
-    paste(
-      "check_taxon_id failed.*",
-      "taxonID detected with duplicated value.*",
-      "Bad taxonID\\: 3"
-    )
-  )
+  expect_equal(dct_check_mapping(dup_taxid_dat), dup_taxid_dat)
 })

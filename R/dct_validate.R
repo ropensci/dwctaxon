@@ -125,24 +125,6 @@ dct_validate <- function(tax_dat,
   )
 
   # Check pre-requisites
-  if (check_mapping_accepted) {
-    assertthat::assert_that(
-      check_taxon_id,
-      msg = "check_mapping_accepted requires check_taxon_id to be TRUE"
-    )
-  }
-  if (check_mapping_parent) {
-    assertthat::assert_that(
-      check_taxon_id,
-      msg = "check_mapping_parent requires check_taxon_id to be TRUE"
-    )
-  }
-  if (check_mapping_original) {
-    assertthat::assert_that(
-      check_taxon_id,
-      msg = "check_mapping_original requires check_taxon_id to be TRUE"
-    )
-  }
   if (check_mapping_accepted_status) {
     assertthat::assert_that(
       check_taxon_id,
