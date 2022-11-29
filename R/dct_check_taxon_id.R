@@ -16,7 +16,7 @@ check_taxon_id_not_na <- function(tax_dat,
     on_fail <- get_dct_opt("on_fail")
   }
   # Early exit with NULL if req'd cols not present
-  if (is.null(tax_dat$taxonID) || run == FALSE) {
+  if (!"taxonID" %in% colnames(tax_dat) || run == FALSE) {
     return(NULL)
   }
 
@@ -71,7 +71,7 @@ check_taxon_id_is_uniq <- function(tax_dat,
   }
 
   # Early exit with NULL if req'd cols not present
-  if (is.null(tax_dat$taxonID) || run == FALSE) {
+  if (!"taxonID" %in% colnames(tax_dat) || run == FALSE) {
     return(NULL)
   }
 

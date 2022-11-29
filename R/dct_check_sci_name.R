@@ -18,7 +18,7 @@ check_sci_name_not_na <- function(tax_dat,
   }
 
   # Early exit with NULL if req'd cols not present
-  if (is.null(tax_dat$scientificName) || run == FALSE) {
+  if (!"scientificName" %in% colnames(tax_dat) || run == FALSE) {
     return(NULL)
   }
 
@@ -74,7 +74,7 @@ check_sci_name_is_uniq <- function(tax_dat,
   }
 
   # Early exit with NULL if req'd cols not present
-  if (is.null(tax_dat$scientificName) || run == FALSE) {
+  if (!"scientificName" %in% colnames(tax_dat) || run == FALSE) {
     return(NULL)
   }
 
