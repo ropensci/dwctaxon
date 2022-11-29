@@ -87,8 +87,10 @@ don't have to type the same thing each time you call a function.</p>
 
 <ul><li><p><code>check_taxon_id</code>: Logical vector of length 1; should all instances of  <code>taxonID</code> be required to be non-missing and unique? Default <code>TRUE</code>.</p></li>
 <li><p><code>check_tax_status</code>: Logical vector of length 1; should all taxonomic names be required to have a valid value for taxonomic status (by default, "accepted", "synonym", or "variant")? Default <code>TRUE</code>.</p></li>
-<li><p><code>check_mapping</code>: Logical vector of length 1; should all values of <code>acceptedNameUsageID</code> be required to map to the <code>taxonID</code> of an existing name? Default <code>TRUE</code>.</p></li>
-<li><p><code>check_mapping_strict</code>: Logical vector of length 1; should rules about mapping of variants and synonyms be enforced? Default <code>TRUE</code>.
+<li><p><code>check_mapping_accepted</code>: Logical vector of length 1; should all values of <code>acceptedNameUsageID</code> be required to map to the <code>taxonID</code> of an existing name? Default <code>TRUE</code>.</p></li>
+<li><p><code>check_mapping_parent</code>: Logical vector of length 1; should all values of <code>parentNameUsageID</code> be required to map to the <code>taxonID</code> of an existing name? Default <code>TRUE</code>.</p></li>
+<li><p><code>check_mapping_original</code>: Logical vector of length 1; should all values of <code>originalNameUsageID</code> be required to map to the <code>taxonID</code> of an existing name? Default <code>TRUE</code>.</p></li>
+<li><p><code>check_mapping_accepted_status</code>: Logical vector of length 1; should rules about mapping of variants and synonyms be enforced? Default <code>TRUE</code>.
 (See <code><a href="dct_validate.html">dct_validate()</a></code>)</p></li>
 <li><p><code>check_sci_name</code>: Logical vector of length 1; should all instances of <code>scientificName</code> be required to be non-missing and unique? Default <code>TRUE</code>.</p></li>
 <li><p><code>check_status_diff</code>: Logical vector of length 1; should each scientific name be allowed to have only one taxonomic status? Default <code>FALSE</code>.</p></li>
@@ -130,10 +132,16 @@ don't have to type the same thing each time you call a function.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $check_tax_status</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $check_mapping</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $check_mapping_accepted</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $check_mapping_strict</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $check_mapping_parent</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $check_mapping_original</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $check_mapping_accepted_status</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $check_sci_name</span>

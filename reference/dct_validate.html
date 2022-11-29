@@ -63,8 +63,10 @@
 <span>  <span class="va">tax_dat</span>,</span>
 <span>  <span class="va">check_taxon_id</span>,</span>
 <span>  <span class="va">check_tax_status</span>,</span>
-<span>  <span class="va">check_mapping</span>,</span>
-<span>  <span class="va">check_mapping_strict</span>,</span>
+<span>  <span class="va">check_mapping_accepted</span>,</span>
+<span>  <span class="va">check_mapping_parent</span>,</span>
+<span>  <span class="va">check_mapping_original</span>,</span>
+<span>  <span class="va">check_mapping_accepted_status</span>,</span>
 <span>  <span class="va">check_sci_name</span>,</span>
 <span>  <span class="va">check_status_diff</span>,</span>
 <span>  <span class="va">check_col_names</span>,</span>
@@ -88,12 +90,21 @@
 <dd><p>Logical vector of length 1; should all taxonomic names be required to have a valid value for taxonomic status (by default, "accepted", "synonym", or "variant")? Default <code>TRUE</code>.</p></dd>
 
 
-<dt>check_mapping</dt>
+<dt>check_mapping_accepted</dt>
 <dd><p>Logical vector of length 1; should all values of <code>acceptedNameUsageID</code> be required to map to the <code>taxonID</code> of an existing name? Default <code>TRUE</code>.</p></dd>
 
 
-<dt>check_mapping_strict</dt>
-<dd><p>Logical vector of length 1; should rules about mapping of variants and synonyms be enforced? Default <code>TRUE</code>. (see Details)</p></dd>
+<dt>check_mapping_parent</dt>
+<dd><p>Logical vector of length 1; should all values of <code>parentNameUsageID</code> be required to map to the <code>taxonID</code> of an existing name? Default <code>TRUE</code>.</p></dd>
+
+
+<dt>check_mapping_original</dt>
+<dd><p>Logical vector of length 1; should all values of <code>originalNameUsageID</code> be required to map to the <code>taxonID</code> of an existing name? Default <code>TRUE</code>.</p></dd>
+
+
+<dt>check_mapping_accepted_status</dt>
+<dd><p>Logical vector of length 1; should rules about mapping of variants and synonyms be enforced? Default <code>TRUE</code>.
+(see Details)</p></dd>
 
 
 <dt>check_sci_name</dt>
@@ -133,11 +144,11 @@ return a dataframe with a summary of the reasons for failure</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>For <code>check_mapping_strict</code> and <code>check_status_diff</code>, "accepted", "synonym",
-and "variant" are determined by string matching of <code>taxonomicStatus</code>; so
-"provisionally accepted" is counted as "accepted", "ambiguous synonym" is
-counted as "synonym", etc. (case-sensitive).</p>
-<p>For <code>check_mapping_strict</code>, the following rules are enforced:</p><ul><li><p>Rows with <code>taxonomicStatus</code> of "synonym" (synonyms) must have an
+    <p>For <code>check_mapping_accepted_status</code> and <code>check_status_diff</code>, "accepted",
+"synonym", and "variant" are determined by string matching of
+<code>taxonomicStatus</code>; so "provisionally accepted" is counted as "accepted",
+"ambiguous synonym" is counted as "synonym", etc. (case-sensitive).</p>
+<p>For <code>check_mapping_accepted_status</code>, the following rules are enforced:</p><ul><li><p>Rows with <code>taxonomicStatus</code> of "synonym" (synonyms) must have an
 <code>acceptedNameUsageID</code> matching the <code>taxonID</code> of an accepted name (
 <code>taxonomicStatus</code> of "accepted")</p></li>
 <li><p>Rows with <code>taxonomicStatus</code> of "variant" (orthographic variants) must
