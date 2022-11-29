@@ -145,6 +145,12 @@ param_remap_variant <- glue::glue(
   {print_default("remap_variant")}.'
 )
 
+param_skip_missing_cols <- glue::glue(
+  'Logical vector of length 1; should checks be silently skipped if any of the
+  columns they inspect are missing? \\
+  {print_default("skip_missing_cols")}.'
+)
+
 # Check that default values of both clear_usage_name and
 # clear_usage_id are TRUE
 check_fill_usage_id_name <- function() {

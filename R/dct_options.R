@@ -20,6 +20,7 @@
 #' - `check_status_diff`: `r param_check_status_diff`
 #' - `check_col_names`: `r param_check_col_names`
 #' - `valid_tax_status`: `r param_valid_tax_status`
+#' - `skip_missing_cols`: `r param_skip_missing_cols`
 #' - `on_success`: `r param_on_success`
 #' - `on_fail`: `r param_on_fail`
 #'
@@ -71,6 +72,7 @@ dct_opts <- settings::options_manager(
   check_status_diff = FALSE,
   check_col_names = TRUE,
   valid_tax_status = "accepted, synonym, variant, NA",
+  skip_missing_cols = FALSE,
   on_success = "data",
   on_fail = "error",
   # editing
@@ -96,6 +98,7 @@ dct_opts <- settings::options_manager(
     check_status_diff = settings::inlist(TRUE, FALSE),
     check_col_names = settings::inlist(TRUE, FALSE),
     # valid_tax_status is character
+    skip_missing_cols = settings::inlist(TRUE, FALSE),
     on_success = settings::inlist("data", "logical"),
     on_fail = settings::inlist("error", "summary"),
     fill_taxon_id = settings::inlist(TRUE, FALSE),

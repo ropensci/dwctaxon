@@ -35,6 +35,7 @@
 #' @param check_status_diff `r param_check_status_diff`
 #' @param check_col_names `r param_check_col_names`
 #' @param valid_tax_status `r param_valid_tax_status`
+#' @param skip_missing_cols `r param_skip_missing_cols`
 #' @param on_success `r param_on_success`
 #' @param on_fail `r param_on_fail`
 #' @param quiet `r param_quiet`
@@ -57,6 +58,7 @@ dct_validate <- function(tax_dat,
                          valid_tax_status,
                          on_success,
                          on_fail,
+                         skip_missing_cols,
                          quiet) {
   # Set defaults ----
   if (missing(check_taxon_id)) {
@@ -91,6 +93,9 @@ dct_validate <- function(tax_dat,
   if (missing(valid_tax_status)) {
     valid_tax_status <- get_dct_opt("valid_tax_status")
   }
+  if (missing(skip_missing_cols)) {
+    skip_missing_cols <- get_dct_opt("skip_missing_cols")
+  }
   if (missing(on_success)) {
     on_success <- get_dct_opt("on_success")
   }
@@ -117,6 +122,7 @@ dct_validate <- function(tax_dat,
   assertthat::assert_that(assertthat::is.flag(check_status_diff))
   assertthat::assert_that(assertthat::is.flag(check_col_names))
   assertthat::assert_that(assertthat::is.flag(quiet))
+  assertthat::assert_that(assertthat::is.flag(skip_missing_cols))
   # - others are strings
   assertthat::assert_that(assertthat::is.string(valid_tax_status))
   assertthat::assert_that(assertthat::is.string(on_success))
@@ -155,42 +161,42 @@ dct_validate <- function(tax_dat,
     assert_col(
       tax_dat, "taxonID", c("character", "numeric", "integer"),
       req_by = "check_taxon_id",
-      run = check_taxon_id
+      run = check_taxon_id && !skip_missing_cols
     ),
     assert_col(
       tax_dat, "taxonID", c("character", "numeric", "integer"),
       req_by = "check_mapping_accepted_status",
-      run = check_mapping_accepted_status
+      run = check_mapping_accepted_status && !skip_missing_cols
     ),
     assert_col(
       tax_dat, "acceptedNameUsageID", c("character", "numeric", "integer"),
       req_by = "check_mapping_accepted_status",
-      run = check_mapping_accepted_status
+      run = check_mapping_accepted_status && !skip_missing_cols
     ),
     assert_col(
       tax_dat, "taxonomicStatus", "character",
       req_by = "check_tax_status",
-      run = check_tax_status
+      run = check_tax_status && !skip_missing_cols
     ),
     assert_col(
       tax_dat, "taxonomicStatus", "character",
       req_by = "check_status_diff",
-      run = check_status_diff
+      run = check_status_diff && !skip_missing_cols
     ),
     assert_col(
       tax_dat, "taxonomicStatus", "character",
       req_by = "check_mapping_accepted_status",
-      run = check_mapping_accepted_status
+      run = check_mapping_accepted_status && !skip_missing_cols
     ),
     assert_col(
       tax_dat, "scientificName", "character",
       req_by = "check_status_diff",
-      run = check_status_diff
+      run = check_status_diff && !skip_missing_cols
     ),
     assert_col(
       tax_dat, "scientificName", "character",
       req_by = "check_sci_name",
-      run = check_sci_name
+      run = check_sci_name && !skip_missing_cols
     ),
     # taxonID ----
     # - taxonID not NA

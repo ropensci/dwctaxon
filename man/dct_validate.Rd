@@ -18,6 +18,7 @@ dct_validate(
   valid_tax_status,
   on_success,
   on_fail,
+  skip_missing_cols,
   quiet
 )
 }
@@ -48,6 +49,9 @@ dct_validate(
 \item{on_success}{Character vector of length 1, either "logical" or "data". Describes what to do if the check passes. Default \code{"data"}.}
 
 \item{on_fail}{Character vector of length 1, either "error" or "summary". Describes what to do if the check fails. Default \code{"error"}.}
+
+\item{skip_missing_cols}{Logical vector of length 1; should checks be silently skipped if any of the
+columns they inspect are missing? Default \code{FALSE}.}
 
 \item{quiet}{Logical vector of length 1; should warnings be silenced? Default \code{FALSE}.}
 }

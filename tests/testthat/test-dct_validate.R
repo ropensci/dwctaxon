@@ -51,16 +51,60 @@ test_that("correctly formatted data does not error", {
     "3", NA, "accepted", "Species bat"
   )
   expect_no_error(dct_validate(good_dat))
+})
+
+test_that("Missing columns cause error by default", {
+  expect_error(
+    dct_validate(dplyr::select(dct_filmies, -taxonID)),
+    "check_taxon_id requires column taxonID in input data"
+  )
+  expect_error(
+    dct_validate(
+      dplyr::select(dct_filmies, -acceptedNameUsageID),
+      check_mapping_accepted_status = TRUE
+    ),
+    "check_mapping_accepted_status requires column acceptedNameUsageID"
+  )
+  expect_error(
+    dct_validate(
+      dplyr::select(dct_filmies, -taxonomicStatus),
+      check_mapping_accepted_status = TRUE
+    ),
+    "check_tax_status requires column taxonomicStatus in input data"
+  )
+  expect_error(
+    dct_validate(
+      dplyr::select(dct_filmies, -scientificName)
+    ),
+    "check_sci_name requires column scientificName in input data"
+  )
+})
+
+# skip_missing_cols ----
+test_that("skip_missing_cols works", {
+  dct_options(skip_missing_cols = TRUE)
+  expect_no_error(
+    dct_validate(data.frame(taxonID = 1))
+  )
+  expect_no_error(
+    dct_validate(dplyr::select(dct_filmies, -taxonID))
+  )
   expect_no_error(
     dct_validate(
-      data.frame(taxonID = 1),
-      check_mapping_accepted = FALSE,
-      check_mapping_accepted_status = FALSE,
-      check_tax_status = FALSE,
-      check_status_diff = FALSE,
-      check_sci_name = FALSE
+      dplyr::select(dct_filmies, -acceptedNameUsageID),
+      check_mapping_accepted_status = TRUE
     )
   )
+  expect_no_error(
+    dct_validate(
+      dplyr::select(dct_filmies, -taxonomicStatus),
+      check_mapping_accepted_status = TRUE
+    )
+  )
+  expect_no_error(
+    dct_validate(dplyr::select(dct_filmies, -scientificName))
+  )
+  dct_options(reset = TRUE)
 })
 
 # check_taxon_id ----
@@ -159,7 +203,8 @@ test_that("Setting valid taxonomic status via dct_options() works", {
       check_mapping_accepted_status = FALSE,
       check_status_diff = FALSE,
       check_col_names = FALSE,
-      check_sci_name = FALSE
+      check_sci_name = FALSE,
+      check_tax_status = TRUE
     ),
     paste0(
       "check_tax_status failed.*",
