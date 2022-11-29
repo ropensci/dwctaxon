@@ -23,7 +23,7 @@ check_tax_status_valid <- function(tax_dat,
   }
 
   # Early exit with NULL if req'd cols not present
-  if (is.null(tax_dat$taxonomicStatus) || run == FALSE) {
+  if (!"taxonomicStatus" %in% colnames(tax_dat) || run == FALSE) {
     return(NULL)
   }
 
