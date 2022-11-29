@@ -90,12 +90,12 @@ don't have to type the same thing each time you call a function.</p>
 <li><p><code>check_mapping_accepted</code>: Logical vector of length 1; should all values of <code>acceptedNameUsageID</code> be required to map to the <code>taxonID</code> of an existing name? Default <code>TRUE</code>.</p></li>
 <li><p><code>check_mapping_parent</code>: Logical vector of length 1; should all values of <code>parentNameUsageID</code> be required to map to the <code>taxonID</code> of an existing name? Default <code>TRUE</code>.</p></li>
 <li><p><code>check_mapping_original</code>: Logical vector of length 1; should all values of <code>originalNameUsageID</code> be required to map to the <code>taxonID</code> of an existing name? Default <code>TRUE</code>.</p></li>
-<li><p><code>check_mapping_accepted_status</code>: Logical vector of length 1; should rules about mapping of variants and synonyms be enforced? Default <code>TRUE</code>.
-(See <code><a href="dct_validate.html">dct_validate()</a></code>)</p></li>
+<li><p><code>check_mapping_accepted_status</code>: Logical vector of length 1; should rules about mapping of variants and synonyms be enforced? Default <code>FALSE</code>.
+(See <code><a href="dct_validate.html">dct_validate()</a></code>).</p></li>
 <li><p><code>check_sci_name</code>: Logical vector of length 1; should all instances of <code>scientificName</code> be required to be non-missing and unique? Default <code>TRUE</code>.</p></li>
 <li><p><code>check_status_diff</code>: Logical vector of length 1; should each scientific name be allowed to have only one taxonomic status? Default <code>FALSE</code>.</p></li>
 <li><p><code>check_col_names</code>: Logical vector of length 1; should all column names be required to be a valid Darwin Core term? Default <code>TRUE</code>.</p></li>
-<li><p><code>valid_tax_status</code>: Character vector of length 1; valid values for <code>taxonomicStatus</code>. Each value must be separated by a comma. Default <code>accepted, synonym, variant, NA</code>. <code>"NA"</code> indicates that missing (NA) values are valid. Case-sensitive. Can also be set with <code>dct_options()</code>.</p></li>
+<li><p><code>valid_tax_status</code>: Character vector of length 1; valid values for <code>taxonomicStatus</code>. Each value must be separated by a comma. Default <code>accepted, synonym, variant, NA</code>. <code>"NA"</code> indicates that missing (NA) values are valid. Case-sensitive.</p></li>
 <li><p><code>on_success</code>: Character vector of length 1, either "logical" or "data". Describes what to do if the check passes. Default <code>"data"</code>.</p></li>
 <li><p><code>on_fail</code>: Character vector of length 1, either "error" or "summary". Describes what to do if the check fails. Default <code>"error"</code>.</p></li>
 </ul></div>
@@ -142,7 +142,7 @@ don't have to type the same thing each time you call a function.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $check_mapping_accepted_status</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $check_sci_name</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>

@@ -103,8 +103,8 @@
 
 
 <dt>check_mapping_accepted_status</dt>
-<dd><p>Logical vector of length 1; should rules about mapping of variants and synonyms be enforced? Default <code>TRUE</code>.
-(see Details)</p></dd>
+<dd><p>Logical vector of length 1; should rules about mapping of variants and synonyms be enforced? Default <code>FALSE</code>.
+(see Details).</p></dd>
 
 
 <dt>check_sci_name</dt>
@@ -120,7 +120,7 @@
 
 
 <dt>valid_tax_status</dt>
-<dd><p>Character vector of length 1; valid values for <code>taxonomicStatus</code>. Each value must be separated by a comma. Default <code>accepted, synonym, variant, NA</code>. <code>"NA"</code> indicates that missing (NA) values are valid. Case-sensitive. Can also be set with <code><a href="dct_options.html">dct_options()</a></code>.</p></dd>
+<dd><p>Character vector of length 1; valid values for <code>taxonomicStatus</code>. Each value must be separated by a comma. Default <code>accepted, synonym, variant, NA</code>. <code>"NA"</code> indicates that missing (NA) values are valid. Case-sensitive.</p></dd>
 
 
 <dt>on_success</dt>
@@ -149,8 +149,8 @@ return a dataframe with a summary of the reasons for failure</p></li>
 <code>taxonomicStatus</code>; so "provisionally accepted" is counted as "accepted",
 "ambiguous synonym" is counted as "synonym", etc. (case-sensitive).</p>
 <p>For <code>check_mapping_accepted_status</code>, the following rules are enforced:</p><ul><li><p>Rows with <code>taxonomicStatus</code> of "synonym" (synonyms) must have an
-<code>acceptedNameUsageID</code> matching the <code>taxonID</code> of an accepted name (
-<code>taxonomicStatus</code> of "accepted")</p></li>
+<code>acceptedNameUsageID</code> matching the <code>taxonID</code> of an accepted name
+(<code>taxonomicStatus</code> of "accepted")</p></li>
 <li><p>Rows with <code>taxonomicStatus</code> of "variant" (orthographic variants) must
 have an <code>acceptedNameUsageID</code> matching the <code>taxonID</code> of an accepted name or
 synonym (but not another variant)</p></li>
