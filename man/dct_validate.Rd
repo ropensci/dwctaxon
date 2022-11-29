@@ -8,8 +8,10 @@ dct_validate(
   tax_dat,
   check_taxon_id,
   check_tax_status,
-  check_mapping,
-  check_mapping_strict,
+  check_mapping_accepted,
+  check_mapping_parent,
+  check_mapping_original,
+  check_mapping_accepted_status,
   check_sci_name,
   check_status_diff,
   check_col_names,
@@ -25,9 +27,14 @@ dct_validate(
 
 \item{check_tax_status}{Logical vector of length 1; should all taxonomic names be required to have a valid value for taxonomic status (by default, "accepted", "synonym", or "variant")? Default \code{TRUE}.}
 
-\item{check_mapping}{Logical vector of length 1; should all values of \code{acceptedNameUsageID} be required to map to the \code{taxonID} of an existing name? Default \code{TRUE}.}
+\item{check_mapping_accepted}{Logical vector of length 1; should all values of \code{acceptedNameUsageID} be required to map to the \code{taxonID} of an existing name? Default \code{TRUE}.}
 
-\item{check_mapping_strict}{Logical vector of length 1; should rules about mapping of variants and synonyms be enforced? Default \code{TRUE}. (see Details)}
+\item{check_mapping_parent}{Logical vector of length 1; should all values of \code{parentNameUsageID} be required to map to the \code{taxonID} of an existing name? Default \code{TRUE}.}
+
+\item{check_mapping_original}{Logical vector of length 1; should all values of \code{originalNameUsageID} be required to map to the \code{taxonID} of an existing name? Default \code{TRUE}.}
+
+\item{check_mapping_accepted_status}{Logical vector of length 1; should rules about mapping of variants and synonyms be enforced? Default \code{TRUE}.
+(see Details)}
 
 \item{check_sci_name}{Logical vector of length 1; should all instances of \code{scientificName} be required to be non-missing and unique? Default \code{TRUE}.}
 
@@ -57,12 +64,12 @@ Runs a series of automated checks on a taxonomic database in Darwin Core
 (DWC) format.
 }
 \details{
-For \code{check_mapping_strict} and \code{check_status_diff}, "accepted", "synonym",
-and "variant" are determined by string matching of \code{taxonomicStatus}; so
-"provisionally accepted" is counted as "accepted", "ambiguous synonym" is
-counted as "synonym", etc. (case-sensitive).
+For \code{check_mapping_accepted_status} and \code{check_status_diff}, "accepted",
+"synonym", and "variant" are determined by string matching of
+\code{taxonomicStatus}; so "provisionally accepted" is counted as "accepted",
+"ambiguous synonym" is counted as "synonym", etc. (case-sensitive).
 
-For \code{check_mapping_strict}, the following rules are enforced:
+For \code{check_mapping_accepted_status}, the following rules are enforced:
 \itemize{
 \item Rows with \code{taxonomicStatus} of "synonym" (synonyms) must have an
 \code{acceptedNameUsageID} matching the \code{taxonID} of an accepted name (

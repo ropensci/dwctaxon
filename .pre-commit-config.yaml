@@ -35,6 +35,7 @@ repos:
           .*\.py|
           .*\.RData|
           .*\.rds|
+          .*\.rda|
           .*\.Rds|
           .*\.Rproj|
           .*\.sh|

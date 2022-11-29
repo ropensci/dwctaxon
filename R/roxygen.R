@@ -15,17 +15,31 @@ param_check_tax_status <- glue::glue(
   {print_default("check_tax_status")}.'
 )
 
-param_check_mapping <- glue::glue(
+param_check_mapping_accepted <- glue::glue(
   'Logical vector of length 1; should all values of \\
   `acceptedNameUsageID` be required to map to the `taxonID` of an existing \\
   name? \\
-  {print_default("check_taxon_id")}.'
+  {print_default("check_mapping_accepted")}.'
 )
 
-param_check_mapping_strict <- glue::glue(
+param_check_mapping_parent <- glue::glue(
+  'Logical vector of length 1; should all values of \\
+  `parentNameUsageID` be required to map to the `taxonID` of an existing \\
+  name? \\
+  {print_default("check_mapping_parent")}.'
+)
+
+param_check_mapping_original <- glue::glue(
+  'Logical vector of length 1; should all values of \\
+  `originalNameUsageID` be required to map to the `taxonID` of an existing \\
+  name? \\
+  {print_default("check_mapping_original")}.'
+)
+
+param_check_mapping_accepted_status <- glue::glue( # nolint
   'Logical vector of length 1; should rules about \\
   mapping of variants and synonyms be enforced? \\
-  {print_default("check_mapping_strict")}.'
+  {print_default("check_mapping_accepted_status")}.'
 )
 
 param_check_sci_name <- glue::glue(

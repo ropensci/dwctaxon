@@ -1,6 +1,3 @@
-# Clear default value for VALID_TAX_STATUS
-Sys.unsetenv("VALID_TAX_STATUS")
-
 test_that("checks on input work", {
   expect_error(
     dct_validate(1),
@@ -11,8 +8,20 @@ test_that("checks on input work", {
     "check_taxon_id is not a flag"
   )
   expect_error(
-    dct_validate(data.frame(), check_mapping = NULL),
-    "check_mapping is not a flag"
+    dct_validate(data.frame(), check_mapping_accepted = NULL),
+    "check_mapping_accepted is not a flag"
+  )
+  expect_error(
+    dct_validate(data.frame(), check_mapping_parent = NULL),
+    "check_mapping_parent is not a flag"
+  )
+  expect_error(
+    dct_validate(data.frame(), check_mapping_original = NULL),
+    "check_mapping_original is not a flag"
+  )
+  expect_error(
+    dct_validate(data.frame(), check_mapping_accepted_status = NULL),
+    "check_mapping_accepted_status is not a flag"
   )
   expect_error(
     dct_validate(data.frame(), check_tax_status = NULL),
@@ -25,10 +34,6 @@ test_that("checks on input work", {
   expect_error(
     dct_validate(data.frame(), check_col_names = NULL),
     "check_col_names is not a flag"
-  )
-  expect_error(
-    dct_validate(data.frame(), check_mapping_strict = NULL),
-    "check_mapping_strict is not a flag"
   )
   expect_error(
     dct_validate(data.frame(), valid_tax_status = c(1, 2)),
@@ -49,8 +54,8 @@ test_that("correctly formatted data does not error", {
   expect_no_error(
     dct_validate(
       data.frame(taxonID = 1),
-      check_mapping = FALSE,
-      check_mapping_strict = FALSE,
+      check_mapping_accepted = FALSE,
+      check_mapping_accepted_status = FALSE,
       check_tax_status = FALSE,
       check_status_diff = FALSE,
       check_sci_name = FALSE
@@ -154,8 +159,8 @@ test_that("Setting valid taxonomic status via dct_options() works", {
   expect_error(
     dct_validate(
       data.frame(taxonID = 1, taxonomicStatus = "synonym"),
-      check_mapping = FALSE,
-      check_mapping_strict = FALSE,
+      check_mapping_accepted = FALSE,
+      check_mapping_accepted_status = FALSE,
       check_status_diff = FALSE,
       check_col_names = FALSE,
       check_sci_name = FALSE
@@ -181,7 +186,7 @@ test_that("check for 'no mapping to self' works", {
     "3", "3", "synonym", "Species bat"
   )
   expect_error(
-    dct_validate(bad_dat, check_mapping_strict = FALSE),
+    dct_validate(bad_dat, check_mapping_accepted_status = FALSE),
     paste0(
       "check_mapping failed.*",
       "taxonID detected with identical acceptedNameUsageID.*",
@@ -192,7 +197,10 @@ test_that("check for 'no mapping to self' works", {
   )
   expect_equal(
     suppressWarnings(
-      dct_validate(bad_dat, check_mapping_strict = FALSE, on_fail = "summary")
+      dct_validate(
+        bad_dat,
+        check_mapping_accepted_status = FALSE, on_fail = "summary"
+      )
     ),
     tibble::tibble(
       taxonID = "3",
@@ -212,7 +220,7 @@ test_that("check for 'target taxonID exists' works", {
     "3", "4", "synonym", "Species bat"
   )
   expect_error(
-    dct_validate(bad_dat, check_mapping_strict = FALSE),
+    dct_validate(bad_dat, check_mapping_accepted_status = FALSE),
     paste0(
       "check_mapping failed.*",
       "taxonID detected whose acceptedNameUsageID value does not map to.*",
@@ -224,7 +232,10 @@ test_that("check for 'target taxonID exists' works", {
   )
   expect_equal(
     suppressWarnings(
-      dct_validate(bad_dat, check_mapping_strict = FALSE, on_fail = "summary")
+      dct_validate(
+        bad_dat,
+        check_mapping_accepted_status = FALSE, on_fail = "summary"
+      )
     ),
     tibble::tibble(
       taxonID = "3",
@@ -239,7 +250,46 @@ test_that("check for 'target taxonID exists' works", {
   )
 })
 
-# check_mapping_strict ----
+# check_mapping_accepted_status ----
+
+dct_options(
+  check_tax_status = FALSE,
+  check_mapping_accepted_status = FALSE
+)
+with_parameters_test_that("check_mapping_* works for dup taxid",
+  {
+    expect_snapshot({
+      (expect_error(dct_validate(bad_dat)))
+    })
+    expect_snapshot({
+      (expect_warning(dct_validate(bad_dat, on_fail = "summary")))
+    })
+    expect_snapshot({
+      suppressWarnings(
+        dct_validate(bad_dat, on_fail = "summary")
+      )
+    })
+  },
+  bad_dat = bad_dat_dup_taxid
+)
+
+with_parameters_test_that("check_mapping_* works for missing taxid",
+  {
+    expect_snapshot({
+      (expect_error(dct_validate(bad_dat)))
+    })
+    expect_snapshot({
+      (expect_warning(dct_validate(bad_dat, on_fail = "summary")))
+    })
+    expect_snapshot({
+      suppressWarnings(
+        dct_validate(bad_dat, on_fail = "summary")
+      )
+    })
+  },
+  bad_dat = bad_dat_missing_taxid
+)
+dct_options(reset = TRUE)
 
 test_that("check for 'synonyms must map to accepted names' works", {
   bad_dat <- rbind(
@@ -259,7 +309,7 @@ test_that("check for 'synonyms must map to accepted names' works", {
   expect_error(
     dct_validate(bad_dat),
     paste0(
-      "check_mapping_strict failed.*",
+      "check_mapping_accepted_status failed.*",
       "synonym detected whose acceptedNameUsageID value.*",
       "does not map to taxonID of an accepted name.*",
       "Bad taxonID\\: 1.*",
@@ -279,7 +329,7 @@ test_that("check for 'synonyms must map to accepted names' works", {
         "synonym detected whose acceptedNameUsageID value",
         "does not map to taxonID of an accepted name"
       ),
-      check = "check_mapping_strict"
+      check = "check_mapping_accepted_status"
     )
   )
 })
@@ -297,7 +347,7 @@ test_that(
     expect_error(
       dct_validate(bad_dat),
       paste0(
-        "check_mapping_strict failed.*",
+        "check_mapping_accepted_status failed.*",
         "rows detected whose acceptedNameUsageID value.*",
         "is not missing, but have missing taxonomicStatus.*",
         "Bad taxonID\\: 2.*",
@@ -317,7 +367,7 @@ test_that(
           "rows detected whose acceptedNameUsageID value",
           "is not missing, but have missing taxonomicStatus"
         ),
-        check = "check_mapping_strict"
+        check = "check_mapping_accepted_status"
       )
     )
   }
@@ -335,7 +385,7 @@ test_that(
     expect_error(
       dct_validate(bad_var_dat),
       paste0(
-        "check_mapping_strict failed.*",
+        "check_mapping_accepted_status failed.*",
         "variant\\(s\\) detected whose acceptedNameUsageID value maps to.*",
         "taxonID of a variant.*",
         "Bad taxonID\\: 1.*",
@@ -355,7 +405,7 @@ test_that(
           "variant(s) detected whose acceptedNameUsageID value maps to",
           "taxonID of a variant"
         ),
-        check = "check_mapping_strict"
+        check = "check_mapping_accepted_status"
       )
     )
   }
@@ -374,7 +424,7 @@ test_that(
     expect_error(
       dct_validate(bad_var_dat),
       paste0(
-        "check_mapping_strict failed.*",
+        "check_mapping_accepted_status failed.*",
         "variant\\(s\\) detected who lack an acceptedNameUsageID.*",
         "Bad taxonID\\: 3.*",
         "Bad scientificName\\: Species bat"
@@ -388,7 +438,7 @@ test_that(
         taxonID = "3",
         scientificName = "Species bat",
         error = "variant(s) detected who lack an acceptedNameUsageID",
-        check = "check_mapping_strict"
+        check = "check_mapping_accepted_status"
       )
     )
   }
@@ -405,7 +455,7 @@ test_that(
     expect_error(
       dct_validate(bad_acc_dat),
       paste0(
-        "check_mapping_strict failed.*",
+        "check_mapping_accepted_status failed.*",
         "accepted name\\(s\\) detected with a non\\-missing value for ",
         "acceptedNameUsageID.*",
         "Bad taxonID\\: 1.*",
@@ -423,7 +473,7 @@ test_that(
           "accepted name(s) detected with a non-missing value for",
           "acceptedNameUsageID"
         ),
-        check = "check_mapping_strict"
+        check = "check_mapping_accepted_status"
       )
     )
   }
@@ -594,12 +644,9 @@ test_that("combinations of failures get reported", {
         "taxonID detected whose taxonomicStatus is not in valid_tax_status (accepted, synonym, variant, NA)" # nolint
       ),
       check = c(
-        "check_mapping_strict", "check_mapping_strict", "check_sci_name",
-        "check_tax_status", "check_tax_status"
+        "check_mapping_accepted_status", "check_mapping_accepted_status",
+        "check_sci_name", "check_tax_status", "check_tax_status"
       )
     )
   )
 })
-
-# Clear default value for VALID_TAX_STATUS
-Sys.unsetenv("VALID_TAX_STATUS")
