@@ -4,7 +4,7 @@
 \alias{dct_check_sci_name}
 \title{Check scientificName}
 \usage{
-dct_check_sci_name(tax_dat, on_fail, on_success)
+dct_check_sci_name(tax_dat, on_fail, on_success, quiet)
 }
 \arguments{
 \item{tax_dat}{Dataframe; taxonomic database in DWC format.}
@@ -12,6 +12,8 @@ dct_check_sci_name(tax_dat, on_fail, on_success)
 \item{on_fail}{Character vector of length 1, either "error" or "summary". Describes what to do if the check fails. Default \code{"error"}.}
 
 \item{on_success}{Character vector of length 1, either "logical" or "data". Describes what to do if the check passes. Default \code{"data"}.}
+
+\item{quiet}{Logical vector of length 1; should warnings be silenced? Default \code{FALSE}.}
 }
 \value{
 Depends on the result of the check and on values of \code{on_fail} and
@@ -36,11 +38,10 @@ The following rules are enforced:
 }
 }
 \examples{
-suppressWarnings(
-  dct_check_sci_name(
-    data.frame(scientificName = NA_character_),
-    on_fail = "summary"
-  )
+dct_check_sci_name(
+  data.frame(scientificName = NA_character_),
+  on_fail = "summary", quiet = TRUE
 )
+
 dct_check_sci_name(data.frame(scientificName = "a"))
 }

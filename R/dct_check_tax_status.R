@@ -10,7 +10,8 @@ check_tax_status_valid <- function(tax_dat,
                                    on_fail,
                                    on_success,
                                    valid_tax_status,
-                                   run = TRUE) {
+                                   run = TRUE,
+                                   quiet) {
   # Set defaults ----
   if (missing(valid_tax_status)) {
     valid_tax_status <- get_dct_opt("valid_tax_status")
@@ -20,6 +21,9 @@ check_tax_status_valid <- function(tax_dat,
   }
   if (missing(on_fail)) {
     on_fail <- get_dct_opt("on_fail")
+  }
+  if (missing(quiet)) {
+    quiet <- get_dct_opt("quiet")
   }
 
   # Early exit with NULL if req'd cols not present
@@ -56,18 +60,21 @@ check_tax_status_valid <- function(tax_dat,
   }
   if (on_fail == "summary") {
     if (length(tax_status_is_bad) != 0) {
-      warning("check_tax_status failed")
-      return(
-        tibble::tibble(
+      error_msg <- as.character(glue::glue(
+        "taxonID detected whose taxonomicStatus is not \\
+             in valid_tax_status ({valid_tax_status})"
+      ))
+      assert_that_d(
+        sum(tax_status_is_bad) == 0,
+        data = tibble::tibble(
           taxonID = bad_taxon_id,
           scientificName = bad_sci_name,
           taxonomicStatus = bad_tax_status,
-          error = as.character(glue::glue(
-            "taxonID detected whose taxonomicStatus is not \\
-             in valid_tax_status ({valid_tax_status})"
-          )),
+          error = error_msg,
           check = "check_tax_status"
-        )
+        ),
+        msg = error_msg,
+        quiet = quiet
       )
     }
   }
@@ -84,8 +91,9 @@ check_tax_status_valid <- function(tax_dat,
 #'
 #' @param tax_dat `r param_tax_dat`
 #' @param on_fail `r param_on_fail`
-#' @param on_success `r param_on_success
+#' @param on_success `r param_on_success`
 #' @param valid_tax_status `r param_valid_tax_status` (see Examples).
+#' @param quiet `r param_quiet`
 #'
 #' @inherit dct_check_taxon_id return
 #' @references <https://dwc.tdwg.org/terms/#dwc:taxonomicStatus>
@@ -96,7 +104,8 @@ check_tax_status_valid <- function(tax_dat,
 dct_check_tax_status <- function(tax_dat,
                                  on_fail,
                                  on_success,
-                                 valid_tax_status) {
+                                 valid_tax_status,
+                                 quiet) {
   # Set defaults ----
   if (missing(valid_tax_status)) {
     valid_tax_status <- get_dct_opt("valid_tax_status")
@@ -107,29 +116,30 @@ dct_check_tax_status <- function(tax_dat,
   if (missing(on_fail)) {
     on_fail <- get_dct_opt("on_fail")
   }
+  if (missing(quiet)) {
+    quiet <- get_dct_opt("quiet")
+  }
   # Run main checks
-  suppressWarnings(
-    check_res <- list(
-      # Check for required columns
-      assert_col(
-        tax_dat, "taxonomicStatus", "character",
-        req_by = "check_tax_status", on_fail = on_fail
-      ),
-      # Check taxonomic status
-      check_tax_status_valid(
-        tax_dat,
-        on_fail = on_fail, on_success = "logical",
-        valid_tax_status = valid_tax_status
-      )
-    ) |>
-      # drop any NULL results
-      purrr::compact()
-  )
+  check_res <- list(
+    # Check for required columns
+    assert_col(
+      tax_dat, "taxonomicStatus", "character",
+      req_by = "check_tax_status", on_fail = on_fail, quiet = quiet
+    ),
+    # Check taxonomic status
+    check_tax_status_valid(
+      tax_dat,
+      on_fail = on_fail, on_success = "logical",
+      valid_tax_status = valid_tax_status,
+      quiet = quiet
+    )
+  ) |>
+    # drop any NULL results
+    purrr::compact()
 
   # Format results
   if (on_fail == "summary") {
     if (any_not_true(check_res)) {
-      warning("check_tax_status failed")
       res <- check_res |>
         bind_rows_f() |>
         sort_cols_dwc()

@@ -6,6 +6,5 @@ bad_dat <- tibble::tribble(
   "2", "1", "synonym", "Species bar",
   "3", "4", "synonym", "Species bat"
 )
-suppressWarnings(
-  dct_check_mapping(bad_dat, on_fail = "summary")
-)
+
+dct_check_mapping(bad_dat, on_fail = "summary", quiet = TRUE)

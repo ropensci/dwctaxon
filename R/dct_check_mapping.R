@@ -12,13 +12,17 @@ check_mapping_to_self <- function(tax_dat,
                                   on_fail,
                                   on_success,
                                   col_select = "acceptedNameUsageID",
-                                  run = TRUE) {
+                                  run = TRUE,
+                                  quiet) {
   # Set defaults ----
   if (missing(on_success)) {
     on_success <- get_dct_opt("on_success")
   }
   if (missing(on_fail)) {
     on_fail <- get_dct_opt("on_fail")
+  }
+  if (missing(quiet)) {
+    quiet <- get_dct_opt("quiet")
   }
 
   # Early exit with NULL if req'd cols not present
@@ -65,7 +69,8 @@ check_mapping_to_self <- function(tax_dat,
         error = error_msg,
         check = "check_mapping"
       ),
-      msg = error_msg
+      msg = error_msg,
+      quiet = quiet
     )
   }
   if (on_success == "data") {
@@ -89,13 +94,17 @@ check_mapping_exists <- function(tax_dat,
                                  on_fail,
                                  on_success,
                                  col_select = "acceptedNameUsageID",
-                                 run = TRUE) {
+                                 run = TRUE,
+                                 quiet) {
   # Set defaults ----
   if (missing(on_success)) {
     on_success <- get_dct_opt("on_success")
   }
   if (missing(on_fail)) {
     on_fail <- get_dct_opt("on_fail")
+  }
+  if (missing(quiet)) {
+    quiet <- get_dct_opt("quiet")
   }
 
   # Early exit with NULL if req'd cols not present
@@ -146,7 +155,8 @@ check_mapping_exists <- function(tax_dat,
         error = error_msg,
         check = "check_mapping"
       ),
-      msg = error_msg
+      msg = error_msg,
+      quiet = quiet
     )
   }
 
@@ -181,6 +191,7 @@ check_mapping_exists <- function(tax_dat,
 #' @param on_success `r param_on_success`
 #' @param col_select Character vector of length 1; the name of the column
 #' (DWC term) to check. Default `"acceptedNameUsageID"`.
+#' @param quiet `r param_quiet`
 #'
 #' @inherit dct_check_taxon_id return
 #' @example inst/examples/dct_check_mapping.R
@@ -190,13 +201,17 @@ check_mapping_exists <- function(tax_dat,
 dct_check_mapping <- function(tax_dat,
                               on_fail,
                               on_success,
-                              col_select = "acceptedNameUsageID") {
+                              col_select = "acceptedNameUsageID",
+                              quiet) {
   # Set defaults ----
   if (missing(on_success)) {
     on_success <- get_dct_opt("on_success")
   }
   if (missing(on_fail)) {
     on_fail <- get_dct_opt("on_fail")
+  }
+  if (missing(quiet)) {
+    quiet <- get_dct_opt("quiet")
   }
   # Check input format
   assertthat::assert_that(
@@ -228,29 +243,28 @@ dct_check_mapping <- function(tax_dat,
   )
 
   # Run main checks
-  suppressWarnings(
-    check_res <- list(
-      # Check no names map to self
-      check_mapping_to_self(
-        tax_dat,
-        on_fail = on_fail, on_success = "logical",
-        col_select = col_select
-      ),
-      # Check all names have matching taxonID for selected column
-      check_mapping_exists(
-        tax_dat,
-        on_fail = on_fail, on_success = "logical",
-        col_select = col_select
-      )
-    ) |>
-      # drop any NULL results
-      purrr::compact()
-  )
+  check_res <- list(
+    # Check no names map to self
+    check_mapping_to_self(
+      tax_dat,
+      on_fail = on_fail, on_success = "logical",
+      col_select = col_select,
+      quiet = quiet
+    ),
+    # Check all names have matching taxonID for selected column
+    check_mapping_exists(
+      tax_dat,
+      on_fail = on_fail, on_success = "logical",
+      col_select = col_select,
+      quiet = quiet
+    )
+  ) |>
+    # drop any NULL results
+    purrr::compact()
 
   # Format results
   if (on_fail == "summary") {
     if (any_not_true(check_res)) {
-      warning("check_mapping failed")
       res <- check_res |>
         bind_rows_f() |>
         sort_cols_dwc()

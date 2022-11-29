@@ -5,16 +5,18 @@
 \title{Check that taxonomicStatus is within valid values in
 Darwin Core taxonomic data}
 \usage{
-dct_check_tax_status(tax_dat, on_fail, on_success, valid_tax_status)
+dct_check_tax_status(tax_dat, on_fail, on_success, valid_tax_status, quiet)
 }
 \arguments{
 \item{tax_dat}{Dataframe; taxonomic database in DWC format.}
 
 \item{on_fail}{Character vector of length 1, either "error" or "summary". Describes what to do if the check fails. Default \code{"error"}.}
 
-\item{on_success}{`r param_on_success}
+\item{on_success}{Character vector of length 1, either "logical" or "data". Describes what to do if the check passes. Default \code{"data"}.}
 
 \item{valid_tax_status}{Character vector of length 1; valid values for \code{taxonomicStatus}. Each value must be separated by a comma. Default \verb{accepted, synonym, variant, NA}. \code{"NA"} indicates that missing (NA) values are valid. Case-sensitive. (see Examples).}
+
+\item{quiet}{Logical vector of length 1; should warnings be silenced? Default \code{FALSE}.}
 }
 \value{
 Depends on the result of the check and on values of \code{on_fail} and

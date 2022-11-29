@@ -12,7 +12,8 @@ check_mapping_strict_status <- function(tax_dat,
                                         on_fail,
                                         on_success,
                                         valid_tax_status,
-                                        run = TRUE) {
+                                        run = TRUE,
+                                        quiet) {
   # Set defaults ----
   if (missing(valid_tax_status)) {
     valid_tax_status <- get_dct_opt("valid_tax_status")
@@ -23,6 +24,10 @@ check_mapping_strict_status <- function(tax_dat,
   if (missing(on_fail)) {
     on_fail <- get_dct_opt("on_fail")
   }
+  if (missing(quiet)) {
+    quiet <- get_dct_opt("quiet")
+  }
+
   if (run == FALSE) {
     return(NULL)
   }
@@ -71,7 +76,8 @@ check_mapping_strict_status <- function(tax_dat,
         error = error_msg,
         check = "check_mapping_accepted_status"
       ),
-      msg = error_msg
+      msg = error_msg,
+      quiet = quiet
     )
   }
   if (on_success == "data") {
@@ -98,13 +104,17 @@ check_mapping_strict_status <- function(tax_dat,
 check_syn_map_to_acc <- function(tax_dat,
                                  on_fail,
                                  on_success,
-                                 run = TRUE) {
+                                 run = TRUE,
+                                 quiet) {
   # Set defaults ----
   if (missing(on_success)) {
     on_success <- get_dct_opt("on_success")
   }
   if (missing(on_fail)) {
     on_fail <- get_dct_opt("on_fail")
+  }
+  if (missing(quiet)) {
+    quiet <- get_dct_opt("quiet")
   }
 
   if (run == FALSE) {
@@ -163,7 +173,8 @@ check_syn_map_to_acc <- function(tax_dat,
         error = err_msg,
         check = "check_mapping_accepted_status"
       ),
-      msg = err_msg
+      msg = err_msg,
+      quiet = quiet
     )
   }
 
@@ -188,13 +199,17 @@ check_syn_map_to_acc <- function(tax_dat,
 check_acc_id_has_tax_status <- function(tax_dat,
                                         on_fail,
                                         on_success,
-                                        run = TRUE) {
+                                        run = TRUE,
+                                        quiet) {
   # Set defaults ----
   if (missing(on_success)) {
     on_success <- get_dct_opt("on_success")
   }
   if (missing(on_fail)) {
     on_fail <- get_dct_opt("on_fail")
+  }
+  if (missing(quiet)) {
+    quiet <- get_dct_opt("quiet")
   }
 
   if (run == FALSE) {
@@ -244,7 +259,8 @@ check_acc_id_has_tax_status <- function(tax_dat,
         error = error_msg,
         check = "check_mapping_accepted_status"
       ),
-      msg = error_msg
+      msg = error_msg,
+      quiet = quiet
     )
   }
 
@@ -269,13 +285,17 @@ check_acc_id_has_tax_status <- function(tax_dat,
 check_acc_id_valid_tax_status <- function(tax_dat,
                                           on_fail,
                                           on_success,
-                                          run = TRUE) {
+                                          run = TRUE,
+                                          quiet) {
   # Set defaults ----
   if (missing(on_success)) {
     on_success <- get_dct_opt("on_success")
   }
   if (missing(on_fail)) {
     on_fail <- get_dct_opt("on_fail")
+  }
+  if (missing(quiet)) {
+    quiet <- get_dct_opt("quiet")
   }
 
   if (run == FALSE) {
@@ -339,7 +359,8 @@ check_acc_id_valid_tax_status <- function(tax_dat,
         error = err_msg,
         check = "check_mapping_accepted_status"
       ),
-      msg = err_msg
+      msg = err_msg,
+      quiet = quiet
     )
   }
 
@@ -365,13 +386,17 @@ check_acc_id_valid_tax_status <- function(tax_dat,
 check_variant_map_to_nonvar <- function(tax_dat,
                                         on_fail,
                                         on_success,
-                                        run = TRUE) {
+                                        run = TRUE,
+                                        quiet) {
   # Set defaults ----
   if (missing(on_success)) {
     on_success <- get_dct_opt("on_success")
   }
   if (missing(on_fail)) {
     on_fail <- get_dct_opt("on_fail")
+  }
+  if (missing(quiet)) {
+    quiet <- get_dct_opt("quiet")
   }
 
   if (run == FALSE) {
@@ -422,7 +447,8 @@ check_variant_map_to_nonvar <- function(tax_dat,
         error = error_msg,
         check = "check_mapping_accepted_status"
       ),
-      msg = error_msg
+      msg = error_msg,
+      quiet = quiet
     )
   }
 
@@ -446,13 +472,17 @@ check_variant_map_to_nonvar <- function(tax_dat,
 check_variant_map_to_something <- function(tax_dat,
                                            on_fail,
                                            on_success,
-                                           run = TRUE) {
+                                           run = TRUE,
+                                           quiet) {
   # Set defaults ----
   if (missing(on_success)) {
     on_success <- get_dct_opt("on_success")
   }
   if (missing(on_fail)) {
     on_fail <- get_dct_opt("on_fail")
+  }
+  if (missing(quiet)) {
+    quiet <- get_dct_opt("quiet")
   }
 
   if (run == FALSE) {
@@ -494,7 +524,8 @@ check_variant_map_to_something <- function(tax_dat,
         error = err_msg,
         check = "check_mapping_accepted_status"
       ),
-      msg = err_msg
+      msg = err_msg,
+      quiet = quiet
     )
   }
 
@@ -518,13 +549,17 @@ check_variant_map_to_something <- function(tax_dat,
 check_accepted_map_to_nothing <- function(tax_dat,
                                           on_fail,
                                           on_success,
-                                          run = TRUE) {
+                                          run = TRUE,
+                                          quiet) {
   # Set defaults ----
   if (missing(on_success)) {
     on_success <- get_dct_opt("on_success")
   }
   if (missing(on_fail)) {
     on_fail <- get_dct_opt("on_fail")
+  }
+  if (missing(quiet)) {
+    quiet <- get_dct_opt("quiet")
   }
 
   if (run == FALSE) {
@@ -570,7 +605,8 @@ check_accepted_map_to_nothing <- function(tax_dat,
         error = err_msg,
         check = "check_mapping_accepted_status"
       ),
-      msg = err_msg
+      msg = err_msg,
+      quiet = quiet
     )
   }
 
