@@ -8,7 +8,8 @@ dct_check_mapping(
   tax_dat,
   on_fail,
   on_success,
-  col_select = "acceptedNameUsageID"
+  col_select = "acceptedNameUsageID",
+  quiet
 )
 }
 \arguments{
@@ -20,6 +21,8 @@ dct_check_mapping(
 
 \item{col_select}{Character vector of length 1; the name of the column
 (DWC term) to check. Default \code{"acceptedNameUsageID"}.}
+
+\item{quiet}{Logical vector of length 1; should warnings be silenced? Default \code{FALSE}.}
 }
 \value{
 Depends on the result of the check and on values of \code{on_fail} and
@@ -63,7 +66,6 @@ bad_dat <- tibble::tribble(
   "2", "1", "synonym", "Species bar",
   "3", "4", "synonym", "Species bat"
 )
-suppressWarnings(
-  dct_check_mapping(bad_dat, on_fail = "summary")
-)
+
+dct_check_mapping(bad_dat, on_fail = "summary", quiet = TRUE)
 }

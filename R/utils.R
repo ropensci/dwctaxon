@@ -78,10 +78,15 @@ assert_dat <- function(...) {
 #' @param msg Warning message to return if test if false
 #' @param env Environment in which to evaluate the function; default is
 #'   the parent frame (function)
+#' @param quiet Should warnings be silenced?
 #' @return TRUE if test is true or `data` if test is false
 #' @noRd
 #' @autoglobal
-assert_that_d <- function(condition, data, msg = NULL, env = parent.frame()) {
+assert_that_d <- function(condition,
+                          data,
+                          msg = NULL,
+                          env = parent.frame(),
+                          quiet = FALSE) {
   assert_res <- tryCatch(
     expr = assertthat::assert_that(isTRUE(condition), msg = msg),
     error = function(e) {
@@ -94,7 +99,9 @@ assert_that_d <- function(condition, data, msg = NULL, env = parent.frame()) {
   if (isTRUE(assert_res)) {
     return(TRUE)
   } else {
-    warning(unclass(assert_res)$message)
+    if (!quiet) {
+      warning(unclass(assert_res)$message)
+    }
     do.call("return", list(data), envir = env)
   }
 }
@@ -109,11 +116,12 @@ assert_that_d <- function(condition, data, msg = NULL, env = parent.frame()) {
 #' @param on_fail String; either "error" (return error) or "summary" (return
 #'   tibble with summary of failure)
 #' @param run Logical; should this check be run? If FALSE, return NULL
+#' @param quiet Logical; should warnings be silenced?
 #'
 #' @noRd
 #' @autoglobal
 assert_col <- function(dat, col, class = NULL, req_by = NULL,
-                       on_fail = "error", run = TRUE) {
+                       on_fail = "error", run = TRUE, quiet = FALSE) {
   if (run == FALSE) {
     return(NULL)
   }
@@ -135,7 +143,8 @@ assert_col <- function(dat, col, class = NULL, req_by = NULL,
     req_col_res <- assert_that_d(
       req_col_exists,
       data = tibble::tibble(check = req_by, error = col_err_msg),
-      msg = col_err_msg
+      msg = col_err_msg,
+      quiet = quiet
     )
     # Early exit if required col not present
     if (!isTRUE(req_col_res)) {
@@ -172,7 +181,8 @@ assert_col <- function(dat, col, class = NULL, req_by = NULL,
         assert_that_d(
           col_inherits_req_class,
           data = tibble::tibble(check = req_by, error = class_err_msg),
-          msg = class_err_msg
+          msg = class_err_msg,
+          quiet = quiet
         )
       )
     } else {

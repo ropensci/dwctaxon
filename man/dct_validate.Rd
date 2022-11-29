@@ -17,7 +17,8 @@ dct_validate(
   check_col_names,
   valid_tax_status,
   on_success,
-  on_fail
+  on_fail,
+  quiet
 )
 }
 \arguments{
@@ -47,6 +48,8 @@ dct_validate(
 \item{on_success}{Character vector of length 1, either "logical" or "data". Describes what to do if the check passes. Default \code{"data"}.}
 
 \item{on_fail}{Character vector of length 1, either "error" or "summary". Describes what to do if the check fails. Default \code{"error"}.}
+
+\item{quiet}{Logical vector of length 1; should warnings be silenced? Default \code{FALSE}.}
 }
 \value{
 Depends on the result of the check and on values of \code{on_fail} and

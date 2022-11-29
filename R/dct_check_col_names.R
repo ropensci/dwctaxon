@@ -9,13 +9,17 @@
 check_col_names_p <- function(tax_dat,
                               on_fail,
                               on_success,
-                              run = TRUE) {
+                              run = TRUE,
+                              quiet) {
   # Set defaults ----
   if (missing(on_success)) {
     on_success <- get_dct_opt("on_success")
   }
   if (missing(on_fail)) {
     on_fail <- get_dct_opt("on_fail")
+  }
+  if (missing(quiet)) {
+    quiet <- get_dct_opt("quiet")
   }
 
   if (run == FALSE) {
@@ -38,14 +42,17 @@ check_col_names_p <- function(tax_dat,
     )
   }
   if (on_fail == "summary") {
+    err_msg <- glue::glue(
+      "Invalid column names detected: {bad_col_names}"
+    )
     assert_that_d(
       length(bad_col_names) == 0,
       data = tibble::tibble(
-        error = glue::glue(
-          "Invalid column names detected: {bad_col_names}"
-        ),
+        error = err_msg,
         check = "check_col_names"
-      )
+      ),
+      msg = err_msg,
+      quiet = quiet
     )
   }
   if (on_success == "data") {

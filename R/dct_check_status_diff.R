@@ -13,13 +13,17 @@
 check_status_diff_p <- function(tax_dat,
                                 on_fail,
                                 on_success,
-                                run = TRUE) {
+                                run = TRUE,
+                                quiet) {
   # Set defaults ----
   if (missing(on_success)) {
     on_success <- get_dct_opt("on_success")
   }
   if (missing(on_fail)) {
     on_fail <- get_dct_opt("on_fail")
+  }
+  if (missing(quiet)) {
+    quiet <- get_dct_opt("quiet")
   }
 
   if (run == FALSE) {
@@ -61,18 +65,21 @@ check_status_diff_p <- function(tax_dat,
     )
   }
   if (on_fail == "summary") {
+    err_msg <- paste(
+      "scientificName detected with multiple",
+      "different values for taxonomicStatus"
+    )
     assert_that_d(
       length(bad_sci_name_uniq) == 0,
       data = tibble::tibble(
         taxonID = bad_tax_id,
         scientificName = bad_sci_name,
         taxonomicStatus = bad_tax_status,
-        error = paste(
-          "scientificName detected with multiple",
-          "different values for taxonomicStatus"
-        ),
+        error = err_msg,
         check = "check_status_diff"
-      )
+      ),
+      msg = err_msg,
+      quiet = quiet
     )
   }
   if (on_success == "data") {

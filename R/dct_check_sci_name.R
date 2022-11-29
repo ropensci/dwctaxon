@@ -8,13 +8,17 @@
 check_sci_name_not_na <- function(tax_dat,
                                   on_fail,
                                   on_success,
-                                  run = TRUE) {
+                                  run = TRUE,
+                                  quiet) {
   # Set defaults ----
   if (missing(on_success)) {
     on_success <- get_dct_opt("on_success")
   }
   if (missing(on_fail)) {
     on_fail <- get_dct_opt("on_fail")
+  }
+  if (missing(quiet)) {
+    quiet <- get_dct_opt("quiet")
   }
 
   # Early exit with NULL if req'd cols not present
@@ -38,13 +42,16 @@ check_sci_name_not_na <- function(tax_dat,
     )
   }
   if (on_fail == "summary") {
+    err_msg <- "scientificName detected with missing value"
     assert_that_d(
       length(missing_sci_name) == 0,
       data = tibble::tibble(
         scientificName = missing_sci_name,
         check = "check_sci_name",
-        error = "scientificName detected with missing value"
-      )
+        error = err_msg
+      ),
+      msg = err_msg,
+      quiet = quiet
     )
   }
   if (on_success == "data") {
@@ -64,13 +71,17 @@ check_sci_name_not_na <- function(tax_dat,
 check_sci_name_is_uniq <- function(tax_dat,
                                    on_fail,
                                    on_success,
-                                   run = TRUE) {
+                                   run = TRUE,
+                                   quiet) {
   # Set defaults ----
   if (missing(on_success)) {
     on_success <- get_dct_opt("on_success")
   }
   if (missing(on_fail)) {
     on_fail <- get_dct_opt("on_fail")
+  }
+  if (missing(quiet)) {
+    quiet <- get_dct_opt("quiet")
   }
 
   # Early exit with NULL if req'd cols not present
@@ -96,13 +107,16 @@ check_sci_name_is_uniq <- function(tax_dat,
     )
   }
   if (on_fail == "summary") {
+    err_msg <- "scientificName detected with duplicated value"
     assert_that_d(
       length(duplicated_sci_name) == 0,
       data = tibble::tibble(
         scientificName = duplicated_sci_name,
         check = "check_sci_name",
-        error = "scientificName detected with duplicated value"
-      )
+        error = err_msg
+      ),
+      msg = err_msg,
+      quiet = quiet
     )
   }
   if (on_success == "data") {
@@ -125,6 +139,7 @@ check_sci_name_is_uniq <- function(tax_dat,
 #' @param tax_dat `r param_tax_dat`
 #' @param on_fail `r param_on_fail`
 #' @param on_success `r param_on_success`
+#' @param quiet `r param_quiet`
 #'
 #' @inherit dct_check_taxon_id return
 #' @example inst/examples/dct_check_sci_name.R
@@ -133,13 +148,17 @@ check_sci_name_is_uniq <- function(tax_dat,
 #'
 dct_check_sci_name <- function(tax_dat,
                                on_fail,
-                               on_success) {
+                               on_success,
+                               quiet) {
   # Set defaults ----
   if (missing(on_success)) {
     on_success <- get_dct_opt("on_success")
   }
   if (missing(on_fail)) {
     on_fail <- get_dct_opt("on_fail")
+  }
+  if (missing(quiet)) {
+    quiet <- get_dct_opt("quiet")
   }
 
   # Check input format
@@ -159,26 +178,29 @@ dct_check_sci_name <- function(tax_dat,
   )
 
   # Run main checks
-  suppressWarnings(
-    check_res <- list(
-      # Check for required columns
-      assert_col(
-        tax_dat, "scientificName", "character",
-        req_by = "check_sci_name", on_fail = on_fail
-      ),
-      # Check taxonID not NA
-      check_sci_name_not_na(tax_dat, on_fail = on_fail, on_success = "logical"),
-      # Check taxonID is unique
-      check_sci_name_is_uniq(tax_dat, on_fail = on_fail, on_success = "logical")
-    ) |>
-      # drop any NULL results
-      purrr::compact()
-  )
+  check_res <- list(
+    # Check for required columns
+    assert_col(
+      tax_dat, "scientificName", "character",
+      req_by = "check_sci_name", on_fail = on_fail, quiet = quiet
+    ),
+    # Check taxonID not NA
+    check_sci_name_not_na(
+      tax_dat,
+      on_fail = on_fail, on_success = "logical", quiet = quiet
+    ),
+    # Check taxonID is unique
+    check_sci_name_is_uniq(
+      tax_dat,
+      on_fail = on_fail, on_success = "logical", quiet = quiet
+    )
+  ) |>
+    # drop any NULL results
+    purrr::compact()
 
   # Format results
   if (on_fail == "summary") {
     if (any_not_true(check_res)) {
-      warning("check_sci_name failed")
       return(bind_rows_f(check_res))
     }
   }

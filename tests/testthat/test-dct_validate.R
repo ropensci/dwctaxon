@@ -81,9 +81,7 @@ test_that("check for 'taxonID cannot be missing' works", {
     )
   )
   expect_equal(
-    suppressWarnings(
-      dct_check_taxon_id(bad_dat, on_fail = "summary")
-    ),
+    dct_check_taxon_id(bad_dat, on_fail = "summary", quiet = TRUE),
     tibble::tibble(
       taxonID = NA_character_,
       error = "taxonID detected with missing value",
@@ -110,7 +108,7 @@ test_that("check for 'taxonID cannot be duplicated' works", {
     )
   )
   expect_equal(
-    suppressWarnings(dct_validate(bad_dat, on_fail = "summary")),
+    dct_validate(bad_dat, on_fail = "summary", quiet = TRUE),
     tibble::tibble(
       taxonID = as.character(rep(3, 2)),
       error = rep("taxonID detected with duplicated value", 2),
@@ -262,9 +260,7 @@ with_parameters_test_that("check_mapping_* works for dup taxid",
       (expect_warning(dct_validate(bad_dat, on_fail = "summary")))
     })
     expect_snapshot({
-      suppressWarnings(
-        dct_validate(bad_dat, on_fail = "summary")
-      )
+      dct_validate(bad_dat, on_fail = "summary", quiet = TRUE)
     })
   },
   bad_dat = bad_dat_dup_taxid
@@ -279,9 +275,7 @@ with_parameters_test_that("check_mapping_* works for missing taxid",
       (expect_warning(dct_validate(bad_dat, on_fail = "summary")))
     })
     expect_snapshot({
-      suppressWarnings(
-        dct_validate(bad_dat, on_fail = "summary")
-      )
+      dct_validate(bad_dat, on_fail = "summary", quiet = TRUE)
     })
   },
   bad_dat = bad_dat_missing_taxid

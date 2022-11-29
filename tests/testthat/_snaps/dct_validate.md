@@ -14,12 +14,12 @@
     Code
       (expect_warning(dct_validate(bad_dat, on_fail = "summary")))
     Output
-      <simpleWarning in dct_validate(bad_dat, on_fail = "summary"): check_mapping failed>
+      <simpleWarning in assert_that_d(sum(map_id_is_bad) == 0, data = tibble::tibble(taxonID = bad_taxon_id,     scientificName = bad_sci_name, `:=`({        {            col_select        }    }, bad_acc_id), error = error_msg, check = "check_mapping"),     msg = error_msg, quiet = quiet): taxonID detected with identical acceptedNameUsageID>
 
 ---
 
     Code
-      suppressWarnings(dct_validate(bad_dat, on_fail = "summary"))
+      dct_validate(bad_dat, on_fail = "summary", quiet = TRUE)
     Output
       # A tibble: 1 x 5
         taxonID acceptedNameUsageID scientificName error                         check
@@ -42,12 +42,12 @@
     Code
       (expect_warning(dct_validate(bad_dat, on_fail = "summary")))
     Output
-      <simpleWarning in dct_validate(bad_dat, on_fail = "summary"): check_mapping failed>
+      <simpleWarning in assert_that_d(sum(map_id_is_bad) == 0, data = tibble::tibble(taxonID = bad_taxon_id,     scientificName = bad_sci_name, `:=`({        {            col_select        }    }, bad_acc_id), error = error_msg, check = "check_mapping"),     msg = error_msg, quiet = quiet): taxonID detected with identical parentNameUsageID>
 
 ---
 
     Code
-      suppressWarnings(dct_validate(bad_dat, on_fail = "summary"))
+      dct_validate(bad_dat, on_fail = "summary", quiet = TRUE)
     Output
       # A tibble: 1 x 5
         taxonID parentNameUsageID scientificName error                           check
@@ -70,12 +70,12 @@
     Code
       (expect_warning(dct_validate(bad_dat, on_fail = "summary")))
     Output
-      <simpleWarning in dct_validate(bad_dat, on_fail = "summary"): check_mapping failed>
+      <simpleWarning in assert_that_d(sum(map_id_is_bad) == 0, data = tibble::tibble(taxonID = bad_taxon_id,     scientificName = bad_sci_name, `:=`({        {            col_select        }    }, bad_acc_id), error = error_msg, check = "check_mapping"),     msg = error_msg, quiet = quiet): taxonID detected with identical originalNameUsageID>
 
 ---
 
     Code
-      suppressWarnings(dct_validate(bad_dat, on_fail = "summary"))
+      dct_validate(bad_dat, on_fail = "summary", quiet = TRUE)
     Output
       # A tibble: 1 x 5
         taxonID originalNameUsageID scientificName error                         check
@@ -98,12 +98,12 @@
     Code
       (expect_warning(dct_validate(bad_dat, on_fail = "summary")))
     Output
-      <simpleWarning in dct_validate(bad_dat, on_fail = "summary"): check_mapping failed>
+      <simpleWarning in assert_that_d(sum(map_id_is_bad) == 0, data = tibble::tibble(taxonID = bad_taxon_id,     scientificName = bad_sci_name, `:=`({        {            col_select        }    }, bad_acc_id), error = error_msg, check = "check_mapping"),     msg = error_msg, quiet = quiet): taxonID detected whose acceptedNameUsageID value does not map to taxonID of an existing name.>
 
 ---
 
     Code
-      suppressWarnings(dct_validate(bad_dat, on_fail = "summary"))
+      dct_validate(bad_dat, on_fail = "summary", quiet = TRUE)
     Output
       # A tibble: 1 x 5
         taxonID acceptedNameUsageID scientificName error                         check
@@ -126,12 +126,12 @@
     Code
       (expect_warning(dct_validate(bad_dat, on_fail = "summary")))
     Output
-      <simpleWarning in dct_validate(bad_dat, on_fail = "summary"): check_mapping failed>
+      <simpleWarning in assert_that_d(sum(map_id_is_bad) == 0, data = tibble::tibble(taxonID = bad_taxon_id,     scientificName = bad_sci_name, `:=`({        {            col_select        }    }, bad_acc_id), error = error_msg, check = "check_mapping"),     msg = error_msg, quiet = quiet): taxonID detected whose parentNameUsageID value does not map to taxonID of an existing name.>
 
 ---
 
     Code
-      suppressWarnings(dct_validate(bad_dat, on_fail = "summary"))
+      dct_validate(bad_dat, on_fail = "summary", quiet = TRUE)
     Output
       # A tibble: 1 x 5
         taxonID parentNameUsageID scientificName error                           check
@@ -154,12 +154,12 @@
     Code
       (expect_warning(dct_validate(bad_dat, on_fail = "summary")))
     Output
-      <simpleWarning in dct_validate(bad_dat, on_fail = "summary"): check_mapping failed>
+      <simpleWarning in assert_that_d(sum(map_id_is_bad) == 0, data = tibble::tibble(taxonID = bad_taxon_id,     scientificName = bad_sci_name, `:=`({        {            col_select        }    }, bad_acc_id), error = error_msg, check = "check_mapping"),     msg = error_msg, quiet = quiet): taxonID detected whose originalNameUsageID value does not map to taxonID of an existing name.>
 
 ---
 
     Code
-      suppressWarnings(dct_validate(bad_dat, on_fail = "summary"))
+      dct_validate(bad_dat, on_fail = "summary", quiet = TRUE)
     Output
       # A tibble: 1 x 5
         taxonID originalNameUsageID scientificName error                         check

@@ -7,13 +7,17 @@
 check_taxon_id_not_na <- function(tax_dat,
                                   on_fail,
                                   on_success,
-                                  run = TRUE) {
+                                  run = TRUE,
+                                  quiet) {
   # Set defaults ----
   if (missing(on_success)) {
     on_success <- get_dct_opt("on_success")
   }
   if (missing(on_fail)) {
     on_fail <- get_dct_opt("on_fail")
+  }
+  if (missing(quiet)) {
+    quiet <- get_dct_opt("quiet")
   }
   # Early exit with NULL if req'd cols not present
   if (!"taxonID" %in% colnames(tax_dat) || run == FALSE) {
@@ -42,7 +46,8 @@ check_taxon_id_not_na <- function(tax_dat,
         taxonID = missing_tax_id,
         check = "check_taxon_id",
         error = "taxonID detected with missing value"
-      )
+      ),
+      quiet = quiet
     )
   }
   if (on_success == "data") {
@@ -61,7 +66,8 @@ check_taxon_id_not_na <- function(tax_dat,
 check_taxon_id_is_uniq <- function(tax_dat,
                                    on_fail,
                                    on_success,
-                                   run = TRUE) {
+                                   run = TRUE,
+                                   quiet) {
   # Set defaults ----
   if (missing(on_success)) {
     on_success <- get_dct_opt("on_success")
@@ -69,6 +75,10 @@ check_taxon_id_is_uniq <- function(tax_dat,
   if (missing(on_fail)) {
     on_fail <- get_dct_opt("on_fail")
   }
+  if (missing(quiet)) {
+    quiet <- get_dct_opt("quiet")
+  }
+
 
   # Early exit with NULL if req'd cols not present
   if (!"taxonID" %in% colnames(tax_dat) || run == FALSE) {
@@ -97,7 +107,8 @@ check_taxon_id_is_uniq <- function(tax_dat,
         taxonID = duplicated_tax_id,
         check = "check_taxon_id",
         error = "taxonID detected with duplicated value"
-      )
+      ),
+      quiet = quiet
     )
   }
   if (on_success == "data") {
@@ -119,6 +130,7 @@ check_taxon_id_is_uniq <- function(tax_dat,
 #' @param tax_dat `r param_tax_dat`
 #' @param on_fail `r param_on_fail`
 #' @param on_success `r param_on_success`
+#' @param quiet `r param_quiet`
 #'
 #' @return Depends on the result of the check and on values of `on_fail` and
 #' `on_success`:
@@ -133,13 +145,17 @@ check_taxon_id_is_uniq <- function(tax_dat,
 #'
 dct_check_taxon_id <- function(tax_dat,
                                on_fail,
-                               on_success) {
+                               on_success,
+                               quiet) {
   # Set defaults ----
   if (missing(on_success)) {
     on_success <- get_dct_opt("on_success")
   }
   if (missing(on_fail)) {
     on_fail <- get_dct_opt("on_fail")
+  }
+  if (missing(quiet)) {
+    quiet <- get_dct_opt("quiet")
   }
 
   # Check input format
@@ -159,26 +175,29 @@ dct_check_taxon_id <- function(tax_dat,
   )
 
   # Run main checks
-  suppressWarnings(
-    check_res <- list(
-      # Check for required columns
-      assert_col(
-        tax_dat, "taxonID", c("character", "numeric", "integer"),
-        req_by = "check_taxon_id", on_fail = on_fail
-      ),
-      # Check taxonID not NA
-      check_taxon_id_not_na(tax_dat, on_fail = on_fail, on_success = "logical"),
-      # Check taxonID is unique
-      check_taxon_id_is_uniq(tax_dat, on_fail = on_fail, on_success = "logical")
-    ) |>
-      # drop any NULL results
-      purrr::compact()
-  )
+  check_res <- list(
+    # Check for required columns
+    assert_col(
+      tax_dat, "taxonID", c("character", "numeric", "integer"),
+      req_by = "check_taxon_id", on_fail = on_fail
+    ),
+    # Check taxonID not NA
+    check_taxon_id_not_na(
+      tax_dat,
+      on_fail = on_fail, on_success = "logical", quiet = quiet
+    ),
+    # Check taxonID is unique
+    check_taxon_id_is_uniq(
+      tax_dat,
+      on_fail = on_fail, on_success = "logical", quiet = quiet
+    )
+  ) |>
+    # drop any NULL results
+    purrr::compact()
 
   # Format results
   if (on_fail == "summary") {
     if (any_not_true(check_res)) {
-      warning("check_taxon failed")
       res <- check_res |>
         bind_rows_f() |>
         sort_cols_dwc()
