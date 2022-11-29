@@ -29,8 +29,10 @@ The arguments that can be set with this function are as follows:
 \itemize{
 \item \code{check_taxon_id}: Logical vector of length 1; should all instances of  \code{taxonID} be required to be non-missing and unique? Default \code{TRUE}.
 \item \code{check_tax_status}: Logical vector of length 1; should all taxonomic names be required to have a valid value for taxonomic status (by default, "accepted", "synonym", or "variant")? Default \code{TRUE}.
-\item \code{check_mapping}: Logical vector of length 1; should all values of \code{acceptedNameUsageID} be required to map to the \code{taxonID} of an existing name? Default \code{TRUE}.
-\item \code{check_mapping_strict}: Logical vector of length 1; should rules about mapping of variants and synonyms be enforced? Default \code{TRUE}.
+\item \code{check_mapping_accepted}: Logical vector of length 1; should all values of \code{acceptedNameUsageID} be required to map to the \code{taxonID} of an existing name? Default \code{TRUE}.
+\item \code{check_mapping_parent}: Logical vector of length 1; should all values of \code{parentNameUsageID} be required to map to the \code{taxonID} of an existing name? Default \code{TRUE}.
+\item \code{check_mapping_original}: Logical vector of length 1; should all values of \code{originalNameUsageID} be required to map to the \code{taxonID} of an existing name? Default \code{TRUE}.
+\item \code{check_mapping_accepted_status}: Logical vector of length 1; should rules about mapping of variants and synonyms be enforced? Default \code{TRUE}.
 (See \code{dct_validate()})
 \item \code{check_sci_name}: Logical vector of length 1; should all instances of \code{scientificName} be required to be non-missing and unique? Default \code{TRUE}.
 \item \code{check_status_diff}: Logical vector of length 1; should each scientific name be allowed to have only one taxonomic status? Default \code{FALSE}.

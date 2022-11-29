@@ -35,111 +35,63 @@ test_that("missing columns will pass", {
   )
 })
 
-# Set up data for testing check_mapping_to_self()
-bad_dat_dup_taxid <- tibble::tribble(
-  ~taxonID, ~acceptedNameUsageID, ~scientificName,
-  "1", NA, "Species foo",
-  "2", "1", "Species bar",
-  "3", "3", "Species bat"
-)
-bad_cols <- c("acceptedNameUsageID", "parentNameUsageID", "originalNameUsageID")
-bad_dat_dup_taxid <- rep(list(bad_dat_dup_taxid), 3)
-bad_dat_dup_taxid[[2]] <- dplyr::rename(
-  bad_dat_dup_taxid[[2]], !!bad_cols[2] := acceptedNameUsageID
-)
-bad_dat_dup_taxid[[3]] <- dplyr::rename(
-  bad_dat_dup_taxid[[3]], !!bad_cols[3] := acceptedNameUsageID
-)
-
-# Set up data for testing check_mapping_exists()
-bad_dat_missing_taxid <- tibble::tribble(
-  ~taxonID, ~acceptedNameUsageID, ~scientificName,
-  "1", NA, "Species foo",
-  "2", "1", "Species bar",
-  "3", "4", "Species bat"
-)
-bad_dat_missing_taxid <- rep(list(bad_dat_missing_taxid), 3)
-bad_dat_missing_taxid[[2]] <- dplyr::rename(
-  bad_dat_missing_taxid[[2]], !!bad_cols[2] := acceptedNameUsageID
-)
-bad_dat_missing_taxid[[3]] <- dplyr::rename(
-  bad_dat_missing_taxid[[3]], !!bad_cols[3] := acceptedNameUsageID
-)
-
 with_parameters_test_that("check_mapping_to_self works",
   {
     # subcheck: check_mapping_to_self
     expect_snapshot({
-      (expect_error(
-        check_mapping_to_self(bad_dat_dup_taxid, col_select = bad_cols)
-      )
-      )
+      (expect_error(check_mapping_to_self(bad_dat, col_select = bad_col)))
     })
     expect_snapshot({
       suppressWarnings(
         check_mapping_to_self(
-          bad_dat_dup_taxid,
-          col_select = bad_cols, on_fail = "summary"
+          bad_dat,
+          col_select = bad_col, on_fail = "summary"
         )
       )
     })
     # main check: dct_check_mapping
     expect_snapshot({
-      (expect_error(
-        dct_check_mapping(bad_dat_dup_taxid, col_select = bad_cols)
-      )
-      )
+      (expect_error(dct_check_mapping(bad_dat, col_select = bad_col)))
     })
     expect_snapshot({
       suppressWarnings(
-        dct_check_mapping(
-          bad_dat_dup_taxid,
-          col_select = bad_cols, on_fail = "summary"
-        )
+        dct_check_mapping(bad_dat, col_select = bad_col, on_fail = "summary")
       )
     })
   },
-  bad_dat_dup_taxid = bad_dat_dup_taxid,
-  bad_cols = bad_cols
+  bad_dat = bad_dat_dup_taxid,
+  bad_col = bad_dat_dup_taxid_cols
 )
 
 with_parameters_test_that("check_mapping_exists works",
   {
     # subcheck: check_mapping_exists
     expect_snapshot({
-      (
-        expect_error(
-          check_mapping_exists(bad_dat_missing_taxid, col_select = bad_cols)
-        )
-      )
+      (expect_error(check_mapping_exists(bad_dat, col_select = bad_col)))
     })
     expect_snapshot({
       suppressWarnings(
         check_mapping_exists(
-          bad_dat_missing_taxid,
-          col_select = bad_cols, on_fail = "summary"
+          bad_dat,
+          col_select = bad_col, on_fail = "summary"
         )
       )
     })
     # main: dct_check_mapping
     expect_snapshot({
-      (
-        expect_error(
-          dct_check_mapping(bad_dat_missing_taxid, col_select = bad_cols)
-        )
-      )
+      (expect_error(dct_check_mapping(bad_dat, col_select = bad_col)))
     })
     expect_snapshot({
       suppressWarnings(
         dct_check_mapping(
-          bad_dat_missing_taxid,
-          col_select = bad_cols, on_fail = "summary"
+          bad_dat,
+          col_select = bad_col, on_fail = "summary"
         )
       )
     })
   },
-  bad_dat_missing_taxid = bad_dat_missing_taxid,
-  bad_cols = bad_cols
+  bad_dat = bad_dat_missing_taxid,
+  bad_col = bad_dat_dup_taxid_cols
 )
 
 test_that("check for 'no mapping to self' works", {

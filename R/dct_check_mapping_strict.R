@@ -1,4 +1,4 @@
-#' check_mapping_strict sub-check: check that taxonomicStatus includes
+#' check_mapping_accepted_status sub-check: check that taxonomicStatus includes
 #' needed values
 #'
 #' Required columns: none
@@ -53,7 +53,7 @@ check_mapping_strict_status <- function(tax_dat,
     assertthat::assert_that(
       is.na(missing_tax_status),
       msg = glue::glue(
-        "check_mapping_strict failed
+        "check_mapping_accepted_status failed
          valid_tax_status missing required value or values.
          Missing values: {missing_tax_status}
          Current valid_tax_status: '{valid_tax_status}'"
@@ -61,15 +61,17 @@ check_mapping_strict_status <- function(tax_dat,
     )
   }
   if (on_fail == "summary") {
+    error_msg <- glue::glue(
+      "valid_tax_status missing required value or values: \\
+          {missing_tax_status}"
+    )
     assert_that_d(
       is.na(missing_tax_status),
       data = tibble::tibble(
-        error = glue::glue(
-          "valid_tax_status missing required value or values: \\
-          {missing_tax_status}"
-        ),
-        check = "check_mapping_strict"
-      )
+        error = error_msg,
+        check = "check_mapping_accepted_status"
+      ),
+      msg = error_msg
     )
   }
   if (on_success == "data") {
@@ -80,7 +82,7 @@ check_mapping_strict_status <- function(tax_dat,
   }
 }
 
-#' check_mapping_strict sub-check: check that synonyms map to accepted
+#' check_mapping_accepted_status sub-check: check that synonyms map to accepted
 #' names
 #'
 #' Required columns:
@@ -137,7 +139,7 @@ check_syn_map_to_acc <- function(tax_dat,
     assertthat::assert_that(
       sum(syn_id_not_in_acc_id) == 0,
       msg = glue::glue(
-        "check_mapping_strict failed.
+        "check_mapping_accepted_status failed.
           synonym detected whose acceptedNameUsageID value does not \\
           map to taxonID of an accepted name.
           {make_msg('taxonID', bad_taxon_id)}\\
@@ -148,18 +150,20 @@ check_syn_map_to_acc <- function(tax_dat,
     )
   }
   if (on_fail == "summary") {
+    err_msg <- paste(
+      "synonym detected whose acceptedNameUsageID value does not",
+      "map to taxonID of an accepted name"
+    )
     assert_that_d(
       sum(syn_id_not_in_acc_id) == 0,
       data = tibble::tibble(
         taxonID = bad_taxon_id,
         scientificName = bad_sci_name,
         acceptedNameUsageID = bad_acc_id,
-        error = paste(
-          "synonym detected whose acceptedNameUsageID value does not",
-          "map to taxonID of an accepted name"
-        ),
-        check = "check_mapping_strict"
-      )
+        error = err_msg,
+        check = "check_mapping_accepted_status"
+      ),
+      msg = err_msg
     )
   }
 
@@ -171,8 +175,8 @@ check_syn_map_to_acc <- function(tax_dat,
   }
 }
 
-#' check_mapping_strict sub-check: any row with acceptedNameUsageID must
-#' have non-missing taxonomicStatus
+#' check_mapping_accepted_status sub-check: any row with acceptedNameUsageID
+#' must have non-missing taxonomicStatus
 #'
 #' Required columns:
 #' - acceptedNameUsageID
@@ -216,7 +220,7 @@ check_acc_id_has_tax_status <- function(tax_dat,
     assertthat::assert_that(
       sum(tax_status_is_missing) == 0,
       msg = glue::glue(
-        "check_mapping_strict failed.
+        "check_mapping_accepted_status failed.
           rows detected whose acceptedNameUsageID value is not missing, \\
           but have missing taxonomicStatus.
           {make_msg('taxonID', bad_taxon_id)}\\
@@ -227,18 +231,20 @@ check_acc_id_has_tax_status <- function(tax_dat,
     )
   }
   if (on_fail == "summary") {
+    error_msg <- paste(
+      "rows detected whose acceptedNameUsageID value is not missing,",
+      "but have missing taxonomicStatus"
+    )
     assert_that_d(
       sum(tax_status_is_missing) == 0,
       data = tibble::tibble(
         taxonID = bad_taxon_id,
         scientificName = bad_sci_name,
         acceptedNameUsageID = bad_acc_id,
-        error = paste(
-          "rows detected whose acceptedNameUsageID value is not missing,",
-          "but have missing taxonomicStatus"
-        ),
-        check = "check_mapping_strict"
-      )
+        error = error_msg,
+        check = "check_mapping_accepted_status"
+      ),
+      msg = error_msg
     )
   }
 
@@ -305,7 +311,7 @@ check_acc_id_valid_tax_status <- function(tax_dat,
     assertthat::assert_that(
       sum(acc_usage_id_is_not_valid) == 0,
       msg = glue::glue(
-        "check_mapping_strict failed.
+        "check_mapping_accepted_status failed.
           rows detected whose acceptedNameUsageID value is not missing, \\
           but with taxonomicStatus that is not 'accepted', 'synonym', or \\
           'variant'.
@@ -318,6 +324,11 @@ check_acc_id_valid_tax_status <- function(tax_dat,
     )
   }
   if (on_fail == "summary") {
+    err_msg <- paste(
+      "rows detected whose acceptedNameUsageID value is not missing,",
+      "but with taxonomicStatus that is not 'accepted', 'synonym', or",
+      "'variant'"
+    )
     assert_that_d(
       sum(acc_usage_id_is_not_valid) == 0,
       data = tibble::tibble(
@@ -325,13 +336,10 @@ check_acc_id_valid_tax_status <- function(tax_dat,
         acceptedNameUsageID = bad_acc_id,
         scientificName = bad_sci_name,
         taxonomicStatus = bad_tax_status,
-        error = paste(
-          "rows detected whose acceptedNameUsageID value is not missing,",
-          "but with taxonomicStatus that is not 'accepted', 'synonym', or",
-          "'variant'"
-        ),
-        check = "check_mapping_strict"
-      )
+        error = err_msg,
+        check = "check_mapping_accepted_status"
+      ),
+      msg = err_msg
     )
   }
 
@@ -343,7 +351,7 @@ check_acc_id_valid_tax_status <- function(tax_dat,
   }
 }
 
-#' check_mapping_strict sub-check: variants cannot map to variants
+#' check_mapping_accepted_status sub-check: variants cannot map to variants
 #'
 #' Required columns:
 #' - taxonID
@@ -390,7 +398,7 @@ check_variant_map_to_nonvar <- function(tax_dat,
     assertthat::assert_that(
       sum(var_id_maps_to_var_id) == 0,
       msg = glue::glue(
-        "check_mapping_strict failed.
+        "check_mapping_accepted_status failed.
           variant(s) detected whose acceptedNameUsageID value maps to \\
           taxonID of a variant.
           {make_msg('taxonID', bad_taxon_id)}\\
@@ -401,18 +409,20 @@ check_variant_map_to_nonvar <- function(tax_dat,
     )
   }
   if (on_fail == "summary") {
+    error_msg <- paste(
+      "variant(s) detected whose acceptedNameUsageID value maps to",
+      "taxonID of a variant"
+    )
     assert_that_d(
       sum(var_id_maps_to_var_id) == 0,
       data = tibble::tibble(
         taxonID = bad_taxon_id,
         scientificName = bad_sci_name,
         acceptedNameUsageID = bad_acc_id,
-        error = paste(
-          "variant(s) detected whose acceptedNameUsageID value maps to",
-          "taxonID of a variant"
-        ),
-        check = "check_mapping_strict"
-      )
+        error = error_msg,
+        check = "check_mapping_accepted_status"
+      ),
+      msg = error_msg
     )
   }
 
@@ -424,7 +434,7 @@ check_variant_map_to_nonvar <- function(tax_dat,
   }
 }
 
-#' check_mapping_strict sub-check: variants must map to something
+#' check_mapping_accepted_status sub-check: variants must map to something
 #'
 #' Required columns:
 #' - taxonomicStatus
@@ -466,7 +476,7 @@ check_variant_map_to_something <- function(tax_dat,
     assertthat::assert_that(
       sum(var_id_no_acc_id) == 0,
       msg = glue::glue(
-        "check_mapping_strict failed.
+        "check_mapping_accepted_status failed.
           variant(s) detected who lack an acceptedNameUsageID.
           {make_msg('taxonID', bad_taxon_id)}\\
           {make_msg('scientificName', bad_sci_name, is_last = TRUE)}",
@@ -475,14 +485,16 @@ check_variant_map_to_something <- function(tax_dat,
     )
   }
   if (on_fail == "summary") {
+    err_msg <- "variant(s) detected who lack an acceptedNameUsageID"
     assert_that_d(
       sum(var_id_no_acc_id) == 0,
       data = tibble::tibble(
         taxonID = bad_taxon_id,
         scientificName = bad_sci_name,
-        error = "variant(s) detected who lack an acceptedNameUsageID",
-        check = "check_mapping_strict"
-      )
+        error = err_msg,
+        check = "check_mapping_accepted_status"
+      ),
+      msg = err_msg
     )
   }
 
@@ -494,7 +506,7 @@ check_variant_map_to_something <- function(tax_dat,
   }
 }
 
-#' check_mapping_strict sub-check: accepted names can't map to anything
+#' check_mapping_accepted_status sub-check: accepted names can't map to anything
 #'
 #' Required columns:
 #' - taxonomicStatus
@@ -536,7 +548,7 @@ check_accepted_map_to_nothing <- function(tax_dat,
     assertthat::assert_that(
       sum(acc_id_map_to_something) == 0,
       msg = glue::glue(
-        "check_mapping_strict failed.
+        "check_mapping_accepted_status failed.
           accepted name(s) detected with a non-missing value for \\
           acceptedNameUsageID.
           {make_msg('taxonID', bad_taxon_id)}\\
@@ -546,17 +558,19 @@ check_accepted_map_to_nothing <- function(tax_dat,
     )
   }
   if (on_fail == "summary") {
+    err_msg <- paste(
+      "accepted name(s) detected with a non-missing value for",
+      "acceptedNameUsageID"
+    )
     assert_that_d(
       sum(acc_id_map_to_something) == 0,
       data = tibble::tibble(
         taxonID = bad_taxon_id,
         scientificName = bad_sci_name,
-        error = paste(
-          "accepted name(s) detected with a non-missing value for",
-          "acceptedNameUsageID"
-        ),
-        check = "check_mapping_strict"
-      )
+        error = err_msg,
+        check = "check_mapping_accepted_status"
+      ),
+      msg = err_msg
     )
   }
 

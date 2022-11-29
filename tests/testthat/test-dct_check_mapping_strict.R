@@ -1,6 +1,3 @@
-# Clear default value for VALID_TAX_STATUS
-Sys.unsetenv("VALID_TAX_STATUS")
-
 test_that("check for 'valid_tax_status must include required values' works", {
   expect_error(
     check_mapping_strict_status(
@@ -26,7 +23,18 @@ test_that("check for 'valid_tax_status must include required values' works", {
         "valid_tax_status missing required value or values:",
         "synonym, accepted, variant"
       ),
-      check = "check_mapping_strict"
+      check = "check_mapping_accepted_status"
+    )
+  )
+  expect_warning(
+    check_mapping_strict_status(
+      data.frame(a = 1),
+      valid_tax_status = "foo",
+      on_fail = "summary"
+    ),
+    paste(
+      "valid_tax_status missing required value or values:",
+      "synonym, accepted, variant"
     )
   )
 })
@@ -46,10 +54,14 @@ test_that("check for 'synonyms must map to accepted names' works", {
       scientificName = "bar"
     )
   )
+  bad_dat_warning <- paste(
+    "synonym detected whose acceptedNameUsageID value",
+    "does not map to taxonID of an accepted name"
+  )
   expect_error(
     check_syn_map_to_acc(bad_dat),
     paste0(
-      "check_mapping_strict failed.*",
+      "check_mapping_accepted_status failed.*",
       "synonym detected whose acceptedNameUsageID value.*",
       "does not map to taxonID of an accepted name.*",
       "Bad taxonID\\: 1.*",
@@ -65,12 +77,13 @@ test_that("check for 'synonyms must map to accepted names' works", {
       taxonID = "1",
       scientificName = "foo",
       acceptedNameUsageID = "3",
-      error = paste(
-        "synonym detected whose acceptedNameUsageID value",
-        "does not map to taxonID of an accepted name"
-      ),
-      check = "check_mapping_strict"
+      error = bad_dat_warning,
+      check = "check_mapping_accepted_status"
     )
+  )
+  expect_warning(
+    check_syn_map_to_acc(bad_dat, on_fail = "summary"),
+    bad_dat_warning
   )
 })
 
@@ -83,10 +96,14 @@ test_that(
       "2", "1", NA_character_, "foo",
       "3", "1", "synonym", "Species bat"
     )
+    bad_dat_warning <- paste(
+      "rows detected whose acceptedNameUsageID value",
+      "is not missing, but have missing taxonomicStatus"
+    )
     expect_error(
       check_acc_id_has_tax_status(bad_dat),
       paste0(
-        "check_mapping_strict failed.*",
+        "check_mapping_accepted_status failed.*",
         "rows detected whose acceptedNameUsageID value.*",
         "is not missing, but have missing taxonomicStatus.*",
         "Bad taxonID\\: 2.*",
@@ -102,12 +119,13 @@ test_that(
         taxonID = "2",
         scientificName = "foo",
         acceptedNameUsageID = "1",
-        error = paste(
-          "rows detected whose acceptedNameUsageID value",
-          "is not missing, but have missing taxonomicStatus"
-        ),
-        check = "check_mapping_strict"
+        error = bad_dat_warning,
+        check = "check_mapping_accepted_status"
       )
+    )
+    expect_warning(
+      check_acc_id_has_tax_status(bad_dat, on_fail = "summary"),
+      bad_dat_warning
     )
   }
 )
@@ -121,10 +139,15 @@ test_that(
       "2", "1", "meh", "foo",
       "3", "1", "synonym", "Species bat"
     )
+    bad_dat_error <- paste(
+      "rows detected whose acceptedNameUsageID value is not missing,",
+      "but with taxonomicStatus that is not 'accepted', 'synonym', or",
+      "'variant'"
+    )
     expect_error(
       check_acc_id_valid_tax_status(bad_dat),
       paste0(
-        "check_mapping_strict failed.*",
+        "check_mapping_accepted_status failed.*",
         "rows detected whose acceptedNameUsageID value is not missing.*",
         "but with taxonomicStatus that is not.*",
         "Bad taxonID\\: 2.*",
@@ -141,13 +164,13 @@ test_that(
         acceptedNameUsageID = "1",
         scientificName = "foo",
         taxonomicStatus = "meh",
-        error = paste(
-          "rows detected whose acceptedNameUsageID value is not missing,",
-          "but with taxonomicStatus that is not 'accepted', 'synonym', or",
-          "'variant'"
-        ),
-        check = "check_mapping_strict"
+        error = bad_dat_error,
+        check = "check_mapping_accepted_status"
       )
+    )
+    expect_warning(
+      check_acc_id_valid_tax_status(bad_dat, on_fail = "summary"),
+      bad_dat_error
     )
   }
 )
@@ -163,7 +186,7 @@ test_that(
     expect_error(
       check_variant_map_to_nonvar(bad_var_dat),
       paste0(
-        "check_mapping_strict failed.*",
+        "check_mapping_accepted_status failed.*",
         "variant\\(s\\) detected whose acceptedNameUsageID value maps to.*",
         "taxonID of a variant.*",
         "Bad taxonID\\: 1.*",
@@ -183,7 +206,14 @@ test_that(
           "variant(s) detected whose acceptedNameUsageID value maps to",
           "taxonID of a variant"
         ),
-        check = "check_mapping_strict"
+        check = "check_mapping_accepted_status"
+      )
+    )
+    expect_warning(
+      check_variant_map_to_nonvar(bad_var_dat, on_fail = "summary"),
+      paste(
+        "variant\\(s\\) detected whose acceptedNameUsageID value maps to",
+        "taxonID of a variant"
       )
     )
   }
@@ -200,7 +230,7 @@ test_that(
     expect_error(
       check_variant_map_to_something(bad_var_dat),
       paste0(
-        "check_mapping_strict failed.*",
+        "check_mapping_accepted_status failed.*",
         "variant\\(s\\) detected who lack an acceptedNameUsageID.*",
         "Bad taxonID\\: 3.*",
         "Bad scientificName\\: Species bat"
@@ -214,8 +244,12 @@ test_that(
         taxonID = "3",
         scientificName = "Species bat",
         error = "variant(s) detected who lack an acceptedNameUsageID",
-        check = "check_mapping_strict"
+        check = "check_mapping_accepted_status"
       )
+    )
+    expect_warning(
+      check_variant_map_to_something(bad_var_dat, on_fail = "summary"),
+      "variant\\(s\\) detected who lack an acceptedNameUsageID"
     )
   }
 )
@@ -231,7 +265,7 @@ test_that(
     expect_error(
       check_accepted_map_to_nothing(bad_acc_dat),
       paste0(
-        "check_mapping_strict failed.*",
+        "check_mapping_accepted_status failed.*",
         "accepted name\\(s\\) detected with a non\\-missing value for ",
         "acceptedNameUsageID.*",
         "Bad taxonID\\: 1.*",
@@ -249,7 +283,14 @@ test_that(
           "accepted name(s) detected with a non-missing value for",
           "acceptedNameUsageID"
         ),
-        check = "check_mapping_strict"
+        check = "check_mapping_accepted_status"
+      )
+    )
+    expect_warning(
+      check_accepted_map_to_nothing(bad_acc_dat, on_fail = "summary"),
+      paste(
+        "accepted name\\(s\\) detected with a non-missing value for",
+        "acceptedNameUsageID"
       )
     )
   }

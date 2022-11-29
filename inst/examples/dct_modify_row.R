@@ -13,7 +13,7 @@ dct_filmies |>
   ) |>
   dct_validate(
     check_tax_status = FALSE,
-    check_mapping_strict = FALSE,
+    check_mapping_accepted_status = FALSE,
     check_sci_name = FALSE
   )
 # Sometimes changing one name will affect others, if they map
