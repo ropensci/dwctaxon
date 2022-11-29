@@ -63,7 +63,8 @@ Darwin Core (DWC) taxonomic data.</p>
 <span>  <span class="va">tax_dat</span>,</span>
 <span>  <span class="va">on_fail</span>,</span>
 <span>  <span class="va">on_success</span>,</span>
-<span>  col_select <span class="op">=</span> <span class="st">"acceptedNameUsageID"</span></span>
+<span>  col_select <span class="op">=</span> <span class="st">"acceptedNameUsageID"</span>,</span>
+<span>  <span class="va">quiet</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -84,6 +85,10 @@ Darwin Core (DWC) taxonomic data.</p>
 <dt>col_select</dt>
 <dd><p>Character vector of length 1; the name of the column
 (DWC term) to check. Default <code>"acceptedNameUsageID"</code>.</p></dd>
+
+
+<dt>quiet</dt>
+<dd><p>Logical vector of length 1; should warnings be silenced? Default <code>FALSE</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -120,9 +125,8 @@ of a name (for example, for a species, this would be the genus).</p></li>
 <span class="r-in"><span>  <span class="st">"2"</span>, <span class="st">"1"</span>, <span class="st">"synonym"</span>, <span class="st">"Species bar"</span>,</span></span>
 <span class="r-in"><span>  <span class="st">"3"</span>, <span class="st">"4"</span>, <span class="st">"synonym"</span>, <span class="st">"Species bat"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="fu">dct_check_mapping</span><span class="op">(</span><span class="va">bad_dat</span>, on_fail <span class="op">=</span> <span class="st">"summary"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">dct_check_mapping</span><span class="op">(</span><span class="va">bad_dat</span>, on_fail <span class="op">=</span> <span class="st">"summary"</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   taxonID acceptedNameUsageID scientificName error                         check</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;glue&gt;</span>                        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span>

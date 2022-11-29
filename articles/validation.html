@@ -186,7 +186,9 @@ a time. In that case, set the <code>on_fail</code> argument to
 value <code>"error"</code> or <code>"summary"</code>):</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/dct_validate.html">dct_validate</a></span><span class="op">(</span><span class="va">filmies_dirty</span>, on_fail <span class="op">=</span> <span class="st">"summary"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning in dct_validate(filmies_dirty, on_fail = "summary"): check_mapping failed</span></span>
+<span><span class="co">#&gt; Warning in assert_that_d(length(duplicated_tax_id) == 0, data = tibble::tibble(taxonID = duplicated_tax_id, : isTRUE(x = condition) is not TRUE</span></span>
+<span><span class="co">#&gt; Warning in assert_that_d(sum(map_id_is_bad) == 0, data = tibble::tibble(taxonID = bad_taxon_id, : taxonID detected whose acceptedNameUsageID value does not map to taxonID of an existing name.</span></span>
+<span><span class="co">#&gt; Warning in assert_that_d(length(duplicated_sci_name) == 0, data = tibble::tibble(scientificName = duplicated_sci_name, : scientificName detected with duplicated value</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 17 × 5</span></span></span>
 <span><span class="co">#&gt;    taxonID  acceptedNameUsageID scientificName                                              error                                                                                         check         </span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                                       <span style="color: #949494; font-style: italic;">&lt;glue&gt;</span>                                                                                        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         </span></span>
