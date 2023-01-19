@@ -35,6 +35,7 @@ The typical use-case of dwctaxon is not create Darwin Core Taxon datasets from s
 The primary motivation for validation is so that the dataset can be used for taxonomic name resolution, for example with the [taxastand](https://github.com/joelnitta/taxastand) R package.
 
 For detailed usage examples, see the vignettes:
+
 - [What is DWC?](https://joelnitta.github.io/dwctaxon/articles/what-is-dwc.html)
 - [Editing DWC taxon data](https://joelnitta.github.io/dwctaxon/articles/editing.html)
 - [Validating DWC taxon data](https://joelnitta.github.io/dwctaxon/articles/validation.html)
