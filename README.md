@@ -102,7 +102,7 @@ filmies_small |>
 #> 3 54115097 <NA>                accepted        species   Cephalomanes crassum (Copel.) M. G. Price <NA>               
 #> 4 54133784 54115098            synonym         species   Trichomanes densinervium Copel.           <NA>               
 #> 5 54115098 <NA>                accepted        species   Cephalomanes densinervium (Copel.) Copel. <NA>               
-#> 6 193e2011 <NA>                accepted        <NA>      Hymenophyllum dwctaxonense Nitta          2023-01-19 16:15:08
+#> 6 193e2011 <NA>                accepted        <NA>      Hymenophyllum dwctaxonense Nitta          2023-01-19 16:24:38
 ```
 
 `dct_modify_row()` modifies a row, automatically re-mapping synonyms if
@@ -122,8 +122,8 @@ filmies_small |>
 #> 1 54115096 <NA>                accepted        species   Cephalomanes atrovirens Presl             <NA>               
 #> 2 54133783 54115097            synonym         species   Trichomanes crassum Copel.                <NA>               
 #> 3 54115097 <NA>                accepted        species   Cephalomanes crassum (Copel.) M. G. Price <NA>               
-#> 4 54133784 54115097            synonym         species   Trichomanes densinervium Copel.           2023-01-19 16:15:08
-#> 5 54115098 54115097            synonym         species   Cephalomanes densinervium (Copel.) Copel. 2023-01-19 16:15:08
+#> 4 54133784 54115097            synonym         species   Trichomanes densinervium Copel.           2023-01-19 16:24:38
+#> 5 54115098 54115097            synonym         species   Cephalomanes densinervium (Copel.) Copel. 2023-01-19 16:24:38
 ```
 
 `dct_fill_col()` fills in values for columns that have “term” - “termID”
@@ -230,7 +230,7 @@ dct_filmies |>
 #>    taxonID  acceptedNameUsageID taxonomicStatus taxonRank scientificName                             modified           
 #>    <chr>    <chr>               <chr>           <chr>     <chr>                                      <chr>              
 #>  1 54115096 <NA>                accepted        species   Cephalomanes atrovirens Presl              <NA>               
-#>  2 54133783 <NA>                accepted        species   Trichomanes crassum Copel.                 2023-01-19 16:15:08
+#>  2 54133783 <NA>                accepted        species   Trichomanes crassum Copel.                 2023-01-19 16:24:38
 #>  3 54115097 <NA>                accepted        species   Cephalomanes crassum (Copel.) M. G. Price  <NA>               
 #>  4 54133784 54115098            synonym         species   Trichomanes densinervium Copel.            <NA>               
 #>  5 54115098 <NA>                accepted        species   Cephalomanes densinervium (Copel.) Copel.  <NA>               
@@ -261,6 +261,12 @@ version of the package:
 
 You can find DOIs for older versions by viewing the “Releases” menu on
 the right.
+
+## Contributing
+
+Contributions to this package are welcome! Please see the [Contribution
+Guide](.github/CONTRIBUTING.md) and [Code of
+Conduct](https://ropensci.org/code-of-conduct/).
 
 ## License
 
