@@ -9,6 +9,9 @@
 has not yet been a stable, usable release suitable for the
 public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
 [![DOI](https://zenodo.org/badge/434126221.svg)](https://zenodo.org/badge/latestdoi/434126221)
+[![runiverse](https://joelnitta.r-universe.dev/badges/dwctaxon)](https://joelnitta.r-universe.dev/ui#package:dwctaxon)
+[![Codecov test
+coverage](https://codecov.io/gh/joelnitta/dwctaxon/branch/main/graph/badge.svg)](https://app.codecov.io/gh/joelnitta/dwctaxon?branch=main)
 <!-- badges: end -->
 
 The goal of dwctaxon is to facilitate working with [Darwin Core Taxon
@@ -21,6 +24,13 @@ easy modification and validation of existing datasets.
 The primary motivation for validation is so that the dataset can be used
 for taxonomic name resolution, for example with the
 [taxastand](https://github.com/joelnitta/taxastand) R package.
+
+For detailed usage examples, see the vignettes: - [What is
+DWC?](https://joelnitta.github.io/dwctaxon/articles/what-is-dwc.html) -
+[Editing DWC taxon
+data](https://joelnitta.github.io/dwctaxon/articles/editing.html) -
+[Validating DWC taxon
+data](https://joelnitta.github.io/dwctaxon/articles/validation.html)
 
 ## Installation
 
@@ -94,7 +104,7 @@ filmies_small |>
 #> 3 54115097 <NA>                accepted        species   Cephalomanes crassum (Copel.) M. G. Price <NA>               
 #> 4 54133784 54115098            synonym         species   Trichomanes densinervium Copel.           <NA>               
 #> 5 54115098 <NA>                accepted        species   Cephalomanes densinervium (Copel.) Copel. <NA>               
-#> 6 193e2011 <NA>                accepted        <NA>      Hymenophyllum dwctaxonense Nitta          2022-11-18 17:11:00
+#> 6 193e2011 <NA>                accepted        <NA>      Hymenophyllum dwctaxonense Nitta          2023-01-19 16:50:28
 ```
 
 `dct_modify_row()` modifies a row, automatically re-mapping synonyms if
@@ -114,8 +124,8 @@ filmies_small |>
 #> 1 54115096 <NA>                accepted        species   Cephalomanes atrovirens Presl             <NA>               
 #> 2 54133783 54115097            synonym         species   Trichomanes crassum Copel.                <NA>               
 #> 3 54115097 <NA>                accepted        species   Cephalomanes crassum (Copel.) M. G. Price <NA>               
-#> 4 54133784 54115097            synonym         species   Trichomanes densinervium Copel.           2022-11-18 17:11:00
-#> 5 54115098 54115097            synonym         species   Cephalomanes densinervium (Copel.) Copel. 2022-11-18 17:11:00
+#> 4 54133784 54115097            synonym         species   Trichomanes densinervium Copel.           2023-01-19 16:50:28
+#> 5 54115098 54115097            synonym         species   Cephalomanes densinervium (Copel.) Copel. 2023-01-19 16:50:28
 ```
 
 `dct_fill_col()` fills in values for columns that have “term” - “termID”
@@ -182,24 +192,24 @@ This can be done by setting `on_fail` to `"summary"`:
 dct_validate(filmies_dirty, on_fail = "summary")
 ```
 
-    #> Warning in dct_validate(filmies_dirty, on_fail = "summary"): check_mapping failed
-    #> # A tibble: 14 × 5
-    #>    taxonID  acceptedNameUsageID scientificName                             error                                    check               
-    #>    <chr>    <chr>               <chr>                                      <chr>                                    <chr>               
-    #>  1 54115096 b                   Cephalomanes atrovirens Presl              taxonID detected whose acceptedNameUs... check_mapping       
-    #>  2 54133783 k                   Trichomanes crassum Copel.                 taxonID detected whose acceptedNameUs... check_mapping       
-    #>  3 54115097 s                   Cephalomanes crassum (Copel.) M. G. Price  taxonID detected whose acceptedNameUs... check_mapping       
-    #>  4 54133786 n                   Cephalomanes curvatum (J. Sm.) V. D. Bosch taxonID detected whose acceptedNameUs... check_mapping       
-    #>  5 54133783 p                   Trichomanes crassum Copel.                 taxonID detected whose acceptedNameUs... check_mapping       
-    #>  6 54115096 <NA>                Cephalomanes atrovirens Presl              accepted name(s) detected with a non-... check_mapping_strict
-    #>  7 54115097 <NA>                Cephalomanes crassum (Copel.) M. G. Price  accepted name(s) detected with a non-... check_mapping_strict
-    #>  8 54133783 k                   Trichomanes crassum Copel.                 synonym detected whose acceptedNameUs... check_mapping_strict
-    #>  9 54133786 n                   Cephalomanes curvatum (J. Sm.) V. D. Bosch synonym detected whose acceptedNameUs... check_mapping_strict
-    #> 10 54133783 p                   Trichomanes crassum Copel.                 synonym detected whose acceptedNameUs... check_mapping_strict
-    #> 11 <NA>     <NA>                Cephalomanes atrovirens Presl              scientificName detected with duplicat... check_sci_name      
-    #> 12 <NA>     <NA>                Trichomanes crassum Copel.                 scientificName detected with duplicat... check_sci_name      
-    #> 13 54115096 <NA>                <NA>                                       taxonID detected with duplicated value   check_taxon_id      
-    #> 14 54133783 <NA>                <NA>                                       taxonID detected with duplicated value   check_taxon_id
+    #> Warning in assert_that_d(length(duplicated_tax_id) == 0, data = tibble::tibble(taxonID = duplicated_tax_id, : isTRUE(x = condition) is not
+    #> TRUE
+    #> Warning in assert_that_d(sum(map_id_is_bad) == 0, data = tibble::tibble(taxonID = bad_taxon_id, : taxonID detected whose acceptedNameUsageID
+    #> value does not map to taxonID of an existing name.
+    #> Warning in assert_that_d(length(duplicated_sci_name) == 0, data = tibble::tibble(scientificName = duplicated_sci_name, : scientificName
+    #> detected with duplicated value
+    #> # A tibble: 9 × 5
+    #>   taxonID  acceptedNameUsageID scientificName                             error                                    check         
+    #>   <chr>    <chr>               <chr>                                      <glue>                                   <chr>         
+    #> 1 54115096 b                   Cephalomanes atrovirens Presl              taxonID detected whose acceptedNameUs... check_mapping 
+    #> 2 54133783 k                   Trichomanes crassum Copel.                 taxonID detected whose acceptedNameUs... check_mapping 
+    #> 3 54115097 s                   Cephalomanes crassum (Copel.) M. G. Price  taxonID detected whose acceptedNameUs... check_mapping 
+    #> 4 54133786 n                   Cephalomanes curvatum (J. Sm.) V. D. Bosch taxonID detected whose acceptedNameUs... check_mapping 
+    #> 5 54133783 p                   Trichomanes crassum Copel.                 taxonID detected whose acceptedNameUs... check_mapping 
+    #> 6 <NA>     <NA>                Cephalomanes atrovirens Presl              scientificName detected with duplicat... check_sci_name
+    #> 7 <NA>     <NA>                Trichomanes crassum Copel.                 scientificName detected with duplicat... check_sci_name
+    #> 8 54115096 <NA>                <NA>                                       taxonID detected with duplicated value   check_taxon_id
+    #> 9 54133783 <NA>                <NA>                                       taxonID detected with duplicated value   check_taxon_id
 
 ### Piping
 
@@ -222,7 +232,7 @@ dct_filmies |>
 #>    taxonID  acceptedNameUsageID taxonomicStatus taxonRank scientificName                             modified           
 #>    <chr>    <chr>               <chr>           <chr>     <chr>                                      <chr>              
 #>  1 54115096 <NA>                accepted        species   Cephalomanes atrovirens Presl              <NA>               
-#>  2 54133783 <NA>                accepted        species   Trichomanes crassum Copel.                 2022-11-18 17:11:01
+#>  2 54133783 <NA>                accepted        species   Trichomanes crassum Copel.                 2023-01-19 16:50:28
 #>  3 54115097 <NA>                accepted        species   Cephalomanes crassum (Copel.) M. G. Price  <NA>               
 #>  4 54133784 54115098            synonym         species   Trichomanes densinervium Copel.            <NA>               
 #>  5 54115098 <NA>                accepted        species   Cephalomanes densinervium (Copel.) Copel.  <NA>               
@@ -253,6 +263,12 @@ version of the package:
 
 You can find DOIs for older versions by viewing the “Releases” menu on
 the right.
+
+## Contributing
+
+Contributions to this package are welcome! Please see the [Contribution
+Guide](.github/CONTRIBUTING.md) and [Code of
+Conduct](https://ropensci.org/code-of-conduct/).
 
 ## License
 

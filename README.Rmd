@@ -24,6 +24,8 @@ set.seed(12345)
 <!-- badges: start -->
 [![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
 [![DOI](https://zenodo.org/badge/434126221.svg)](https://zenodo.org/badge/latestdoi/434126221)
+[![runiverse](https://joelnitta.r-universe.dev/badges/dwctaxon)](https://joelnitta.r-universe.dev/ui#package:dwctaxon)
+[![Codecov test coverage](https://codecov.io/gh/joelnitta/dwctaxon/branch/main/graph/badge.svg)](https://app.codecov.io/gh/joelnitta/dwctaxon?branch=main)
 <!-- badges: end -->
 
 The goal of dwctaxon is to facilitate working with [Darwin Core Taxon data](https://dwc.tdwg.org/terms/#taxon) in R.
@@ -31,6 +33,11 @@ The goal of dwctaxon is to facilitate working with [Darwin Core Taxon data](http
 The typical use-case of dwctaxon is not create Darwin Core Taxon datasets from scratch (although you could do that), but rather to enable easy modification and validation of existing datasets.
 
 The primary motivation for validation is so that the dataset can be used for taxonomic name resolution, for example with the [taxastand](https://github.com/joelnitta/taxastand) R package.
+
+For detailed usage examples, see the vignettes:
+- [What is DWC?](https://joelnitta.github.io/dwctaxon/articles/what-is-dwc.html)
+- [Editing DWC taxon data](https://joelnitta.github.io/dwctaxon/articles/editing.html)
+- [Validating DWC taxon data](https://joelnitta.github.io/dwctaxon/articles/validation.html)
 
 ## Installation
 
@@ -177,6 +184,10 @@ version of the package:
 
 You can find DOIs for older versions by viewing the "Releases" menu on
 the right.
+
+## Contributing
+
+Contributions to this package are welcome! Please see the [Contribution Guide](.github/CONTRIBUTING.md) and [Code of Conduct](https://ropensci.org/code-of-conduct/).
 
 ## License
 
