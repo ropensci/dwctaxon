@@ -19,6 +19,7 @@ cff
 cffr
 citEntry
 citHeader
+CMD
 Config
 Copel
 crassum
@@ -96,14 +97,17 @@ Qiang
 Queljoe
 Radford
 readr
+reprex
 rlang
 rmarkdown
 roclet
 roclets
 Romain
 ropensci
+rOpenSci
 Roxgen
 Roxygen
+roxygen
 RoxygenNote
 roxyglobals
 rstudio
@@ -114,6 +118,7 @@ scientificNameID
 Simko
 Stokely
 stringr
+styler
 sublicense
 Suruceanu
 taxastand
