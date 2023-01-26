@@ -103,7 +103,8 @@ seed since this vignette involves some random samples.</p>
 <div class="section level2">
 <h2 id="the-data">The data<a class="anchor" aria-label="anchor" href="#the-data"></a>
 </h2>
-<p>As before, we will use the example dataset that comes with dwctaxon,
+<p>As <a href="https://joelnitta.github.io/dwctaxon/articles/editing.html#the-data">before</a>,
+we will use the example dataset that comes with dwctaxon,
 <code>dct_filmies</code>:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dct_filmies</span></span>
@@ -127,6 +128,8 @@ more interesting.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">filmies_dirty</span> <span class="op">&lt;-</span></span>
 <span>  <span class="va">dct_filmies</span> <span class="op">|&gt;</span></span>
+<span>  <span class="co"># Change taxonomic status of one row to 'good'</span></span>
+<span>  <span class="fu"><a href="../reference/dct_modify_row.html">dct_modify_row</a></span><span class="op">(</span>taxon_id <span class="op">=</span> <span class="st">"54115096"</span>, tax_status <span class="op">=</span> <span class="st">"good"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="co"># Duplicate some rows at the end</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html" class="external-link">bind_rows</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">dct_filmies</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="co"># Insert bad values for `acceptedNameUsageID` of 5 random rows</span></span>
@@ -139,19 +142,19 @@ more interesting.</p>
 <span>  <span class="op">)</span></span>
 <span></span>
 <span><span class="va">filmies_dirty</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2,457 × 5</span></span></span>
-<span><span class="co">#&gt;    taxonID  acceptedNameUsageID taxonomicStatus taxonRank scientificName                            </span></span>
-<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 54115096 <span style="color: #BB0000;">NA</span>                  accepted        species   Cephalomanes atrovirens Presl             </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 54133783 54115097            synonym         species   Trichomanes crassum Copel.                </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 54115097 <span style="color: #BB0000;">NA</span>                  accepted        species   Cephalomanes crassum (Copel.) M. G. Price </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 54133784 54115098            synonym         species   Trichomanes densinervium Copel.           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 54115098 <span style="color: #BB0000;">NA</span>                  accepted        species   Cephalomanes densinervium (Copel.) Copel. </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 54133786 54115100            synonym         species   Cephalomanes curvatum (J. Sm.) V. D. Bosch</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 54133787 54115100            synonym         species   Cephalomanes javanica (Bl.) V. D. Bosch   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 54133788 54115100            synonym         species   Cephalomanes oblongifolium Presl          </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 54133789 54115100            synonym         species   Cephalomanes zollingeri V. D. Bosch       </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 54133790 54115100            synonym         species   Lacostea javanica (Bl.) Prantl            </span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2,457 × 6</span></span></span>
+<span><span class="co">#&gt;    taxonID  acceptedNameUsageID taxonomicStatus taxonRank scientificName                             modified           </span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>              </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 54115096 <span style="color: #BB0000;">NA</span>                  good            species   Cephalomanes atrovirens Presl              2023-01-26 01:03:42</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 54133783 54115097            synonym         species   Trichomanes crassum Copel.                 <span style="color: #BB0000;">NA</span>                 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 54115097 <span style="color: #BB0000;">NA</span>                  accepted        species   Cephalomanes crassum (Copel.) M. G. Price  <span style="color: #BB0000;">NA</span>                 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 54133784 54115098            synonym         species   Trichomanes densinervium Copel.            <span style="color: #BB0000;">NA</span>                 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 54115098 <span style="color: #BB0000;">NA</span>                  accepted        species   Cephalomanes densinervium (Copel.) Copel.  <span style="color: #BB0000;">NA</span>                 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 54133786 54115100            synonym         species   Cephalomanes curvatum (J. Sm.) V. D. Bosch <span style="color: #BB0000;">NA</span>                 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 54133787 54115100            synonym         species   Cephalomanes javanica (Bl.) V. D. Bosch    <span style="color: #BB0000;">NA</span>                 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 54133788 54115100            synonym         species   Cephalomanes oblongifolium Presl           <span style="color: #BB0000;">NA</span>                 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 54133789 54115100            synonym         species   Cephalomanes zollingeri V. D. Bosch        <span style="color: #BB0000;">NA</span>                 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 54133790 54115100            synonym         species   Lacostea javanica (Bl.) Prantl             <span style="color: #BB0000;">NA</span>                 </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># … with 2,447 more rows</span></span></span></code></pre></div>
 <p>The first few rows may look the same, but we know that these data now
 have some problems.</p>
@@ -187,28 +190,30 @@ value <code>"error"</code> or <code>"summary"</code>):</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/dct_validate.html">dct_validate</a></span><span class="op">(</span><span class="va">filmies_dirty</span>, on_fail <span class="op">=</span> <span class="st">"summary"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Warning in assert_that_d(length(duplicated_tax_id) == 0, data = tibble::tibble(taxonID = duplicated_tax_id, : isTRUE(x = condition) is not TRUE</span></span>
+<span><span class="co">#&gt; Warning in assert_that_d(sum(tax_status_is_bad) == 0, data = tibble::tibble(taxonID = bad_taxon_id, : taxonID detected whose taxonomicStatus is not in valid_tax_status (accepted, synonym, variant, NA)</span></span>
 <span><span class="co">#&gt; Warning in assert_that_d(sum(map_id_is_bad) == 0, data = tibble::tibble(taxonID = bad_taxon_id, : taxonID detected whose acceptedNameUsageID value does not map to taxonID of an existing name.</span></span>
 <span><span class="co">#&gt; Warning in assert_that_d(length(duplicated_sci_name) == 0, data = tibble::tibble(scientificName = duplicated_sci_name, : scientificName detected with duplicated value</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 17 × 5</span></span></span>
-<span><span class="co">#&gt;    taxonID  acceptedNameUsageID scientificName                                              error                                                                                         check         </span></span>
-<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                                       <span style="color: #949494; font-style: italic;">&lt;glue&gt;</span>                                                                                        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 54133841 k                   Trichomanes cumingii (Presl) C. Chr.                        taxonID detected whose acceptedNameUsageID value does not map to taxonID of an existing name. check_mapping </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 54134450 z                   Trichomanes omphalodes (Vieill.) C. Chr.                    taxonID detected whose acceptedNameUsageID value does not map to taxonID of an existing name. check_mapping </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 54134462 b                   Trichomanes amabile Nakai                                   taxonID detected whose acceptedNameUsageID value does not map to taxonID of an existing name. check_mapping </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 54134950 v                   Mecodium atrovirens (Col.) Copel.                           taxonID detected whose acceptedNameUsageID value does not map to taxonID of an existing name. check_mapping </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 54135730 x                   Leptocionium attenuatum (Hook.) Bosch                       taxonID detected whose acceptedNameUsageID value does not map to taxonID of an existing name. check_mapping </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> <span style="color: #BB0000;">NA</span>       <span style="color: #BB0000;">NA</span>                  Hymenophyllum myriocarpum var. endiviifolium (Desv.) Stolze scientificName detected with duplicated value                                                 check_sci_name</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> <span style="color: #BB0000;">NA</span>       <span style="color: #BB0000;">NA</span>                  Hymenophyllum nigrescens Liebm.                             scientificName detected with duplicated value                                                 check_sci_name</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> <span style="color: #BB0000;">NA</span>       <span style="color: #BB0000;">NA</span>                  Mecodium nigricans (Presl ex Kl.) Copel.                    scientificName detected with duplicated value                                                 check_sci_name</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> <span style="color: #BB0000;">NA</span>       <span style="color: #BB0000;">NA</span>                  Sphaerocionium nigricans Presl ex Kl.                       scientificName detected with duplicated value                                                 check_sci_name</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> <span style="color: #BB0000;">NA</span>       <span style="color: #BB0000;">NA</span>                  Hymenophyllum myriocarpum var. nigrescens (Liebm.) Stolze   scientificName detected with duplicated value                                                 check_sci_name</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> <span style="color: #BB0000;">NA</span>       <span style="color: #BB0000;">NA</span>                  Hymenophyllum trichophyllum var. buesii C. V. Morton        scientificName detected with duplicated value                                                 check_sci_name</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span> 54126747 <span style="color: #BB0000;">NA</span>                  <span style="color: #BB0000;">NA</span>                                                          taxonID detected with duplicated value                                                        check_taxon_id</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">13</span> 54135528 <span style="color: #BB0000;">NA</span>                  <span style="color: #BB0000;">NA</span>                                                          taxonID detected with duplicated value                                                        check_taxon_id</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">14</span> 54135530 <span style="color: #BB0000;">NA</span>                  <span style="color: #BB0000;">NA</span>                                                          taxonID detected with duplicated value                                                        check_taxon_id</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">15</span> 54135531 <span style="color: #BB0000;">NA</span>                  <span style="color: #BB0000;">NA</span>                                                          taxonID detected with duplicated value                                                        check_taxon_id</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">16</span> 54126748 <span style="color: #BB0000;">NA</span>                  <span style="color: #BB0000;">NA</span>                                                          taxonID detected with duplicated value                                                        check_taxon_id</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">17</span> 54126749 <span style="color: #BB0000;">NA</span>                  <span style="color: #BB0000;">NA</span>                                                          taxonID detected with duplicated value                                                        check_taxon_id</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 18 × 6</span></span></span>
+<span><span class="co">#&gt;    taxonID  acceptedNameUsageID scientificName                                              taxonomicStatus error                                                                                              check        </span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                                       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;glue&gt;</span>                                                                                             <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 54133841 k                   Trichomanes cumingii (Presl) C. Chr.                        <span style="color: #BB0000;">NA</span>              taxonID detected whose acceptedNameUsageID value does not map to taxonID of an existing name.      check_mapping</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 54134450 z                   Trichomanes omphalodes (Vieill.) C. Chr.                    <span style="color: #BB0000;">NA</span>              taxonID detected whose acceptedNameUsageID value does not map to taxonID of an existing name.      check_mapping</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 54134462 b                   Trichomanes amabile Nakai                                   <span style="color: #BB0000;">NA</span>              taxonID detected whose acceptedNameUsageID value does not map to taxonID of an existing name.      check_mapping</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 54134950 v                   Mecodium atrovirens (Col.) Copel.                           <span style="color: #BB0000;">NA</span>              taxonID detected whose acceptedNameUsageID value does not map to taxonID of an existing name.      check_mapping</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 54135730 x                   Leptocionium attenuatum (Hook.) Bosch                       <span style="color: #BB0000;">NA</span>              taxonID detected whose acceptedNameUsageID value does not map to taxonID of an existing name.      check_mapping</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> <span style="color: #BB0000;">NA</span>       <span style="color: #BB0000;">NA</span>                  Hymenophyllum myriocarpum var. endiviifolium (Desv.) Stolze <span style="color: #BB0000;">NA</span>              scientificName detected with duplicated value                                                      check_sci_na…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> <span style="color: #BB0000;">NA</span>       <span style="color: #BB0000;">NA</span>                  Hymenophyllum nigrescens Liebm.                             <span style="color: #BB0000;">NA</span>              scientificName detected with duplicated value                                                      check_sci_na…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> <span style="color: #BB0000;">NA</span>       <span style="color: #BB0000;">NA</span>                  Mecodium nigricans (Presl ex Kl.) Copel.                    <span style="color: #BB0000;">NA</span>              scientificName detected with duplicated value                                                      check_sci_na…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> <span style="color: #BB0000;">NA</span>       <span style="color: #BB0000;">NA</span>                  Sphaerocionium nigricans Presl ex Kl.                       <span style="color: #BB0000;">NA</span>              scientificName detected with duplicated value                                                      check_sci_na…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> <span style="color: #BB0000;">NA</span>       <span style="color: #BB0000;">NA</span>                  Hymenophyllum myriocarpum var. nigrescens (Liebm.) Stolze   <span style="color: #BB0000;">NA</span>              scientificName detected with duplicated value                                                      check_sci_na…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> <span style="color: #BB0000;">NA</span>       <span style="color: #BB0000;">NA</span>                  Hymenophyllum trichophyllum var. buesii C. V. Morton        <span style="color: #BB0000;">NA</span>              scientificName detected with duplicated value                                                      check_sci_na…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span> 54115096 <span style="color: #BB0000;">NA</span>                  Cephalomanes atrovirens Presl                               good            taxonID detected whose taxonomicStatus is not in valid_tax_status (accepted, synonym, variant, NA) check_tax_st…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">13</span> 54126747 <span style="color: #BB0000;">NA</span>                  <span style="color: #BB0000;">NA</span>                                                          <span style="color: #BB0000;">NA</span>              taxonID detected with duplicated value                                                             check_taxon_…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">14</span> 54135528 <span style="color: #BB0000;">NA</span>                  <span style="color: #BB0000;">NA</span>                                                          <span style="color: #BB0000;">NA</span>              taxonID detected with duplicated value                                                             check_taxon_…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">15</span> 54135530 <span style="color: #BB0000;">NA</span>                  <span style="color: #BB0000;">NA</span>                                                          <span style="color: #BB0000;">NA</span>              taxonID detected with duplicated value                                                             check_taxon_…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">16</span> 54135531 <span style="color: #BB0000;">NA</span>                  <span style="color: #BB0000;">NA</span>                                                          <span style="color: #BB0000;">NA</span>              taxonID detected with duplicated value                                                             check_taxon_…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">17</span> 54126748 <span style="color: #BB0000;">NA</span>                  <span style="color: #BB0000;">NA</span>                                                          <span style="color: #BB0000;">NA</span>              taxonID detected with duplicated value                                                             check_taxon_…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">18</span> 54126749 <span style="color: #BB0000;">NA</span>                  <span style="color: #BB0000;">NA</span>                                                          <span style="color: #BB0000;">NA</span>              taxonID detected with duplicated value                                                             check_taxon_…</span></span></code></pre></div>
 <p>(You may need to scroll to the right in the output below to see all
 the text).</p>
 <p>In this case, <code><a href="../reference/dct_validate.html">dct_validate()</a></code> still issues a warning to
@@ -264,8 +269,131 @@ the values “accepted”, “synonym”, etc. This is unlike, e.g.,
 of possible values.</p>
 <p>However, although DWC recommends using a controlled vocabulary for
 such terms, it does not specify the actual values! So dwctaxon lets you
-set those yourself (and tries to employ reasonable defaults).</p>
-<p>(more soon!)</p>
+set those yourself (and tries to employ reasonable defaults), as shown
+in the <a href="#changing-the-defaults">next section</a>.</p>
+</div>
+<div class="section level2">
+<h2 id="changing-the-defaults">Changing the defaults<a class="anchor" aria-label="anchor" href="#changing-the-defaults"></a>
+</h2>
+<p>Say you want to use a different set of allowed values for
+<code>taxonStatus</code>. Here, let’s include “good” so that the data
+will pass the check for taxonomic status (remember <a href="#the-data">we modified the data</a> so the
+<code>taxonomicStatus</code> of one of the rows was
+<code>"good"</code>).</p>
+<p>One way would be to use the <code>valid_tax_status</code> argument of
+<code><a href="../reference/dct_validate.html">dct_validate()</a></code> or <code><a href="../reference/dct_check_tax_status.html">dct_check_tax_status()</a></code>:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">filmies_dirty</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/dct_check_tax_status.html">dct_check_tax_status</a></span><span class="op">(</span></span>
+<span>    valid_tax_status <span class="op">=</span> <span class="st">"good, accepted, synonym"</span>,</span>
+<span>    on_success <span class="op">=</span> <span class="st">"logical"</span> <span class="co"># Issue "TRUE" if the check passes</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
+<p>But specifying this argument every time you want to check something
+gets tedious.</p>
+<p>So we can change the default setting for
+<code>valid_tax_status</code> with <code><a href="../reference/dct_options.html">dct_options()</a></code> like
+so:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/dct_options.html">dct_options</a></span><span class="op">(</span>valid_tax_status <span class="op">=</span> <span class="st">"good, accepted, synonym"</span><span class="op">)</span></span></code></pre></div>
+<p>Now we can run <code><a href="../reference/dct_check_tax_status.html">dct_check_tax_status()</a></code> and it will use
+the new default value:</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">filmies_dirty</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/dct_check_tax_status.html">dct_check_tax_status</a></span><span class="op">(</span>on_success <span class="op">=</span> <span class="st">"logical"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
+<p>You can change back to the original default values with
+<code>reset = TRUE</code>:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/dct_options.html">dct_options</a></span><span class="op">(</span>reset <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p>Now running the same code as above throws an error:</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">filmies_dirty</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/dct_check_tax_status.html">dct_check_tax_status</a></span><span class="op">(</span>on_success <span class="op">=</span> <span class="st">"logical"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Error: check_tax_status failed.</span></span>
+<span><span class="co">#&gt; taxonID detected whose taxonomicStatus is not in valid_tax_status (accepted, synonym, variant, NA)</span></span>
+<span><span class="co">#&gt; Bad taxonID: 54115096</span></span>
+<span><span class="co">#&gt; Bad scientificName: Cephalomanes atrovirens Presl</span></span>
+<span><span class="co">#&gt; Bad taxonomicStatus: good</span></span></code></pre></div>
+<p>There are a large number of settings that can be modified. See
+<code>?dct_options()</code> for a description of each.</p>
+<p>You can view the current status of all options (default values) by
+running <code><a href="../reference/dct_options.html">dct_options()</a></code> with no arguments:</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/dct_options.html">dct_options</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; $check_taxon_id</span></span>
+<span><span class="co">#&gt; [1] TRUE</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $check_tax_status</span></span>
+<span><span class="co">#&gt; [1] TRUE</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $check_mapping_accepted</span></span>
+<span><span class="co">#&gt; [1] TRUE</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $check_mapping_parent</span></span>
+<span><span class="co">#&gt; [1] TRUE</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $check_mapping_original</span></span>
+<span><span class="co">#&gt; [1] TRUE</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $check_mapping_accepted_status</span></span>
+<span><span class="co">#&gt; [1] FALSE</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $check_sci_name</span></span>
+<span><span class="co">#&gt; [1] TRUE</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $check_status_diff</span></span>
+<span><span class="co">#&gt; [1] FALSE</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $check_col_names</span></span>
+<span><span class="co">#&gt; [1] TRUE</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $valid_tax_status</span></span>
+<span><span class="co">#&gt; [1] "accepted, synonym, variant, NA"</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $skip_missing_cols</span></span>
+<span><span class="co">#&gt; [1] FALSE</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $on_success</span></span>
+<span><span class="co">#&gt; [1] "data"</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $on_fail</span></span>
+<span><span class="co">#&gt; [1] "error"</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $fill_taxon_id</span></span>
+<span><span class="co">#&gt; [1] TRUE</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $fill_usage_id</span></span>
+<span><span class="co">#&gt; [1] TRUE</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $clear_usage_id</span></span>
+<span><span class="co">#&gt; [1] TRUE</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $clear_usage_name</span></span>
+<span><span class="co">#&gt; [1] TRUE</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $fill_usage_name</span></span>
+<span><span class="co">#&gt; [1] TRUE</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $remap_names</span></span>
+<span><span class="co">#&gt; [1] TRUE</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $remap_variant</span></span>
+<span><span class="co">#&gt; [1] FALSE</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $stamp_modified</span></span>
+<span><span class="co">#&gt; [1] TRUE</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $strict</span></span>
+<span><span class="co">#&gt; [1] FALSE</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $quiet</span></span>
+<span><span class="co">#&gt; [1] FALSE</span></span></code></pre></div>
+<p>Or check the value of one particular setting by passing its name with
+the <code>$</code> operator:</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/dct_options.html">dct_options</a></span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="va">valid_tax_status</span></span>
+<span><span class="co">#&gt; [1] "accepted, synonym, variant, NA"</span></span></code></pre></div>
 </div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
