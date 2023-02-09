@@ -20,7 +20,10 @@ dct_filmies <-
     taxonID, acceptedNameUsageID, taxonomicStatus,
     taxonRank, scientificName
   ) %>%
-  mutate(across(everything(), as.character)) %>%
+  mutate(
+    across(everything(), as.character),
+    scientificName = stringi::stri_trans_general(scientificName, "latin-ascii")
+  ) %>%
   dct_validate()
 
 usethis::use_data(dct_filmies, overwrite = TRUE)
