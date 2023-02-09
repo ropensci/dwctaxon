@@ -128,6 +128,8 @@ dct_check_tax_status <- function(tax_dat,
     quiet <- get_dct_opt("quiet")
   }
   # Run main checks
+  assertthat::assert_that(assertthat::is.string(valid_tax_status))
+
   check_res <- list(
     # Check for required columns
     assert_col(
