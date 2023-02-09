@@ -59,7 +59,7 @@ dct_modify_row_single <- function(tax_dat,
   # Check input classes ----
   if (!is.null(taxon_id)) {
     assertthat::assert_that(
-      assertthat::is.string(taxon_id) | assertthat::is.scalar(usage_id)
+      assertthat::is.string(taxon_id) | assertthat::is.scalar(taxon_id)
     )
   }
   if (!is.null(sci_name)) {
