@@ -9,13 +9,9 @@ dct_terms <-
   # Strip out the term from the URL
   dplyr::mutate(
     group = stringr::str_to_lower(group),
-    term = stringr::str_split(iri, "\\/") |> purrr::map_chr(dplyr::last),
-    # Treat 'date' as 'character' to avoid hassle of formatting dates
-    # same for 'uri'
-    type = tidyr::replace_na(type, "character") |>
-      stringr::str_replace_all("date|uri", "character")
+    term = stringr::str_split(iri, "\\/") |> purrr::map_chr(dplyr::last)
   ) |>
-  dplyr::select(group, term, type)
+  dplyr::select(group, term)
 
 # Add two attributes: date-time of retrieval, URL where terms originate
 attributes(dct_terms) <- c(

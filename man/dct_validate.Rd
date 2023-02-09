@@ -92,6 +92,10 @@ for \code{acceptedNameUsageID}
 
 Default settings of all arguments can be modified with \code{dct_options()} (see
 Examples).
+
+Most columns are expected to be vectors of class character, but this is not
+checked for all columns. Columns (DWC terms) with names including 'ID', for
+example 'taxonID', may be character, numeric, or integer.
 }
 \examples{
 # The example dataset dct_filmies is already correctly formatted and passes

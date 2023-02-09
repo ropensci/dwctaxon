@@ -14,9 +14,6 @@ utils::globalVariables(c(
   "scientificName", # <check_status_diff_p>
   "taxonomicStatus", # <check_status_diff_p>
   "dct_terms", # <dct_fill_col>
-  "dct_terms", # <dct_fix_format>
-  "input_type", # <dct_fix_format>
-  "type", # <dct_fix_format>
   "taxonID", # <dct_modify_row_single>
   "scientificName", # <dct_modify_row_single>
   "acceptedNameUsageID", # <dct_modify_row_single>

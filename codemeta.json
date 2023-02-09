@@ -210,11 +210,6 @@
     },
     "6": {
       "@type": "SoftwareApplication",
-      "identifier": "methods",
-      "name": "methods"
-    },
-    "7": {
-      "@type": "SoftwareApplication",
       "identifier": "purrr",
       "name": "purrr",
       "provider": {
@@ -225,7 +220,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=purrr"
     },
-    "8": {
+    "7": {
       "@type": "SoftwareApplication",
       "identifier": "rlang",
       "name": "rlang",
@@ -237,7 +232,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=rlang"
     },
-    "9": {
+    "8": {
       "@type": "SoftwareApplication",
       "identifier": "settings",
       "name": "settings",
@@ -249,7 +244,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=settings"
     },
-    "10": {
+    "9": {
       "@type": "SoftwareApplication",
       "identifier": "stringr",
       "name": "stringr",
@@ -261,7 +256,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=stringr"
     },
-    "11": {
+    "10": {
       "@type": "SoftwareApplication",
       "identifier": "tibble",
       "name": "tibble",
@@ -273,24 +268,12 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=tibble"
     },
-    "12": {
-      "@type": "SoftwareApplication",
-      "identifier": "tidyr",
-      "name": "tidyr",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=tidyr"
-    },
-    "13": {
+    "11": {
       "@type": "SoftwareApplication",
       "identifier": "utils",
       "name": "utils"
     },
-    "14": {
+    "12": {
       "@type": "SoftwareApplication",
       "identifier": "R",
       "name": "R",
@@ -298,7 +281,7 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "469.534KB",
+  "fileSize": "508.126KB",
   "citation": [
     {
       "@type": "CreativeWork",
@@ -320,5 +303,6 @@
     }
   ],
   "readme": "https://github.com/joelnitta/dwctaxon/blob/main/README.md",
+  "contIntegration": "https://app.codecov.io/gh/joelnitta/dwctaxon?branch=main",
   "developmentStatus": "https://www.repostatus.org/#wip"
 }

@@ -29,13 +29,11 @@ Imports:
     digest,
     dplyr,
     glue,
-    methods,
     purrr,
     rlang,
     settings,
     stringr,
     tibble,
-    tidyr,
     utils
 Suggests: 
     testthat (>= 3.0.0),
