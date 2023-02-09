@@ -17,7 +17,6 @@ reference:
   - dct_add_row
   - dct_modify_row
   - dct_fill_col
-  - dct_fix_format
 - title: Validate taxonomic names
 - contents:
   - dct_validate

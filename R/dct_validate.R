@@ -23,6 +23,10 @@
 #' Default settings of all arguments can be modified with `dct_options()` (see
 #' Examples).
 #'
+#' Most columns are expected to be vectors of class character, but this is not
+#' checked for all columns. Columns (DWC terms) with names including 'ID', for
+#' example 'taxonID', may be character, numeric, or integer.
+#'
 #' @param tax_dat `r param_tax_dat`
 #' @param check_taxon_id `r param_check_taxon_id`
 #' @param check_tax_status `r param_check_tax_status`

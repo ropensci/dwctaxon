@@ -16,11 +16,11 @@ dct_filmies <-
   mutate(
     taxonomicStatus = str_remove_all(taxonomicStatus, " name")
   ) %>%
-  dct_fix_format() %>%
   select(
     taxonID, acceptedNameUsageID, taxonomicStatus,
     taxonRank, scientificName
   ) %>%
+  mutate(across(everything(), as.character)) %>%
   dct_validate()
 
 usethis::use_data(dct_filmies, overwrite = TRUE)
