@@ -44,7 +44,8 @@ Suggests:
     knitr,
     rmarkdown,
     tidyverse,
-    patrick
+    patrick,
+    stringi
 Remotes: 
     anthonynorth/roxyglobals
 Depends: 

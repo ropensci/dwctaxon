@@ -18,7 +18,10 @@
 #' Taxonomic data of filmy ferns
 #'
 #' Taxonomic data of filmy ferns (family Hymenophyllaceae) in Darwin Core
-#' format.
+#' format. Non-ASCII characters have been converted to ASCII, so some author
+#' names may not be as expected. Meant for demonstration purposes only, not
+#' formal data analysis.
+#'
 #' Modified from data downloaded from the [Catalog of
 #' Life](https://www.catalogueoflife.org/) under the [Creative Commons
 #' Attribution (CC BY) 4.0](https://creativecommons.org/licenses/by/4.0/)
