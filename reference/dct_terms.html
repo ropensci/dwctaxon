@@ -64,11 +64,10 @@ record-level are included.</p>
 
     <div class="section level2">
     <h2 id="format">Format<a class="anchor" aria-label="anchor" href="#format"></a></h2>
-    <p>Dataframe (tibble), including three columns:</p><ul><li><p><code>group</code>: Darwin Core term group; either "taxon" (terms in the Taxon class)
+    <p>Dataframe (tibble), including two columns:</p><ul><li><p><code>group</code>: Darwin Core term group; either "taxon" (terms in the Taxon class)
 or "record-level" (terms that are generic in that they might apply
 to any type of record in a dataset.)</p></li>
 <li><p><code>term</code>: Darwin Core term</p></li>
-<li><p><code>type</code>: Type of data, corresponding to class in R (except for "date").</p></li>
 </ul><p>with two additional attributes:</p><ul><li><p><code>retrieved</code>: Date the terms were obtained</p></li>
 <li><p><code>url</code>: URL from which the terms were obtained</p></li>
 </ul></div>
