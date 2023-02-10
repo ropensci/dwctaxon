@@ -168,7 +168,7 @@ test_that("stamp_modified argument works", {
   # Replace time stamp with date stamp for testing
   stub(dct_add_row, "Sys.time", Sys.Date(), depth = 2)
   expect_equal(
-    dct_add_row(tax_dat, taxon_id = "2"),
+    dct_add_row(tax_dat, taxon_id = "2", stamp_modified = TRUE),
     tibble::tribble(
       ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
       ~modified,

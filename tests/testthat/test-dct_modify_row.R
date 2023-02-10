@@ -253,7 +253,7 @@ test_that("stamp_modified argument works", {
   # Replace time stamp with date stamp for testing
   stub(dct_modify_row, "Sys.time", Sys.Date(), depth = 2)
   expect_equal(
-    dct_modify_row(tax_dat, "1", tax_status = "bar"),
+    dct_modify_row(tax_dat, "1", tax_status = "bar", stamp_modified = TRUE),
     tibble::tribble(
       ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
       ~modified,
