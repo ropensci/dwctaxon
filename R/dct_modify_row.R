@@ -57,25 +57,35 @@ dct_modify_row_single <- function(tax_dat,
   if (!is.null(other_terms) && isTRUE(is.na(other_terms))) other_terms <- NULL
 
   # Check input classes ----
-  if (!is.null(taxon_id)) {
+  ifelse(
+    !is.null(taxon_id),
     assertthat::assert_that(
       assertthat::is.string(taxon_id) | assertthat::is.scalar(taxon_id)
-    )
-  }
-  if (!is.null(sci_name)) {
-    assertthat::assert_that(assertthat::is.string(sci_name))
-  }
-  if (!is.null(tax_status)) {
-    assertthat::assert_that(assertthat::is.string(tax_status))
-  }
-  if (!is.null(usage_id)) {
+    ),
+    TRUE
+  )
+  ifelse(
+    !is.null(sci_name),
+    assertthat::assert_that(assertthat::is.string(sci_name)),
+    TRUE
+  )
+  ifelse(
+    !is.null(tax_status),
+    assertthat::assert_that(assertthat::is.string(tax_status)),
+    TRUE
+  )
+  ifelse(
+    !is.null(usage_id),
     assertthat::assert_that(
       assertthat::is.string(usage_id) | assertthat::is.scalar(usage_id)
-    )
-  }
-  if (!is.null(usage_name)) {
-    assertthat::assert_that(assertthat::is.string(usage_name))
-  }
+    ),
+    TRUE
+  )
+  ifelse(
+    !is.null(usage_name),
+    assertthat::assert_that(assertthat::is.string(usage_name)),
+    TRUE
+  )
   assertthat::assert_that(assertthat::is.flag(clear_usage_id))
   assertthat::assert_that(assertthat::is.flag(fill_usage_name))
   assertthat::assert_that(assertthat::is.flag(remap_names))
@@ -85,19 +95,23 @@ dct_modify_row_single <- function(tax_dat,
   assertthat::assert_that(assertthat::is.flag(quiet))
   # Other input checks ----
   # - usage_name must exist in input data
-  if (!is.null(usage_name)) {
+  ifelse(
+    !is.null(usage_name),
     assertthat::assert_that(
       usage_name %in% tax_dat$scientificName,
       msg = "`usage_name` not detected in `tax_dat$scientificName`"
-    )
-  }
+    ),
+    TRUE
+  )
   # - usage_id must exist in input data
-  if (!is.null(usage_id)) {
+  ifelse(
+    !is.null(usage_id),
     assertthat::assert_that(
       usage_id %in% tax_dat$taxonID,
       msg = "`usage_id` not detected in `tax_dat$taxonID`"
-    )
-  }
+    ),
+    TRUE
+  )
 
   # Convert aliases ----
   if (!is.null(other_terms)) {
@@ -189,14 +203,16 @@ dct_modify_row_single <- function(tax_dat,
       )
     )
     # If both usage_id and usage_name provided, they must agree
-    if (!is.null(usage_id)) {
+    ifelse(
+      !is.null(usage_id),
       assertthat::assert_that(
         usage_id_match == usage_id,
         msg = glue::glue(
           "usage_id and usage_name do not agree for usage_name '{usage_name}'"
         )
-      )
-    }
+      ),
+      TRUE
+    )
     usage_id <- usage_id_match
   }
 
