@@ -201,8 +201,8 @@ assert_col <- function(dat, col, class = NULL, req_by = NULL,
 #' @noRd
 #' @autoglobal
 bind_rows_f <- function(x) {
-  x <- x[sapply(x, function(y) inherits(y, "data.frame"))]
-  x <- x[sapply(x, function(y) nrow(y) > 0)]
+  x <- x[purrr::map_lgl(x, function(y) inherits(y, "data.frame"))]
+  x <- x[purrr::map_lgl(x, function(y) nrow(y) > 0)]
   do.call(dplyr::bind_rows, x)
 }
 
@@ -231,7 +231,7 @@ sort_cols_dwc <- function(x) {
 #' @noRd
 #' @autoglobal
 any_not_true <- function(x) {
-  sapply(x, function(y) !isTRUE(y)) |>
+  purrr::map_lgl(x, function(y) !isTRUE(y)) |>
     any()
 }
 

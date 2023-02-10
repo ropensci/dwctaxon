@@ -356,7 +356,7 @@ dct_validate <- function(tax_dat,
     purrr::compact()
 
   # Delete any empty dataframes
-  empty_df <- sapply(
+  empty_df <- purrr::map_lgl(
     check_res, function(y) inherits(y, "data.frame") && nrow(y) == 0
   )
   check_res <- check_res[!empty_df]
