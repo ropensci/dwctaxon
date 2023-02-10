@@ -149,7 +149,7 @@ data in compliance with Darwin Core standards in R.
 <span><span class="co">#&gt; 3 54115097 &lt;NA&gt;                accepted        species   Cephalomanes crassum (Copel.) M. G. Price &lt;NA&gt;               </span></span>
 <span><span class="co">#&gt; 4 54133784 54115098            synonym         species   Trichomanes densinervium Copel.           &lt;NA&gt;               </span></span>
 <span><span class="co">#&gt; 5 54115098 &lt;NA&gt;                accepted        species   Cephalomanes densinervium (Copel.) Copel. &lt;NA&gt;               </span></span>
-<span><span class="co">#&gt; 6 193e2011 &lt;NA&gt;                accepted        &lt;NA&gt;      Hymenophyllum dwctaxonense Nitta          2023-01-19 16:57:37</span></span></code></pre></div>
+<span><span class="co">#&gt; 6 193e2011 &lt;NA&gt;                accepted        &lt;NA&gt;      Hymenophyllum dwctaxonense Nitta          2023-02-10 17:07:29</span></span></code></pre></div>
 <p><code><a href="reference/dct_modify_row.html">dct_modify_row()</a></code> modifies a row, automatically re-mapping synonyms if needed.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Change C. densinervium to a synonym of C. crassum</span></span>
@@ -165,8 +165,8 @@ data in compliance with Darwin Core standards in R.
 <span><span class="co">#&gt; 1 54115096 &lt;NA&gt;                accepted        species   Cephalomanes atrovirens Presl             &lt;NA&gt;               </span></span>
 <span><span class="co">#&gt; 2 54133783 54115097            synonym         species   Trichomanes crassum Copel.                &lt;NA&gt;               </span></span>
 <span><span class="co">#&gt; 3 54115097 &lt;NA&gt;                accepted        species   Cephalomanes crassum (Copel.) M. G. Price &lt;NA&gt;               </span></span>
-<span><span class="co">#&gt; 4 54133784 54115097            synonym         species   Trichomanes densinervium Copel.           2023-01-19 16:57:37</span></span>
-<span><span class="co">#&gt; 5 54115098 54115097            synonym         species   Cephalomanes densinervium (Copel.) Copel. 2023-01-19 16:57:37</span></span></code></pre></div>
+<span><span class="co">#&gt; 4 54133784 54115097            synonym         species   Trichomanes densinervium Copel.           2023-02-10 17:07:29</span></span>
+<span><span class="co">#&gt; 5 54115098 54115097            synonym         species   Cephalomanes densinervium (Copel.) Copel. 2023-02-10 17:07:29</span></span></code></pre></div>
 <p><code><a href="reference/dct_fill_col.html">dct_fill_col()</a></code> fills in values for columns that have “term” - “termID” pairs (e.g., <code>acceptedNameUsage</code> and <code>acceptedNameUsageID</code>).</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Fill-in the acceptedNameUsage column with scientific names</span></span>
@@ -249,7 +249,7 @@ data in compliance with Darwin Core standards in R.
 <span><span class="co">#&gt;    taxonID  acceptedNameUsageID taxonomicStatus taxonRank scientificName                             modified           </span></span>
 <span><span class="co">#&gt;    &lt;chr&gt;    &lt;chr&gt;               &lt;chr&gt;           &lt;chr&gt;     &lt;chr&gt;                                      &lt;chr&gt;              </span></span>
 <span><span class="co">#&gt;  1 54115096 &lt;NA&gt;                accepted        species   Cephalomanes atrovirens Presl              &lt;NA&gt;               </span></span>
-<span><span class="co">#&gt;  2 54133783 &lt;NA&gt;                accepted        species   Trichomanes crassum Copel.                 2023-01-19 16:57:37</span></span>
+<span><span class="co">#&gt;  2 54133783 &lt;NA&gt;                accepted        species   Trichomanes crassum Copel.                 2023-02-10 17:07:29</span></span>
 <span><span class="co">#&gt;  3 54115097 &lt;NA&gt;                accepted        species   Cephalomanes crassum (Copel.) M. G. Price  &lt;NA&gt;               </span></span>
 <span><span class="co">#&gt;  4 54133784 54115098            synonym         species   Trichomanes densinervium Copel.            &lt;NA&gt;               </span></span>
 <span><span class="co">#&gt;  5 54115098 &lt;NA&gt;                accepted        species   Cephalomanes densinervium (Copel.) Copel.  &lt;NA&gt;               </span></span>
@@ -328,6 +328,7 @@ data in compliance with Darwin Core standards in R.
 <li><a href="https://zenodo.org/badge/latestdoi/434126221" class="external-link"><img src="https://zenodo.org/badge/434126221.svg" alt="DOI"></a></li>
 <li><a href="https://joelnitta.r-universe.dev/ui#package:dwctaxon" class="external-link"><img src="https://joelnitta.r-universe.dev/badges/dwctaxon" alt="runiverse"></a></li>
 <li><a href="https://app.codecov.io/gh/joelnitta/dwctaxon?branch=main" class="external-link"><img src="https://codecov.io/gh/joelnitta/dwctaxon/branch/main/graph/badge.svg" alt="Codecov test coverage"></a></li>
+<li><a href="https://github.com/joelnitta/dwctaxon/actions?query=workflow%3Apkgcheck" class="external-link"><img src="https://github.com/joelnitta/dwctaxon/workflows/pkgcheck/badge.svg" alt="pkgcheck"></a></li>
 </ul>
 </div>
 
