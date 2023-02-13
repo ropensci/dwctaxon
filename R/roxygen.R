@@ -156,7 +156,7 @@ param_skip_missing_cols <- glue::glue(
 check_fill_usage_id_name <- function() {
   invisible(
     assertthat::assert_that(
-      get_dct_opt("clear_usage_name") && get_dct_opt("clear_usage_id"),
+      dct_options()$clear_usage_name && dct_options()$clear_usage_id,
       msg = "clear_usage_name and clear_usage_id are both not TRUE"
     )
   )

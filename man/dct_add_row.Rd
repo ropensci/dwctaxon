@@ -12,10 +12,10 @@ dct_add_row(
   usage_id = NULL,
   usage_name = NULL,
   new_dat = NULL,
-  fill_taxon_id,
-  fill_usage_id,
-  stamp_modified,
-  strict,
+  fill_taxon_id = dct_options()$fill_taxon_id,
+  fill_usage_id = dct_options()$fill_usage_id,
+  stamp_modified = dct_options()$stamp_modified,
+  strict = dct_options()$strict,
   ...
 )
 }

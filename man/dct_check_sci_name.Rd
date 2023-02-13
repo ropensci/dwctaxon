@@ -4,7 +4,12 @@
 \alias{dct_check_sci_name}
 \title{Check scientificName}
 \usage{
-dct_check_sci_name(tax_dat, on_fail, on_success, quiet)
+dct_check_sci_name(
+  tax_dat,
+  on_fail = dct_options()$on_fail,
+  on_success = dct_options()$on_success,
+  quiet = dct_options()$quiet
+)
 }
 \arguments{
 \item{tax_dat}{Dataframe; taxonomic database in DWC format.}

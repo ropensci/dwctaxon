@@ -7,25 +7,12 @@
 #' @inherit check_taxon_id_not_na
 #' @noRd
 check_tax_status_valid <- function(tax_dat,
-                                   on_fail,
-                                   on_success,
-                                   valid_tax_status,
+                                   on_fail = dct_options()$on_fail,
+                                   on_success = dct_options()$on_success,
+                                   valid_tax_status =
+                                     dct_options()$valid_tax_status,
                                    run = TRUE,
-                                   quiet) {
-  # Set defaults ----
-  if (missing(valid_tax_status)) {
-    valid_tax_status <- get_dct_opt("valid_tax_status")
-  }
-  if (missing(on_success)) {
-    on_success <- get_dct_opt("on_success")
-  }
-  if (missing(on_fail)) {
-    on_fail <- get_dct_opt("on_fail")
-  }
-  if (missing(quiet)) {
-    quiet <- get_dct_opt("quiet")
-  }
-
+                                   quiet = dct_options()$quiet) {
   # Early exit with NULL if req'd cols not present
   if (
     !"taxonomicStatus" %in% colnames(tax_dat) ||
@@ -110,23 +97,11 @@ check_tax_status_valid <- function(tax_dat,
 #' @export
 #'
 dct_check_tax_status <- function(tax_dat,
-                                 on_fail,
-                                 on_success,
-                                 valid_tax_status,
-                                 quiet) {
-  # Set defaults ----
-  if (missing(valid_tax_status)) {
-    valid_tax_status <- get_dct_opt("valid_tax_status")
-  }
-  if (missing(on_success)) {
-    on_success <- get_dct_opt("on_success")
-  }
-  if (missing(on_fail)) {
-    on_fail <- get_dct_opt("on_fail")
-  }
-  if (missing(quiet)) {
-    quiet <- get_dct_opt("quiet")
-  }
+                                 on_fail = dct_options()$on_fail,
+                                 on_success = dct_options()$on_success,
+                                 valid_tax_status =
+                                   dct_options()$valid_tax_status,
+                                 quiet = dct_options()$quiet) {
   # Run main checks
   assertthat::assert_that(assertthat::is.string(valid_tax_status))
 

@@ -5,7 +5,13 @@
 \title{Check that taxonomicStatus is within valid values in
 Darwin Core taxonomic data}
 \usage{
-dct_check_tax_status(tax_dat, on_fail, on_success, valid_tax_status, quiet)
+dct_check_tax_status(
+  tax_dat,
+  on_fail = dct_options()$on_fail,
+  on_success = dct_options()$on_success,
+  valid_tax_status = dct_options()$valid_tax_status,
+  quiet = dct_options()$quiet
+)
 }
 \arguments{
 \item{tax_dat}{Dataframe; taxonomic database in DWC format.}

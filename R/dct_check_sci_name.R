@@ -6,21 +6,10 @@
 #' @noRd
 #' @autoglobal
 check_sci_name_not_na <- function(tax_dat,
-                                  on_fail,
-                                  on_success,
+                                  on_fail = dct_options()$on_fail,
+                                  on_success = dct_options()$on_success,
                                   run = TRUE,
-                                  quiet) {
-  # Set defaults ----
-  if (missing(on_success)) {
-    on_success <- get_dct_opt("on_success")
-  }
-  if (missing(on_fail)) {
-    on_fail <- get_dct_opt("on_fail")
-  }
-  if (missing(quiet)) {
-    quiet <- get_dct_opt("quiet")
-  }
-
+                                  quiet = dct_options()$quiet) {
   # Early exit with NULL if req'd cols not present
   if (!"scientificName" %in% colnames(tax_dat) || run == FALSE) {
     return(NULL)
@@ -69,21 +58,10 @@ check_sci_name_not_na <- function(tax_dat,
 #' @noRd
 #' @autoglobal
 check_sci_name_is_uniq <- function(tax_dat,
-                                   on_fail,
-                                   on_success,
+                                   on_fail = dct_options()$on_fail,
+                                   on_success = dct_options()$on_success,
                                    run = TRUE,
-                                   quiet) {
-  # Set defaults ----
-  if (missing(on_success)) {
-    on_success <- get_dct_opt("on_success")
-  }
-  if (missing(on_fail)) {
-    on_fail <- get_dct_opt("on_fail")
-  }
-  if (missing(quiet)) {
-    quiet <- get_dct_opt("quiet")
-  }
-
+                                   quiet = dct_options()$quiet) {
   # Early exit with NULL if req'd cols not present
   if (!"scientificName" %in% colnames(tax_dat) || run == FALSE) {
     return(NULL)
@@ -147,20 +125,9 @@ check_sci_name_is_uniq <- function(tax_dat,
 #' @export
 #'
 dct_check_sci_name <- function(tax_dat,
-                               on_fail,
-                               on_success,
-                               quiet) {
-  # Set defaults ----
-  if (missing(on_success)) {
-    on_success <- get_dct_opt("on_success")
-  }
-  if (missing(on_fail)) {
-    on_fail <- get_dct_opt("on_fail")
-  }
-  if (missing(quiet)) {
-    quiet <- get_dct_opt("quiet")
-  }
-
+                               on_fail = dct_options()$on_fail,
+                               on_success = dct_options()$on_success,
+                               quiet = dct_options()$quiet) {
   # Check input format
   assertthat::assert_that(
     inherits(tax_dat, "data.frame"),

@@ -6,10 +6,10 @@
 \usage{
 dct_check_mapping(
   tax_dat,
-  on_fail,
-  on_success,
+  on_fail = dct_options()$on_fail,
+  on_success = dct_options()$on_success,
   col_select = "acceptedNameUsageID",
-  quiet
+  quiet = dct_options()$quiet
 )
 }
 \arguments{

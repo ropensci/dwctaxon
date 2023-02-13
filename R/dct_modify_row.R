@@ -13,41 +13,17 @@ dct_modify_row_single <- function(tax_dat,
                                   tax_status = NULL,
                                   usage_id = NULL,
                                   usage_name = NULL,
-                                  clear_usage_id,
-                                  clear_usage_name,
-                                  fill_usage_name,
-                                  remap_names,
-                                  remap_variant,
-                                  stamp_modified,
-                                  strict,
-                                  quiet,
+                                  clear_usage_id = dct_options()$clear_usage_id,
+                                  clear_usage_name =
+                                    dct_options()$clear_usage_name,
+                                  fill_usage_name =
+                                    dct_options()$fill_usage_name,
+                                  remap_names = dct_options()$remap_names,
+                                  remap_variant = dct_options()$remap_variant,
+                                  stamp_modified = dct_options()$stamp_modified,
+                                  strict = dct_options()$strict,
+                                  quiet = dct_options()$quiet,
                                   other_terms = NULL) {
-  # Set defaults ----
-  if (missing(clear_usage_id)) {
-    clear_usage_id <- get_dct_opt("clear_usage_id")
-  }
-  if (missing(clear_usage_name)) {
-    clear_usage_name <- get_dct_opt("clear_usage_name")
-  }
-  if (missing(fill_usage_name)) {
-    fill_usage_name <- get_dct_opt("fill_usage_name")
-  }
-  if (missing(remap_names)) {
-    remap_names <- get_dct_opt("remap_names")
-  }
-  if (missing(remap_variant)) {
-    remap_variant <- get_dct_opt("remap_variant")
-  }
-  if (missing(stamp_modified)) {
-    stamp_modified <- get_dct_opt("stamp_modified")
-  }
-  if (missing(strict)) {
-    strict <- get_dct_opt("strict")
-  }
-  if (missing(quiet)) {
-    quiet <- get_dct_opt("quiet")
-  }
-
   # Convert any NA input (from args_tbl) to NULL
   if (!is.null(taxon_id) && is.na(taxon_id)) taxon_id <- NULL
   if (!is.null(sci_name) && is.na(sci_name)) sci_name <- NULL
@@ -456,42 +432,16 @@ dct_modify_row <- function(tax_dat,
                            tax_status = NULL,
                            usage_id = NULL,
                            usage_name = NULL,
-                           clear_usage_id,
-                           clear_usage_name,
-                           fill_usage_name,
-                           remap_names,
-                           remap_variant,
-                           stamp_modified,
-                           strict,
-                           quiet,
+                           clear_usage_id = dct_options()$clear_usage_id,
+                           clear_usage_name = dct_options()$clear_usage_name,
+                           fill_usage_name = dct_options()$fill_usage_name,
+                           remap_names = dct_options()$remap_names,
+                           remap_variant = dct_options()$remap_variant,
+                           stamp_modified = dct_options()$stamp_modified,
+                           strict = dct_options()$strict,
+                           quiet = dct_options()$quiet,
                            args_tbl = NULL,
                            ...) {
-  # Set defaults ----
-  if (missing(clear_usage_id)) {
-    clear_usage_id <- get_dct_opt("clear_usage_id")
-  }
-  if (missing(clear_usage_name)) {
-    clear_usage_name <- get_dct_opt("clear_usage_name")
-  }
-  if (missing(fill_usage_name)) {
-    fill_usage_name <- get_dct_opt("fill_usage_name")
-  }
-  if (missing(remap_names)) {
-    remap_names <- get_dct_opt("remap_names")
-  }
-  if (missing(remap_variant)) {
-    remap_variant <- get_dct_opt("remap_variant")
-  }
-  if (missing(stamp_modified)) {
-    stamp_modified <- get_dct_opt("stamp_modified")
-  }
-  if (missing(strict)) {
-    strict <- get_dct_opt("strict")
-  }
-  if (missing(quiet)) {
-    quiet <- get_dct_opt("quiet")
-  }
-
   # Check input ----
   # - tax_dat must be dataframe
   assertthat::assert_that(

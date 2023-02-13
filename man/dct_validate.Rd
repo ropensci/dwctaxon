@@ -6,20 +6,20 @@
 \usage{
 dct_validate(
   tax_dat,
-  check_taxon_id,
-  check_tax_status,
-  check_mapping_accepted,
-  check_mapping_parent,
-  check_mapping_original,
-  check_mapping_accepted_status,
-  check_sci_name,
-  check_status_diff,
-  check_col_names,
-  valid_tax_status,
-  on_success,
-  on_fail,
-  skip_missing_cols,
-  quiet
+  check_taxon_id = dct_options()$check_taxon_id,
+  check_tax_status = dct_options()$check_tax_status,
+  check_mapping_accepted = dct_options()$check_mapping_accepted,
+  check_mapping_parent = dct_options()$check_mapping_parent,
+  check_mapping_original = dct_options()$check_mapping_original,
+  check_mapping_accepted_status = dct_options()$check_mapping_accepted_status,
+  check_sci_name = dct_options()$check_sci_name,
+  check_status_diff = dct_options()$check_status_diff,
+  check_col_names = dct_options()$check_col_names,
+  valid_tax_status = dct_options()$valid_tax_status,
+  on_success = dct_options()$on_success,
+  on_fail = dct_options()$on_fail,
+  skip_missing_cols = dct_options()$skip_missing_cols,
+  quiet = dct_options()$quiet
 )
 }
 \arguments{

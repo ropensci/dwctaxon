@@ -49,24 +49,11 @@ dct_add_row <- function(tax_dat,
                         usage_id = NULL,
                         usage_name = NULL,
                         new_dat = NULL,
-                        fill_taxon_id,
-                        fill_usage_id,
-                        stamp_modified,
-                        strict,
+                        fill_taxon_id = dct_options()$fill_taxon_id,
+                        fill_usage_id = dct_options()$fill_usage_id,
+                        stamp_modified = dct_options()$stamp_modified,
+                        strict = dct_options()$strict,
                         ...) {
-  # Set defaults ----
-  if (missing(fill_taxon_id)) {
-    fill_taxon_id <- get_dct_opt("fill_taxon_id")
-  }
-  if (missing(fill_usage_id)) {
-    fill_usage_id <- get_dct_opt("fill_usage_id")
-  }
-  if (missing(stamp_modified)) {
-    stamp_modified <- get_dct_opt("stamp_modified")
-  }
-  if (missing(strict)) {
-    strict <- get_dct_opt("strict")
-  }
   # Check if new_dat overlaps with abbreviated terms and convert
   if (!is.null(new_dat)) {
     # - taxon_id
