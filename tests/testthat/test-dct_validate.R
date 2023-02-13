@@ -41,8 +41,6 @@ test_that("checks on input work", {
   )
 })
 
-# TODO: Checks on required columns
-
 test_that("correctly formatted data does not error", {
   good_dat <- tibble::tribble(
     ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
@@ -649,24 +647,25 @@ test_that("combinations of failures get reported", {
     "3", NA, "accept", "bat",
     "4", NA, "accept", "bat"
   )
-  # TODO fix missing values in summary output
   expect_equal(
     dct_validate(bad_dat, on_fail = "summary", quiet = TRUE),
     tibble::tibble(
-      taxonID = c("1", "2", NA, "3", "4"),
-      acceptedNameUsageID = rep(NA_character_, 5),
-      scientificName = c("foo", "bar", "bat", "bat", "bat"),
-      taxonomicStatus = c(NA, NA, NA, "accept", "accept"),
+      taxonID = c("1", "2", "3", "4", "3", "4"),
+      acceptedNameUsageID = rep(NA_character_, 6),
+      scientificName = c("foo", "bar", "bat", "bat", "bat", "bat"),
+      taxonomicStatus = c(NA, NA, NA, NA, "accept", "accept"),
       error = c(
         "accepted name(s) detected with a non-missing value for acceptedNameUsageID", # nolint
         "synonym detected whose acceptedNameUsageID value does not map to taxonID of an accepted name", # nolint
+        "scientificName detected with duplicated value",
         "scientificName detected with duplicated value",
         "taxonID detected whose taxonomicStatus is not in valid_tax_status (accepted, synonym, variant, NA)", # nolint
         "taxonID detected whose taxonomicStatus is not in valid_tax_status (accepted, synonym, variant, NA)" # nolint
       ),
       check = c(
         "check_mapping_accepted_status", "check_mapping_accepted_status",
-        "check_sci_name", "check_tax_status", "check_tax_status"
+        "check_sci_name", "check_sci_name",
+        "check_tax_status", "check_tax_status"
       )
     )
   )
