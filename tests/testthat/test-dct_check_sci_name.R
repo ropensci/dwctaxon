@@ -133,6 +133,7 @@ test_that("check for 'sci name cannot be duplicated' works", {
   expect_equal(
     dct_check_sci_name(bad_dat, on_fail = "summary", quiet = TRUE),
     tibble::tibble(
+      taxonID = "3",
       scientificName = "Species bar",
       check = "check_sci_name",
       error = "scientificName detected with duplicated value"

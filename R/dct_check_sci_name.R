@@ -72,6 +72,13 @@ check_sci_name_is_uniq <- function(tax_dat,
     duplicated(tax_dat$scientificName)
   ]
 
+  bad_tax_id <- NULL
+  if ("taxonID" %in% colnames(tax_dat)) {
+    bad_tax_id <- tax_dat$taxonID[
+      tax_dat$scientificName %in% duplicated_sci_name
+    ]
+  }
+
   # Format results
   if (on_fail == "error") {
     assertthat::assert_that(
@@ -89,6 +96,7 @@ check_sci_name_is_uniq <- function(tax_dat,
     assert_that_d(
       length(duplicated_sci_name) == 0,
       data = tibble::tibble(
+        taxonID = bad_tax_id,
         scientificName = duplicated_sci_name,
         check = "check_sci_name",
         error = err_msg
@@ -168,7 +176,7 @@ dct_check_sci_name <- function(tax_dat,
   # Format results
   if (on_fail == "summary") {
     if (any_not_true(check_res)) {
-      return(bind_rows_f(check_res))
+      return(unique(bind_rows_f(check_res)))
     }
   }
   if (on_success == "data") {
