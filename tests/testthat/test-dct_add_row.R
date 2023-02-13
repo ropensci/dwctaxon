@@ -14,6 +14,16 @@ test_that("check for duplicated taxonID works", {
   )
 })
 
+test_that("check for bad col names works", {
+  expect_error(
+    dct_add_row(
+      base_dat,
+      taxon_id = "2", sci_namea = "hi", stamp_modified = FALSE
+    ),
+    "Invalid column name"
+  )
+})
+
 # warnings ---
 test_that("warning about changing taxonID class works", {
   expect_warning(

@@ -71,7 +71,6 @@ dct_add_row <- function(tax_dat,
     # - tax_status
     assert_that_uses_one_name(new_dat, "taxonomicStatus", "tax_status")
     new_dat <- convert_col(new_dat, "taxonomicStatus", "tax_status")
-    # TODO Check that all columns are DWC terms
   }
 
   # or create new_dat from direct input
@@ -180,6 +179,14 @@ dct_add_row <- function(tax_dat,
       modified = as.character(Sys.time())
     )
   }
+
+  # Check column names
+  check_col_names_p(
+    new_dat,
+    on_fail = "error", on_success = "logical",
+    run = TRUE,
+    quiet = FALSE
+  )
 
   # Add new data
   res <- dplyr::bind_rows(tax_dat, new_dat)
