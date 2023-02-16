@@ -74,9 +74,13 @@ check_sci_name_is_uniq <- function(tax_dat,
 
   bad_tax_id <- NULL
   if ("taxonID" %in% colnames(tax_dat)) {
-    bad_tax_id <- tax_dat$taxonID[
-      tax_dat$scientificName %in% duplicated_sci_name
+    bad_rows <- tax_dat[
+      tax_dat$scientificName %in% duplicated_sci_name,
+      c("taxonID", "scientificName")
     ]
+    bad_rows <- unique(bad_rows)
+    bad_tax_id <- bad_rows$taxonID
+    duplicated_sci_name <- bad_rows$scientificName
   }
 
   # Format results
