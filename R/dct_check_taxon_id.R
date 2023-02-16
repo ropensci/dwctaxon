@@ -86,6 +86,7 @@ check_taxon_id_is_uniq <- function(tax_dat,
         check = "check_taxon_id",
         error = "taxonID detected with duplicated value"
       ),
+      msg = "taxonID detected with duplicated value",
       quiet = quiet
     )
   }

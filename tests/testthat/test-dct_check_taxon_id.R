@@ -150,4 +150,8 @@ test_that("check for 'taxonID cannot be duplicated' works", {
       check = rep("check_taxon_id", 2)
     )
   )
+  expect_warning(
+    dct_check_taxon_id(bad_dat, on_fail = "summary", quiet = FALSE),
+    "taxonID detected with duplicated value"
+  )
 })
