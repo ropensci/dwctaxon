@@ -175,7 +175,7 @@ It's often a good idea to include `dct_validate()` at the end of a chain to make
 
 If you use this package, please cite it! Here is an example:
 
-    Nitta, JH (2022) dwctaxon: Tools for working with Darwin Core Taxon data in R. https://doi.org/10.5281/zenodo.6388271
+    Nitta, JH and Iwasaki, W (2023) dwctaxon: Tools for working with Darwin Core Taxon data in R. https://doi.org/10.5281/zenodo.6388271
 
 The example DOI above is for the overall package.
 

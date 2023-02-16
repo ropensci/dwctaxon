@@ -107,7 +107,7 @@ filmies_small |>
 #> 3 54115097 <NA>                accepted        species   Cephalomanes crassum (Copel.) M. G. Price <NA>               
 #> 4 54133784 54115098            synonym         species   Trichomanes densinervium Copel.           <NA>               
 #> 5 54115098 <NA>                accepted        species   Cephalomanes densinervium (Copel.) Copel. <NA>               
-#> 6 193e2011 <NA>                accepted        <NA>      Hymenophyllum dwctaxonense Nitta          2023-02-10 17:07:29
+#> 6 193e2011 <NA>                accepted        <NA>      Hymenophyllum dwctaxonense Nitta          2023-02-16 16:33:16
 ```
 
 `dct_modify_row()` modifies a row, automatically re-mapping synonyms if
@@ -127,8 +127,8 @@ filmies_small |>
 #> 1 54115096 <NA>                accepted        species   Cephalomanes atrovirens Presl             <NA>               
 #> 2 54133783 54115097            synonym         species   Trichomanes crassum Copel.                <NA>               
 #> 3 54115097 <NA>                accepted        species   Cephalomanes crassum (Copel.) M. G. Price <NA>               
-#> 4 54133784 54115097            synonym         species   Trichomanes densinervium Copel.           2023-02-10 17:07:29
-#> 5 54115098 54115097            synonym         species   Cephalomanes densinervium (Copel.) Copel. 2023-02-10 17:07:29
+#> 4 54133784 54115097            synonym         species   Trichomanes densinervium Copel.           2023-02-16 16:33:16
+#> 5 54115098 54115097            synonym         species   Cephalomanes densinervium (Copel.) Copel. 2023-02-16 16:33:16
 ```
 
 `dct_fill_col()` fills in values for columns that have “term” - “termID”
@@ -195,12 +195,12 @@ This can be done by setting `on_fail` to `"summary"`:
 dct_validate(filmies_dirty, on_fail = "summary")
 ```
 
-    #> Warning in assert_that_d(length(duplicated_tax_id) == 0, data = tibble::tibble(taxonID = duplicated_tax_id, : isTRUE(x = condition) is not
-    #> TRUE
+    #> Warning in assert_that_d(length(duplicated_tax_id) == 0, data = tibble::tibble(taxonID = duplicated_tax_id, : taxonID detected with
+    #> duplicated value
     #> Warning in assert_that_d(sum(map_id_is_bad) == 0, data = tibble::tibble(taxonID = bad_taxon_id, : taxonID detected whose acceptedNameUsageID
     #> value does not map to taxonID of an existing name.
-    #> Warning in assert_that_d(length(duplicated_sci_name) == 0, data = tibble::tibble(scientificName = duplicated_sci_name, : scientificName
-    #> detected with duplicated value
+    #> Warning in assert_that_d(length(duplicated_sci_name) == 0, data = tibble::tibble(taxonID = bad_tax_id, : scientificName detected with
+    #> duplicated value
     #> # A tibble: 9 × 5
     #>   taxonID  acceptedNameUsageID scientificName                             error                                    check         
     #>   <chr>    <chr>               <chr>                                      <glue>                                   <chr>         
@@ -209,8 +209,8 @@ dct_validate(filmies_dirty, on_fail = "summary")
     #> 3 54115097 s                   Cephalomanes crassum (Copel.) M. G. Price  taxonID detected whose acceptedNameUs... check_mapping 
     #> 4 54133786 n                   Cephalomanes curvatum (J. Sm.) V. D. Bosch taxonID detected whose acceptedNameUs... check_mapping 
     #> 5 54133783 p                   Trichomanes crassum Copel.                 taxonID detected whose acceptedNameUs... check_mapping 
-    #> 6 <NA>     <NA>                Cephalomanes atrovirens Presl              scientificName detected with duplicat... check_sci_name
-    #> 7 <NA>     <NA>                Trichomanes crassum Copel.                 scientificName detected with duplicat... check_sci_name
+    #> 6 54115096 <NA>                Cephalomanes atrovirens Presl              scientificName detected with duplicat... check_sci_name
+    #> 7 54133783 <NA>                Trichomanes crassum Copel.                 scientificName detected with duplicat... check_sci_name
     #> 8 54115096 <NA>                <NA>                                       taxonID detected with duplicated value   check_taxon_id
     #> 9 54133783 <NA>                <NA>                                       taxonID detected with duplicated value   check_taxon_id
 
@@ -235,7 +235,7 @@ dct_filmies |>
 #>    taxonID  acceptedNameUsageID taxonomicStatus taxonRank scientificName                             modified           
 #>    <chr>    <chr>               <chr>           <chr>     <chr>                                      <chr>              
 #>  1 54115096 <NA>                accepted        species   Cephalomanes atrovirens Presl              <NA>               
-#>  2 54133783 <NA>                accepted        species   Trichomanes crassum Copel.                 2023-02-10 17:07:29
+#>  2 54133783 <NA>                accepted        species   Trichomanes crassum Copel.                 2023-02-16 16:33:16
 #>  3 54115097 <NA>                accepted        species   Cephalomanes crassum (Copel.) M. G. Price  <NA>               
 #>  4 54133784 54115098            synonym         species   Trichomanes densinervium Copel.            <NA>               
 #>  5 54115098 <NA>                accepted        species   Cephalomanes densinervium (Copel.) Copel.  <NA>               
@@ -255,7 +255,7 @@ formatted.
 
 If you use this package, please cite it! Here is an example:
 
-    Nitta, JH (2022) dwctaxon: Tools for working with Darwin Core Taxon data in R. https://doi.org/10.5281/zenodo.6388271
+    Nitta, JH and Iwasaki, W (2023) dwctaxon: Tools for working with Darwin Core Taxon data in R. https://doi.org/10.5281/zenodo.6388271
 
 The example DOI above is for the overall package.
 
