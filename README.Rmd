@@ -27,6 +27,7 @@ set.seed(12345)
 [![runiverse](https://joelnitta.r-universe.dev/badges/dwctaxon)](https://joelnitta.r-universe.dev/ui#package:dwctaxon)
 [![Codecov test coverage](https://codecov.io/gh/joelnitta/dwctaxon/branch/main/graph/badge.svg)](https://app.codecov.io/gh/joelnitta/dwctaxon?branch=main)
 [![pkgcheck](https://github.com/joelnitta/dwctaxon/workflows/pkgcheck/badge.svg)](https://github.com/joelnitta/dwctaxon/actions?query=workflow%3Apkgcheck)
+[![Status at rOpenSci Software Peer Review](https://badges.ropensci.org/574_status.svg)](https://github.com/ropensci/software-review/issues/574)
 <!-- badges: end -->
 
 The goal of dwctaxon is to facilitate working with [Darwin Core Taxon data](https://dwc.tdwg.org/terms/#taxon) in R.
