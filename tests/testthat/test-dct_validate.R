@@ -1,3 +1,5 @@
+library(patrick)
+
 test_that("checks on input work", {
   expect_error(
     dct_validate(1),
