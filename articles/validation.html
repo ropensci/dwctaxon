@@ -121,7 +121,7 @@ we will use the example dataset that comes with dwctaxon,
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 54133788 54115100            synonym         species   Cephalomanes oblongifolium Presl          </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 54133789 54115100            synonym         species   Cephalomanes zollingeri V. D. Bosch       </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 54133790 54115100            synonym         species   Lacostea javanica (Bl.) Prantl            </span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># … with 2,441 more rows</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 2,441 more rows</span></span></span></code></pre></div>
 <p>However, <code>dct_filmies</code> already is well-formatted and would
 pass all validation checks! So lets introduce some noise to make things
 more interesting.</p>
@@ -143,19 +143,19 @@ more interesting.</p>
 <span></span>
 <span><span class="va">filmies_dirty</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2,457 × 6</span></span></span>
-<span><span class="co">#&gt;    taxonID  acceptedNameUsageID taxonomicStatus taxonRank scientificName                             modified           </span></span>
-<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>              </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 54115096 <span style="color: #BB0000;">NA</span>                  good            species   Cephalomanes atrovirens Presl              2023-03-21 21:52:53</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 54133783 54115097            synonym         species   Trichomanes crassum Copel.                 <span style="color: #BB0000;">NA</span>                 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 54115097 <span style="color: #BB0000;">NA</span>                  accepted        species   Cephalomanes crassum (Copel.) M. G. Price  <span style="color: #BB0000;">NA</span>                 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 54133784 54115098            synonym         species   Trichomanes densinervium Copel.            <span style="color: #BB0000;">NA</span>                 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 54115098 <span style="color: #BB0000;">NA</span>                  accepted        species   Cephalomanes densinervium (Copel.) Copel.  <span style="color: #BB0000;">NA</span>                 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 54133786 54115100            synonym         species   Cephalomanes curvatum (J. Sm.) V. D. Bosch <span style="color: #BB0000;">NA</span>                 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 54133787 54115100            synonym         species   Cephalomanes javanica (Bl.) V. D. Bosch    <span style="color: #BB0000;">NA</span>                 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 54133788 54115100            synonym         species   Cephalomanes oblongifolium Presl           <span style="color: #BB0000;">NA</span>                 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 54133789 54115100            synonym         species   Cephalomanes zollingeri V. D. Bosch        <span style="color: #BB0000;">NA</span>                 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 54133790 54115100            synonym         species   Lacostea javanica (Bl.) Prantl             <span style="color: #BB0000;">NA</span>                 </span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># … with 2,447 more rows</span></span></span></code></pre></div>
+<span><span class="co">#&gt;    taxonID  acceptedNameUsageID taxonomicStatus taxonRank scientificName                             modified                  </span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 54115096 <span style="color: #BB0000;">NA</span>                  good            species   Cephalomanes atrovirens Presl              2023-04-25 11:03:29.900823</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 54133783 54115097            synonym         species   Trichomanes crassum Copel.                 <span style="color: #BB0000;">NA</span>                        </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 54115097 <span style="color: #BB0000;">NA</span>                  accepted        species   Cephalomanes crassum (Copel.) M. G. Price  <span style="color: #BB0000;">NA</span>                        </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 54133784 54115098            synonym         species   Trichomanes densinervium Copel.            <span style="color: #BB0000;">NA</span>                        </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 54115098 <span style="color: #BB0000;">NA</span>                  accepted        species   Cephalomanes densinervium (Copel.) Copel.  <span style="color: #BB0000;">NA</span>                        </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 54133786 54115100            synonym         species   Cephalomanes curvatum (J. Sm.) V. D. Bosch <span style="color: #BB0000;">NA</span>                        </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 54133787 54115100            synonym         species   Cephalomanes javanica (Bl.) V. D. Bosch    <span style="color: #BB0000;">NA</span>                        </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 54133788 54115100            synonym         species   Cephalomanes oblongifolium Presl           <span style="color: #BB0000;">NA</span>                        </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 54133789 54115100            synonym         species   Cephalomanes zollingeri V. D. Bosch        <span style="color: #BB0000;">NA</span>                        </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 54133790 54115100            synonym         species   Lacostea javanica (Bl.) Prantl             <span style="color: #BB0000;">NA</span>                        </span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 2,447 more rows</span></span></span></code></pre></div>
 <p>The first few rows may look the same, but we know that these data now
 have some problems.</p>
 </div>
@@ -365,6 +365,9 @@ running <code><a href="../reference/dct_options.html">dct_options()</a></code> w
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $fill_usage_id</span></span>
 <span><span class="co">#&gt; [1] TRUE</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $taxon_id_length</span></span>
+<span><span class="co">#&gt; [1] 32</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $clear_usage_id</span></span>
 <span><span class="co">#&gt; [1] TRUE</span></span>
