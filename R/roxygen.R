@@ -92,8 +92,8 @@ param_quiet <- glue::glue(
 
 param_fill_taxon_id <- glue::glue(
   'Logical vector of length 1; if `taxon_id` is not \\
-  provided, should values in the taxonID column be filled in by looking \\
-  them up from the scientificName? \\
+  provided, should values in the taxonID column be filled in by \\
+  generating them automatically from the scientificName? \\
   {print_default("fill_taxon_id")}.'
 )
 
@@ -102,6 +102,13 @@ param_fill_usage_id <- glue::glue(
   provided, should values in the acceptedNameUsageID column be filled in by \\
   matching acceptedNameUsage to scientificName? \\
   {print_default("fill_usage_id")}.'
+)
+
+param_taxon_id_length <- glue::glue(
+  'Numeric vector of length 1; how many characters should be included in \\
+  automatically generated values of taxonID? Must be between 1 and 32, \\
+  inclusive. \\
+  {print_default("taxon_id_length")}.'
 )
 
 param_stamp_modified <- glue::glue(

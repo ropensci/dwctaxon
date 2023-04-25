@@ -28,6 +28,7 @@
 #'
 #' - `fill_taxon_id`: `r param_fill_taxon_id`
 #' - `fill_usage_id`: `r param_fill_usage_id`
+#' - `taxon_id_length`: `r param_taxon_id_length`
 #' - `clear_usage_id`: `r param_clear_usage_id`
 #' - `clear_usage_name`: `r param_clear_usage_name`
 #' - `fill_usage_name`: `r param_fill_usage_name`
@@ -78,6 +79,7 @@ dct_opts <- settings::options_manager(
   # editing
   fill_taxon_id = TRUE,
   fill_usage_id = TRUE,
+  taxon_id_length = 32,
   clear_usage_id = TRUE,
   clear_usage_name = TRUE,
   fill_usage_name = TRUE,
@@ -103,6 +105,7 @@ dct_opts <- settings::options_manager(
     on_fail = settings::inlist("error", "summary"),
     fill_taxon_id = settings::inlist(TRUE, FALSE),
     fill_usage_id = settings::inlist(TRUE, FALSE),
+    taxon_id_length = settings::inlist(1:32),
     clear_usage_id = settings::inlist(TRUE, FALSE),
     clear_usage_name = settings::inlist(TRUE, FALSE),
     fill_usage_name = settings::inlist(TRUE, FALSE),

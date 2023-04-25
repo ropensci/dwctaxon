@@ -111,11 +111,54 @@ test_that("fill_taxon_id argument works", {
     tibble::tibble(
       taxonID = c(
         "1",
+        digest::digest("bar"),
+        digest::digest("bat")
+      ),
+      scientificName = c("foo", "bar", "bat")
+    )
+  )
+  expect_equal(
+    dct_add_row(base_dat,
+      sci_name = c("bar", "bat"),
+      stamp_modified = FALSE,
+      taxon_id_length = 8
+    ),
+    tibble::tibble(
+      taxonID = c(
+        "1",
         digest::digest("bar") |> substr(1, 8),
         digest::digest("bat") |> substr(1, 8)
       ),
       scientificName = c("foo", "bar", "bat")
     )
+  )
+  expect_error(
+    dct_add_row(base_dat,
+      sci_name = c("bar", "bat"),
+      stamp_modified = FALSE,
+      taxon_id_length = "a"
+    ),
+    "taxon_id_length is not a numeric or integer vector"
+  )
+  expect_error(
+    dct_add_row(base_dat,
+      sci_name = c("bar", "bat"),
+      stamp_modified = FALSE,
+      taxon_id_length = 40
+    ),
+    "taxon_id_length must be <= 32"
+  )
+  expect_error(
+    dct_add_row(base_dat,
+      sci_name = c("bar", "bat"),
+      stamp_modified = FALSE,
+      taxon_id_length = -1
+    ),
+    "taxon_id_length must be >= 1"
+  )
+  expect_error(
+    dct_options(taxon_id_length = 50),
+    "Option value out of range"
   )
 })
 
@@ -205,6 +248,22 @@ test_that("setting validation args via options works", {
   expect_snapshot({
     (expect_no_error(dct_add_row(base_dat, new_dat = add_dat, strict = TRUE)))
   })
+  dct_options(reset = TRUE)
+  dct_options(taxon_id_length = 8)
+  expect_equal(
+    dct_add_row(base_dat,
+      sci_name = c("bar", "bat"),
+      stamp_modified = FALSE
+    ),
+    tibble::tibble(
+      taxonID = c(
+        "1",
+        digest::digest("bar") |> substr(1, 8),
+        digest::digest("bat") |> substr(1, 8)
+      ),
+      scientificName = c("foo", "bar", "bat")
+    )
+  )
   dct_options(reset = TRUE)
 })
 
