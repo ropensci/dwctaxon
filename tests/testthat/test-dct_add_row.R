@@ -138,7 +138,15 @@ test_that("fill_taxon_id argument works", {
       stamp_modified = FALSE,
       taxon_id_length = "a"
     ),
-    "taxon_id_length is not a numeric or integer vector"
+    "taxon_id_length is not a number"
+  )
+  expect_error(
+    dct_add_row(base_dat,
+      sci_name = c("bar", "bat"),
+      stamp_modified = FALSE,
+      taxon_id_length = c(2, 3)
+    ),
+    "taxon_id_length is not a number"
   )
   expect_error(
     dct_add_row(base_dat,

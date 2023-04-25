@@ -119,7 +119,7 @@ dct_add_row <- function(tax_dat,
       new_dat[["taxonID"]] <- NA_character_
     }
     if ("scientificName" %in% colnames(new_dat)) {
-      assertthat::assert_that(is.numeric(taxon_id_length))
+      assertthat::assert_that(assertthat::is.number(taxon_id_length))
       assertthat::assert_that(
         !is.null(taxon_id_length),
         msg = "taxon_id_length required to generate taxonID values")
