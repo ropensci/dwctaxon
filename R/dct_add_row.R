@@ -10,6 +10,10 @@
 #' `fill_taxon_id` and `fill_usage_id` only act on the newly added data (they
 #' do not fill columns in `tax_dat`).
 #'
+#' If "taxonID" is not provided for the new row and `fill_taxon_id` is `TRUE`,
+#' a value for taxonID will be automatically generated from the md5 hash digest
+#' of the scientific name.
+#'
 #' To modify settings used for validation if `strict` is `TRUE`,
 #' use `dct_options()`.
 #'
@@ -31,6 +35,7 @@
 #' input data (`tax_dat`).
 #' @param fill_taxon_id `r param_fill_taxon_id`
 #' @param fill_usage_id `r param_fill_usage_id`
+#' @param taxon_id_length `r param_taxon_id_length`
 #' @param stamp_modified `r param_stamp_modified`
 #' @param strict `r param_strict`
 #' @param ... Additional data to add, specified as sets of named
@@ -51,6 +56,7 @@ dct_add_row <- function(tax_dat,
                         new_dat = NULL,
                         fill_taxon_id = dct_options()$fill_taxon_id,
                         fill_usage_id = dct_options()$fill_usage_id,
+                        taxon_id_length = dct_options()$taxon_id_length,
                         stamp_modified = dct_options()$stamp_modified,
                         strict = dct_options()$strict,
                         ...) {
@@ -113,9 +119,19 @@ dct_add_row <- function(tax_dat,
       new_dat[["taxonID"]] <- NA_character_
     }
     if ("scientificName" %in% colnames(new_dat)) {
+      assertthat::assert_that(is.numeric(taxon_id_length))
+      assertthat::assert_that(
+        !is.null(taxon_id_length),
+        msg = "taxon_id_length required to generate taxonID values")
+      assertthat::assert_that(taxon_id_length >= 1,
+        msg = "taxon_id_length must be >= 1")
+      assertthat::assert_that(taxon_id_length <= 32,
+        msg = "taxon_id_length must be <= 32")
+      taxon_id_length <- as.integer(taxon_id_length)
       new_dat <- dplyr::mutate(
         new_dat,
-        taxonID = make_taxon_id_from_sci_name(taxonID, scientificName)
+        taxonID = make_taxon_id_from_sci_name(
+          taxonID, scientificName, max_len = taxon_id_length)
       )
     }
   }

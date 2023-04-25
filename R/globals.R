@@ -4,7 +4,6 @@ utils::globalVariables(c(
   "taxonID", # <dct_add_row>
   "scientificName", # <dct_add_row>
   "dct_terms", # <check_col_names_p>
-  ":=", # <check_mapping_to_self>
   "taxonomicStatus", # <check_syn_map_to_acc>
   "acceptedNameUsageID", # <check_acc_id_has_tax_status>
   "acceptedNameUsageID", # <check_acc_id_valid_tax_status>

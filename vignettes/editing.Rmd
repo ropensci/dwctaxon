@@ -61,7 +61,7 @@ filmies_small |>
   )
 ```
 
-Notice that although we did not specify `taxonID` or `modified`, these columns are automatically filled by default^[`taxonID` is filled with a portion of the [hash](https://en.wikipedia.org/wiki/Hash_function) of the scientific name. This is usually unique to that name, but not necessarily. It is recommended to run `dct_validate()` to make sure the `taxonID` values are unique.]; they can be turned off by setting the `fill_taxon_id` and `stamp_modified` arguments to `FALSE`.
+Notice that although we did not specify `taxonID` or `modified`, these columns are automatically filled by default^[`taxonID` is filled with the [md5 hash](https://en.wikipedia.org/wiki/Hash_function) of the scientific name. By default, the hash is 32 characters long, so automatically generated values of `taxonID` should be unique if the scientific names are unique. This can be checked by running `dct_validate()`.]; they can be turned off by setting the `fill_taxon_id` and `stamp_modified` arguments to `FALSE`.
 
 The names of the new values should be valid DWC terms. You can see the terms available with `dct_terms`:
 

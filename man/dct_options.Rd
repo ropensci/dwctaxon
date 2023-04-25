@@ -47,8 +47,9 @@ columns they inspect are missing? Default \code{FALSE}.
 
 \subsection{Editing arguments}{
 \itemize{
-\item \code{fill_taxon_id}: Logical vector of length 1; if \code{taxon_id} is not provided, should values in the taxonID column be filled in by looking them up from the scientificName? Default \code{TRUE}.
+\item \code{fill_taxon_id}: Logical vector of length 1; if \code{taxon_id} is not provided, should values in the taxonID column be filled in by generating them automatically from the scientificName? Default \code{TRUE}.
 \item \code{fill_usage_id}: Logical vector of length 1; if \code{usage_id} is not provided, should values in the acceptedNameUsageID column be filled in by matching acceptedNameUsage to scientificName? Default \code{TRUE}.
+\item \code{taxon_id_length}: Numeric vector of length 1; how many characters should be included in automatically generated values of taxonID? Must be between 1 and 32, inclusive. Default \code{32}.
 \item \code{clear_usage_id}: Logical vector of length 1; should acceptedNameUsageID of the selected row be set to \code{NA} if the word "accepted" is detected in tax_status (not case-sensitive)? Default \code{TRUE}.
 \item \code{clear_usage_name}: Logical vector of length 1; should acceptedNameUsage of the selected row be set to \code{NA} if the word "accepted" is detected in tax_status (not case-sensitive)? Default \code{TRUE}.
 \item \code{fill_usage_name}: Logical vector of length 1; should the acceptedNameUsage of the selected row be set to the scientificName corresponding to its acceptedNameUsageID? Default \code{TRUE}.
