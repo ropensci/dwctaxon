@@ -14,7 +14,7 @@
     "name": "R",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 4.2.1 (2022-06-23)",
+  "runtimePlatform": "R version 4.3.0 (2023-04-21)",
   "author": [
     {
       "@type": "Person",
@@ -293,11 +293,11 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "508.381KB",
+  "fileSize": "463.387KB",
   "citation": [
     {
       "@type": "CreativeWork",
-      "datePublished": "2022",
+      "datePublished": "2023",
       "author": [
         {
           "@type": "Person",
@@ -315,6 +315,11 @@
     }
   ],
   "readme": "https://github.com/joelnitta/dwctaxon/blob/main/README.md",
-  "contIntegration": "https://app.codecov.io/gh/joelnitta/dwctaxon?branch=main",
-  "developmentStatus": "https://www.repostatus.org/#wip"
+  "contIntegration": ["https://app.codecov.io/gh/joelnitta/dwctaxon?branch=main", "https://github.com/joelnitta/dwctaxon/actions?query=workflow%3Apkgcheck"],
+  "developmentStatus": "https://www.repostatus.org/#wip",
+  "review": {
+    "@type": "Review",
+    "url": "https://github.com/ropensci/software-review/issues/574",
+    "provider": "https://ropensci.org"
+  }
 }
