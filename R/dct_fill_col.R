@@ -59,12 +59,24 @@ dct_fill_col <- function(tax_dat,
     msg = "fill_from must be a valid DWC term; see `dct_terms`"
   )
   assertthat::assert_that(
+    fill_from %in% colnames(tax_dat),
+    msg = "fill_from must be an existing column in tax_dat"
+  )
+  assertthat::assert_that(
     match_to %in% dct_terms$term,
     msg = "match_to must be a valid DWC term; see `dct_terms`"
   )
   assertthat::assert_that(
+    match_to %in% colnames(tax_dat),
+    msg = "match_to must be an existing column in tax_dat"
+  )
+  assertthat::assert_that(
     match_from %in% dct_terms$term,
     msg = "match_from must be a valid DWC term; see `dct_terms`"
+  )
+  assertthat::assert_that(
+    match_from %in% colnames(tax_dat),
+    msg = "match_from must be an existing column in tax_dat"
   )
 
   # Add fill_to as empty col if it does not yet exist

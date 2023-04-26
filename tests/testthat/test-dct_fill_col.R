@@ -3,7 +3,8 @@
 # make data for sharing across tests
 test_dat <- tibble::tribble(
   ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
-  "1", NA, "accepted", "foo"
+  "1", NA, "accepted", "foo",
+  "2", "1", "synonym", "foobar"
 )
 
 test_that("input format checks work", {
@@ -62,6 +63,36 @@ test_that("input format checks work", {
       match_from = "acceptedNameUsageID"
     ),
     "tax_dat must be of class 'data.frame'"
+  )
+  expect_error(
+    dct_fill_col(
+      test_dat,
+      fill_to = "acceptedNameUsage",
+      fill_from = "parentNameUsageID", # valid DwC name but not in data
+      match_to = "taxonID",
+      match_from = "acceptedNameUsageID",
+      "fill_from must be an existing column in tax_dat"
+    )
+  )
+  expect_error(
+    dct_fill_col(
+      test_dat,
+      fill_to = "acceptedNameUsage",
+      fill_from = "scientificName",
+      match_to = "taxonID",
+      match_from = "parentNameUsageID", # valid DwC name but not in data
+      "match_from must be an existing column in tax_dat"
+    )
+  )
+  expect_error(
+    dct_fill_col(
+      test_dat,
+      fill_to = "acceptedNameUsage",
+      fill_from = "scientificName",
+      match_to = "parentNameUsageID", # valid DwC name but not in data
+      match_from = "acceptedNameUsageID", 
+      "match_to must be an existing column in tax_dat"
+    )
   )
 })
 
