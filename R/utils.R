@@ -17,12 +17,19 @@
 #' @autoglobal
 paste3 <- function(..., sep = " ") {
   L <- list(...) # nolint
-     L <- lapply(L,function(x) {x[is.na(x)] <- ""; x}) # nolint
-     ret <-gsub(paste0("(^",sep,"|",sep,"$)"),"", # nolint
-                 gsub(paste0(sep,sep),sep, # nolint
-                      do.call(paste,c(L,list(sep=sep))))) # nolint
-     is.na(ret) <- ret=="" # nolint
-     ret
+  L <- lapply(L, function(x) {
+    x[is.na(x)] <- ""
+    x
+  }) # nolint
+  ret <- gsub(
+    paste0("(^", sep, "|", sep, "$)"), "", # nolint
+    gsub(
+      paste0(sep, sep), sep, # nolint
+      do.call(paste, c(L, list(sep = sep)))
+    )
+  ) # nolint
+  is.na(ret) <- ret == "" # nolint
+  ret
 }
 
 #' Drop the first element of a vector
