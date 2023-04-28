@@ -20,6 +20,7 @@ repos:
         -    tibble
         -    tidyr
         -    utils
+        -    git2r
         -    anthonynorth/roxyglobals
     # codemeta must be above use-tidy-description when both are used
     -   id: codemeta-description-updated
