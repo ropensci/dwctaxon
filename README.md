@@ -20,13 +20,26 @@ Review](https://badges.ropensci.org/574_status.svg)](https://github.com/ropensci
 The goal of dwctaxon is to facilitate working with [Darwin Core Taxon
 data](https://dwc.tdwg.org/terms/#taxon) in R.
 
-The typical use-case of dwctaxon is not create Darwin Core Taxon
-datasets from scratch (although you could do that), but rather to enable
-easy modification and validation of existing datasets.
+## Statement of need
 
-The primary motivation for validation is so that the dataset can be used
-for taxonomic name resolution, for example with the
-[taxastand](https://github.com/joelnitta/taxastand) R package.
+dwctaxon facilitates **editing** and **validating** Darwin Core Taxon
+data. There are various reasons one might want to do this. Here is a
+non-exhaustive list of use-cases for dwctaxon:
+
+- To maintain an existing taxonomic database.
+- To prepare a taxonomic database as a reference for taxonomic name
+  resolution, for example with the
+  [taxastand](https://github.com/joelnitta/taxastand) or
+  [U.Taxonstand](https://doi.org/10.1016/j.pld.2022.09.001) R packages.
+- To curate taxonomic data as part of a [Darwin Core
+  Archive](https://en.wikipedia.org/wiki/Darwin_Core_Archive).
+
+In theory, dwctaxon could be used to create taxonomic databases from
+scratch, but it is more likely to be useful for updating and validating
+existing databases (R in general is more suited to data wrangling and
+analysis as opposed to data entry).
+
+## Resources
 
 For detailed usage examples, see the vignettes:
 
@@ -36,6 +49,12 @@ For detailed usage examples, see the vignettes:
   data](https://joelnitta.github.io/dwctaxon/articles/editing.html)
 - [Validating DWC taxon
   data](https://joelnitta.github.io/dwctaxon/articles/validation.html)
+
+For more information about dwctaxon, in particular for using it to
+maintain a reference database for taxonomic name resolution, see
+[taxastand and dwctaxon: A pair of R packages for standardizing species
+names in Darwin Core format (BioDigiCon 2022
+talk)](https://www.joelnitta.com/talks/2022-09-27_biodigi.html).
 
 ## Installation
 
@@ -131,6 +150,7 @@ filmies_small |>
 #> 3 54115097 <NA>                accepted        species   Cephalomanes crassum (Copel.) M. G. Price <NA>                      
 #> 4 54133784 54115097            synonym         species   Trichomanes densinervium Copel.           2023-04-29 08:53:31.963611
 #> 5 54115098 54115097            synonym         species   Cephalomanes densinervium (Copel.) Copel. 2023-04-29 08:53:31.950087
+
 ```
 
 `dct_fill_col()` fills in values for columns that have “term” - “termID”
