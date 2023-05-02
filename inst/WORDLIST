@@ -12,6 +12,7 @@ aut
 Bartnik
 basionym
 Bengtsson
+BioDigiCon
 bootswatch
 BugReports
 Cephalomanes
@@ -73,6 +74,7 @@ LazyData
 Linnaean
 lionel
 Lukasz
+md
 MERCHANTABILITY
 Muehleisen
 Müller
@@ -130,6 +132,7 @@ taxid
 taxonID
 taxonomicID
 taxonomicStatus
+Taxonstand
 tdwg
 termID
 testthat
