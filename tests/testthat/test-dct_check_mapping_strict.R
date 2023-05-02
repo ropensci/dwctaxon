@@ -35,6 +35,60 @@ test_that("check for 'valid_tax_status must include required values' works", {
       "synonym, accepted, variant"
     )
   )
+  expect_error(
+    check_mapping_strict_status(
+      data.frame(a = 1),
+      valid_tax_status = "synonym, accepted",
+    ),
+    paste0(
+      "valid_tax_status missing required value or values.*",
+      "Missing values\\: variant.*",
+      "Current valid_tax_status\\: 'synonym, accepted'"
+    )
+  )
+  expect_error(
+    check_mapping_strict_status(
+      data.frame(a = 1),
+      valid_tax_status = "variant, accepted",
+    ),
+    paste0(
+      "valid_tax_status missing required value or values.*",
+      "Missing values\\: synonym.*",
+      "Current valid_tax_status\\: 'variant, accepted'"
+    )
+  )
+  expect_error(
+    check_mapping_strict_status(
+      data.frame(a = 1),
+      valid_tax_status = "variant, synonym",
+    ),
+    paste0(
+      "valid_tax_status missing required value or values.*",
+      "Missing values\\: accepted.*",
+      "Current valid_tax_status\\: 'variant, synonym'"
+    )
+  )
+  expect_error(
+    check_mapping_strict_status(
+      data.frame(a = 1),
+      valid_tax_status = "variant, synonym",
+    ),
+    paste0(
+      "valid_tax_status missing required value or values.*",
+      "Missing values\\: accepted.*",
+      "Current valid_tax_status\\: 'variant, synonym'"
+    )
+  )
+  expect_error(
+    check_mapping_strict_status(
+      data.frame(a = 1),
+      valid_tax_status = paste(
+        sample(c("variant", "synonym", "accepted"), 2),
+        collapse = ", "
+      )
+    ),
+      "valid_tax_status missing required value or values.*"
+  )
 })
 
 test_that("check for 'synonyms must map to accepted names' works", {

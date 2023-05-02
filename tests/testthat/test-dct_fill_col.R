@@ -90,7 +90,7 @@ test_that("input format checks work", {
       fill_to = "acceptedNameUsage",
       fill_from = "scientificName",
       match_to = "parentNameUsageID", # valid DwC name but not in data
-      match_from = "acceptedNameUsageID", 
+      match_from = "acceptedNameUsageID",
       "match_to must be an existing column in tax_dat"
     )
   )
