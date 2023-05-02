@@ -87,7 +87,7 @@ test_that("check for 'valid_tax_status must include required values' works", {
         collapse = ", "
       )
     ),
-      "valid_tax_status missing required value or values.*"
+    "valid_tax_status missing required value or values.*"
   )
 })
 
