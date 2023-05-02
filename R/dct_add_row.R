@@ -122,16 +122,21 @@ dct_add_row <- function(tax_dat,
       assertthat::assert_that(assertthat::is.number(taxon_id_length))
       assertthat::assert_that(
         !is.null(taxon_id_length),
-        msg = "taxon_id_length required to generate taxonID values")
+        msg = "taxon_id_length required to generate taxonID values"
+      )
       assertthat::assert_that(taxon_id_length >= 1,
-        msg = "taxon_id_length must be >= 1")
+        msg = "taxon_id_length must be >= 1"
+      )
       assertthat::assert_that(taxon_id_length <= 32,
-        msg = "taxon_id_length must be <= 32")
+        msg = "taxon_id_length must be <= 32"
+      )
       taxon_id_length <- as.integer(taxon_id_length)
       new_dat <- dplyr::mutate(
         new_dat,
         taxonID = make_taxon_id_from_sci_name(
-          taxonID, scientificName, max_len = taxon_id_length)
+          taxonID, scientificName,
+          max_len = taxon_id_length
+        )
       )
     }
   }

@@ -34,18 +34,23 @@ check_mapping_strict_status <- function(tax_dat,
     "variant", valid_tax_status,
     ignore.case = FALSE
   )
+  any_missing <- any(c(
+      valid_tax_status_lacks_syn,
+      valid_tax_status_lacks_acc,
+      valid_tax_status_lacks_var
+    ))
 
-  missing_tax_status <- paste3(
-    ifelse(valid_tax_status_lacks_syn, "synonym", NA_character_),
-    ifelse(valid_tax_status_lacks_acc, "accepted", NA_character_),
-    ifelse(valid_tax_status_lacks_var, "variant", NA_character_),
-    sep = ", "
-  )
+  missing_tax_status <- c("synonym", "accepted", "variant")[
+    c(valid_tax_status_lacks_syn,
+      valid_tax_status_lacks_acc,
+      valid_tax_status_lacks_var)]
+
+  missing_tax_status <- paste(missing_tax_status, collapse = ", ")
 
   # Format results
   if (on_fail == "error") {
     assertthat::assert_that(
-      is.na(missing_tax_status),
+      !any_missing,
       msg = glue::glue(
         "check_mapping_accepted_status failed
          valid_tax_status missing required value or values.
@@ -60,7 +65,7 @@ check_mapping_strict_status <- function(tax_dat,
           {missing_tax_status}"
     )
     assert_that_d(
-      is.na(missing_tax_status),
+      !any_missing,
       data = tibble::tibble(
         error = error_msg,
         check = "check_mapping_accepted_status"
