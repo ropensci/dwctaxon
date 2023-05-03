@@ -48,7 +48,8 @@ temp_unzip <- paste0(temp_dir, "/dwca-vascan")
 # Download data
 download.file(
   url = "https://data.canadensys.net/ipt/archive.do?r=vascan&v=37.12",
-  destfile = temp_zip)
+  destfile = temp_zip
+)
 
 # Unzip
 unzip(temp_zip, exdir = temp_unzip)
@@ -185,7 +186,7 @@ Next, we will run validation again, but this time allow `id` as an extra column.
 dct_validate(
   vascan_fixed,
   extra_cols = "id"
-  )
+)
 ```
 
 It passes, so we have now confirmed that the only steps needed to obtain correctly formatted DWC data are to de-duplicate the species names and account for the `id` column.
