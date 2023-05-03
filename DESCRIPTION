@@ -45,7 +45,8 @@ Suggests:
     rmarkdown,
     tidyverse,
     patrick,
-    stringi
+    stringi,
+    english
 Remotes: 
     anthonynorth/roxyglobals
 Depends: 
