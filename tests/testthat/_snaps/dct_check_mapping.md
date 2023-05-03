@@ -1,4 +1,4 @@
-# check_mapping_to_self works bad_dat=1          , 2          , 3          , NA         , 1          , 3          , Species foo, Species bar, Species bat, bad_col=acceptedNameUsageID
+# check_mapping_to_self works bad_dat=1          , 2          , 3          , NA         , 1          , 3          , Species foo, Species bar, Species bat, Accepted   , Synonym    , Synonym    , bad_col=acceptedNameUsageID
 
     Code
       (expect_error(check_mapping_to_self(bad_dat, col_select = bad_col)))
@@ -41,7 +41,7 @@
         <chr>   <chr>               <chr>          <glue>                        <chr>
       1 3       3                   Species bat    taxonID detected with identi~ chec~
 
-# check_mapping_to_self works bad_dat=1          , 2          , 3          , NA         , 1          , 3          , Species foo, Species bar, Species bat, bad_col=parentNameUsageID
+# check_mapping_to_self works bad_dat=1          , 2          , 3          , NA         , 1          , 3          , Species foo, Species bar, Species bat, Accepted   , Synonym    , Synonym    , bad_col=parentNameUsageID
 
     Code
       (expect_error(check_mapping_to_self(bad_dat, col_select = bad_col)))
@@ -84,7 +84,7 @@
         <chr>   <chr>             <chr>          <glue>                          <chr>
       1 3       3                 Species bat    taxonID detected with identica~ chec~
 
-# check_mapping_to_self works bad_dat=1          , 2          , 3          , NA         , 1          , 3          , Species foo, Species bar, Species bat, bad_col=originalNameUsageID
+# check_mapping_to_self works bad_dat=1          , 2          , 3          , NA         , 1          , 3          , Species foo, Species bar, Species bat, Accepted   , Synonym    , Synonym    , bad_col=originalNameUsageID
 
     Code
       (expect_error(check_mapping_to_self(bad_dat, col_select = bad_col)))

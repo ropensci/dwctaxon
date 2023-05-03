@@ -90,14 +90,17 @@ with_parameters_test_that("check_mapping_exists works",
 )
 
 test_that("check for 'no mapping to self' works", {
-  bad_dat <- tibble::tribble(
-    ~taxonID, ~acceptedNameUsageID, ~scientificName,
-    "1", NA, "Species foo",
-    "2", "1", "Species bar",
-    "3", "3", "Species bat"
+  self_check_dat <- tibble::tribble(
+    ~taxonID, ~acceptedNameUsageID, ~scientificName, ~taxonomicStatus,
+    "1", NA, "Species foo", "accepted",
+    "2", "1", "Species bar", "synonym",
+    "3", "3", "Species bat", "synonym",
+    # accepted OK to have map to self for acceptedNameUsageID
+    "4", "4", "Species blat", "accepted",
+    "5", "5", "Species maw", "Accepted"
   )
   expect_error(
-    dct_check_mapping(bad_dat),
+    dct_check_mapping(self_check_dat),
     paste0(
       "check_mapping failed.*",
       "taxonID detected with identical acceptedNameUsageID.*",
@@ -107,7 +110,7 @@ test_that("check for 'no mapping to self' works", {
     )
   )
   expect_equal(
-    dct_check_mapping(bad_dat, on_fail = "summary", quiet = TRUE),
+    dct_check_mapping(self_check_dat, on_fail = "summary", quiet = TRUE),
     tibble::tibble(
       taxonID = "3",
       acceptedNameUsageID = "3",
@@ -115,6 +118,10 @@ test_that("check for 'no mapping to self' works", {
       error = "taxonID detected with identical acceptedNameUsageID",
       check = "check_mapping"
     )
+  )
+  # accepted OK to have map to self for acceptedNameUsageID
+  expect_no_error(
+    dct_check_mapping(self_check_dat[c(4, 5), ])
   )
 })
 

@@ -1,5 +1,8 @@
 #' check_mapping sub-check: check that no names map to self
 #'
+#' Names with taxonomicStatus of "accepted" are allowed to to have equal
+#' taxonID and acceptedNameUsageID
+#'
 #' Required columns:
 #' - taxonID
 #' - select column
@@ -18,6 +21,8 @@ check_mapping_to_self <- function(tax_dat,
   if (
     !"taxonID" %in% colnames(tax_dat) ||
       !"scientificName" %in% colnames(tax_dat) ||
+      (!"taxonomicStatus" %in% colnames(tax_dat) &&
+        col_select == "acceptedNameUsageID") ||
       !col_select %in% colnames(tax_dat) ||
       run == FALSE
   ) {
@@ -28,6 +33,12 @@ check_mapping_to_self <- function(tax_dat,
   map_to_self <- tax_dat[[col_select]] == tax_dat$taxonID
   map_id_is_na <- is.na(tax_dat[[col_select]])
   map_id_is_bad <- !map_id_is_na & map_to_self
+
+  # For acceptedNameUsageID, allow self-mapping for accepted names
+  if (col_select == "acceptedNameUsageID") {
+    map_id_is_bad <- map_id_is_bad &
+      !grepl("^accepted$", tax_dat$taxonomicStatus, ignore.case = TRUE)
+  }
 
   # Get vectors of bad values
   bad_taxon_id <- tax_dat$taxonID[map_id_is_bad]

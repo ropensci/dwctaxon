@@ -1,4 +1,4 @@
-# check_mapping_* works for dup taxid bad_dat=1          , 2          , 3          , NA         , 1          , 3          , Species foo, Species bar, Species bat
+# check_mapping_* works for dup taxid bad_dat=1          , 2          , 3          , NA         , 1          , 3          , Species foo, Species bar, Species bat, Accepted   , Synonym    , Synonym    
 
     Code
       (expect_error(dct_validate(bad_dat)))
