@@ -39,6 +39,7 @@
 #' @param check_status_diff `r param_check_status_diff`
 #' @param check_col_names `r param_check_col_names`
 #' @param valid_tax_status `r param_valid_tax_status`
+#' @param extra_cols `r param_extra_cols`
 #' @param skip_missing_cols `r param_skip_missing_cols`
 #' @param on_success `r param_on_success`
 #' @param on_fail `r param_on_fail`
@@ -64,6 +65,7 @@ dct_validate <- function(tax_dat,
                          check_status_diff = dct_options()$check_status_diff,
                          check_col_names = dct_options()$check_col_names,
                          valid_tax_status = dct_options()$valid_tax_status,
+                         extra_cols = dct_options()$extra_cols,
                          on_success = dct_options()$on_success,
                          on_fail = dct_options()$on_fail,
                          skip_missing_cols = dct_options()$skip_missing_cols,
@@ -308,6 +310,7 @@ dct_validate <- function(tax_dat,
       tax_dat,
       on_fail = on_fail, on_success = "logical",
       run = check_col_names,
+      extra_cols = extra_cols,
       quiet = quiet
     )
   ) |>

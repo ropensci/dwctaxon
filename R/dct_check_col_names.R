@@ -10,6 +10,7 @@ check_col_names_p <- function(tax_dat,
                               on_fail = dct_options()$on_fail,
                               on_success = dct_options()$on_success,
                               run = TRUE,
+                              extra_cols = dct_options()$extra_cols,
                               quiet = dct_options()$quiet) {
   # Set defaults ----
 
@@ -17,7 +18,9 @@ check_col_names_p <- function(tax_dat,
     return(NULL)
   }
 
-  bad_col_names <- setdiff(colnames(tax_dat), dct_terms$term) |>
+  allowed_terms <- c(dct_terms$term, extra_cols)
+
+  bad_col_names <- setdiff(colnames(tax_dat), allowed_terms) |>
     unique() |>
     sort()
 
