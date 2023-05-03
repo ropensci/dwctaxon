@@ -9,6 +9,17 @@ test_that("get_dct_opt() works", {
   )
 })
 
+test_that("custom checks on options work", {
+  expect_error(
+    dct_options(valid_tax_status = 1),
+    "Option value must be a string"
+  )
+  expect_error(
+    dct_options(valid_tax_status = c("a", "b")),
+    "Option value must be a string"
+  )
+})
+
 test_that("dct_options() can be set and unset", {
   expect_equal(
     inherits(dct_options(), "list"),

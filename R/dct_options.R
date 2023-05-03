@@ -1,3 +1,36 @@
+#' Helper function to validate dct_options
+#'
+#' @param ... Not used
+#'
+#' @return A function
+#'
+#' @noRd
+#' @autoglobal
+settings_is_char <- function(...) {
+  function(x) {
+    assertthat::assert_that(
+      is.character(x), msg = "Option value must be a character vector")
+    x
+  }
+}
+
+#' Helper function to validate dct_options
+#'
+#' @param ... Not used
+#'
+#' @return A function
+#'
+#' @noRd
+#' @autoglobal
+settings_is_string <- function(...) {
+  function(x) {
+    assertthat::assert_that(
+      assertthat::is.string(x),
+      msg = "Option value must be a string (a character vector of length 1)")
+    x
+  }
+}
+
 #' Get and set function arguments via options
 #'
 #' Changes the default values of function arguments.
@@ -99,7 +132,7 @@ dct_opts <- settings::options_manager(
     check_sci_name = settings::inlist(TRUE, FALSE),
     check_status_diff = settings::inlist(TRUE, FALSE),
     check_col_names = settings::inlist(TRUE, FALSE),
-    # valid_tax_status is character
+    valid_tax_status = settings_is_string(),
     skip_missing_cols = settings::inlist(TRUE, FALSE),
     on_success = settings::inlist("data", "logical"),
     on_fail = settings::inlist("error", "summary"),
