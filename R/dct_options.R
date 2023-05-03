@@ -8,9 +8,13 @@
 #' @autoglobal
 settings_is_char <- function(..., null_allowed = FALSE) {
   function(x) {
-    if (null_allowed && is.null(x)) return(x)
+    if (null_allowed && is.null(x)) {
+      return(x)
+    }
     assertthat::assert_that(
-      is.character(x), msg = "Option value must be a character vector")
+      is.character(x),
+      msg = "Option value must be a character vector"
+    )
     x
   }
 }
@@ -26,10 +30,13 @@ settings_is_char <- function(..., null_allowed = FALSE) {
 #' @autoglobal
 settings_is_string <- function(..., null_allowed = FALSE) {
   function(x) {
-    if (null_allowed && is.null(x)) return(x)
+    if (null_allowed && is.null(x)) {
+      return(x)
+    }
     assertthat::assert_that(
       assertthat::is.string(x),
-      msg = "Option value must be a string (a character vector of length 1)")
+      msg = "Option value must be a string (a character vector of length 1)"
+    )
     x
   }
 }
