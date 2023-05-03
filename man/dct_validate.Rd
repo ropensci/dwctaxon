@@ -16,6 +16,7 @@ dct_validate(
   check_status_diff = dct_options()$check_status_diff,
   check_col_names = dct_options()$check_col_names,
   valid_tax_status = dct_options()$valid_tax_status,
+  extra_cols = dct_options()$extra_cols,
   on_success = dct_options()$on_success,
   on_fail = dct_options()$on_fail,
   skip_missing_cols = dct_options()$skip_missing_cols,
@@ -45,6 +46,9 @@ dct_validate(
 \item{check_col_names}{Logical vector of length 1; should all column names be required to be a valid Darwin Core term? Default \code{TRUE}.}
 
 \item{valid_tax_status}{Character vector of length 1; valid values for \code{taxonomicStatus}. Each value must be separated by a comma. Default \verb{accepted, synonym, variant, NA}. \code{"NA"} indicates that missing (NA) values are valid. Case-sensitive.}
+
+\item{extra_cols}{Character vector; names of columns that should be allowed beyond
+those defined by the Darwin Core (DwC) Taxon standard. Default NULL. Providing column name(s) that are valid DwC taxon column(s) has no effect.}
 
 \item{on_success}{Character vector of length 1, either "logical" or "data". Describes what to do if the check passes. Default \code{"data"}.}
 

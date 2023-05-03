@@ -6,8 +6,9 @@
 #'
 #' @noRd
 #' @autoglobal
-settings_is_char <- function(...) {
+settings_is_char <- function(..., null_allowed = FALSE) {
   function(x) {
+    if (null_allowed && is.null(x)) return(x)
     assertthat::assert_that(
       is.character(x), msg = "Option value must be a character vector")
     x
@@ -17,13 +18,15 @@ settings_is_char <- function(...) {
 #' Helper function to validate dct_options
 #'
 #' @param ... Not used
+#' @param null_allowed Boolean; are NULL values allowed?
 #'
 #' @return A function
 #'
 #' @noRd
 #' @autoglobal
-settings_is_string <- function(...) {
+settings_is_string <- function(..., null_allowed = FALSE) {
   function(x) {
+    if (null_allowed && is.null(x)) return(x)
     assertthat::assert_that(
       assertthat::is.string(x),
       msg = "Option value must be a string (a character vector of length 1)")
@@ -106,6 +109,7 @@ dct_opts <- settings::options_manager(
   check_status_diff = FALSE,
   check_col_names = TRUE,
   valid_tax_status = "accepted, synonym, variant, NA",
+  extra_cols = NULL,
   skip_missing_cols = FALSE,
   on_success = "data",
   on_fail = "error",
@@ -133,6 +137,7 @@ dct_opts <- settings::options_manager(
     check_status_diff = settings::inlist(TRUE, FALSE),
     check_col_names = settings::inlist(TRUE, FALSE),
     valid_tax_status = settings_is_string(),
+    extra_cols = settings_is_char(null_allowed = TRUE),
     skip_missing_cols = settings::inlist(TRUE, FALSE),
     on_success = settings::inlist("data", "logical"),
     on_fail = settings::inlist("error", "summary"),

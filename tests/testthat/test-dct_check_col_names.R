@@ -21,3 +21,15 @@ test_that("check for 'all columns must have valid names' works", {
     )
   )
 })
+
+test_that("specifying extra columns works", {
+  expect_error(
+    check_col_names_p(data.frame(a = 1, b = 1, taxonID = 3))
+  )
+  expect_no_error(
+    check_col_names_p(
+      data.frame(a = 1, b = 1, taxonID = 3),
+      extra_cols = c("a", "b")
+    )
+  )
+})
