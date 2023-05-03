@@ -1,0 +1,198 @@
+---
+title: "Real World Example"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Real World Example}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+
+# Increase width for printing tibbles
+options(width = 140)
+```
+
+This vignette demonstrates using dwctaxon on "real life" data found in the wild. Our goal is to import the data and validate it.
+
+First, load the packages used for this vignette.
+
+```{r setup, message = FALSE}
+library(dwctaxon)
+library(readr)
+library(tibble)
+library(dplyr)
+```
+
+## Import data
+
+We will use the [Database of Vascular Plants of Canada (VASCAN)](http://data.canadensys.net/ipt/resource.do?r=vascan), which is available as a Darwin Core Archive.
+
+The data can be obtained manually by going to the [VASCAN website](http://data.canadensys.net/ipt/resource.do?r=vascan), downloading the Darwin Core Archive, and unzipping it^[If you download the data manually, it may be a different version than the one used here, v37.12].
+
+Alternatively, it can be downloaded and unzipped with R:
+
+```{r download-unzip}
+# Set up folders:
+# - Specify temporary folder for downloading data
+temp_dir <- tempdir()
+# - Set name of zip file
+temp_zip <- paste0(temp_dir, "/dwca-vascan.zip")
+# - Set name of unzipped folder
+temp_unzip <- paste0(temp_dir, "/dwca-vascan")
+
+# Download data
+download.file(
+  url = "https://data.canadensys.net/ipt/archive.do?r=vascan&v=37.12",
+  destfile = temp_zip
+)
+
+# Unzip
+unzip(temp_zip, exdir = temp_unzip)
+
+# Check the contents of the unzipped data (the Darwin Core Archive)
+list.files(temp_unzip)
+```
+
+Next, load the taxonomic data (`taxon.txt`) into R. It is a tab-separated text file, so we use `readr::read_tsv()` to load it.
+
+```{r load-data}
+vascan <- read_tsv(paste0(temp_unzip, "/taxon.txt"))
+
+# OK to delete the tempo
+
+# Take a peak at the data
+vascan
+```
+
+The dataset includes `r nrow(vascan)` rows (taxa) and `r ncol(vascan)` columns.
+
+# Validation
+
+Let's see if the dataset passes validation with dwctaxon.
+
+It is usually a good idea to just run `dct_validate()` with default settings the first time.
+If it passes, you can move on.
+
+```{r validation, error = TRUE}
+dct_validate(vascan)
+```
+
+Looks like we've got problems...
+
+To dig into these in more detail, let's run `dct_validate()` again, but this time output a summary of errors.
+
+```{r validation-summary}
+validation_res <- dct_validate(vascan, on_fail = "summary")
+
+validation_res
+```
+
+The summary lists one `taxonID` per row. Let's count these to get a higher-level view of what's going on.
+
+```{r summary-analysis}
+validation_res %>%
+  count(check, error)
+```
+
+```{r summary-analysis-hide, show = FALSE, echo = FALSE}
+validation_res_sum <-
+  validation_res %>%
+  count(check, error)
+
+n_error_types <- nrow(validation_res_sum) %>%
+  english::english()
+
+n_bad_cols <- validation_res_sum %>%
+  filter(error == "Invalid column names detected: id") %>%
+  pull(n) %>%
+  english::english()
+
+n_bad_sci_name <- validation_res_sum %>%
+  filter(error == "scientificName detected with duplicated value") %>%
+  pull(n)
+```
+
+We see there are `r n_error_types` kinds of errors. 
+There is `r n_bad_cols` column with an invalid name (`id`) and `r n_bad_sci_name` rows with duplicated scientific names.
+
+## Investigate errors
+
+### Duplicate names
+
+Let's take a closer look at some of those duplicated names.
+
+```{r check-sci-name-dups}
+dup_names <-
+  validation_res %>%
+  filter(grepl("scientificName detected with duplicated value", error)) %>%
+  arrange(scientificName)
+
+dup_names
+```
+
+We can join back to the original data to investigate these names.
+
+```{r check-sci-name-dups-orig}
+inner_join(
+  select(dup_names, taxonID),
+  vascan,
+  by = "taxonID"
+) %>%
+  # Just look at the first 6 columns
+  select(1:6)
+```
+
+We see that in some cases, multiple entries for the exact same scientific name (for example, `Arnica monocephala Rydberg`) differ only in the value for `nameAccordingToID`.
+
+So this seems like something the database manager should fix.
+
+### Invalid column names
+
+Let's see what is in the `id` column.
+
+```{r inspect-id}
+vascan %>%
+  select(id)
+
+n_distinct(vascan$id)
+```
+
+`id` contains numbers that are all unique.
+In other words, these appear to be unique key values to each row in the dataset (as one would expect from the name `id`).
+
+It is probably the case that this dataset has a good reason for using the `id` column, even though it is not a standard DwC column.
+
+## Fixing the data
+
+Let's see if we can get this dataset to pass validation.
+
+First, let's remove the duplicated names.
+This is something that should be done with more thought, but here let's just keep the first name of each pair.
+
+```{r fix-data}
+vascan_fixed <-
+  vascan %>%
+  filter(!duplicated(scientificName))
+```
+
+Next, we will run validation again, but this time allow `id` as an extra column.
+
+```{r validation-2}
+dct_validate(
+  vascan_fixed,
+  extra_cols = "id"
+)
+```
+
+It passes, so we have now confirmed that the only steps needed to obtain correctly formatted DWC data are to de-duplicate the species names and account for the `id` column.
+
+## Summary
+
+This vignette shows how dwctaxon can be used on DwC data to find possible problems in a taxonomic dataset.
+We were able to identify several rows with duplicated scientific names and one column that does not follow DwC standards.
+Other than that, it passes validation, giving us confidence that this dataset can be used for downstream taxonomic analyses.
