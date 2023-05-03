@@ -73,10 +73,10 @@ if (!is.null(get_dct_opt("extra_cols"))) {
   stop("Default value for extra_cols should be NULL")
 }
 param_extra_cols <- glue::glue(
-  'Character vector; names of columns that should be allowed beyond
+  "Character vector; names of columns that should be allowed beyond
   those defined by the Darwin Core DWC taxon standard. \\
   Default NULL. \\
-  Providing column name(s) that are valid DWC taxon column(s) has no effect.'
+  Providing column name(s) that are valid DWC taxon column(s) has no effect."
 )
 
 param_on_fail <- glue::glue(
