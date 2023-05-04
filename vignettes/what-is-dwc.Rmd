@@ -52,13 +52,11 @@ However, there are some peculiarities that are good to be familiar with as follo
 The [Linnaean system of taxonomy](https://en.wikipedia.org/wiki/Linnaean_taxonomy) organizes taxa into a hierarchy, so we may be used to working with taxonomic data in "wide" format where each row is a species, like this:
 
 ```{r taxon-wide, echo = FALSE, message = FALSE}
-library(tidyverse)
-library(knitr)
-taxon_wide <- tribble(
+taxon_wide <- tibble::tribble(
   ~species, ~genus, ~family, ~order,
   "Crepidomanes minutum", "Crepidomanes", "Hymenophyllaceae", "Hymenophyllales"
 )
-kable(taxon_wide)
+knitr::kable(taxon_wide)
 ```
 
 Indeed, in DWC taxon, higher taxonomic levels like `genus`, `family`, and `order` are valid terms and may be used.
@@ -66,36 +64,36 @@ Indeed, in DWC taxon, higher taxonomic levels like `genus`, `family`, and `order
 However, `species` is **not** a valid DWC term. That is because each row of a DWC taxonomic database is a single scientific name **of any rank**, not just species. So it is typical for data to be oriented vertically ("long" format):
 
 ```{r taxon-long, echo = FALSE}
-pivot_longer(
+tidyr::pivot_longer(
   taxon_wide,
   names_to = "taxonRank",
   values_to = "scientificName",
   everything()
 ) |>
-  kable()
+  knitr::kable()
 ```
 
 And since `genus`, `family`, etc. are valid DWC terms, these can also be included (when applicable):
 
 ```{r taxon-long-wide, echo = FALSE}
-pivot_longer(
+tidyr::pivot_longer(
   taxon_wide,
   names_to = "taxonRank",
   values_to = "scientificName",
-  everything()
+  dplyr::everything()
 ) |>
-  mutate(genus = case_when(
-    str_detect(scientificName, "Crepidomanes") ~ "Crepidomanes",
+  dplyr::mutate(genus = case_when(
+    stringr::str_detect(scientificName, "Crepidomanes") ~ "Crepidomanes",
     TRUE ~ NA_character_
   )) |>
-  mutate(family = case_when(
-    str_detect(
+  dplyr::mutate(family = case_when(
+    stringr::str_detect(
       scientificName, "Crepidomanes|Hymenophyllaceae"
     ) ~ "Hymenophyllaceae",
     TRUE ~ NA_character_
   )) |>
-  mutate(order = case_when(
-    str_detect(
+  dplyr::mutate(order = case_when(
+    stringr::str_detect(
       scientificName, "Crepidomanes|Hymenophyll"
     ) ~ "Hymenophyllales",
     TRUE ~ NA_character_

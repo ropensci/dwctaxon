@@ -124,18 +124,6 @@
     },
     {
       "@type": "SoftwareApplication",
-      "identifier": "tidyverse",
-      "name": "tidyverse",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=tidyverse"
-    },
-    {
-      "@type": "SoftwareApplication",
       "identifier": "patrick",
       "name": "patrick",
       "provider": {
@@ -169,6 +157,18 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=english"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "tidyr",
+      "name": "tidyr",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=tidyr"
     }
   ],
   "softwareRequirements": {
@@ -305,7 +305,7 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "476.009KB",
+  "fileSize": "472.05KB",
   "citation": [
     {
       "@type": "CreativeWork",
