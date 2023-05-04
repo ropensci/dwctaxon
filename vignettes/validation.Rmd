@@ -25,7 +25,7 @@ Start by loading packages and setting the random number generator seed since thi
 
 ```{r library, message = FALSE}
 library(dwctaxon)
-library(tidyverse) # for tidy data wrangling
+library(dplyr)
 
 set.seed(12345)
 ```
@@ -73,7 +73,7 @@ dct_validate(filmies_dirty)
 
 ```{r get-dups, echo = FALSE, warning = FALSE}
 dup_taxid <- dct_validate(filmies_dirty, on_fail = "summary") |>
-  filter(str_detect(error, "taxonID .* duplicated value")) |>
+  filter(stringr::str_detect(error, "taxonID .* duplicated value")) |>
   pull(taxonID) |>
   knitr::combine_words()
 ```

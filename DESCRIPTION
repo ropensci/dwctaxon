@@ -43,10 +43,10 @@ Suggests:
     usethis,
     knitr,
     rmarkdown,
-    tidyverse,
     patrick,
     stringi,
-    english
+    english,
+    tidyr
 Remotes: 
     anthonynorth/roxyglobals
 Depends: 

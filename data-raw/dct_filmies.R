@@ -1,7 +1,8 @@
 ## code to prepare `dct_filmies` dataset goes here
 
 library(taxastand)
-library(tidyverse)
+library(dplyr)
+library(stringr)
 
 dct_filmies <-
   filmy_taxonomy %>%
