@@ -6,11 +6,11 @@
 \usage{
 dct_add_row(
   tax_dat,
-  taxon_id = NULL,
-  sci_name = NULL,
-  tax_status = NULL,
-  usage_id = NULL,
-  usage_name = NULL,
+  taxonID = NULL,
+  scientificName = NULL,
+  taxonomicStatus = NULL,
+  acceptedNameUsageID = NULL,
+  acceptedNameUsage = NULL,
   new_dat = NULL,
   fill_taxon_id = dct_options()$fill_taxon_id,
   fill_usage_id = dct_options()$fill_usage_id,
@@ -23,21 +23,20 @@ dct_add_row(
 \arguments{
 \item{tax_dat}{Dataframe; taxonomic database in DWC format.}
 
-\item{taxon_id}{Character or numeric vector; values to add to taxonID column.
-Can also use \code{taxonomicID}. Ignored if \code{new_dat} is not \code{NULL}.}
+\item{taxonID}{Character or numeric vector; values to add to taxonID column.
+Ignored if \code{new_dat} is not \code{NULL}.}
 
-\item{sci_name}{Character vector; values to add to scientificName column. Can
-also use \code{scientificName}. Ignored if \code{new_dat} is not \code{NULL}.}
+\item{scientificName}{Character vector; values to add to scientificName
+column. Ignored if \code{new_dat} is not \code{NULL}.}
 
-\item{tax_status}{Character vector; values to add to taxonomicStatus column.
-Can also use \code{taxonomicStatus}. Ignored if \code{new_dat} is not \code{NULL}.}
+\item{taxonomicStatus}{Character vector; values to add to taxonomicStatus
+column. Ignored if \code{new_dat} is not \code{NULL}.}
 
-\item{usage_id}{Character or numeric vector; values to add to
-acceptedNameUsageID column. Can also use \code{acceptedNameUsageID}. Ignored if
-\code{new_dat} is not \code{NULL}.}
+\item{acceptedNameUsageID}{Character or numeric vector; values to add to
+acceptedNameUsageID column. Ignored if \code{new_dat} is not \code{NULL}.}
 
-\item{usage_name}{Character vector; values to add to acceptedNameUsage
-column. Can also use \code{acceptedNameUsage}. Ignored if \code{new_dat} is not \code{NULL}.}
+\item{acceptedNameUsage}{Character vector; values to add to acceptedNameUsage
+column. Ignored if \code{new_dat} is not \code{NULL}.}
 
 \item{new_dat}{A dataframe including columns corresponding to one or more of
 the above arguments, except for \code{tax_dat}. Other DWC terms can also be
@@ -66,11 +65,6 @@ Dataframe; taxonomic database in DWC format.
 Add one or more rows to a taxonomic database in Darwin Core (DWC) format.
 }
 \details{
-Arguments \code{taxon_id}, \code{sci_name}, \code{tax_status}, \code{usage_id}, and \code{usage_name}
-are provided as convenience to avoid typing the longer "taxonomicID",
-"scientificName", "taxonomicStatus", "acceptedNameUsageID", and
-"acceptedNameUsage", respectively, but the latter may be used instead.
-
 \code{fill_taxon_id} and \code{fill_usage_id} only act on the newly added data (they
 do not fill columns in \code{tax_dat}).
 
@@ -89,7 +83,7 @@ tibble::tibble(
   taxonomicStatus = "accepted"
 ) |>
   dct_add_row(
-    sci_name = "Foogenus barspecies var. bla",
+    scientificName = "Foogenus barspecies var. bla",
     parentNameUsageID = "123",
     nameAccordingTo = "me",
     strict = TRUE

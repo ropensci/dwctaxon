@@ -2,10 +2,11 @@
 
     Code
       dct_add_row(dct_add_row(tibble::tibble(taxonID = "123", scientificName = "Foogenus barspecies",
-        taxonomicStatus = "accepted"), sci_name = "Bargenus foosp", tax_status = "accepted",
-      usage_id = NA, stamp_modified = FALSE), sci_name = c("Foogenus boospecies",
-        "Bargenus bkaspecies"), usage_name = c("Foogenus barspecies",
-        "Bargenus foosp"), tax_status = "synonym", stamp_modified = FALSE)
+        taxonomicStatus = "accepted"), scientificName = "Bargenus foosp",
+      taxonomicStatus = "accepted", acceptedNameUsageID = NA, stamp_modified = FALSE),
+      scientificName = c("Foogenus boospecies", "Bargenus bkaspecies"),
+      acceptedNameUsage = c("Foogenus barspecies", "Bargenus foosp"),
+      taxonomicStatus = "synonym", stamp_modified = FALSE)
     Output
       # A tibble: 4 x 5
         taxonID   scientificName taxonomicStatus acceptedNameUsageID acceptedNameUsage
@@ -19,10 +20,11 @@
 
     Code
       dct_add_row(dct_add_row(tibble::tibble(taxonID = "123", scientificName = "Foogenus barspecies",
-        taxonomicStatus = "accepted"), sci_name = "Bargenus foosp", tax_status = "accepted",
-      stamp_modified = FALSE), sci_name = c("Foogenus boospecies",
-        "Bargenus bkaspecies"), usage_name = c("Foogenus barspecies",
-        "Bargenus foosp"), tax_status = "synonym", stamp_modified = FALSE)
+        taxonomicStatus = "accepted"), scientificName = "Bargenus foosp",
+      taxonomicStatus = "accepted", stamp_modified = FALSE), scientificName = c(
+        "Foogenus boospecies", "Bargenus bkaspecies"), acceptedNameUsage = c(
+        "Foogenus barspecies", "Bargenus foosp"), taxonomicStatus = "synonym",
+      stamp_modified = FALSE)
     Output
       # A tibble: 4 x 4
         taxonID                       scientificName taxonomicStatus acceptedNameUsage

@@ -2,11 +2,6 @@
 #'
 #' Add one or more rows to a taxonomic database in Darwin Core (DWC) format.
 #'
-#' Arguments `taxon_id`, `sci_name`, `tax_status`, `usage_id`, and `usage_name`
-#' are provided as convenience to avoid typing the longer "taxonomicID",
-#' "scientificName", "taxonomicStatus", "acceptedNameUsageID", and
-#' "acceptedNameUsage", respectively, but the latter may be used instead.
-#'
 #' `fill_taxon_id` and `fill_usage_id` only act on the newly added data (they
 #' do not fill columns in `tax_dat`).
 #'
@@ -18,17 +13,16 @@
 #' use `dct_options()`.
 #'
 #' @param tax_dat `r param_tax_dat`
-#' @param taxon_id Character or numeric vector; values to add to taxonID column.
-#' Can also use `taxonomicID`. Ignored if `new_dat` is not `NULL`.
-#' @param sci_name Character vector; values to add to scientificName column. Can
-#' also use `scientificName`. Ignored if `new_dat` is not `NULL`.
-#' @param tax_status Character vector; values to add to taxonomicStatus column.
-#' Can also use `taxonomicStatus`. Ignored if `new_dat` is not `NULL`.
-#' @param usage_id Character or numeric vector; values to add to
-#' acceptedNameUsageID column. Can also use `acceptedNameUsageID`. Ignored if
-#' `new_dat` is not `NULL`.
-#' @param usage_name Character vector; values to add to acceptedNameUsage
-#' column. Can also use `acceptedNameUsage`. Ignored if `new_dat` is not `NULL`.
+#' @param taxonID Character or numeric vector; values to add to taxonID column.
+#' Ignored if `new_dat` is not `NULL`.
+#' @param scientificName Character vector; values to add to scientificName
+#' column. Ignored if `new_dat` is not `NULL`.
+#' @param taxonomicStatus Character vector; values to add to taxonomicStatus
+#' column. Ignored if `new_dat` is not `NULL`.
+#' @param acceptedNameUsageID Character or numeric vector; values to add to
+#' acceptedNameUsageID column. Ignored if `new_dat` is not `NULL`.
+#' @param acceptedNameUsage Character vector; values to add to acceptedNameUsage
+#' column. Ignored if `new_dat` is not `NULL`.
 #' @param new_dat A dataframe including columns corresponding to one or more of
 #' the above arguments, except for `tax_dat`. Other DWC terms can also be
 #' included as additional columns. All rows in `new_dat` will be appended to the
@@ -48,11 +42,11 @@
 #' @autoglobal
 #' @export
 dct_add_row <- function(tax_dat,
-                        taxon_id = NULL,
-                        sci_name = NULL,
-                        tax_status = NULL,
-                        usage_id = NULL,
-                        usage_name = NULL,
+                        taxonID = NULL, # nolint
+                        scientificName = NULL, # nolint
+                        taxonomicStatus = NULL, # nolint
+                        acceptedNameUsageID = NULL, # nolint
+                        acceptedNameUsage = NULL, # nolint
                         new_dat = NULL,
                         fill_taxon_id = dct_options()$fill_taxon_id,
                         fill_usage_id = dct_options()$fill_usage_id,
@@ -60,57 +54,22 @@ dct_add_row <- function(tax_dat,
                         stamp_modified = dct_options()$stamp_modified,
                         strict = dct_options()$strict,
                         ...) {
-  # Check if new_dat overlaps with abbreviated terms and convert
-  if (!is.null(new_dat)) {
-    # - taxon_id
-    assert_that_uses_one_name(new_dat, "taxon_id", "taxonID")
-    new_dat <- convert_col(new_dat, "taxonID", "taxon_id")
-    # - sci_name
-    assert_that_uses_one_name(new_dat, "scientificName", "sci_name")
-    new_dat <- convert_col(new_dat, "scientificName", "sci_name")
-    # - usage_id
-    assert_that_uses_one_name(new_dat, "acceptedNameUsageID", "usage_id")
-    new_dat <- convert_col(new_dat, "acceptedNameUsageID", "usage_id")
-    # - usage_name
-    assert_that_uses_one_name(new_dat, "acceptedNameUsage", "usage_name")
-    new_dat <- convert_col(new_dat, "acceptedNameUsage", "usage_name")
-    # - tax_status
-    assert_that_uses_one_name(new_dat, "taxonomicStatus", "tax_status")
-    new_dat <- convert_col(new_dat, "taxonomicStatus", "tax_status")
-  }
-
-  # or create new_dat from direct input
+  # Create new_dat from direct input if provided
   if (is.null(new_dat)) {
-    tryCatch(
-      expr = {
-        new_dat <- tibble::tibble(
-          taxonID = taxon_id,
-          scientificName = sci_name,
-          acceptedNameUsageID = usage_id,
-          acceptedNameUsage = usage_name,
-          taxonomicStatus = tax_status,
-          ...
-        )
-      },
-      # Provide a more useful error msg than tibble default for
-      # duplicated column names
-      error = function(e) {
-        err_msg <- as.character(e)
-        if (grepl("Column name .* must not be duplicated", err_msg)) {
-          dup_col <- stringr::str_match(
-            err_msg, "Column name `(.*)` must not be duplicated"
-          )[, 2]
-          stop(
-            glue::glue("Duplicate column name detected: {dup_col}
-            Did you try to use both the shortened and full version \\
-            of a DWC term?")
-          )
-        } else {
-          stop(e)
-        }
-      }
+    new_dat <- tibble::tibble(
+      taxonID = taxonID,
+      scientificName = scientificName,
+      acceptedNameUsageID = acceptedNameUsageID,
+      acceptedNameUsage = acceptedNameUsage,
+      taxonomicStatus = taxonomicStatus,
+      ...
     )
   }
+
+  assertthat::assert_that(
+    nrow(new_dat) > 0,
+    msg = "Row cannot be added without specifying new data"
+  )
 
   # Fill in taxonID for those missing
   if (isTRUE(fill_taxon_id)) {

@@ -1,21 +1,22 @@
 # Tests for major arguments ----
 
 library(mockery)
+library(tibble)
 
 # - taxon_id
 # - sci_name
-test_that("sci_name works to identify or modify row", {
-  tax_dat <- tibble::tribble(
+test_that("scientificName works to identify or modify row", {
+  tax_dat <- tribble(
     ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
     "1", NA, "accepted", "foo"
   )
   expect_equal(
     dct_modify_row(
       tax_dat,
-      sci_name = "foo", tax_status = "maybe accepted",
+      scientificName = "foo", taxonomicStatus = "maybe accepted",
       stamp_modified = FALSE
     ),
-    tibble::tribble(
+    tribble(
       ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
       "1", NA, "maybe accepted", "foo"
     )
@@ -23,57 +24,71 @@ test_that("sci_name works to identify or modify row", {
   expect_equal(
     dct_modify_row(
       tax_dat,
-      taxon_id = "1", sci_name = "foobar",
+      taxonID = "1", scientificName = "foobar",
       stamp_modified = FALSE
     ),
-    tibble::tribble(
+    tribble(
       ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
       "1", NA, "accepted", "foobar"
     )
   )
 })
 
-# - tax_status
-# - usage_id
-# - remap_names
-test_that("tax_status, usage_id, and remap_names arguments work", {
-  tax_dat <- tibble::tribble(
-    ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
-    "1", NA, "accepted", "foo",
-    "2", NA, "accepted", "bar",
-    "3", "2", "synonym", "bat"
-  )
-  expect_equal(
+# - ...
+test_that("non-DWC terms fail", {
+  expect_error(
     dct_modify_row(
-      tax_dat,
-      taxon_id = "2", tax_status = "synonym", usage_id = "1",
-      stamp_modified = FALSE
+      data.frame(taxonID = "a"),
+      taxon_id = "a", scientificName = "foobar"
     ),
-    tibble::tribble(
-      ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
-      "1", NA, "accepted", "foo",
-      "2", "1", "synonym", "bar",
-      "3", "1", "synonym", "bat"
-    )
-  )
-  expect_equal(
-    dct_modify_row(
-      tax_dat,
-      taxon_id = "2", tax_status = "synonym", usage_id = "1",
-      stamp_modified = FALSE, remap_names = FALSE
-    ),
-    tibble::tribble(
-      ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
-      "1", NA, "accepted", "foo",
-      "2", "1", "synonym", "bar",
-      "3", "2", "synonym", "bat"
-    )
+    "All terms to modify must be valid DWC taxon terms"
   )
 })
 
+# - taxonomicStatus
+# - acceptedNameUsageID
+# - remap_names
+test_that(
+  "Name remapping works",
+  {
+    tax_dat <- tribble(
+      ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
+      "1", NA, "accepted", "foo",
+      "2", NA, "accepted", "bar",
+      "3", "2", "synonym", "bat"
+    )
+    expect_equal(
+      dct_modify_row(
+        tax_dat,
+        taxonID = "2", taxonomicStatus = "synonym", acceptedNameUsageID = "1",
+        stamp_modified = FALSE
+      ),
+      tribble(
+        ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
+        "1", NA, "accepted", "foo",
+        "2", "1", "synonym", "bar",
+        "3", "1", "synonym", "bat"
+      )
+    )
+    expect_equal(
+      dct_modify_row(
+        tax_dat,
+        taxonID = "2", taxonomicStatus = "synonym", acceptedNameUsageID = "1",
+        stamp_modified = FALSE, remap_names = FALSE
+      ),
+      tribble(
+        ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
+        "1", NA, "accepted", "foo",
+        "2", "1", "synonym", "bar",
+        "3", "2", "synonym", "bat"
+      )
+    )
+  }
+)
+
 # - clear_usage_id
 test_that("clear_usage_id argument works", {
-  tax_dat <- tibble::tribble(
+  tax_dat <- tribble(
     ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
     "1", NA, "accepted", "foo",
     "2", "1", "synonym", "bar"
@@ -81,10 +96,10 @@ test_that("clear_usage_id argument works", {
   expect_equal(
     dct_modify_row(
       tax_dat,
-      taxon_id = "2", tax_status = "accepted",
+      taxonID = "2", taxonomicStatus = "accepted",
       stamp_modified = FALSE
     ),
-    tibble::tribble(
+    tribble(
       ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
       "1", NA, "accepted", "foo",
       "2", NA_character_, "accepted", "bar"
@@ -93,10 +108,10 @@ test_that("clear_usage_id argument works", {
   expect_equal(
     dct_modify_row(
       tax_dat,
-      taxon_id = "2", tax_status = "accepted",
+      taxonID = "2", taxonomicStatus = "accepted",
       clear_usage_id = FALSE, stamp_modified = FALSE
     ),
-    tibble::tribble(
+    tribble(
       ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
       "1", NA, "accepted", "foo",
       "2", "1", "accepted", "bar"
@@ -106,7 +121,7 @@ test_that("clear_usage_id argument works", {
 
 # - fill_usage_name
 test_that("fill_usage_name argument works", {
-  tax_dat <- tibble::tribble(
+  tax_dat <- tribble(
     ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
     ~acceptedNameUsage,
     "1", NA, "accepted", "foo", NA_character_,
@@ -116,10 +131,10 @@ test_that("fill_usage_name argument works", {
   expect_equal(
     dct_modify_row(
       tax_dat,
-      taxon_id = "2", tax_status = "synonym", usage_id = "1",
+      taxonID = "2", taxonomicStatus = "synonym", acceptedNameUsageID = "1",
       fill_usage_name = TRUE, stamp_modified = FALSE
     ),
-    tibble::tribble(
+    tribble(
       ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
       ~acceptedNameUsage,
       "1", NA, "accepted", "foo", NA,
@@ -130,10 +145,10 @@ test_that("fill_usage_name argument works", {
   expect_equal(
     dct_modify_row(
       tax_dat[, colnames(tax_dat) != "acceptedNameUsage"],
-      taxon_id = "2", tax_status = "synonym", usage_id = "1",
+      taxonID = "2", taxonomicStatus = "synonym", acceptedNameUsageID = "1",
       fill_usage_name = TRUE, stamp_modified = FALSE
     ),
-    tibble::tribble(
+    tribble(
       ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
       "1", NA, "accepted", "foo",
       "2", "1", "synonym", "bar"
@@ -143,7 +158,7 @@ test_that("fill_usage_name argument works", {
 
 # - remap_names
 test_that("fill_usage_name works with remap_names", {
-  tax_dat <- tibble::tribble(
+  tax_dat <- tribble(
     ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
     ~acceptedNameUsage,
     "1", NA, "accepted", "foo", NA_character_,
@@ -153,10 +168,10 @@ test_that("fill_usage_name works with remap_names", {
   expect_equal(
     dct_modify_row(
       tax_dat,
-      taxon_id = "2", tax_status = "synonym", usage_id = "1",
+      taxonID = "2", taxonomicStatus = "synonym", acceptedNameUsageID = "1",
       fill_usage_name = TRUE, stamp_modified = FALSE
     ),
-    tibble::tribble(
+    tribble(
       ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
       ~acceptedNameUsage,
       "1", NA, "accepted", "foo", NA,
@@ -168,7 +183,7 @@ test_that("fill_usage_name works with remap_names", {
 
 # - remap_variant
 test_that("remap_variant argument works", {
-  tax_dat <- tibble::tribble(
+  tax_dat <- tribble(
     ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
     "1", NA_character_, "accepted", "foo",
     "2", NA_character_, "accepted", "bar",
@@ -177,12 +192,12 @@ test_that("remap_variant argument works", {
   expect_equal(
     dct_modify_row(
       tax_dat,
-      taxon_id = "2",
-      tax_status = "synonym",
-      usage_name = "foo",
+      taxonID = "2",
+      taxonomicStatus = "synonym",
+      acceptedNameUsage = "foo",
       stamp_modified = FALSE
     ),
-    tibble::tribble(
+    tribble(
       ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
       "1", NA_character_, "accepted", "foo",
       "2", "1", "synonym", "bar",
@@ -192,20 +207,20 @@ test_that("remap_variant argument works", {
   expect_equal(
     dct_modify_row(
       tax_dat,
-      taxon_id = "2",
-      tax_status = "synonym",
-      usage_name = "foo",
+      taxonID = "2",
+      taxonomicStatus = "synonym",
+      acceptedNameUsage = "foo",
       remap_variant = TRUE,
       stamp_modified = FALSE
     ),
-    tibble::tribble(
+    tribble(
       ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
       "1", NA_character_, "accepted", "foo",
       "2", "1", "synonym", "bar",
       "3", "1", "variety", "bat"
     )
   )
-  tax_dat <- tibble::tribble(
+  tax_dat <- tribble(
     ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
     "1", NA_character_, "accepted", "foo",
     "2", NA_character_, "accepted", "bar",
@@ -214,12 +229,12 @@ test_that("remap_variant argument works", {
   expect_equal(
     dct_modify_row(
       tax_dat,
-      taxon_id = "2",
-      tax_status = "synonym",
-      usage_name = "foo",
+      taxonID = "2",
+      taxonomicStatus = "synonym",
+      acceptedNameUsage = "foo",
       stamp_modified = FALSE
     ),
-    tibble::tribble(
+    tribble(
       ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
       "1", NA_character_, "accepted", "foo",
       "2", "1", "synonym", "bar",
@@ -229,13 +244,13 @@ test_that("remap_variant argument works", {
   expect_equal(
     dct_modify_row(
       tax_dat,
-      taxon_id = "2",
-      tax_status = "synonym",
-      usage_name = "foo",
+      taxonID = "2",
+      taxonomicStatus = "synonym",
+      acceptedNameUsage = "foo",
       remap_variant = TRUE,
       stamp_modified = FALSE
     ),
-    tibble::tribble(
+    tribble(
       ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
       "1", NA_character_, "accepted", "foo",
       "2", "1", "synonym", "bar",
@@ -246,15 +261,18 @@ test_that("remap_variant argument works", {
 
 # - stamp_modified
 test_that("stamp_modified argument works", {
-  tax_dat <- tibble::tribble(
+  tax_dat <- tribble(
     ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
     "1", NA_character_, "accepted", "foo"
   )
   # Replace time stamp with date stamp for testing
   stub(dct_modify_row, "Sys.time", Sys.Date(), depth = 2)
   expect_equal(
-    dct_modify_row(tax_dat, "1", tax_status = "bar", stamp_modified = TRUE),
-    tibble::tribble(
+    dct_modify_row(
+      tax_dat, "1",
+      taxonomicStatus = "bar", stamp_modified = TRUE
+    ),
+    tribble(
       ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
       ~modified,
       "1", NA_character_, "bar", "foo", as.character(Sys.Date())
@@ -267,7 +285,7 @@ test_that("stamp_modified argument works", {
 
 # - args_tbl
 test_that("args_tbl can be used to update data", {
-  dat <- tibble::tribble(
+  dat <- tribble(
     ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
     ~nameAccordingTo,
     1, NA, "accepted", "foo", "her",
@@ -278,13 +296,13 @@ test_that("args_tbl can be used to update data", {
     dct_modify_row(
       dat,
       args_tbl = data.frame(
-        taxon_id = c(1, 2),
-        tax_status = "synonym",
-        usage_id = 3,
+        taxonID = c(1, 2),
+        taxonomicStatus = "synonym",
+        acceptedNameUsageID = 3,
         stamp_modified = FALSE
       )
     ),
-    tibble::tibble(
+    tibble(
       taxonID = c(1, 2, 3),
       acceptedNameUsageID = c(3, 3, NA),
       taxonomicStatus = c("synonym", "synonym", "accepted"),
@@ -296,13 +314,13 @@ test_that("args_tbl can be used to update data", {
     dct_modify_row(
       dat,
       args_tbl = data.frame(
-        sci_name = c("foo", "bar"),
-        tax_status = "synonym",
-        usage_id = 3,
+        scientificName = c("foo", "bar"),
+        taxonomicStatus = "synonym",
+        acceptedNameUsageID = 3,
         stamp_modified = FALSE
       )
     ),
-    tibble::tibble(
+    tibble(
       taxonID = c(1, 2, 3),
       acceptedNameUsageID = c(3, 3, NA),
       taxonomicStatus = c("synonym", "synonym", "accepted"),
@@ -313,15 +331,15 @@ test_that("args_tbl can be used to update data", {
   expect_equal(
     dct_modify_row(
       dat,
-      args_tbl = tibble::tibble(
-        taxon_id = c(1, 2),
-        tax_status = "synonym",
-        usage_id = 3,
+      args_tbl = tibble(
+        taxonID = c(1, 2),
+        taxonomicStatus = "synonym",
+        acceptedNameUsageID = 3,
         stamp_modified = FALSE,
         nameAccordingTo = "me"
       )
     ),
-    tibble::tibble(
+    tibble(
       taxonID = c(1, 2, 3),
       acceptedNameUsageID = c(3, 3, NA),
       taxonomicStatus = c("synonym", "synonym", "accepted"),
@@ -333,17 +351,74 @@ test_that("args_tbl can be used to update data", {
 
 # Other tests ----
 
+test_that("Catching missing taxonID works", {
+  expect_error(
+    dct_modify_row(
+      data.frame(scientificName = "a")
+    ),
+    paste(
+      "tax_dat must include column taxonID, the values of which must be",
+      "unique and non-missing"
+    )
+  )
+  expect_error(
+    dct_modify_row(
+      data.frame(taxonID = c("a", "a"))
+    ),
+    paste(
+      "tax_dat must include column taxonID, the values of which must be",
+      "unique and non-missing"
+    )
+  )
+  expect_error(
+    dct_modify_row(
+      data.frame(taxonID = c("a", NA))
+    ),
+    paste(
+      "tax_dat must include column taxonID, the values of which must be",
+      "unique and non-missing"
+    )
+  )
+})
+
+test_that("Catching incorrectly specified usage names or IDs works", {
+  expect_error(
+    dct_modify_row(
+      tibble(taxonID = "a", scientificName = "b"),
+      acceptedNameUsage = "c"
+    ),
+    "Input acceptedNameUsage not detected in tax_dat\\$scientificName"
+  )
+  expect_error(
+    dct_modify_row(
+      tibble(taxonID = "a", scientificName = "b"),
+      acceptedNameUsageID = "c"
+    ),
+    "Input acceptedNameUsageID not detected in tax_dat\\$taxonID"
+  )
+  expect_error(
+    dct_modify_row(
+      tibble(taxonID = "a"),
+      acceptedNameUsage = "c"
+    ),
+    paste(
+      "tax_dat must include column 'scientificName' to look up rows by",
+      "acceptedNameUsage"
+    )
+  )
+})
+
 test_that("can modify row without changing status", {
-  tax_dat <- tibble::tribble(
+  tax_dat <- tribble(
     ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
     "1", NA, "accepted", "foo"
   )
   expect_equal(
     dct_modify_row(
       tax_dat,
-      taxon_id = "1", sci_name = "bar", stamp_modified = FALSE
+      taxonID = "1", scientificName = "bar", stamp_modified = FALSE
     ),
-    tibble::tribble(
+    tribble(
       ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
       "1", NA, "accepted", "bar"
     )
@@ -351,7 +426,7 @@ test_that("can modify row without changing status", {
 })
 
 test_that("other terms can be added", {
-  tax_dat <- tibble::tribble(
+  tax_dat <- tribble(
     ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
     "1", NA, "accepted", "foo",
     "2", NA, "accepted", "bar",
@@ -360,14 +435,14 @@ test_that("other terms can be added", {
   expect_equal(
     dct_modify_row(
       tax_dat,
-      taxon_id = "2",
-      tax_status = "synonym",
-      usage_name = "foo",
+      taxonID = "2",
+      taxonomicStatus = "synonym",
+      acceptedNameUsage = "foo",
       stamp_modified = FALSE,
       nameAccordingTo = "Me",
       nameAccordingToID = 1
     ),
-    tibble::tribble(
+    tribble(
       ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
       ~nameAccordingTo, ~nameAccordingToID,
       "1", NA, "accepted", "foo", NA, NA,
@@ -379,16 +454,16 @@ test_that("other terms can be added", {
     dct_modify_row(
       tax_dat,
       args_tbl = data.frame(
-        taxon_id = c("2", "3"),
-        tax_status = c("synonym", "accepted"),
-        usage_name = c("foo", NA),
+        taxonID = c("2", "3"),
+        taxonomicStatus = c("synonym", "accepted"),
+        acceptedNameUsage = c("foo", NA),
         clear_usage_id = c(FALSE, TRUE),
         stamp_modified = rep(FALSE, 2),
         nameAccordingTo = rep("Me", 2),
         nameAccordingToID = rep(1, 2)
       )
     ),
-    tibble::tribble(
+    tribble(
       ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
       ~nameAccordingTo, ~nameAccordingToID,
       "1", NA, "accepted", "foo", NA, NA,
@@ -398,60 +473,12 @@ test_that("other terms can be added", {
   )
 })
 
-test_that("argument aliases work", {
-  dat <- tibble::tribble(
-    ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
-    "1", NA, "accepted", "foo",
-    "2", "1", "synonym", "bar",
-    "3", NA, "accepted", "bat"
-  )
-  expect_equal(
-    dct_modify_row(dat, taxon_id = "2", tax_status = "accepted"),
-    dct_modify_row(dat, taxonID = "2", tax_status = "accepted")
-  )
-  expect_equal(
-    dct_modify_row(dat, sci_name = "bar", tax_status = "accepted"),
-    dct_modify_row(dat, scientificName = "bar", tax_status = "accepted")
-  )
-  expect_equal(
-    dct_modify_row(
-      dat,
-      taxon_id = "2", usage_id = "3", tax_status = "synonym"
-    ),
-    dct_modify_row(
-      dat,
-      taxon_id = "2", acceptedNameUsageID = "3", tax_status = "synonym"
-    )
-  )
-  expect_equal(
-    dct_modify_row(
-      dat,
-      taxon_id = "2", usage_name = "bat", tax_status = "synonym"
-    ),
-    dct_modify_row(
-      dat,
-      taxon_id = "2", acceptedNameUsage = "bat", tax_status = "synonym"
-    )
-  )
-  expect_equal(
-    dct_modify_row(
-      dat,
-      taxon_id = "2", usage_name = "bat", tax_status = "synonym"
-    ),
-    dct_modify_row(
-      dat,
-      taxon_id = "2", acceptedNameUsage = "bat",
-      taxonomicStatus = "synonym", clear_usage_id = FALSE
-    )
-  )
-})
-
 test_that("attempt to update without changes returns original data", {
   expect_equal(
     dct_modify_row(
       dct_filmies,
-      sci_name = "Cephalomanes atrovirens Presl",
-      tax_status = "accepted",
+      scientificName = "Cephalomanes atrovirens Presl",
+      taxonomicStatus = "accepted",
       stamp_modified = FALSE, quiet = TRUE
     ),
     dct_filmies
@@ -459,8 +486,8 @@ test_that("attempt to update without changes returns original data", {
   expect_warning(
     dct_modify_row(
       dct_filmies,
-      sci_name = "Cephalomanes atrovirens Presl",
-      tax_status = "accepted",
+      scientificName = "Cephalomanes atrovirens Presl",
+      taxonomicStatus = "accepted",
       stamp_modified = FALSE
     ),
     paste0(
@@ -471,9 +498,9 @@ test_that("attempt to update without changes returns original data", {
   expect_warning(
     dct_modify_row(
       dct_filmies,
-      sci_name = "Trichomanes crassum Copel.",
-      usage_id = "54115097",
-      tax_status = "synonym",
+      scientificName = "Trichomanes crassum Copel.",
+      acceptedNameUsageID = "54115097",
+      taxonomicStatus = "synonym",
       stamp_modified = FALSE
     ),
     paste0(

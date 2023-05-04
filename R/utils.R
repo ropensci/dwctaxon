@@ -254,22 +254,6 @@ val_if_in_dat <- function(df, col, i) {
   ifelse(col %in% colnames(df), df[[col]][[i]], NA)
 }
 
-#' Replace one column in a dataframe with another
-#'
-#' @param df Dataframe
-#' @param col_keep Column name to keep
-#' @param col_replace Column name to replace
-#'
-#' @return Dataframe
-#' @noRd
-#' @autoglobal
-convert_col <- function(df, col_keep, col_replace) {
-  if (col_replace %in% colnames(df)) {
-    colnames(df)[colnames(df) == col_replace] <- col_keep
-  }
-  df
-}
-
 #' Generate a taxonID from a scientific name, single version.
 #'
 #' @param taxon_id String or number; taxonID (may be NA).
@@ -327,24 +311,4 @@ is_unique <- function(x, allow_na = TRUE) {
     x <- x[!is.na(x)]
   }
   !any(duplicated(x))
-}
-
-#' Assert that a dataframe only uses one of two possible column names
-#'
-#' @param df Dataframe.
-#' @param col_1 Name of first column.
-#' @param col_2 Name of second column.
-#'
-#' @return TRUE if assertion passes, error if not.
-#'
-#' @noRd
-#' @autoglobal
-assert_that_uses_one_name <- function(df, col_1, col_2) {
-  assertthat::assert_that(
-    sum(
-      col_1 %in% colnames(df),
-      col_2 %in% colnames(df)
-    ) != 2,
-    msg = glue::glue("Must use either {col_1} or {col_2}")
-  )
 }
