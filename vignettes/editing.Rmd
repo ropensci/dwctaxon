@@ -69,30 +69,11 @@ The names of the new values should be valid DWC terms. You can see the terms ava
 dct_terms
 ```
 
-There are few exceptions to this requirement of using DWC terms, however. To save on typing these rather long names, there are aliases available for the most commonly used terms as follows:
-
-- `taxon_id` = `taxonID`
-- `sci_name` = `scientificName`
-- `tax_status` = `taxonomicStatus`
-- `usage_id` = `acceptedNameUsageID`
-- `usage_name` = `acceptedNameUsage`
-
-So we can obtain the same results above using the aliases:
-
-```{r add-row-simple-2}
-filmies_small |>
-  dct_add_row(
-    sci_name = c("Homo sapiens", "Drosophila melanogaster"),
-    tax_status = "accepted",
-    taxonRank = "species"
-  )
-```
-
 ### Adding rows by dataframe
 
 Adding rows with vectors as shown above works well if you only need to add a small number of rows. However, this could get unwieldy if you have a large number to add. In this case, you can instead add them via a dataframe.
 
-The dataframe should have column names matching valid DWC taxon terms (again, usage of the shorter aliases is allowed):
+The dataframe should have column names matching valid DWC taxon terms:
 
 ```{r add-row-from-df}
 # Let's add some rows from the original dct_filmies
@@ -110,38 +91,38 @@ Note that in this case the `taxonID` already existed in the data to add, so it i
 
 `dct_modify_row()` changes the values in an existing row.
 
-Here, it is helpful to reiterate the purpose of the `taxonID` column: it is a unique identifier for each row (taxonomic name) in the data. So we will use `taxonID` to identify the row to change, then apply new values using other DWC terms (again, usage of the shorter aliases is allowed).
+Here, it is helpful to reiterate the purpose of the `taxonID` column: it is a unique identifier for each row (taxonomic name) in the data. So we will use `taxonID` to identify the row to change, then apply new values using other DWC terms.
 
 ```{r modify-1}
 # Change the status of Trichomanes crassum Copel. to "accepted"
 filmies_small |>
   dct_modify_row(
-    taxon_id = "54133783", # taxonID of Trichomanes crassum Copel.
-    tax_status = "accepted"
+    taxonID = "54133783", # taxonID of Trichomanes crassum Copel.
+    taxonomicStatus = "accepted"
   )
 ```
 
 Notice there were some additional automatic changes besides just `taxonomicStatus`. Since the new status is `"accepted"`, dwctaxon automatically set `acceptedNameUsageID` (which indicates the `taxonID` of the accepted name for synonyms) to `NA`. This behavior can be disabled by setting the `clear_usage_id` argument to `FALSE`. We see the `modified` field has been updated as well.
 
-However, it can be difficult for humans to keep track of which `taxonID` matches which name; typically, we think in terms of species names, not ID numbers. For that reason, you can also use `sci_name` (or `scientificName`) instead of `taxon_id` to specify a row to modify^[This only works if the scientific name is unique within the dataset].
+However, it can be difficult for humans to keep track of which `taxonID` matches which name; typically, we think in terms of species names, not ID numbers. For that reason, you can also use `scientificName` instead of `taxon_id` to specify a row to modify^[This only works if the scientific name is unique within the dataset].
 
 ```{r modify-2}
 # Change the status of Trichomanes crassum Copel. to "accepted"
 filmies_small |>
   dct_modify_row(
-    sci_name = "Trichomanes crassum Copel.",
-    tax_status = "accepted"
+    scientificName = "Trichomanes crassum Copel.",
+    taxonomicStatus = "accepted"
   )
 ```
 
-If you provide **both** `taxon_id` and `sci_name`, dwctaxon will identify the row with `taxon_id` and apply `sci_name` as the new scientific name:
+If you provide **both** `taxonID` and `scientificName`, dwctaxon will identify the row with `taxonID` and apply `scientificName` as the new scientific name:
 
 ```{r modify-3}
 # Change the name of Trichomanes crassum Copel.
 filmies_small |>
   dct_modify_row(
-    taxon_id = "54133783", # taxonID of Trichomanes crassum Copel.
-    sci_name = "Bogus name"
+    taxonID = "54133783", # taxonID of Trichomanes crassum Copel.
+    scientificName = "Bogus name"
   )
 ```
 
@@ -153,9 +134,9 @@ Another convenient automated behavior of dwctaxon is the ability to "re-map" syn
 # Change C. densinervium to a synonym of C. crassum
 filmies_small |>
   dct_modify_row(
-    sci_name = "Cephalomanes densinervium (Copel.) Copel.",
-    tax_status = "synonym",
-    usage_name = "Cephalomanes crassum (Copel.) M. G. Price"
+    scientificName = "Cephalomanes densinervium (Copel.) Copel.",
+    taxonomicStatus = "synonym",
+    acceptedNameUsage = "Cephalomanes crassum (Copel.) M. G. Price"
   )
 ```
 
@@ -180,6 +161,6 @@ filmies_small |>
 
 The meaning of the arguments `fill_to` and `fill_from` I think are fairly clear: we are filling the `acceptedNameUsage` column with values from `scientificName`.
 
-`match_to` and `match_from` are a bit trickier; they describe *how* to find the data for filling. Here, we are looking up  `acceptedNameUsage` by matching `acceptedNameUsageID` (`match_from`) to `taxonID` (`match_to`).
+`match_to` and `match_from` are a bit trickier; they describe *how* to find the data for filling. Here, we are looking up `acceptedNameUsage` by matching `acceptedNameUsageID` (`match_from`) to `taxonID` (`match_to`).
 
 Like I said, it's easiest to figure out `dct_fill_col()` by trying it yourself.

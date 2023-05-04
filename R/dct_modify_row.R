@@ -70,12 +70,25 @@ dct_modify_row_single <- function(tax_dat,
   assertthat::assert_that(assertthat::is.flag(strict))
   assertthat::assert_that(assertthat::is.flag(quiet))
   # Other input checks ----
+
+  # - scientificName is present if usage_name is specified
+  ifelse(
+    !is.null(usage_name),
+    assertthat::assert_that(
+      isTRUE("scientificName" %in% colnames(tax_dat)),
+      msg = paste(
+        "tax_dat must include column 'scientificName' to look up rows by",
+        "acceptedNameUsage"
+      )
+    ),
+    TRUE
+  )
   # - usage_name must exist in input data
   ifelse(
     !is.null(usage_name),
     assertthat::assert_that(
       usage_name %in% tax_dat$scientificName,
-      msg = "`usage_name` not detected in `tax_dat$scientificName`"
+      msg = "Input acceptedNameUsage not detected in tax_dat$scientificName"
     ),
     TRUE
   )
@@ -84,78 +97,32 @@ dct_modify_row_single <- function(tax_dat,
     !is.null(usage_id),
     assertthat::assert_that(
       usage_id %in% tax_dat$taxonID,
-      msg = "`usage_id` not detected in `tax_dat$taxonID`"
+      msg = "Input acceptedNameUsageID not detected in tax_dat$taxonID"
     ),
     TRUE
   )
 
-  # Convert aliases ----
-  if (!is.null(other_terms)) {
-    if (nrow(other_terms) > 0) {
-      # - taxon_id
-      assertthat::assert_that(
-        sum(!is.null(taxon_id), "taxonID" %in% colnames(other_terms)) != 2,
-        msg = "Must use either taxon_id or taxonID"
+  # - other_terms must be valid DWC terms or an exception specified by
+  # options
+  ifelse(
+    isTRUE(nrow(other_terms) > 0),
+    assertthat::assert_that(
+      all(
+        colnames(other_terms) %in% c(dct_terms$term, dct_options()$extra_cols)
+      ),
+      msg = paste(
+        "All terms to modify must be valid DWC taxon terms (`dct_terms$term`)",
+        "or specified by `dct_options$()extra_cols`"
       )
-      if ("taxonID" %in% colnames(other_terms)) {
-        taxon_id <- other_terms$taxonID[[1]]
-        other_terms$taxonID <- NULL
-      }
-      # - sci_name
-      assertthat::assert_that(
-        sum(
-          !is.null(sci_name), "scientificName" %in% colnames(other_terms)
-        ) != 2,
-        msg = "Must use either sci_name or scientificName"
-      )
-      if ("scientificName" %in% colnames(other_terms)) {
-        sci_name <- other_terms$scientificName[[1]]
-        other_terms$scientificName <- NULL
-      }
-      # - usage_id
-      assertthat::assert_that(
-        sum(
-          !is.null(usage_id),
-          "acceptedNameUsageID" %in% colnames(other_terms)
-        ) != 2,
-        msg = "Must use either usage_id or acceptedNameUsageID"
-      )
-      if ("acceptedNameUsageID" %in% colnames(other_terms)) {
-        usage_id <- other_terms$acceptedNameUsageID[[1]]
-        other_terms$acceptedNameUsageID <- NULL
-      }
-      # - usage_name
-      assertthat::assert_that(
-        sum(
-          !is.null(usage_name),
-          "acceptedNameUsage" %in% colnames(other_terms)
-        ) != 2,
-        msg = "Must use either usage_name or acceptedNameUsage"
-      )
-      if ("acceptedNameUsage" %in% colnames(other_terms)) {
-        usage_name <- other_terms$acceptedNameUsage[[1]]
-        other_terms$acceptedNameUsage <- NULL
-      }
-      # - tax_status
-      assertthat::assert_that(
-        sum(
-          !is.null(tax_status),
-          "taxonomicStatus" %in% colnames(other_terms)
-        ) != 2,
-        msg = "Must use either tax_status or taxonomicStatus"
-      )
-      if ("taxonomicStatus" %in% colnames(other_terms)) {
-        tax_status <- other_terms$taxonomicStatus[[1]]
-        other_terms$taxonomicStatus <- NULL
-      }
-    }
-  }
+    ),
+    TRUE
+  )
 
   # Isolate row to change ----
   # by sci_name or taxon_id
   assertthat::assert_that(
     !(is.null(sci_name) && is.null(taxon_id)),
-    msg = "Must provide one or both of sci_name and taxon_id"
+    msg = "Must provide one or both of scientificName and taxonID"
   )
   if (!is.null(taxon_id)) {
     tax_dat_row <- dplyr::filter(tax_dat, taxonID == taxon_id)
@@ -164,7 +131,8 @@ dct_modify_row_single <- function(tax_dat,
     tax_dat_row <- dplyr::filter(tax_dat, scientificName == sci_name)
     assertthat::assert_that(nrow(tax_dat_row) == 1,
       msg = glue::glue(
-        "Not exactly one scientificName matches sci_name '{sci_name}'"
+        "Not exactly one scientificName in data \\
+        matches input scientificName '{sci_name}'"
       )
     )
   }
@@ -175,7 +143,8 @@ dct_modify_row_single <- function(tax_dat,
     assertthat::assert_that(
       length(usage_id_match) == 1,
       msg = glue::glue(
-        "Not exactly one scientificName matches usage_name '{usage_name}'"
+        "Not exactly one scientificName in data \\
+        matches input acceptedNameUsage '{usage_name}'"
       )
     )
     # If both usage_id and usage_name provided, they must agree
@@ -184,7 +153,8 @@ dct_modify_row_single <- function(tax_dat,
       assertthat::assert_that(
         usage_id_match == usage_id,
         msg = glue::glue(
-          "usage_id and usage_name do not agree for usage_name '{usage_name}'"
+          "Input acceptedNameUsageID and acceptedNameUsage do not agree for \\
+          acceptedNameUsage '{usage_name}'"
         )
       ),
       TRUE
@@ -353,39 +323,34 @@ dct_modify_row_single <- function(tax_dat,
 #'
 #' Modify one or more rows in a taxonomic database in Darwin Core (DWC) format.
 #'
-#' Arguments `taxon_id`, `sci_name`, `tax_status`, `usage_id`, and `usage_name`
-#' are provided as convenience to avoid typing the longer "taxonomicID",
-#' "scientificName", "taxonomicStatus", "acceptedNameUsageID", and
-#' "acceptedNameUsage", respectively, but the latter may be used instead.
+#' `taxonID` is only used to identify the row(s) to modify and is not itself
+#' modified. `scientificName` can be used in the same way if `taxonID` is not
+#' provided (as long as `scientificName` matches a single row). If both
+#' `taxonID` and `scientificName` are provided, `scientificName` will be
+#' assigned to the scientificName of the row identified by `taxonID`, replacing
+#' any value that already exists.
 #'
-#' `taxon_id` is only used to identify the row(s) to modify and is not itself
-#' modified. `sci_name` can be used in the same way if `taxon_id` is not
-#' provided (as long as `sci_name` matches a single row). If both `taxon_id` and
-#' `sci_name` are provided, `sci_name` will be assigned to the scientificName of
-#' the row identified by `taxon_id`, replacing any value that already exists.
+#' `acceptedNameUsageID` and `acceptedNameUsage` must match existing values of
+#' acceptedNameUsageID and acceptedNameUsage in the input data (`tax_dat`). On
+#' default settings, either can be used and the other will be filled in
+#' automatically (`fill_usage_id` and `fill_usage_name` are both `TRUE`). `r
+#' check_fill_usage_id_name()`
 #'
-#' `usage_id` and `usage_name` must match existing values of acceptedNameUsageID
-#' and acceptedNameUsage in the input data (`tax_dat`). On default settings,
-#' either can be used and the other will be filled in automatically
-#' (`fill_usage_id` and `fill_usage_name` are both `TRUE`).
-#' `r check_fill_usage_id_name()`
-#'
-#' `tax_status` any other arguments provided that
+#' Any other arguments provided that
 #' are DWC terms will be assigned to the selected row (i.e., they will
 #' modify the row).
 #'
-#' If `remap_names` is `TRUE` (default) and `usage_id` (i.e.,
-#' acceptedNameUsageID) is provided, any names that have an acceptedNameUsageID
-#' matching the taxonID of the selected row (i.e., synonyms of that row) will
-#' also have their acceptedNameUsageID replaced with the new
-#' acceptedNameUsageID. This behavior is not applied to names with
-#' taxonomicStatus of "variant" by default, but can be turned on for such names
-#' with `remap_variant`.
+#' If `remap_names` is `TRUE` (default) and `acceptedNameUsageID` is provided,
+#' any names that have an acceptedNameUsageID matching the taxonID of the
+#' selected row (i.e., synonyms of that row) will also have their
+#' acceptedNameUsageID replaced with the new acceptedNameUsageID. This behavior
+#' is not applied to names with taxonomicStatus of "variant" by default, but can
+#' be turned on for such names with `remap_variant`.
 #'
-#' If `clear_usage_id` or `clear_usage_name` is `TRUE` and `tax_status`
-#' (or `taxonomicStatus`) includes the word "accepted", acceptedNameUsageID
+#' If `clear_usage_id` or `clear_usage_name` is `TRUE` and `taxonomicStatus`
+#' includes the word "accepted", acceptedNameUsageID
 #' or acceptedNameUsage will be set to NA respectively, regardless of the
-#' values of `usage_id`, `usage_name`, or `fill_usage_name`.
+#' values of `acceptedNameUsageID`, `acceptedNameUsage`, or `fill_usage_name`.
 #'
 #' Can either modify a single row in the input taxonomic database if each
 #' argument is supplied as a vector of length 1, or can apply a set of changes
@@ -393,18 +358,17 @@ dct_modify_row_single <- function(tax_dat,
 #' `args_tbl`.
 #'
 #' @param tax_dat Dataframe; taxonomic database in DWC format.
-#' @param taxon_id Character or numeric vector of length 1; taxonID of the row
-#' to be modified (the selected row). Can also use `taxonID`.
-#' @param sci_name Character vector of length 1; scientificName of the row to
-#' be modified if `taxon_id` is `NULL`, OR the scientificName to assign to the
-#' selected row if `taxon_id` is provided (see Details).
-#' Can also use `scientificName`.
-#' @param tax_status Character vector of length 1; taxonomicStatus to
-#' assign to the selected row. Can also use `taxonomicStatus`.
-#' @param usage_id Character or numeric vector of length 1; acceptedNameUsageID
-#' to assign to the selected row. Can also use `acceptedNameUsageID`
-#' @param usage_name Character vector of length 1; acceptedNameUsage to assign
-#' to the selected row. Can also use `acceptedNameUsage`.
+#' @param taxonID Character or numeric vector of length 1; taxonID of the row
+#' to be modified (the selected row).
+#' @param scientificName Character vector of length 1; scientificName of the row
+#' to be modified if `taxonID` is `NULL`, OR the scientificName to assign to the
+#' selected row if `taxonID` is provided (see Details).
+#' @param taxonomicStatus Character vector of length 1; taxonomicStatus to
+#' assign to the selected row.
+#' @param acceptedNameUsageID Character or numeric vector of length 1;
+#' acceptedNameUsageID to assign to the selected row.
+#' @param acceptedNameUsage Character vector of length 1; acceptedNameUsage to
+#' assign to the selected row.
 #' @param clear_usage_id `r param_clear_usage_id`
 #' @param clear_usage_name `r param_clear_usage_id`
 #' @param fill_usage_name `r param_fill_usage_name`
@@ -427,11 +391,11 @@ dct_modify_row_single <- function(tax_dat,
 #' @export
 #' @example inst/examples/dct_modify_row.R
 dct_modify_row <- function(tax_dat,
-                           taxon_id = NULL,
-                           sci_name = NULL,
-                           tax_status = NULL,
-                           usage_id = NULL,
-                           usage_name = NULL,
+                           taxonID = NULL, # nolint
+                           scientificName = NULL, # nolint
+                           taxonomicStatus = NULL, # nolint
+                           acceptedNameUsageID = NULL, # nolint
+                           acceptedNameUsage = NULL, # nolint
                            clear_usage_id = dct_options()$clear_usage_id,
                            clear_usage_name = dct_options()$clear_usage_name,
                            fill_usage_name = dct_options()$fill_usage_name,
@@ -456,7 +420,19 @@ dct_modify_row <- function(tax_dat,
     )
   }
   # - taxonID of tax_dat must be non-missing and unique
-  dct_check_taxon_id(tax_dat, on_fail = "error", on_success = "logical")
+  tryCatch(
+    dct_check_taxon_id(tax_dat, on_fail = "error", on_success = "logical"),
+    error = function(x) {
+      stop(
+        paste(
+          "tax_dat must include column taxonID, the values of which must be",
+          "unique and non-missing"
+        ),
+        call. = FALSE
+      )
+    }
+  )
+
   # - others checked at level of dct_modify_row_single()
 
   # define standard arguments to exclude from other_terms
@@ -469,11 +445,11 @@ dct_modify_row <- function(tax_dat,
     for (i in seq_len(nrow(args_tbl))) {
       tax_dat <- dct_modify_row_single(
         tax_dat,
-        taxon_id = val_if_in_dat(args_tbl, "taxon_id", i),
-        sci_name = val_if_in_dat(args_tbl, "sci_name", i),
-        tax_status = val_if_in_dat(args_tbl, "tax_status", i),
-        usage_id = val_if_in_dat(args_tbl, "usage_id", i),
-        usage_name = val_if_in_dat(args_tbl, "usage_name", i),
+        taxon_id = val_if_in_dat(args_tbl, "taxonID", i),
+        sci_name = val_if_in_dat(args_tbl, "scientificName", i),
+        tax_status = val_if_in_dat(args_tbl, "taxonomicStatus", i),
+        usage_id = val_if_in_dat(args_tbl, "acceptedNameUsageID", i),
+        usage_name = val_if_in_dat(args_tbl, "acceptedNameUsage", i),
         clear_usage_id = val_if_in_dat(args_tbl, "clear_usage_id", i),
         clear_usage_name = val_if_in_dat(args_tbl, "clear_usage_name", i),
         fill_usage_name = val_if_in_dat(args_tbl, "fill_usage_name", i),
@@ -491,11 +467,11 @@ dct_modify_row <- function(tax_dat,
   # Otherwise, run dct_modify_row_single()
   dct_modify_row_single(
     tax_dat,
-    taxon_id = taxon_id,
-    sci_name = sci_name,
-    tax_status = tax_status,
-    usage_id = usage_id,
-    usage_name = usage_name,
+    taxon_id = taxonID,
+    sci_name = scientificName,
+    tax_status = taxonomicStatus,
+    usage_id = acceptedNameUsageID,
+    usage_name = acceptedNameUsage,
     clear_usage_id = clear_usage_id,
     clear_usage_name = clear_usage_name,
     fill_usage_name = fill_usage_name,

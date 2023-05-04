@@ -230,17 +230,6 @@ test_that("val_if_in_dat() works", {
   )
 })
 
-test_that("convert_col() works", {
-  expect_equal(
-    data.frame(a = 1, b = 2),
-    convert_col(
-      data.frame(alpha = 1, b = 2),
-      "a",
-      "alpha"
-    )
-  )
-})
-
 test_that("make_taxon_id_from_sci_name() works", {
   expect_equal(
     make_taxon_id_from_sci_name(
@@ -289,17 +278,6 @@ test_that("is_unique() works", {
   expect_equal(
     is_unique(NA, allow_na = FALSE),
     TRUE
-  )
-})
-
-test_that("assert_that_uses_one_name() works", {
-  expect_equal(
-    assert_that_uses_one_name(data.frame(a = 1, b = 2), "a", "A"),
-    TRUE
-  )
-  expect_error(
-    assert_that_uses_one_name(data.frame(a = 1, A = 2), "a", "A"),
-    "Must use either a or A"
   )
 })
 

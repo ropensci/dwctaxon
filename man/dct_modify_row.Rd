@@ -6,11 +6,11 @@
 \usage{
 dct_modify_row(
   tax_dat,
-  taxon_id = NULL,
-  sci_name = NULL,
-  tax_status = NULL,
-  usage_id = NULL,
-  usage_name = NULL,
+  taxonID = NULL,
+  scientificName = NULL,
+  taxonomicStatus = NULL,
+  acceptedNameUsageID = NULL,
+  acceptedNameUsage = NULL,
   clear_usage_id = dct_options()$clear_usage_id,
   clear_usage_name = dct_options()$clear_usage_name,
   fill_usage_name = dct_options()$fill_usage_name,
@@ -26,22 +26,21 @@ dct_modify_row(
 \arguments{
 \item{tax_dat}{Dataframe; taxonomic database in DWC format.}
 
-\item{taxon_id}{Character or numeric vector of length 1; taxonID of the row
-to be modified (the selected row). Can also use \code{taxonID}.}
+\item{taxonID}{Character or numeric vector of length 1; taxonID of the row
+to be modified (the selected row).}
 
-\item{sci_name}{Character vector of length 1; scientificName of the row to
-be modified if \code{taxon_id} is \code{NULL}, OR the scientificName to assign to the
-selected row if \code{taxon_id} is provided (see Details).
-Can also use \code{scientificName}.}
+\item{scientificName}{Character vector of length 1; scientificName of the row to
+be modified if \code{taxonID} is \code{NULL}, OR the scientificName to assign to the
+selected row if \code{taxonID} is provided (see Details).}
 
-\item{tax_status}{Character vector of length 1; taxonomicStatus to
-assign to the selected row. Can also use \code{taxonomicStatus}.}
+\item{taxonomicStatus}{Character vector of length 1; taxonomicStatus to
+assign to the selected row.}
 
-\item{usage_id}{Character or numeric vector of length 1; acceptedNameUsageID
-to assign to the selected row. Can also use \code{acceptedNameUsageID}}
+\item{acceptedNameUsageID}{Character or numeric vector of length 1; acceptedNameUsageID
+to assign to the selected row.}
 
-\item{usage_name}{Character vector of length 1; acceptedNameUsage to assign
-to the selected row. Can also use \code{acceptedNameUsage}.}
+\item{acceptedNameUsage}{Character vector of length 1; acceptedNameUsage to assign
+to the selected row.}
 
 \item{clear_usage_id}{Logical vector of length 1; should acceptedNameUsageID of the selected row be set to \code{NA} if the word "accepted" is detected in tax_status (not case-sensitive)? Default \code{TRUE}.}
 
@@ -76,38 +75,32 @@ Dataframe; taxonomic database in DWC format
 Modify one or more rows in a taxonomic database in Darwin Core (DWC) format.
 }
 \details{
-Arguments \code{taxon_id}, \code{sci_name}, \code{tax_status}, \code{usage_id}, and \code{usage_name}
-are provided as convenience to avoid typing the longer "taxonomicID",
-"scientificName", "taxonomicStatus", "acceptedNameUsageID", and
-"acceptedNameUsage", respectively, but the latter may be used instead.
+\code{taxonID} is only used to identify the row(s) to modify and is not itself
+modified. \code{scientificName} can be used in the same way if \code{taxonID} is not
+provided (as long as \code{scientificName} matches a single row). If both \code{taxonID} and
+\code{scientificName} are provided, \code{scientificName} will be assigned to the scientificName of
+the row identified by \code{taxonID}, replacing any value that already exists.
 
-\code{taxon_id} is only used to identify the row(s) to modify and is not itself
-modified. \code{sci_name} can be used in the same way if \code{taxon_id} is not
-provided (as long as \code{sci_name} matches a single row). If both \code{taxon_id} and
-\code{sci_name} are provided, \code{sci_name} will be assigned to the scientificName of
-the row identified by \code{taxon_id}, replacing any value that already exists.
-
-\code{usage_id} and \code{usage_name} must match existing values of acceptedNameUsageID
+\code{acceptedNameUsageID} and \code{acceptedNameUsage} must match existing values of acceptedNameUsageID
 and acceptedNameUsage in the input data (\code{tax_dat}). On default settings,
 either can be used and the other will be filled in automatically
 (\code{fill_usage_id} and \code{fill_usage_name} are both \code{TRUE}).
 
-\code{tax_status} any other arguments provided that
+Any other arguments provided that
 are DWC terms will be assigned to the selected row (i.e., they will
 modify the row).
 
-If \code{remap_names} is \code{TRUE} (default) and \code{usage_id} (i.e.,
-acceptedNameUsageID) is provided, any names that have an acceptedNameUsageID
+If \code{remap_names} is \code{TRUE} (default) and \code{acceptedNameUsageID} is provided, any names that have an acceptedNameUsageID
 matching the taxonID of the selected row (i.e., synonyms of that row) will
 also have their acceptedNameUsageID replaced with the new
 acceptedNameUsageID. This behavior is not applied to names with
 taxonomicStatus of "variant" by default, but can be turned on for such names
 with \code{remap_variant}.
 
-If \code{clear_usage_id} or \code{clear_usage_name} is \code{TRUE} and \code{tax_status}
-(or \code{taxonomicStatus}) includes the word "accepted", acceptedNameUsageID
+If \code{clear_usage_id} or \code{clear_usage_name} is \code{TRUE} and \code{taxonomicStatus}
+includes the word "accepted", acceptedNameUsageID
 or acceptedNameUsage will be set to NA respectively, regardless of the
-values of \code{usage_id}, \code{usage_name}, or \code{fill_usage_name}.
+values of \code{acceptedNameUsageID}, \code{acceptedNameUsage}, or \code{fill_usage_name}.
 
 Can either modify a single row in the input taxonomic database if each
 argument is supplied as a vector of length 1, or can apply a set of changes
@@ -120,13 +113,13 @@ to the taxonomic database if the input is supplied as a dataframe via
 # and Trichomanes crassum Copel.
 dct_filmies |>
   dct_modify_row(
-    sci_name = "Cephalomanes crassum (Copel.) M. G. Price",
-    tax_status = "synonym",
-    usage_name = "Trichomanes crassum Copel."
+    scientificName = "Cephalomanes crassum (Copel.) M. G. Price",
+    taxonomicStatus = "synonym",
+    acceptedNameUsage = "Trichomanes crassum Copel."
   ) |>
   dct_modify_row(
-    sci_name = "Trichomanes crassum Copel.",
-    tax_status = "accepted"
+    scientificName = "Trichomanes crassum Copel.",
+    taxonomicStatus = "accepted"
   ) |>
   dct_validate(
     check_tax_status = FALSE,
@@ -137,24 +130,24 @@ dct_filmies |>
 # to the new synonym
 dct_modify_row(
   tax_dat = dct_filmies |> head(),
-  sci_name = "Cephalomanes crassum (Copel.) M. G. Price",
-  tax_status = "synonym",
-  usage_name = "Cephalomanes densinervium (Copel.) Copel."
+  scientificName = "Cephalomanes crassum (Copel.) M. G. Price",
+  taxonomicStatus = "synonym",
+  acceptedNameUsage = "Cephalomanes densinervium (Copel.) Copel."
 )
 # Apply a set of changes
 library(tibble)
 updates <- tibble(
-  sci_name = c(
+  scientificName = c(
     "Cephalomanes atrovirens Presl",
     "Cephalomanes crassum (Copel.) M. G. Price"
   ),
-  tax_status = "synonym",
-  usage_name = "Trichomanes crassum Copel."
+  taxonomicStatus = "synonym",
+  acceptedNameUsage = "Trichomanes crassum Copel."
 )
 dct_filmies |>
   dct_modify_row(args_tbl = updates) |>
   dct_modify_row(
-    sci_name = "Trichomanes crassum Copel.",
-    tax_status = "accepted"
+    scientificName = "Trichomanes crassum Copel.",
+    taxonomicStatus = "accepted"
   )
 }

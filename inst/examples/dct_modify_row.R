@@ -3,13 +3,13 @@
 # and Trichomanes crassum Copel.
 dct_filmies |>
   dct_modify_row(
-    sci_name = "Cephalomanes crassum (Copel.) M. G. Price",
-    tax_status = "synonym",
-    usage_name = "Trichomanes crassum Copel."
+    scientificName = "Cephalomanes crassum (Copel.) M. G. Price",
+    taxonomicStatus = "synonym",
+    acceptedNameUsage = "Trichomanes crassum Copel."
   ) |>
   dct_modify_row(
-    sci_name = "Trichomanes crassum Copel.",
-    tax_status = "accepted"
+    scientificName = "Trichomanes crassum Copel.",
+    taxonomicStatus = "accepted"
   ) |>
   dct_validate(
     check_tax_status = FALSE,
@@ -20,23 +20,23 @@ dct_filmies |>
 # to the new synonym
 dct_modify_row(
   tax_dat = dct_filmies |> head(),
-  sci_name = "Cephalomanes crassum (Copel.) M. G. Price",
-  tax_status = "synonym",
-  usage_name = "Cephalomanes densinervium (Copel.) Copel."
+  scientificName = "Cephalomanes crassum (Copel.) M. G. Price",
+  taxonomicStatus = "synonym",
+  acceptedNameUsage = "Cephalomanes densinervium (Copel.) Copel."
 )
 # Apply a set of changes
 library(tibble)
 updates <- tibble(
-  sci_name = c(
+  scientificName = c(
     "Cephalomanes atrovirens Presl",
     "Cephalomanes crassum (Copel.) M. G. Price"
   ),
-  tax_status = "synonym",
-  usage_name = "Trichomanes crassum Copel."
+  taxonomicStatus = "synonym",
+  acceptedNameUsage = "Trichomanes crassum Copel."
 )
 dct_filmies |>
   dct_modify_row(args_tbl = updates) |>
   dct_modify_row(
-    sci_name = "Trichomanes crassum Copel.",
-    tax_status = "accepted"
+    scientificName = "Trichomanes crassum Copel.",
+    taxonomicStatus = "accepted"
   )

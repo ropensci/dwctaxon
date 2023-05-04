@@ -82,17 +82,17 @@ tidyr::pivot_longer(
   values_to = "scientificName",
   dplyr::everything()
 ) |>
-  dplyr::mutate(genus = case_when(
+  dplyr::mutate(genus = dplyr::case_when(
     stringr::str_detect(scientificName, "Crepidomanes") ~ "Crepidomanes",
     TRUE ~ NA_character_
   )) |>
-  dplyr::mutate(family = case_when(
+  dplyr::mutate(family = dplyr::case_when(
     stringr::str_detect(
       scientificName, "Crepidomanes|Hymenophyllaceae"
     ) ~ "Hymenophyllaceae",
     TRUE ~ NA_character_
   )) |>
-  dplyr::mutate(order = case_when(
+  dplyr::mutate(order = dplyr::case_when(
     stringr::str_detect(
       scientificName, "Crepidomanes|Hymenophyll"
     ) ~ "Hymenophyllales",

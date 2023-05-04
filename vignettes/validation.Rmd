@@ -44,7 +44,7 @@ However, `dct_filmies` already is well-formatted and would pass all validation c
 filmies_dirty <-
   dct_filmies |>
   # Change taxonomic status of one row to 'good'
-  dct_modify_row(taxon_id = "54115096", tax_status = "good") |>
+  dct_modify_row(taxonID = "54115096", taxonomicStatus = "good") |>
   # Duplicate some rows at the end
   bind_rows(tail(dct_filmies)) |>
   # Insert bad values for `acceptedNameUsageID` of 5 random rows
