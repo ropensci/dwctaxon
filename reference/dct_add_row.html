@@ -59,11 +59,11 @@
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">dct_add_row</span><span class="op">(</span></span>
 <span>  <span class="va">tax_dat</span>,</span>
-<span>  taxon_id <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  sci_name <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  tax_status <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  usage_id <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  usage_name <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  taxonID <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  scientificName <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  taxonomicStatus <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  acceptedNameUsageID <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  acceptedNameUsage <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  new_dat <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  fill_taxon_id <span class="op">=</span> <span class="fu"><a href="dct_options.html">dct_options</a></span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="va">fill_taxon_id</span>,</span>
 <span>  fill_usage_id <span class="op">=</span> <span class="fu"><a href="dct_options.html">dct_options</a></span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="va">fill_usage_id</span>,</span>
@@ -80,30 +80,29 @@
 <dd><p>Dataframe; taxonomic database in DWC format.</p></dd>
 
 
-<dt>taxon_id</dt>
+<dt>taxonID</dt>
 <dd><p>Character or numeric vector; values to add to taxonID column.
-Can also use <code>taxonomicID</code>. Ignored if <code>new_dat</code> is not <code>NULL</code>.</p></dd>
+Ignored if <code>new_dat</code> is not <code>NULL</code>.</p></dd>
 
 
-<dt>sci_name</dt>
-<dd><p>Character vector; values to add to scientificName column. Can
-also use <code>scientificName</code>. Ignored if <code>new_dat</code> is not <code>NULL</code>.</p></dd>
+<dt>scientificName</dt>
+<dd><p>Character vector; values to add to scientificName
+column. Ignored if <code>new_dat</code> is not <code>NULL</code>.</p></dd>
 
 
-<dt>tax_status</dt>
-<dd><p>Character vector; values to add to taxonomicStatus column.
-Can also use <code>taxonomicStatus</code>. Ignored if <code>new_dat</code> is not <code>NULL</code>.</p></dd>
+<dt>taxonomicStatus</dt>
+<dd><p>Character vector; values to add to taxonomicStatus
+column. Ignored if <code>new_dat</code> is not <code>NULL</code>.</p></dd>
 
 
-<dt>usage_id</dt>
+<dt>acceptedNameUsageID</dt>
 <dd><p>Character or numeric vector; values to add to
-acceptedNameUsageID column. Can also use <code>acceptedNameUsageID</code>. Ignored if
-<code>new_dat</code> is not <code>NULL</code>.</p></dd>
+acceptedNameUsageID column. Ignored if <code>new_dat</code> is not <code>NULL</code>.</p></dd>
 
 
-<dt>usage_name</dt>
+<dt>acceptedNameUsage</dt>
 <dd><p>Character vector; values to add to acceptedNameUsage
-column. Can also use <code>acceptedNameUsage</code>. Ignored if <code>new_dat</code> is not <code>NULL</code>.</p></dd>
+column. Ignored if <code>new_dat</code> is not <code>NULL</code>.</p></dd>
 
 
 <dt>new_dat</dt>
@@ -148,11 +147,7 @@ is not <code>NULL</code>.</p></dd>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Arguments <code>taxon_id</code>, <code>sci_name</code>, <code>tax_status</code>, <code>usage_id</code>, and <code>usage_name</code>
-are provided as convenience to avoid typing the longer "taxonomicID",
-"scientificName", "taxonomicStatus", "acceptedNameUsageID", and
-"acceptedNameUsage", respectively, but the latter may be used instead.</p>
-<p><code>fill_taxon_id</code> and <code>fill_usage_id</code> only act on the newly added data (they
+    <p><code>fill_taxon_id</code> and <code>fill_usage_id</code> only act on the newly added data (they
 do not fill columns in <code>tax_dat</code>).</p>
 <p>If "taxonID" is not provided for the new row and <code>fill_taxon_id</code> is <code>TRUE</code>,
 a value for taxonID will be automatically generated from the md5 hash digest
@@ -170,7 +165,7 @@ use <code><a href="dct_options.html">dct_options()</a></code>.</p>
 <span class="r-in"><span>  taxonomicStatus <span class="op">=</span> <span class="st">"accepted"</span></span></span>
 <span class="r-in"><span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu">dct_add_row</span><span class="op">(</span></span></span>
-<span class="r-in"><span>    sci_name <span class="op">=</span> <span class="st">"Foogenus barspecies var. bla"</span>,</span></span>
+<span class="r-in"><span>    scientificName <span class="op">=</span> <span class="st">"Foogenus barspecies var. bla"</span>,</span></span>
 <span class="r-in"><span>    parentNameUsageID <span class="op">=</span> <span class="st">"123"</span>,</span></span>
 <span class="r-in"><span>    nameAccordingTo <span class="op">=</span> <span class="st">"me"</span>,</span></span>
 <span class="r-in"><span>    strict <span class="op">=</span> <span class="cn">TRUE</span></span></span>
