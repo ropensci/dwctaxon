@@ -59,7 +59,7 @@ taxon_wide <- tibble::tribble(
 knitr::kable(taxon_wide)
 ```
 
-Indeed, in DwC taxon, higher taxonomic levels like `genus`, `family`, and `order` are valid terms and may be used.
+Indeed, in DwC taxon, taxonomic levels above species like `genus`, `family`, and `order` are valid terms and may be used.
 
 However, `species` is **not** a valid DwC term. That is because each row of a DwC taxonomic database is a single scientific name **of any rank**, not just species. So it is typical for data to be oriented vertically ("long" format):
 
