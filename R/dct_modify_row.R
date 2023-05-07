@@ -33,34 +33,29 @@ dct_modify_row_single <- function(tax_dat,
   if (!is.null(other_terms) && isTRUE(is.na(other_terms))) other_terms <- NULL
 
   # Check input classes ----
-  ifelse(
-    !is.null(taxon_id),
-    assertthat::assert_that(
-      assertthat::is.string(taxon_id) | assertthat::is.scalar(taxon_id)
-    ),
-    TRUE
+  assertthat::assert_that(
+    is.null(taxon_id) ||
+      assertthat::is.string(taxon_id) ||
+      assertthat::is.scalar(taxon_id),
+    msg = "taxonID must be of type character or numeric"
   )
-  ifelse(
-    !is.null(sci_name),
-    assertthat::assert_that(assertthat::is.string(sci_name)),
-    TRUE
+  assertthat::assert_that(
+    is.null(sci_name) ||
+      assertthat::is.string(sci_name),
+    msg = "scientificName must be of type character"
   )
-  ifelse(
-    !is.null(tax_status),
-    assertthat::assert_that(assertthat::is.string(tax_status)),
-    TRUE
+  assertthat::assert_that(
+    is.null(tax_status) || assertthat::is.string(tax_status),
+    msg = "taxonomicStatus must be of type character"
   )
-  ifelse(
-    !is.null(usage_id),
-    assertthat::assert_that(
-      assertthat::is.string(usage_id) | assertthat::is.scalar(usage_id)
-    ),
-    TRUE
+  assertthat::assert_that(
+    is.null(usage_id) || assertthat::is.string(usage_id) ||
+      assertthat::is.scalar(usage_id),
+    msg = "acceptedNameUsageID must be of type character or numeric"
   )
-  ifelse(
-    !is.null(usage_name),
-    assertthat::assert_that(assertthat::is.string(usage_name)),
-    TRUE
+  assertthat::assert_that(
+    is.null(usage_name) || assertthat::is.string(usage_name),
+    msg = "usage_name is not a string (a length one character vector)."
   )
   assertthat::assert_that(assertthat::is.flag(clear_usage_id))
   assertthat::assert_that(assertthat::is.flag(fill_usage_name))
@@ -69,53 +64,42 @@ dct_modify_row_single <- function(tax_dat,
   assertthat::assert_that(assertthat::is.flag(stamp_modified))
   assertthat::assert_that(assertthat::is.flag(strict))
   assertthat::assert_that(assertthat::is.flag(quiet))
+
   # Other input checks ----
 
   # - scientificName is present if usage_name is specified
-  ifelse(
-    !is.null(usage_name),
-    assertthat::assert_that(
+  assertthat::assert_that(
+    is.null(usage_name) ||
       isTRUE("scientificName" %in% colnames(tax_dat)),
-      msg = paste(
-        "tax_dat must include column 'scientificName' to look up rows by",
-        "acceptedNameUsage"
-      )
-    ),
-    TRUE
+    msg = paste(
+      "tax_dat must include column 'scientificName' to look up rows by",
+      "acceptedNameUsage"
+    )
   )
   # - usage_name must exist in input data
-  ifelse(
-    !is.null(usage_name),
-    assertthat::assert_that(
+  assertthat::assert_that(
+    is.null(usage_name) ||
       usage_name %in% tax_dat$scientificName,
-      msg = "Input acceptedNameUsage not detected in tax_dat$scientificName"
-    ),
-    TRUE
+    msg = "Input acceptedNameUsage not detected in tax_dat$scientificName"
   )
   # - usage_id must exist in input data
-  ifelse(
-    !is.null(usage_id),
-    assertthat::assert_that(
+  assertthat::assert_that(
+    is.null(usage_id) ||
       usage_id %in% tax_dat$taxonID,
-      msg = "Input acceptedNameUsageID not detected in tax_dat$taxonID"
-    ),
-    TRUE
+    msg = "Input acceptedNameUsageID not detected in tax_dat$taxonID"
   )
 
   # - other_terms must be valid DwC terms or an exception specified by
   # options
-  ifelse(
-    isTRUE(nrow(other_terms) > 0),
-    assertthat::assert_that(
+  assertthat::assert_that(
+    is.null(other_terms) ||
       all(
         colnames(other_terms) %in% c(dct_terms$term, dct_options()$extra_cols)
       ),
-      msg = paste(
-        "All terms to modify must be valid DwC taxon terms (`dct_terms$term`)",
-        "or specified by `dct_options$()extra_cols`"
-      )
-    ),
-    TRUE
+    msg = paste(
+      "All terms to modify must be valid DwC taxon terms (`dct_terms$term`)",
+      "or specified by `dct_options$()extra_cols`"
+    )
   )
 
   # Isolate row to change ----
