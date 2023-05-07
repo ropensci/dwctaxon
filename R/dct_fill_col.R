@@ -1,14 +1,14 @@
 #' Fill a column of a taxonomic database
 #'
-#' Fill a column in a taxonomic database in Darwin Core (DWC) format.
+#' Fill a column in a taxonomic database in Darwin Core (DwC) format.
 #'
-#' Several terms (columns) in DWC format come in pairs of "term" and "termID";
+#' Several terms (columns) in DwC format come in pairs of "term" and "termID";
 #' for example, "acceptedNameUsage" and "acceptedNameUsageID", where the first
 #' is the value in a human-readable form (in this case, scientific name of the
 #' accepted taxon) and the second is the value used by a machine (in this case,
 #' taxonID of the accepted taxon). Other pairs include "parentNameUsage" and
 #' "parentNameUsageID", "scientificName" and "scientificNameID", etc. None are
-#' required to be used in a given DWC dataset.
+#' required to be used in a given DwC dataset.
 #'
 #' Often when updating data, the user may only fill in one value or the other
 #' (e.g., "acceptedNameUsage" or "acceptedNameUsageID"), but not both. The
@@ -52,11 +52,11 @@ dct_fill_col <- function(tax_dat,
   )
   assertthat::assert_that(
     fill_to %in% dct_terms$term,
-    msg = "fill_to must be a valid DWC term; see `dct_terms`"
+    msg = "fill_to must be a valid DwC term; see `dct_terms`"
   )
   assertthat::assert_that(
     fill_from %in% dct_terms$term,
-    msg = "fill_from must be a valid DWC term; see `dct_terms`"
+    msg = "fill_from must be a valid DwC term; see `dct_terms`"
   )
   assertthat::assert_that(
     fill_from %in% colnames(tax_dat),
@@ -64,7 +64,7 @@ dct_fill_col <- function(tax_dat,
   )
   assertthat::assert_that(
     match_to %in% dct_terms$term,
-    msg = "match_to must be a valid DWC term; see `dct_terms`"
+    msg = "match_to must be a valid DwC term; see `dct_terms`"
   )
   assertthat::assert_that(
     match_to %in% colnames(tax_dat),
@@ -72,7 +72,7 @@ dct_fill_col <- function(tax_dat,
   )
   assertthat::assert_that(
     match_from %in% dct_terms$term,
-    msg = "match_from must be a valid DWC term; see `dct_terms`"
+    msg = "match_from must be a valid DwC term; see `dct_terms`"
   )
   assertthat::assert_that(
     match_from %in% colnames(tax_dat),

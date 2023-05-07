@@ -1,6 +1,6 @@
 # R code used for documentation
 
-param_tax_dat <- "Dataframe; taxonomic database in DWC format."
+param_tax_dat <- "Dataframe; taxonomic database in DwC format."
 
 param_check_taxon_id <- glue::glue(
   'Logical vector of length 1; should all instances of \\
@@ -74,9 +74,9 @@ if (!is.null(get_dct_opt("extra_cols"))) {
 }
 param_extra_cols <- glue::glue(
   "Character vector; names of columns that should be allowed beyond
-  those defined by the Darwin Core DWC taxon standard. \\
+  those defined by the Darwin Core DwC taxon standard. \\
   Default NULL. \\
-  Providing column name(s) that are valid DWC taxon column(s) has no effect."
+  Providing column name(s) that are valid DwC taxon column(s) has no effect."
 )
 
 param_on_fail <- glue::glue(

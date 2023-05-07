@@ -184,7 +184,7 @@ bind_rows_f <- function(x) {
 #' @noRd
 #' @autoglobal
 sort_cols_dwc <- function(x) {
-  # valid col names are those in DWC terms plus "error" and "check"
+  # valid col names are those in DwC terms plus "error" and "check"
   val_cols <- c(dct_terms$term, "error", "check")
   # Sort colnames in same order as valid col names
   cols <- colnames(x)

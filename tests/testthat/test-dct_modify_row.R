@@ -35,13 +35,13 @@ test_that("scientificName works to identify or modify row", {
 })
 
 # - ...
-test_that("non-DWC terms fail", {
+test_that("non-DwC terms fail", {
   expect_error(
     dct_modify_row(
       data.frame(taxonID = "a"),
       taxon_id = "a", scientificName = "foobar"
     ),
-    "All terms to modify must be valid DWC taxon terms"
+    "All terms to modify must be valid DwC taxon terms"
   )
 })
 

@@ -46,9 +46,9 @@ In theory, dwctaxon could be used to create taxonomic databases from scratch, bu
 
 For detailed usage examples, see the vignettes:
 
-- [What is DWC?](https://joelnitta.github.io/dwctaxon/articles/what-is-dwc.html)
-- [Editing DWC taxon data](https://joelnitta.github.io/dwctaxon/articles/editing.html)
-- [Validating DWC taxon data](https://joelnitta.github.io/dwctaxon/articles/validation.html)
+- [What is DwC?](https://joelnitta.github.io/dwctaxon/articles/what-is-dwc.html)
+- [Editing DwC taxon data](https://joelnitta.github.io/dwctaxon/articles/editing.html)
+- [Validating DwC taxon data](https://joelnitta.github.io/dwctaxon/articles/validation.html)
 - [Real World Example](https://joelnitta.github.io/dwctaxon/articles/real-data.html)
 
 For more information about dwctaxon, in particular for using it to maintain a reference database for taxonomic name resolution, see [taxastand and dwctaxon: A pair of R packages for standardizing species names in Darwin Core format (BioDigiCon 2022 talk)](https://www.joelnitta.com/talks/2022-09-27_biodigi.html).

@@ -13,14 +13,14 @@ dct_check_mapping(
 )
 }
 \arguments{
-\item{tax_dat}{Dataframe; taxonomic database in DWC format.}
+\item{tax_dat}{Dataframe; taxonomic database in DwC format.}
 
 \item{on_fail}{Character vector of length 1, either "error" or "summary". Describes what to do if the check fails. Default \code{"error"}.}
 
 \item{on_success}{Character vector of length 1, either "logical" or "data". Describes what to do if the check passes. Default \code{"data"}.}
 
 \item{col_select}{Character vector of length 1; the name of the column
-(DWC term) to check. Default \code{"acceptedNameUsageID"}.}
+(DwC term) to check. Default \code{"acceptedNameUsageID"}.}
 
 \item{quiet}{Logical vector of length 1; should warnings be silenced? Default \code{FALSE}.}
 }
@@ -37,7 +37,7 @@ return a dataframe with a summary of the reasons for failure
 }
 \description{
 Check that values of terms like 'acceptedUsageID' map properly to taxonID in
-Darwin Core (DWC) taxonomic data.
+Darwin Core (DwC) taxonomic data.
 }
 \details{
 The following rules are enforced:

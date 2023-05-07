@@ -1,6 +1,6 @@
 #' Add row(s) to a taxonomic database
 #'
-#' Add one or more rows to a taxonomic database in Darwin Core (DWC) format.
+#' Add one or more rows to a taxonomic database in Darwin Core (DwC) format.
 #'
 #' `fill_taxon_id` and `fill_usage_id` only act on the newly added data (they
 #' do not fill columns in `tax_dat`).
@@ -24,7 +24,7 @@
 #' @param acceptedNameUsage Character vector; values to add to acceptedNameUsage
 #' column. Ignored if `new_dat` is not `NULL`.
 #' @param new_dat A dataframe including columns corresponding to one or more of
-#' the above arguments, except for `tax_dat`. Other DWC terms can also be
+#' the above arguments, except for `tax_dat`. Other DwC terms can also be
 #' included as additional columns. All rows in `new_dat` will be appended to the
 #' input data (`tax_dat`).
 #' @param fill_taxon_id `r param_fill_taxon_id`
@@ -34,7 +34,7 @@
 #' @param strict `r param_strict`
 #' @param ... Additional data to add, specified as sets of named
 #' character or numeric vectors; e.g., `parentNameUsageID = "6SH4"`. The name of
-#' each must be a valid column name for data in DWC format. Ignored if `new_dat`
+#' each must be a valid column name for data in DwC format. Ignored if `new_dat`
 #' is not `NULL`.
 #'
 #' @return `r param_tax_dat`

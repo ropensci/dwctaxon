@@ -162,7 +162,7 @@ check_mapping_exists <- function(tax_dat,
 #' Check mapping of usage taxonomic IDs
 #'
 #' Check that values of terms like 'acceptedUsageID' map properly to taxonID in
-#' Darwin Core (DWC) taxonomic data.
+#' Darwin Core (DwC) taxonomic data.
 #'
 #' The following rules are enforced:
 #' - Value of taxonID may not be identical to that of the selected column within
@@ -181,7 +181,7 @@ check_mapping_exists <- function(tax_dat,
 #' @param on_fail `r param_on_fail`
 #' @param on_success `r param_on_success`
 #' @param col_select Character vector of length 1; the name of the column
-#' (DWC term) to check. Default `"acceptedNameUsageID"`.
+#' (DwC term) to check. Default `"acceptedNameUsageID"`.
 #' @param quiet `r param_quiet`
 #'
 #' @inherit dct_check_taxon_id return

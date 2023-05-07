@@ -1,6 +1,6 @@
 #' Modify one row of a taxonomic database
 #'
-#' @param other_terms Tibble of additional DWC terms to add to data;
+#' @param other_terms Tibble of additional DwC terms to add to data;
 #'   will over-write if any columns already exist
 #' @inheritParams dct_modify_row
 #'
@@ -102,7 +102,7 @@ dct_modify_row_single <- function(tax_dat,
     TRUE
   )
 
-  # - other_terms must be valid DWC terms or an exception specified by
+  # - other_terms must be valid DwC terms or an exception specified by
   # options
   ifelse(
     isTRUE(nrow(other_terms) > 0),
@@ -111,7 +111,7 @@ dct_modify_row_single <- function(tax_dat,
         colnames(other_terms) %in% c(dct_terms$term, dct_options()$extra_cols)
       ),
       msg = paste(
-        "All terms to modify must be valid DWC taxon terms (`dct_terms$term`)",
+        "All terms to modify must be valid DwC taxon terms (`dct_terms$term`)",
         "or specified by `dct_options$()extra_cols`"
       )
     ),
@@ -223,7 +223,7 @@ dct_modify_row_single <- function(tax_dat,
       new_row <- dplyr::mutate(new_row, acceptedNameUsage = NaN)
     }
   }
-  # - add other DWC terms, overwriting existing values
+  # - add other DwC terms, overwriting existing values
   if (!is.null(other_terms)) {
     if (nrow(other_terms) > 0) {
       new_row <-
@@ -321,7 +321,7 @@ dct_modify_row_single <- function(tax_dat,
 
 #' Modify row(s) of a taxonomic database
 #'
-#' Modify one or more rows in a taxonomic database in Darwin Core (DWC) format.
+#' Modify one or more rows in a taxonomic database in Darwin Core (DwC) format.
 #'
 #' `taxonID` is only used to identify the row(s) to modify and is not itself
 #' modified. `scientificName` can be used in the same way if `taxonID` is not
@@ -333,12 +333,11 @@ dct_modify_row_single <- function(tax_dat,
 #' `acceptedNameUsageID` and `acceptedNameUsage` must match existing values of
 #' acceptedNameUsageID and acceptedNameUsage in the input data (`tax_dat`). On
 #' default settings, either can be used and the other will be filled in
-#' automatically (`fill_usage_id` and `fill_usage_name` are both `TRUE`). `r
-#' check_fill_usage_id_name()`
+#' automatically (`fill_usage_id` and `fill_usage_name` are both `TRUE`).
+#' `r check_fill_usage_id_name()`
 #'
-#' Any other arguments provided that
-#' are DWC terms will be assigned to the selected row (i.e., they will
-#' modify the row).
+#' Any other arguments provided that are DwC terms will be assigned to the
+#' selected row (i.e., they will modify the row).
 #'
 #' If `remap_names` is `TRUE` (default) and `acceptedNameUsageID` is provided,
 #' any names that have an acceptedNameUsageID matching the taxonID of the
@@ -357,7 +356,7 @@ dct_modify_row_single <- function(tax_dat,
 #' to the taxonomic database if the input is supplied as a dataframe via
 #' `args_tbl`.
 #'
-#' @param tax_dat Dataframe; taxonomic database in DWC format.
+#' @param tax_dat Dataframe; taxonomic database in DwC format.
 #' @param taxonID Character or numeric vector of length 1; taxonID of the row
 #' to be modified (the selected row).
 #' @param scientificName Character vector of length 1; scientificName of the row
@@ -380,13 +379,13 @@ dct_modify_row_single <- function(tax_dat,
 #' @param args_tbl A dataframe including columns corresponding to one or more of
 #' the above arguments, except for `tax_dat`. In this case, the input taxonomic
 #' database will be modified sequentially over each row of input in `args_tbl`.
-#' Other DWC terms can also be included as additional columns,
+#' Other DwC terms can also be included as additional columns,
 #' similar to using `...` to modify a single row.
-#' @param ... other DWC terms to modify, specified as sets of named values.
+#' @param ... other DwC terms to modify, specified as sets of named values.
 #' Each element of the vector must have a name corresponding to a valid
-#' DWC term; see [dct_terms].
+#' DwC term; see [dct_terms].
 #'
-#' @return Dataframe; taxonomic database in DWC format
+#' @return Dataframe; taxonomic database in DwC format
 #' @autoglobal
 #' @export
 #' @example inst/examples/dct_modify_row.R

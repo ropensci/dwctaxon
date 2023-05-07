@@ -1,5 +1,5 @@
 ---
-title: "Validating DWC taxon data"
+title: "Validating DwC taxon data"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Validation}
@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 options(width = 220)
 ```
 
-dwctaxon has two major purposes, (1) editing and (2) validation of taxonomic data in [Darwin Core (DWC)](https://dwc.tdwg.org/terms/#taxon) format. This vignette is about the latter.
+dwctaxon has two major purposes, (1) editing and (2) validation of taxonomic data in [Darwin Core (DwC)](https://dwc.tdwg.org/terms/#taxon) format. This vignette is about the latter.
 
 ## Setup
 
@@ -63,7 +63,7 @@ The first few rows may look the same, but we know that these data now have some 
 
 ## Error on failure
 
-`dct_validate()` is the workhorse function for validating DWC data.
+`dct_validate()` is the workhorse function for validating DwC data.
 
 In default mode, `dct_validate()` will issue an error the first time it finds something wrong with the data (in other words, on the first check that fails):
 
@@ -82,7 +82,7 @@ dwctaxon tries to provide useful error messages that help you determine what in 
 
 ## Summary on failure
 
-If you are troubleshooting a DWC taxon dataset, it may be more useful to know about all of the problems at once instead of fixing them one at a time. In that case, set the `on_fail` argument to `"summary"` (`on_fail` can be either its default value `"error"` or `"summary"`):
+If you are troubleshooting a DwC taxon dataset, it may be more useful to know about all of the problems at once instead of fixing them one at a time. In that case, set the `on_fail` argument to `"summary"` (`on_fail` can be either its default value `"error"` or `"summary"`):
 
 ```{r validate-error-summary, error = TRUE}
 dct_validate(filmies_dirty, on_fail = "summary")
@@ -107,13 +107,13 @@ filmies_dirty |>
   dct_check_mapping()
 ```
 
-It is important to note that not all checks are compatible with each other. For example, `check_sci_name` checks that all scientific names (DWC term `scientificName`) are non-missing and unique; `check_status_diff` checks that in cases of *identical* scientific names, the taxonomic status of each name is different. The default settings for `dct_validate()` are to use the former but not the latter. Whether you expect all scientific names to be unique or not depends on how you set up your data^[According to the rules of taxonomic nomenclature, of course each full scientific name *should* be unique, but there [have been errors in the past](https://www.iapt-taxon.org/nomen/pages/main/art_31.html?zoom_highlight=identical) where the same author published the same name more than once!].
+It is important to note that not all checks are compatible with each other. For example, `check_sci_name` checks that all scientific names (DwC term `scientificName`) are non-missing and unique; `check_status_diff` checks that in cases of *identical* scientific names, the taxonomic status of each name is different. The default settings for `dct_validate()` are to use the former but not the latter. Whether you expect all scientific names to be unique or not depends on how you set up your data^[According to the rules of taxonomic nomenclature, of course each full scientific name *should* be unique, but there [have been errors in the past](https://www.iapt-taxon.org/nomen/pages/main/art_31.html?zoom_highlight=identical) where the same author published the same name more than once!].
 
 ## Controlled vocabularies
 
-Some DWC taxon terms are expected only to take a small number values from a controlled vocabulary. For example, `taxonStatus` (taxonomic status of a scientific name) may only be expected to include the values "accepted", "synonym", etc. This is unlike, e.g., `scientificName`, where we would not try to control the range of possible values.
+Some DwC taxon terms are expected only to take a small number values from a controlled vocabulary. For example, `taxonStatus` (taxonomic status of a scientific name) may only be expected to include the values "accepted", "synonym", etc. This is unlike, e.g., `scientificName`, where we would not try to control the range of possible values.
 
-However, although DWC recommends using a controlled vocabulary for such terms, it does not specify the actual values! So dwctaxon lets you set those yourself (and tries to employ reasonable defaults), as shown in the 
+However, although DwC recommends using a controlled vocabulary for such terms, it does not specify the actual values! So dwctaxon lets you set those yourself (and tries to employ reasonable defaults), as shown in the 
 [next section](#changing-the-defaults).
 
 ## Changing the defaults

@@ -14,7 +14,7 @@ dct_check_tax_status(
 )
 }
 \arguments{
-\item{tax_dat}{Dataframe; taxonomic database in DWC format.}
+\item{tax_dat}{Dataframe; taxonomic database in DwC format.}
 
 \item{on_fail}{Character vector of length 1, either "error" or "summary". Describes what to do if the check fails. Default \code{"error"}.}
 

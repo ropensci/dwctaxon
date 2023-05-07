@@ -13,7 +13,7 @@ dct_fill_col(
 )
 }
 \arguments{
-\item{tax_dat}{Dataframe; taxonomic database in DWC format.}
+\item{tax_dat}{Dataframe; taxonomic database in DwC format.}
 
 \item{fill_to}{Character vector of length 1; name of column to fill.}
 
@@ -25,19 +25,19 @@ values from when filling.}
 \item{match_from}{Character vector of length 1; name of column to match from.}
 }
 \value{
-Dataframe; taxonomic database in DWC format.
+Dataframe; taxonomic database in DwC format.
 }
 \description{
-Fill a column in a taxonomic database in Darwin Core (DWC) format.
+Fill a column in a taxonomic database in Darwin Core (DwC) format.
 }
 \details{
-Several terms (columns) in DWC format come in pairs of "term" and "termID";
+Several terms (columns) in DwC format come in pairs of "term" and "termID";
 for example, "acceptedNameUsage" and "acceptedNameUsageID", where the first
 is the value in a human-readable form (in this case, scientific name of the
 accepted taxon) and the second is the value used by a machine (in this case,
 taxonID of the accepted taxon). Other pairs include "parentNameUsage" and
 "parentNameUsageID", "scientificName" and "scientificNameID", etc. None are
-required to be used in a given DWC dataset.
+required to be used in a given DwC dataset.
 
 Often when updating data, the user may only fill in one value or the other
 (e.g., "acceptedNameUsage" or "acceptedNameUsageID"), but not both. The

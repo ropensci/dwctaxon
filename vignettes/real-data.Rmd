@@ -189,7 +189,7 @@ dct_validate(
 )
 ```
 
-It passes, so we have now confirmed that the only steps needed to obtain correctly formatted DWC data are to de-duplicate the species names and account for the `id` column.
+It passes, so we have now confirmed that the only steps needed to obtain correctly formatted DwC data are to de-duplicate the species names and account for the `id` column.
 
 ## Summary
 
