@@ -24,7 +24,7 @@ dct_validate(
 )
 }
 \arguments{
-\item{tax_dat}{Dataframe; taxonomic database in DWC format.}
+\item{tax_dat}{Dataframe; taxonomic database in DwC format.}
 
 \item{check_taxon_id}{Logical vector of length 1; should all instances of  \code{taxonID} be required to be non-missing and unique? Default \code{TRUE}.}
 
@@ -48,7 +48,7 @@ dct_validate(
 \item{valid_tax_status}{Character vector of length 1; valid values for \code{taxonomicStatus}. Each value must be separated by a comma. Default \verb{accepted, synonym, variant, NA}. \code{"NA"} indicates that missing (NA) values are valid. Case-sensitive.}
 
 \item{extra_cols}{Character vector; names of columns that should be allowed beyond
-those defined by the Darwin Core DWC taxon standard. Default NULL. Providing column name(s) that are valid DWC taxon column(s) has no effect.}
+those defined by the Darwin Core DwC taxon standard. Default NULL. Providing column name(s) that are valid DwC taxon column(s) has no effect.}
 
 \item{on_success}{Character vector of length 1, either "logical" or "data". Describes what to do if the check passes. Default \code{"data"}.}
 
@@ -72,7 +72,7 @@ return a dataframe with a summary of the reasons for failure
 }
 \description{
 Runs a series of automated checks on a taxonomic database in Darwin Core
-(DWC) format.
+(DwC) format.
 }
 \details{
 For \code{check_mapping_accepted_status} and \code{check_status_diff}, "accepted",
@@ -98,7 +98,7 @@ Default settings of all arguments can be modified with \code{dct_options()} (see
 Examples).
 
 Most columns are expected to be vectors of class character, but this is not
-checked for all columns. Columns (DWC terms) with names including 'ID', for
+checked for all columns. Columns (DwC terms) with names including 'ID', for
 example 'taxonID', may be character, numeric, or integer.
 }
 \examples{

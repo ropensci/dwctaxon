@@ -24,23 +24,23 @@ dct_modify_row(
 )
 }
 \arguments{
-\item{tax_dat}{Dataframe; taxonomic database in DWC format.}
+\item{tax_dat}{Dataframe; taxonomic database in DwC format.}
 
 \item{taxonID}{Character or numeric vector of length 1; taxonID of the row
 to be modified (the selected row).}
 
-\item{scientificName}{Character vector of length 1; scientificName of the row to
-be modified if \code{taxonID} is \code{NULL}, OR the scientificName to assign to the
+\item{scientificName}{Character vector of length 1; scientificName of the row
+to be modified if \code{taxonID} is \code{NULL}, OR the scientificName to assign to the
 selected row if \code{taxonID} is provided (see Details).}
 
 \item{taxonomicStatus}{Character vector of length 1; taxonomicStatus to
 assign to the selected row.}
 
-\item{acceptedNameUsageID}{Character or numeric vector of length 1; acceptedNameUsageID
-to assign to the selected row.}
+\item{acceptedNameUsageID}{Character or numeric vector of length 1;
+acceptedNameUsageID to assign to the selected row.}
 
-\item{acceptedNameUsage}{Character vector of length 1; acceptedNameUsage to assign
-to the selected row.}
+\item{acceptedNameUsage}{Character vector of length 1; acceptedNameUsage to
+assign to the selected row.}
 
 \item{clear_usage_id}{Logical vector of length 1; should acceptedNameUsageID of the selected row be set to \code{NA} if the word "accepted" is detected in tax_status (not case-sensitive)? Default \code{TRUE}.}
 
@@ -61,41 +61,41 @@ to the selected row.}
 \item{args_tbl}{A dataframe including columns corresponding to one or more of
 the above arguments, except for \code{tax_dat}. In this case, the input taxonomic
 database will be modified sequentially over each row of input in \code{args_tbl}.
-Other DWC terms can also be included as additional columns,
+Other DwC terms can also be included as additional columns,
 similar to using \code{...} to modify a single row.}
 
-\item{...}{other DWC terms to modify, specified as sets of named values.
+\item{...}{other DwC terms to modify, specified as sets of named values.
 Each element of the vector must have a name corresponding to a valid
-DWC term; see \link{dct_terms}.}
+DwC term; see \link{dct_terms}.}
 }
 \value{
-Dataframe; taxonomic database in DWC format
+Dataframe; taxonomic database in DwC format
 }
 \description{
-Modify one or more rows in a taxonomic database in Darwin Core (DWC) format.
+Modify one or more rows in a taxonomic database in Darwin Core (DwC) format.
 }
 \details{
 \code{taxonID} is only used to identify the row(s) to modify and is not itself
 modified. \code{scientificName} can be used in the same way if \code{taxonID} is not
-provided (as long as \code{scientificName} matches a single row). If both \code{taxonID} and
-\code{scientificName} are provided, \code{scientificName} will be assigned to the scientificName of
-the row identified by \code{taxonID}, replacing any value that already exists.
+provided (as long as \code{scientificName} matches a single row). If both
+\code{taxonID} and \code{scientificName} are provided, \code{scientificName} will be
+assigned to the scientificName of the row identified by \code{taxonID}, replacing
+any value that already exists.
 
-\code{acceptedNameUsageID} and \code{acceptedNameUsage} must match existing values of acceptedNameUsageID
-and acceptedNameUsage in the input data (\code{tax_dat}). On default settings,
-either can be used and the other will be filled in automatically
-(\code{fill_usage_id} and \code{fill_usage_name} are both \code{TRUE}).
+\code{acceptedNameUsageID} and \code{acceptedNameUsage} must match existing values of
+acceptedNameUsageID and acceptedNameUsage in the input data (\code{tax_dat}). On
+default settings, either can be used and the other will be filled in
+automatically (\code{fill_usage_id} and \code{fill_usage_name} are both \code{TRUE}).
 
-Any other arguments provided that
-are DWC terms will be assigned to the selected row (i.e., they will
-modify the row).
+Any other arguments provided that are DwC terms will be assigned to the
+selected row (i.e., they will modify the row).
 
-If \code{remap_names} is \code{TRUE} (default) and \code{acceptedNameUsageID} is provided, any names that have an acceptedNameUsageID
-matching the taxonID of the selected row (i.e., synonyms of that row) will
-also have their acceptedNameUsageID replaced with the new
-acceptedNameUsageID. This behavior is not applied to names with
-taxonomicStatus of "variant" by default, but can be turned on for such names
-with \code{remap_variant}.
+If \code{remap_names} is \code{TRUE} (default) and \code{acceptedNameUsageID} is provided,
+any names that have an acceptedNameUsageID matching the taxonID of the
+selected row (i.e., synonyms of that row) will also have their
+acceptedNameUsageID replaced with the new acceptedNameUsageID. This behavior
+is not applied to names with taxonomicStatus of "variant" by default, but can
+be turned on for such names with \code{remap_variant}.
 
 If \code{clear_usage_id} or \code{clear_usage_name} is \code{TRUE} and \code{taxonomicStatus}
 includes the word "accepted", acceptedNameUsageID

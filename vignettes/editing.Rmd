@@ -1,5 +1,5 @@
 ---
-title: "Editing DWC taxon data"
+title: "Editing DwC taxon data"
 description: >
   Editing taxonomic databases in Darwin Core format
 output: rmarkdown::html_vignette
@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 options(width = 140)
 ```
 
-dwctaxon has two major purposes, (1) editing and (2) validation of taxonomic data in [Darwin Core (DWC)](https://dwc.tdwg.org/terms/#taxon) format. This vignette is about the former. Although you could use dwctaxon to build a taxonomic database from scratch, it is more likely you will be using it to modify an existing database, so we will focus on that kind of use-case.
+dwctaxon has two major purposes, (1) editing and (2) validation of taxonomic data in [Darwin Core (DwC)](https://dwc.tdwg.org/terms/#taxon) format. This vignette is about the former. Although you could use dwctaxon to build a taxonomic database from scratch, it is more likely you will be using it to modify an existing database, so we will focus on that kind of use-case.
 
 We start by loading packages needed for this vignette:
 
@@ -42,7 +42,7 @@ For demonstration purposes, we will just use the first five rows:
 filmies_small <- head(dct_filmies, 5)
 ```
 
-Although DWC taxon format includes a large number of terms (columns)^[See `dct_terms` for a list], a typical database does not use all of them. `dct_filmies` only includes `r ncol(dct_filmies)` columns. Their usage should be clear to most biologists, but two columns need more explanation. `taxonID` is a unique ID for each row (name), and `acceptedNameUsageID` is only provided for synonyms; it indicates the `taxonID` of the accepted name. For more information on DWC taxon format, see `vignette("what-is-dwc")`.
+Although DwC taxon format includes a large number of terms (columns)^[See `dct_terms` for a list], a typical database does not use all of them. `dct_filmies` only includes `r ncol(dct_filmies)` columns. Their usage should be clear to most biologists, but two columns need more explanation. `taxonID` is a unique ID for each row (name), and `acceptedNameUsageID` is only provided for synonyms; it indicates the `taxonID` of the accepted name. For more information on DwC taxon format, see `vignette("what-is-dwc")`.
 
 The rest of the vignette will consist of modifying this dataset.
 
@@ -63,7 +63,7 @@ filmies_small |>
 
 Notice that although we did not specify `taxonID` or `modified`, these columns are automatically filled by default^[`taxonID` is filled with the [md5 hash](https://en.wikipedia.org/wiki/Hash_function) of the scientific name. By default, the hash is 32 characters long, so automatically generated values of `taxonID` should be unique if the scientific names are unique. This can be checked by running `dct_validate()`.]; they can be turned off by setting the `fill_taxon_id` and `stamp_modified` arguments to `FALSE`.
 
-The names of the new values should be valid DWC terms. You can see the terms available with `dct_terms`:
+The names of the new values should be valid DwC terms. You can see the terms available with `dct_terms`:
 
 ```{r dct-terms}
 dct_terms
@@ -73,7 +73,7 @@ dct_terms
 
 Adding rows with vectors as shown above works well if you only need to add a small number of rows. However, this could get unwieldy if you have a large number to add. In this case, you can instead add them via a dataframe.
 
-The dataframe should have column names matching valid DWC taxon terms:
+The dataframe should have column names matching valid DwC taxon terms:
 
 ```{r add-row-from-df}
 # Let's add some rows from the original dct_filmies
@@ -91,7 +91,7 @@ Note that in this case the `taxonID` already existed in the data to add, so it i
 
 `dct_modify_row()` changes the values in an existing row.
 
-Here, it is helpful to reiterate the purpose of the `taxonID` column: it is a unique identifier for each row (taxonomic name) in the data. So we will use `taxonID` to identify the row to change, then apply new values using other DWC terms.
+Here, it is helpful to reiterate the purpose of the `taxonID` column: it is a unique identifier for each row (taxonomic name) in the data. So we will use `taxonID` to identify the row to change, then apply new values using other DwC terms.
 
 ```{r modify-1}
 # Change the status of Trichomanes crassum Copel. to "accepted"
@@ -144,7 +144,7 @@ Notice that **two** names were modified even though we only specified one; since
 
 ## Filling columns
 
-As described in `vignette("what-is-dwc")`, there are several terms in DWC that I call "term - termID" pairs, e.g., `acceptedNameUsage` and `acceptedNameUsageID`, `parentNameUsage` and `parentNameUsageID`, etc. Typically, one is an actual scientific name (e.g., for `acceptedNameUsage`, the accepted name of a synonym), and one is the `taxonID` of that name (e.g., for `acceptedNameUsageID`, the `taxonID` of the accepted name of a synonym). It is up to the manager of the database to choose whether to use either or both of the terms in the pair.
+As described in `vignette("what-is-dwc")`, there are several terms in DwC that I call "term - termID" pairs, e.g., `acceptedNameUsage` and `acceptedNameUsageID`, `parentNameUsage` and `parentNameUsageID`, etc. Typically, one is an actual scientific name (e.g., for `acceptedNameUsage`, the accepted name of a synonym), and one is the `taxonID` of that name (e.g., for `acceptedNameUsageID`, the `taxonID` of the accepted name of a synonym). It is up to the manager of the database to choose whether to use either or both of the terms in the pair.
 
 This sort of data is redundant and could be prone to error if entered manually, so dwctaxon can do it for us with `dct_fill_col()`. The easiest way to see how this works is with an example (you may need to scroll to the right to see the new column):
 

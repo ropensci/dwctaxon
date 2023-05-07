@@ -1,7 +1,7 @@
 #' Validate a taxonomic database
 #'
 #' Runs a series of automated checks on a taxonomic database in Darwin Core
-#' (DWC) format.
+#' (DwC) format.
 #'
 #' For `check_mapping_accepted_status` and `check_status_diff`, "accepted",
 #' "synonym", and "variant" are determined by string matching of
@@ -24,7 +24,7 @@
 #' Examples).
 #'
 #' Most columns are expected to be vectors of class character, but this is not
-#' checked for all columns. Columns (DWC terms) with names including 'ID', for
+#' checked for all columns. Columns (DwC terms) with names including 'ID', for
 #' example 'taxonID', may be character, numeric, or integer.
 #'
 #' @param tax_dat `r param_tax_dat`

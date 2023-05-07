@@ -44,10 +44,10 @@ analysis as opposed to data entry).
 For detailed usage examples, see the vignettes:
 
 - [What is
-  DWC?](https://joelnitta.github.io/dwctaxon/articles/what-is-dwc.html)
-- [Editing DWC taxon
+  DwC?](https://joelnitta.github.io/dwctaxon/articles/what-is-dwc.html)
+- [Editing DwC taxon
   data](https://joelnitta.github.io/dwctaxon/articles/editing.html)
-- [Validating DWC taxon
+- [Validating DwC taxon
   data](https://joelnitta.github.io/dwctaxon/articles/validation.html)
 - [Real World
   Example](https://joelnitta.github.io/dwctaxon/articles/real-data.html)

@@ -21,7 +21,7 @@ dct_add_row(
 )
 }
 \arguments{
-\item{tax_dat}{Dataframe; taxonomic database in DWC format.}
+\item{tax_dat}{Dataframe; taxonomic database in DwC format.}
 
 \item{taxonID}{Character or numeric vector; values to add to taxonID column.
 Ignored if \code{new_dat} is not \code{NULL}.}
@@ -39,7 +39,7 @@ acceptedNameUsageID column. Ignored if \code{new_dat} is not \code{NULL}.}
 column. Ignored if \code{new_dat} is not \code{NULL}.}
 
 \item{new_dat}{A dataframe including columns corresponding to one or more of
-the above arguments, except for \code{tax_dat}. Other DWC terms can also be
+the above arguments, except for \code{tax_dat}. Other DwC terms can also be
 included as additional columns. All rows in \code{new_dat} will be appended to the
 input data (\code{tax_dat}).}
 
@@ -55,14 +55,14 @@ input data (\code{tax_dat}).}
 
 \item{...}{Additional data to add, specified as sets of named
 character or numeric vectors; e.g., \code{parentNameUsageID = "6SH4"}. The name of
-each must be a valid column name for data in DWC format. Ignored if \code{new_dat}
+each must be a valid column name for data in DwC format. Ignored if \code{new_dat}
 is not \code{NULL}.}
 }
 \value{
-Dataframe; taxonomic database in DWC format.
+Dataframe; taxonomic database in DwC format.
 }
 \description{
-Add one or more rows to a taxonomic database in Darwin Core (DWC) format.
+Add one or more rows to a taxonomic database in Darwin Core (DwC) format.
 }
 \details{
 \code{fill_taxon_id} and \code{fill_usage_id} only act on the newly added data (they
