@@ -125,9 +125,12 @@ dct_add_row <- function(tax_dat,
   }
 
   # Fill in acceptedUsageID in new_dat for those missing
+  assertthat::assert_that(
+    !(isTRUE(fill_usage_id) && !"taxonID" %in% colnames(tax_dat)),
+    msg = "tax_dat must include column taxonID if fill_usage_id is TRUE"
+  )
   if (isTRUE(fill_usage_id) &&
     "acceptedNameUsage" %in% colnames(new_dat) &&
-    "acceptedNameUsageID" %in% colnames(tax_dat) &&
     "scientificName" %in% colnames(tax_dat) &&
     "taxonID" %in% colnames(tax_dat)) {
     # Add "acceptedNameUsageID" as empty col if it does not yet exist

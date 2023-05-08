@@ -24,6 +24,20 @@ test_that("check for bad col names works", {
   )
 })
 
+test_that("check agreement between taxonID in data and fill_usage_id works", {
+  expect_error(
+    dct_add_row(
+      data.frame(scientificName = "a"),
+      scientificName = "b",
+      acceptedNameUsage = "a",
+      fill_taxon_id = FALSE,
+      stamp_modified = FALSE,
+      fill_usage_id = TRUE
+    ),
+    "tax_dat must include column taxonID if fill_usage_id is TRUE"
+  )
+})
+
 # warnings ---
 test_that("warning about changing taxonID class works", {
   expect_warning(
@@ -171,7 +185,7 @@ test_that("fill_usage_id works", {
   )
 })
 
-test_that("fill_usage_id doesn't create acceptedUsageID column", {
+test_that("fill_usage_id doesn't create acceptedUsageID column when FALSE", {
   expect_snapshot(
     tibble::tibble(
       taxonID = "123",
@@ -186,7 +200,8 @@ test_that("fill_usage_id doesn't create acceptedUsageID column", {
         scientificName = c("Foogenus boospecies", "Bargenus bkaspecies"),
         acceptedNameUsage = c("Foogenus barspecies", "Bargenus foosp"),
         taxonomicStatus = "synonym",
-        stamp_modified = FALSE
+        stamp_modified = FALSE,
+        fill_usage_id = FALSE
       )
   )
 })
