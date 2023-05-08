@@ -20,12 +20,18 @@
 #' The default settings are to fill acceptedNameUsage with values from
 #' scientificName by matching acceptedNameUsageID to taxonID (see Example).
 #'
+#' When adding timestamps with `stamp_modified`, any row that differs from the
+#' original data (`tax_dat`) is considered modified. This includes when a new
+#' column is added, in which case all rows will be considered modified.
+#'
 #' @param tax_dat `r param_tax_dat`
 #' @param fill_to Character vector of length 1; name of column to fill.
+#'   If the column does not yet exist it will be created.
 #' @param fill_from Character vector of length 1; name of column to copy
 #' values from when filling.
 #' @param match_to Character vector of length 1; name of column to match to.
 #' @param match_from Character vector of length 1; name of column to match from.
+#' @param stamp_modified `r param_stamp_modified`
 #' @return `r param_tax_dat`
 #' @example inst/examples/dct_fill_col.R
 #' @autoglobal
@@ -34,7 +40,8 @@ dct_fill_col <- function(tax_dat,
                          fill_to = "acceptedNameUsage",
                          fill_from = "scientificName",
                          match_to = "taxonID",
-                         match_from = "acceptedNameUsageID") {
+                         match_from = "acceptedNameUsageID",
+                         stamp_modified = dct_options()$stamp_modified) {
   # input format checks ----
   assertthat::assert_that(
     inherits(tax_dat, "data.frame"),
@@ -79,6 +86,9 @@ dct_fill_col <- function(tax_dat,
     msg = "match_from must be an existing column in tax_dat"
   )
 
+  # Save original dataframe for comparison
+  tax_dat_orig <- tax_dat # nolint
+
   # Add fill_to as empty col if it does not yet exist
   if (!fill_to %in% colnames(tax_dat)) {
     tax_dat[[fill_to]] <- rep(NA, nrow(tax_dat))
@@ -95,6 +105,17 @@ dct_fill_col <- function(tax_dat,
     tax_dat[[fill_to]],
     tax_dat[[fill_from]][loc]
   )
+  # Get elements that differ between rows
+  changed <- !purrr::map_lgl(
+    seq_len(nrow(tax_dat)), ~ identical(tax_dat[., ], tax_dat_orig[., ])
+  )
+
+  if (isTRUE(stamp_modified)) {
+    if (!"modified" %in% colnames(tax_dat)) {
+      tax_dat$modified <- NA_character_
+    }
+    tax_dat$modified[changed] <- as.character(Sys.time())
+  }
 
   return(tax_dat)
 }

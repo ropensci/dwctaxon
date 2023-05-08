@@ -1,3 +1,5 @@
+library(mockery)
+
 # input format ----
 
 # make data for sharing across tests
@@ -134,19 +136,22 @@ test_that("sequential filling works", {
       fill_to = "acceptedNameUsageID",
       fill_from = "taxonID",
       match_from = "acceptedNameUsage",
-      match_to = "scientificName"
+      match_to = "scientificName",
+      stamp_modified = FALSE
     ) |>
       dct_fill_col(
         fill_to = "parentNameUsage",
         fill_from = "scientificName",
         match_from = "parentNameUsageID",
-        match_to = "taxonID"
+        match_to = "taxonID",
+        stamp_modified = FALSE
       ) |>
       dct_fill_col(
         fill_to = "acceptedNameUsage",
         fill_from = "scientificName",
         match_from = "acceptedNameUsageID",
-        match_to = "taxonID"
+        match_to = "taxonID",
+        stamp_modified = FALSE
       ),
     filled_dat
   )
@@ -163,13 +168,44 @@ test_that("filling adds a new column if needed", {
       fill_to = "acceptedNameUsage",
       fill_from = "scientificName",
       match_from = "acceptedNameUsageID",
-      match_to = "taxonID"
+      match_to = "taxonID",
+      stamp_modified = FALSE
     ),
     tibble::tribble(
       ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
       ~acceptedNameUsage,
       "1", NA, "accepted", "foo bla", NA,
       "2", "1", "synonym", "foo bar", "foo bla"
+    )
+  )
+})
+
+# - stamp_modified
+test_that("stamp_modified argument works", {
+  tax_dat <- tribble(
+    ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
+    "1", NA_character_, "accepted", "foo"
+  )
+  # Replace time stamp with date stamp for testing
+  stub(dct_fill_col, "Sys.time", Sys.Date(), depth = 2)
+  expect_equal(
+    dct_fill_col(
+      tibble::tribble(
+        ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
+        "1", NA, "accepted", "foo bla",
+        "2", "1", "synonym", "foo bar"
+      ),
+      fill_to = "acceptedNameUsage",
+      fill_from = "scientificName",
+      match_from = "acceptedNameUsageID",
+      match_to = "taxonID",
+      stamp_modified = TRUE
+    ),
+    tibble::tribble(
+      ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
+      ~acceptedNameUsage, ~modified,
+      "1", NA, "accepted", "foo bla", NA, as.character(Sys.Date()),
+      "2", "1", "synonym", "foo bar", "foo bla", as.character(Sys.Date())
     )
   )
 })
