@@ -106,6 +106,7 @@ param_fill_taxon_id <- glue::glue(
   'Logical vector of length 1; if `taxon_id` is not \\
   provided, should values in the taxonID column be filled in by \\
   generating them automatically from the scientificName? \\
+  If the `taxonID` column does not yet exist it will be created. \\
   {print_default("fill_taxon_id")}.'
 )
 
@@ -113,6 +114,7 @@ param_fill_usage_id <- glue::glue(
   'Logical vector of length 1; if `usage_id` is not \\
   provided, should values in the acceptedNameUsageID column be filled in by \\
   matching acceptedNameUsage to scientificName? \\
+  If the `acceptedNameUsageID` column does not yet exist it will be created. \\
   {print_default("fill_usage_id")}.'
 )
 
@@ -127,6 +129,7 @@ param_stamp_modified <- glue::glue(
   'Logical vector of length 1; should the `modified` \\
   column of any newly created or modified row include a timestamp with the \\
   date and time of its creation/modification? \\
+  If the `modified` column does not yet exist it will be created. \\
   {print_default("stamp_modified")}.'
 )
 

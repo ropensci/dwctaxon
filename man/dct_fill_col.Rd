@@ -9,13 +9,15 @@ dct_fill_col(
   fill_to = "acceptedNameUsage",
   fill_from = "scientificName",
   match_to = "taxonID",
-  match_from = "acceptedNameUsageID"
+  match_from = "acceptedNameUsageID",
+  stamp_modified = dct_options()$stamp_modified
 )
 }
 \arguments{
 \item{tax_dat}{Dataframe; taxonomic database in DwC format.}
 
-\item{fill_to}{Character vector of length 1; name of column to fill.}
+\item{fill_to}{Character vector of length 1; name of column to fill.
+If the column does not yet exist it will be created.}
 
 \item{fill_from}{Character vector of length 1; name of column to copy
 values from when filling.}
@@ -23,6 +25,8 @@ values from when filling.}
 \item{match_to}{Character vector of length 1; name of column to match to.}
 
 \item{match_from}{Character vector of length 1; name of column to match from.}
+
+\item{stamp_modified}{Logical vector of length 1; should the \code{modified} column of any newly created or modified row include a timestamp with the date and time of its creation/modification? If the \code{modified} column does not yet exist it will be created. Default \code{TRUE}.}
 }
 \value{
 Dataframe; taxonomic database in DwC format.
@@ -48,6 +52,10 @@ each cell. The values in the \code{match_to} column must be unique.
 
 The default settings are to fill acceptedNameUsage with values from
 scientificName by matching acceptedNameUsageID to taxonID (see Example).
+
+When adding timestamps with \code{stamp_modified}, any row that differs from the
+original data (\code{tax_dat}) is considered modified. This includes when a new
+column is added, in which case all rows will be considered modified.
 }
 \examples{
 # Fill acceptedNameUsage with values from scientificName by

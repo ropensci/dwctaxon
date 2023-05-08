@@ -16,7 +16,7 @@
       3 442c4d2d~ Foogenus boos~ synonym         123                 Foogenus barspec~
       4 42e72bd3~ Bargenus bkas~ synonym         22aad27626cf8f945d~ Bargenus foosp   
 
-# fill_usage_id doesn't create acceptedUsageID column
+# fill_usage_id doesn't create acceptedUsageID column when FALSE
 
     Code
       dct_add_row(dct_add_row(tibble::tibble(taxonID = "123", scientificName = "Foogenus barspecies",
@@ -24,7 +24,7 @@
       taxonomicStatus = "accepted", stamp_modified = FALSE), scientificName = c(
         "Foogenus boospecies", "Bargenus bkaspecies"), acceptedNameUsage = c(
         "Foogenus barspecies", "Bargenus foosp"), taxonomicStatus = "synonym",
-      stamp_modified = FALSE)
+      stamp_modified = FALSE, fill_usage_id = FALSE)
     Output
       # A tibble: 4 x 4
         taxonID                       scientificName taxonomicStatus acceptedNameUsage
