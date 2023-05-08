@@ -174,18 +174,6 @@
   "softwareRequirements": {
     "1": {
       "@type": "SoftwareApplication",
-      "identifier": "assertr",
-      "name": "assertr",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=assertr"
-    },
-    "2": {
-      "@type": "SoftwareApplication",
       "identifier": "assertthat",
       "name": "assertthat",
       "provider": {
@@ -196,7 +184,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=assertthat"
     },
-    "3": {
+    "2": {
       "@type": "SoftwareApplication",
       "identifier": "digest",
       "name": "digest",
@@ -208,7 +196,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=digest"
     },
-    "4": {
+    "3": {
       "@type": "SoftwareApplication",
       "identifier": "dplyr",
       "name": "dplyr",
@@ -220,7 +208,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=dplyr"
     },
-    "5": {
+    "4": {
       "@type": "SoftwareApplication",
       "identifier": "glue",
       "name": "glue",
@@ -232,7 +220,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=glue"
     },
-    "6": {
+    "5": {
       "@type": "SoftwareApplication",
       "identifier": "purrr",
       "name": "purrr",
@@ -244,7 +232,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=purrr"
     },
-    "7": {
+    "6": {
       "@type": "SoftwareApplication",
       "identifier": "rlang",
       "name": "rlang",
@@ -256,7 +244,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=rlang"
     },
-    "8": {
+    "7": {
       "@type": "SoftwareApplication",
       "identifier": "settings",
       "name": "settings",
@@ -268,7 +256,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=settings"
     },
-    "9": {
+    "8": {
       "@type": "SoftwareApplication",
       "identifier": "stringr",
       "name": "stringr",
@@ -280,7 +268,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=stringr"
     },
-    "10": {
+    "9": {
       "@type": "SoftwareApplication",
       "identifier": "tibble",
       "name": "tibble",
@@ -292,12 +280,12 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=tibble"
     },
-    "11": {
+    "10": {
       "@type": "SoftwareApplication",
       "identifier": "utils",
       "name": "utils"
     },
-    "12": {
+    "11": {
       "@type": "SoftwareApplication",
       "identifier": "R",
       "name": "R",
@@ -305,7 +293,7 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "472.05KB",
+  "fileSize": "480.07KB",
   "citation": [
     {
       "@type": "CreativeWork",

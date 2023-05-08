@@ -5,17 +5,6 @@ test_that("drop_first() works", {
   )
 })
 
-test_that("assert_dat() returns expected error", {
-  expect_error(
-    assert_dat(
-      data.frame(a = c(NA, 1)),
-      assertr::not_na,
-      a
-    ),
-    "Column 'a' violates assertion 'not_na' 1 time"
-  )
-})
-
 test_that("assert_that_d() works", {
   # assert_that_d() only works inside a function, so first define
   # the function
