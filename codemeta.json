@@ -169,6 +169,11 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=tidyr"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "utils",
+      "name": "utils"
     }
   ],
   "softwareRequirements": {
@@ -282,18 +287,13 @@
     },
     "10": {
       "@type": "SoftwareApplication",
-      "identifier": "utils",
-      "name": "utils"
-    },
-    "11": {
-      "@type": "SoftwareApplication",
       "identifier": "R",
       "name": "R",
       "version": ">= 2.10"
     },
     "SystemRequirements": null
   },
-  "fileSize": "480.07KB",
+  "fileSize": "491.236KB",
   "citation": [
     {
       "@type": "CreativeWork",
