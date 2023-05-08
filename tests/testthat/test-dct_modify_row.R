@@ -350,7 +350,7 @@ test_that("args_tbl can be used to update data", {
 })
 
 # Helper functions ----
-test_that("Isolating rows works", {
+test_that("isolate_row() works", {
   expect_equal(
     isolate_row(tax_dat = data.frame(taxonID = c(1, 2)), taxon_id = 1),
     data.frame(taxonID = 1)
@@ -366,6 +366,31 @@ test_that("Isolating rows works", {
       tax_dat = data.frame(scientificName = c("a", "a")), sci_name = "a"
     ),
     "Not exactly one scientificName in data matches input scientificName 'a'"
+  )
+})
+
+test_that("lookup_usage_id() works", {
+  expect_equal(
+    lookup_usage_id(
+      tax_dat = data.frame(taxonID = c(1, 2), scientificName = c("a", "b")),
+      usage_name = "b"
+    ),
+    2
+  )
+  expect_error(
+    lookup_usage_id(
+      tax_dat = data.frame(taxonID = c(1, 2), scientificName = c("b", "b")),
+      usage_name = "b"
+    ),
+    "Not exactly one scientificName in data matches input acceptedNameUsage 'b'"
+  )
+  expect_error(
+    lookup_usage_id(
+      tax_dat = data.frame(taxonID = c(1, 2), scientificName = c("a", "b")),
+      usage_name = "b",
+      usage_id = 1
+    ),
+    "Input acceptedNameUsageID and acceptedNameUsage do not agree"
   )
 })
 

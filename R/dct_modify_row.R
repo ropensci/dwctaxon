@@ -31,6 +31,44 @@ isolate_row <- function(tax_dat, sci_name = NULL, taxon_id = NULL) {
   }
 }
 
+#' Lookup acceptedNameUsageID from a scientific name
+#'
+#' Helper function for dct_modify_row_single
+#'
+#' @param tax_dat Dataframe; taxonomic data.
+#' @param usage_name scientificName (of synonym) of row to isolate.
+#' @param usage_id taxonID (of synonym) of row to isolate.
+#'
+#' @return Value of taxonID for the row with scientificName matching usage_name
+#' @noRd
+#' @autoglobal
+lookup_usage_id <- function(tax_dat, usage_name = NULL, usage_id = NULL) {
+  if (!is.null(usage_name)) {
+    usage_id_match <- tax_dat$taxonID[tax_dat$scientificName == usage_name]
+    assertthat::assert_that(
+      length(usage_id_match) == 1,
+      msg = glue::glue(
+        "Not exactly one scientificName in data \\
+        matches input acceptedNameUsage '{usage_name}'"
+      )
+    )
+    # If both usage_id and usage_name provided, they must agree
+    ifelse(
+      !is.null(usage_id),
+      assertthat::assert_that(
+        usage_id_match == usage_id,
+        msg = glue::glue(
+          "Input acceptedNameUsageID and acceptedNameUsage do not agree for \\
+          acceptedNameUsage '{usage_name}'"
+        )
+      ),
+      TRUE
+    )
+    usage_id <- usage_id_match
+  }
+  return(usage_id)
+}
+
 #' Modify one row of a taxonomic database
 #'
 #' @param other_terms Tibble of additional DwC terms to add to data;
@@ -140,29 +178,7 @@ dct_modify_row_single <- function(tax_dat,
   tax_dat_row <- isolate_row(tax_dat, sci_name, taxon_id)
 
   # Look up usage_id if usage_name provided
-  if (!is.null(usage_name)) {
-    usage_id_match <- tax_dat$taxonID[tax_dat$scientificName == usage_name]
-    assertthat::assert_that(
-      length(usage_id_match) == 1,
-      msg = glue::glue(
-        "Not exactly one scientificName in data \\
-        matches input acceptedNameUsage '{usage_name}'"
-      )
-    )
-    # If both usage_id and usage_name provided, they must agree
-    ifelse(
-      !is.null(usage_id),
-      assertthat::assert_that(
-        usage_id_match == usage_id,
-        msg = glue::glue(
-          "Input acceptedNameUsageID and acceptedNameUsage do not agree for \\
-          acceptedNameUsage '{usage_name}'"
-        )
-      ),
-      TRUE
-    )
-    usage_id <- usage_id_match
-  }
+  usage_id <- lookup_usage_id(tax_dat, usage_name, usage_id)
 
   # Create new row by modification ----
   new_row <- tax_dat_row
