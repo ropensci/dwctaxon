@@ -453,6 +453,30 @@ test_that("create_new_row_by_modification() works", {
   )
 })
 
+# mostly already covered by tests of dct_modify_row()
+test_that("change_other_rows() finds other rows affected by change", {
+  expect_equal(
+    change_other_rows(
+      tax_dat = data.frame(
+        taxonID = c(1, 2, 3),
+        scientificName = c("a", "b", "c"),
+        acceptedNameUsageID = c(NA, NA, 1),
+        taxonomicStatus = c("accepted", "accepted", "synonym")
+      ),
+      tax_dat_row = data.frame(taxonID = 1),
+      remap_variant = TRUE,
+      remap_names = TRUE,
+      usage_id = 2
+    ),
+    data.frame(
+      taxonID = 3,
+      scientificName = "c",
+      acceptedNameUsageID = 2,
+      taxonomicStatus = "synonym"
+    )
+  )
+})
+
 # Other tests ----
 
 test_that("Catching missing taxonID works", {

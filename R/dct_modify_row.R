@@ -175,6 +175,62 @@ create_new_row_by_modification <- function(tax_dat,
   return(new_row)
 }
 
+#' Create a new row of taxonomic data by modification
+#'
+#' Helper function for dct_modify_row_single
+#'
+#' @param tax_dat_row Dataframe with a single row; original taxonomic data to
+#'   modify.
+#' @inheritParams dct_modify_row
+#'
+#' @return Dataframe of additional rows affected by modification
+#' @noRd
+#' @autoglobal
+change_other_rows <- function(tax_dat,
+                              tax_dat_row,
+                              usage_name_match = NULL,
+                              usage_id = NULL,
+                              remap_names = NULL,
+                              remap_variant = NULL,
+                              fill_usage_name = NULL,
+                              stamp_modified = NULL) {
+  new_row_other <- NULL
+  if (!is.null(usage_id) && isTRUE(remap_names)) {
+    # - find other rows affected
+    if (isTRUE(remap_variant)) {
+      new_row_other <- dplyr::filter(
+        tax_dat, acceptedNameUsageID == tax_dat_row$taxonID
+      )
+    } else {
+      new_row_other <- dplyr::filter(
+        tax_dat,
+        acceptedNameUsageID == tax_dat_row$taxonID,
+        stringr::str_detect(taxonomicStatus, "variety", negate = TRUE)
+      )
+    }
+    # - update other rows affected
+    if (nrow(new_row_other) > 0) {
+      new_row_other <- dplyr::mutate(
+        new_row_other,
+        acceptedNameUsageID = usage_id
+      )
+      if (isTRUE(fill_usage_name) && !is.null(usage_name_match)) {
+        new_row_other <- dplyr::mutate(
+          new_row_other,
+          acceptedNameUsage = usage_name_match
+        )
+      }
+      if (isTRUE(stamp_modified)) {
+        new_row_other <- dplyr::mutate(
+          new_row_other,
+          modified = as.character(Sys.time())
+        )
+      }
+    }
+  }
+  return(new_row_other)
+}
+
 #' Modify one row of a taxonomic database
 #'
 #' @param other_terms Tibble of additional DwC terms to add to data;
@@ -209,7 +265,7 @@ dct_modify_row_single <- function(tax_dat,
   if (!is.null(usage_name) && is.na(usage_name)) usage_name <- NULL
   if (!is.null(other_terms) && isTRUE(is.na(other_terms))) other_terms <- NULL
 
-  # Check input classes ----
+  # Check input ----
   assertthat::assert_that(
     is.null(taxon_id) ||
       assertthat::is.string(taxon_id) ||
@@ -241,9 +297,6 @@ dct_modify_row_single <- function(tax_dat,
   assertthat::assert_that(assertthat::is.flag(stamp_modified))
   assertthat::assert_that(assertthat::is.flag(strict))
   assertthat::assert_that(assertthat::is.flag(quiet))
-
-  # Other input checks ----
-
   # - scientificName is present if usage_name is specified
   assertthat::assert_that(
     is.null(usage_name) ||
@@ -265,7 +318,6 @@ dct_modify_row_single <- function(tax_dat,
       usage_id %in% tax_dat$taxonID,
     msg = "Input acceptedNameUsageID not detected in tax_dat$taxonID"
   )
-
   # - other_terms must be valid DwC terms or an exception specified by
   # options
   assertthat::assert_that(
@@ -286,6 +338,7 @@ dct_modify_row_single <- function(tax_dat,
   usage_id <- lookup_usage_id(tax_dat, usage_name, usage_id)
 
   # Create new row by modification
+  # adds usage_name_match as attribute
   new_row <- create_new_row_by_modification(
     tax_dat = tax_dat,
     tax_dat_row = tax_dat_row,
@@ -300,46 +353,23 @@ dct_modify_row_single <- function(tax_dat,
     stamp_modified = stamp_modified
   )
 
-  # Change other rows -----
-  # For change to synonym or variety (acceptedNameUsageID not NA),
-  # check if other names will be affected
-  new_row_other <- NULL
   # Extract usage_name_match from new_row, which is stored as an attribute
   usage_name_match <- attributes(new_row)$usage_name_match
   attributes(new_row)$usage_name_match <- NULL
-  if (!is.null(usage_id) && isTRUE(remap_names)) {
-    # - find other rows affected
-    if (isTRUE(remap_variant)) {
-      new_row_other <- dplyr::filter(
-        tax_dat, acceptedNameUsageID == tax_dat_row$taxonID
-      )
-    } else {
-      new_row_other <- dplyr::filter(
-        tax_dat,
-        acceptedNameUsageID == tax_dat_row$taxonID,
-        stringr::str_detect(taxonomicStatus, "variety", negate = TRUE)
-      )
-    }
-    # - update other rows affected
-    if (nrow(new_row_other) > 0) {
-      new_row_other <- dplyr::mutate(
-        new_row_other,
-        acceptedNameUsageID = usage_id
-      )
-      if (isTRUE(fill_usage_name) && !is.null(usage_name_match)) {
-        new_row_other <- dplyr::mutate(
-          new_row_other,
-          acceptedNameUsage = usage_name_match
-        )
-      }
-      if (isTRUE(stamp_modified)) {
-        new_row_other <- dplyr::mutate(
-          new_row_other,
-          modified = as.character(Sys.time())
-        )
-      }
-    }
-  }
+
+  # Change other rows
+  # For change to synonym or variety (acceptedNameUsageID not NA),
+  # check if other names will be affected
+  new_row_other <- change_other_rows(
+    tax_dat = tax_dat,
+    tax_dat_row = tax_dat_row,
+    usage_name_match = usage_name_match,
+    usage_id = usage_id,
+    remap_names = remap_names,
+    remap_variant = remap_variant,
+    fill_usage_name = fill_usage_name,
+    stamp_modified = stamp_modified
+  )
 
   # Format output ----
   # Return input if update doesn't modify changes anything
