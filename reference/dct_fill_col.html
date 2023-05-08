@@ -62,7 +62,8 @@
 <span>  fill_to <span class="op">=</span> <span class="st">"acceptedNameUsage"</span>,</span>
 <span>  fill_from <span class="op">=</span> <span class="st">"scientificName"</span>,</span>
 <span>  match_to <span class="op">=</span> <span class="st">"taxonID"</span>,</span>
-<span>  match_from <span class="op">=</span> <span class="st">"acceptedNameUsageID"</span></span>
+<span>  match_from <span class="op">=</span> <span class="st">"acceptedNameUsageID"</span>,</span>
+<span>  stamp_modified <span class="op">=</span> <span class="fu"><a href="dct_options.html">dct_options</a></span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="va">stamp_modified</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -73,7 +74,8 @@
 
 
 <dt>fill_to</dt>
-<dd><p>Character vector of length 1; name of column to fill.</p></dd>
+<dd><p>Character vector of length 1; name of column to fill.
+If the column does not yet exist it will be created.</p></dd>
 
 
 <dt>fill_from</dt>
@@ -87,6 +89,10 @@ values from when filling.</p></dd>
 
 <dt>match_from</dt>
 <dd><p>Character vector of length 1; name of column to match from.</p></dd>
+
+
+<dt>stamp_modified</dt>
+<dd><p>Logical vector of length 1; should the <code>modified</code> column of any newly created or modified row include a timestamp with the date and time of its creation/modification? If the <code>modified</code> column does not yet exist it will be created. Default <code>TRUE</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -111,6 +117,9 @@ purpose of <code>dct_fill_col()</code> is to fill the missing column.</p>
 each cell. The values in the <code>match_to</code> column must be unique.</p>
 <p>The default settings are to fill acceptedNameUsage with values from
 scientificName by matching acceptedNameUsageID to taxonID (see Example).</p>
+<p>When adding timestamps with <code>stamp_modified</code>, any row that differs from the
+original data (<code>tax_dat</code>) is considered modified. This includes when a new
+column is added, in which case all rows will be considered modified.</p>
     </div>
 
     <div class="section level2">
@@ -124,7 +133,7 @@ scientificName by matching acceptedNameUsageID to taxonID (see Example).</p>
 <span class="r-in"><span>    match_to <span class="op">=</span> <span class="st">"taxonID"</span>,</span></span>
 <span class="r-in"><span>    match_from <span class="op">=</span> <span class="st">"acceptedNameUsageID"</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 5 × 6</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 5 × 7</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   taxonID  acceptedNameUsageID taxonomicStatus taxonRank scientificName         </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 54115096 <span style="color: #BB0000;">NA</span>                  accepted        species   Cephalomanes atroviren…</span>
@@ -132,7 +141,7 @@ scientificName by matching acceptedNameUsageID to taxonID (see Example).</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 54115097 <span style="color: #BB0000;">NA</span>                  accepted        species   Cephalomanes crassum (…</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> 54133784 54115098            synonym         species   Trichomanes densinervi…</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> 54115098 <span style="color: #BB0000;">NA</span>                  accepted        species   Cephalomanes densinerv…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 1 more variable: acceptedNameUsage &lt;chr&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 2 more variables: acceptedNameUsage &lt;chr&gt;, modified &lt;chr&gt;</span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

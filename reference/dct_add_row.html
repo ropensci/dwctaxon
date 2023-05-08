@@ -113,11 +113,11 @@ input data (<code>tax_dat</code>).</p></dd>
 
 
 <dt>fill_taxon_id</dt>
-<dd><p>Logical vector of length 1; if <code>taxon_id</code> is not provided, should values in the taxonID column be filled in by generating them automatically from the scientificName? Default <code>TRUE</code>.</p></dd>
+<dd><p>Logical vector of length 1; if <code>taxon_id</code> is not provided, should values in the taxonID column be filled in by generating them automatically from the scientificName? If the <code>taxonID</code> column does not yet exist it will be created. Default <code>TRUE</code>.</p></dd>
 
 
 <dt>fill_usage_id</dt>
-<dd><p>Logical vector of length 1; if <code>usage_id</code> is not provided, should values in the acceptedNameUsageID column be filled in by matching acceptedNameUsage to scientificName? Default <code>TRUE</code>.</p></dd>
+<dd><p>Logical vector of length 1; if <code>usage_id</code> is not provided, should values in the acceptedNameUsageID column be filled in by matching acceptedNameUsage to scientificName? If the <code>acceptedNameUsageID</code> column does not yet exist it will be created. Default <code>TRUE</code>.</p></dd>
 
 
 <dt>taxon_id_length</dt>
@@ -125,7 +125,7 @@ input data (<code>tax_dat</code>).</p></dd>
 
 
 <dt>stamp_modified</dt>
-<dd><p>Logical vector of length 1; should the <code>modified</code> column of any newly created or modified row include a timestamp with the date and time of its creation/modification? Default <code>TRUE</code>.</p></dd>
+<dd><p>Logical vector of length 1; should the <code>modified</code> column of any newly created or modified row include a timestamp with the date and time of its creation/modification? If the <code>modified</code> column does not yet exist it will be created. Default <code>TRUE</code>.</p></dd>
 
 
 <dt>strict</dt>

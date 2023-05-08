@@ -106,15 +106,15 @@ columns they inspect are missing? Default <code>FALSE</code>.</p></li>
 <div class="section">
 <h3 id="editing-arguments">Editing arguments<a class="anchor" aria-label="anchor" href="#editing-arguments"></a></h3>
 
-<ul><li><p><code>fill_taxon_id</code>: Logical vector of length 1; if <code>taxon_id</code> is not provided, should values in the taxonID column be filled in by generating them automatically from the scientificName? Default <code>TRUE</code>.</p></li>
-<li><p><code>fill_usage_id</code>: Logical vector of length 1; if <code>usage_id</code> is not provided, should values in the acceptedNameUsageID column be filled in by matching acceptedNameUsage to scientificName? Default <code>TRUE</code>.</p></li>
+<ul><li><p><code>fill_taxon_id</code>: Logical vector of length 1; if <code>taxon_id</code> is not provided, should values in the taxonID column be filled in by generating them automatically from the scientificName? If the <code>taxonID</code> column does not yet exist it will be created. Default <code>TRUE</code>.</p></li>
+<li><p><code>fill_usage_id</code>: Logical vector of length 1; if <code>usage_id</code> is not provided, should values in the acceptedNameUsageID column be filled in by matching acceptedNameUsage to scientificName? If the <code>acceptedNameUsageID</code> column does not yet exist it will be created. Default <code>TRUE</code>.</p></li>
 <li><p><code>taxon_id_length</code>: Numeric vector of length 1; how many characters should be included in automatically generated values of taxonID? Must be between 1 and 32, inclusive. Default <code>32</code>.</p></li>
 <li><p><code>clear_usage_id</code>: Logical vector of length 1; should acceptedNameUsageID of the selected row be set to <code>NA</code> if the word "accepted" is detected in tax_status (not case-sensitive)? Default <code>TRUE</code>.</p></li>
 <li><p><code>clear_usage_name</code>: Logical vector of length 1; should acceptedNameUsage of the selected row be set to <code>NA</code> if the word "accepted" is detected in tax_status (not case-sensitive)? Default <code>TRUE</code>.</p></li>
 <li><p><code>fill_usage_name</code>: Logical vector of length 1; should the acceptedNameUsage of the selected row be set to the scientificName corresponding to its acceptedNameUsageID? Default <code>TRUE</code>.</p></li>
 <li><p><code>remap_names</code>: Logical vector of length 1; should the acceptedNameUsageID be updated (remapped) for rows with the same acceptedNameUsageID as the taxonID of the row to be modified? Default <code>TRUE</code>.</p></li>
 <li><p><code>remap_variant</code>: Same as <code>remap_names</code>, but applies specifically to rows with taxonomicStatus of "variant". Default <code>FALSE</code>.</p></li>
-<li><p><code>stamp_modified</code>: Logical vector of length 1; should the <code>modified</code> column of any newly created or modified row include a timestamp with the date and time of its creation/modification? Default <code>TRUE</code>.</p></li>
+<li><p><code>stamp_modified</code>: Logical vector of length 1; should the <code>modified</code> column of any newly created or modified row include a timestamp with the date and time of its creation/modification? If the <code>modified</code> column does not yet exist it will be created. Default <code>TRUE</code>.</p></li>
 </ul></div>
 
 <div class="section">
