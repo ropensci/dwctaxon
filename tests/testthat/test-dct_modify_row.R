@@ -532,8 +532,8 @@ test_that("Catching missing taxonID works", {
       data.frame(scientificName = "a")
     ),
     paste(
-      "tax_dat must include column taxonID, the values of which must be",
-      "unique and non-missing"
+      "tax_dat must include column taxonID, which must be a character or",
+      "numeric vector with unique, non-missing values"
     )
   )
   expect_error(
@@ -541,8 +541,8 @@ test_that("Catching missing taxonID works", {
       data.frame(taxonID = c("a", "a"))
     ),
     paste(
-      "tax_dat must include column taxonID, the values of which must be",
-      "unique and non-missing"
+      "tax_dat must include column taxonID, which must be a character or",
+      "numeric vector with unique, non-missing values"
     )
   )
   expect_error(
@@ -550,8 +550,8 @@ test_that("Catching missing taxonID works", {
       data.frame(taxonID = c("a", NA))
     ),
     paste(
-      "tax_dat must include column taxonID, the values of which must be",
-      "unique and non-missing"
+      "tax_dat must include column taxonID, which must be a character or",
+      "numeric vector with unique, non-missing values"
     )
   )
 })

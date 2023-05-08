@@ -565,8 +565,8 @@ dct_modify_row <- function(tax_dat,
     error = function(x) {
       stop(
         paste(
-          "tax_dat must include column taxonID, the values of which must be",
-          "unique and non-missing"
+          "tax_dat must include column taxonID, which must be a character or",
+          "numeric vector with unique, non-missing values"
         ),
         call. = FALSE
       )
