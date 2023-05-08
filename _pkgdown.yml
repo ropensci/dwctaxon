@@ -15,6 +15,7 @@ reference:
 - title: Modify taxonomic names
 - contents:
   - dct_add_row
+  - dct_drop_row
   - dct_modify_row
   - dct_fill_col
 - title: Validate taxonomic names
