@@ -32,8 +32,7 @@ Imports:
     rlang,
     settings,
     stringr,
-    tibble,
-    utils
+    tibble
 Suggests: 
     testthat (>= 3.0.0),
     roxyglobals (>= 0.2.1),
@@ -45,7 +44,8 @@ Suggests:
     patrick,
     stringi,
     english,
-    tidyr
+    tidyr,
+    utils
 Remotes: 
     anthonynorth/roxyglobals
 Depends: 
