@@ -71,37 +71,6 @@ test_that("new_dat argument works", {
   )
 })
 
-test_that("argument aliases work", {
-  expect_equal(
-    dct_add_row(
-      base_dat,
-      taxonID = "2", scientificName = "bar", acceptedNameUsageID = "1",
-      taxonomicStatus = "synonym",
-      stamp_modified = FALSE
-    ),
-    tibble::tribble(
-      ~taxonID, ~scientificName, ~acceptedNameUsageID, ~taxonomicStatus,
-      "1", "foo", NA, NA,
-      "2", "bar", "1", "synonym"
-    )
-  )
-  expect_equal(
-    dct_add_row(
-      base_dat,
-      taxonID = "2", scientificName = "bar", acceptedNameUsageID = "1",
-      taxonomicStatus = "synonym",
-      stamp_modified = FALSE
-    ),
-    dct_add_row(
-      base_dat,
-      taxonID = "2", scientificName = "bar",
-      acceptedNameUsageID = "1",
-      taxonomicStatus = "synonym",
-      stamp_modified = FALSE
-    )
-  )
-})
-
 test_that("fill_taxon_id argument works", {
   expect_equal(
     dct_add_row(base_dat,
