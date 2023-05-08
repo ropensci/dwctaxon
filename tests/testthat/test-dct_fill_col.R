@@ -1,9 +1,10 @@
 library(mockery)
+library(tibble)
 
 # input format ----
 
 # make data for sharing across tests
-test_dat <- tibble::tribble(
+test_dat <- tribble(
   ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
   "1", NA, "accepted", "foo",
   "2", "1", "synonym", "foobar"
@@ -110,7 +111,7 @@ test_that("dct_fill_col() input checks give meaningful errors", {
 # functionality ----
 
 test_that("sequential filling works", {
-  start_dat <- tibble::tribble(
+  start_dat <- tribble(
     ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
     ~acceptedNameUsage, ~parentNameUsage, ~parentNameUsageID,
     "1", NA, "accepted", "foo df", NA, NA, "3",
@@ -120,7 +121,7 @@ test_that("sequential filling works", {
     "5", "4", "synonym", "bar baf", NA, NA, "6",
     "6", NA, "accepted", "bar", NA, NA, NA
   )
-  filled_dat <- tibble::tribble(
+  filled_dat <- tribble(
     ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
     ~acceptedNameUsage, ~parentNameUsage, ~parentNameUsageID,
     "1", NA, "accepted", "foo df", NA, "foo", "3",
@@ -160,7 +161,7 @@ test_that("sequential filling works", {
 test_that("filling adds a new column if needed", {
   expect_equal(
     dct_fill_col(
-      tibble::tribble(
+      tribble(
         ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
         "1", NA, "accepted", "foo bla",
         "2", "1", "synonym", "foo bar"
@@ -171,7 +172,7 @@ test_that("filling adds a new column if needed", {
       match_to = "taxonID",
       stamp_modified = FALSE
     ),
-    tibble::tribble(
+    tribble(
       ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
       ~acceptedNameUsage,
       "1", NA, "accepted", "foo bla", NA,
@@ -190,7 +191,7 @@ test_that("stamp_modified argument works", {
   stub(dct_fill_col, "Sys.time", Sys.Date(), depth = 2)
   expect_equal(
     dct_fill_col(
-      tibble::tribble(
+      tribble(
         ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
         "1", NA, "accepted", "foo bla",
         "2", "1", "synonym", "foo bar"
@@ -201,7 +202,7 @@ test_that("stamp_modified argument works", {
       match_to = "taxonID",
       stamp_modified = TRUE
     ),
-    tibble::tribble(
+    tribble(
       ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
       ~acceptedNameUsage, ~modified,
       "1", NA, "accepted", "foo bla", NA, as.character(Sys.Date()),
