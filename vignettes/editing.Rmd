@@ -85,6 +85,24 @@ filmies_small |>
 
 Note that in this case the `taxonID` already existed in the data to add, so it is not generated automatically.
 
+## Deleting rows
+
+`dct_drop_row()` drops one or more rows by `taxonID` or `scientificName`.
+
+For example, we can exclude the row for *Cephalomanes atrovirens* Presl by either using its `scientificName` (`Cephalomanes atrovirens Presl`) or its `taxonID` (`54115096`):
+
+```{r drop-row}
+filmies_small |>
+  dct_drop_row(scientificName = "Cephalomanes atrovirens Presl")
+
+filmies_small |>
+  dct_drop_row(taxonID = "54115096")
+```
+
+Since it looks up values by `taxonID` or `scientificName`, `dct_drop_row()` requires these to be unique and non-missing in the taxonomic database.
+
+Of course, since the taxonomic database is a dataframe, you could also use other subsetting techniques like brackets in base R or `dplyr::filter()` from the tidyverse to delete rows.
+
 ## Modifying rows
 
 ### Identifying rows to modify
