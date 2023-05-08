@@ -52,7 +52,7 @@ assign to the selected row.}
 
 \item{remap_variant}{Same as \code{remap_names}, but applies specifically to rows with taxonomicStatus of "variant". Default \code{FALSE}.}
 
-\item{stamp_modified}{Logical vector of length 1; should the \code{modified} column of any newly created or modified row include a timestamp with the date and time of its creation/modification? Default \code{TRUE}.}
+\item{stamp_modified}{Logical vector of length 1; should the \code{modified} column of any newly created or modified row include a timestamp with the date and time of its creation/modification? If the \code{modified} column does not yet exist it will be created. Default \code{TRUE}.}
 
 \item{strict}{Logical vector of length 1; should taxonomic checks be run on the updated taxonomic database? Default \code{FALSE}..}
 

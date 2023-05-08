@@ -43,13 +43,13 @@ the above arguments, except for \code{tax_dat}. Other DwC terms can also be
 included as additional columns. All rows in \code{new_dat} will be appended to the
 input data (\code{tax_dat}).}
 
-\item{fill_taxon_id}{Logical vector of length 1; if \code{taxon_id} is not provided, should values in the taxonID column be filled in by generating them automatically from the scientificName? Default \code{TRUE}.}
+\item{fill_taxon_id}{Logical vector of length 1; if \code{taxon_id} is not provided, should values in the taxonID column be filled in by generating them automatically from the scientificName? If the \code{taxonID} column does not yet exist it will be created. Default \code{TRUE}.}
 
-\item{fill_usage_id}{Logical vector of length 1; if \code{usage_id} is not provided, should values in the acceptedNameUsageID column be filled in by matching acceptedNameUsage to scientificName? Default \code{TRUE}.}
+\item{fill_usage_id}{Logical vector of length 1; if \code{usage_id} is not provided, should values in the acceptedNameUsageID column be filled in by matching acceptedNameUsage to scientificName? If the \code{acceptedNameUsageID} column does not yet exist it will be created. Default \code{TRUE}.}
 
 \item{taxon_id_length}{Numeric vector of length 1; how many characters should be included in automatically generated values of taxonID? Must be between 1 and 32, inclusive. Default \code{32}.}
 
-\item{stamp_modified}{Logical vector of length 1; should the \code{modified} column of any newly created or modified row include a timestamp with the date and time of its creation/modification? Default \code{TRUE}.}
+\item{stamp_modified}{Logical vector of length 1; should the \code{modified} column of any newly created or modified row include a timestamp with the date and time of its creation/modification? If the \code{modified} column does not yet exist it will be created. Default \code{TRUE}.}
 
 \item{strict}{Logical vector of length 1; should taxonomic checks be run on the updated taxonomic database? Default \code{FALSE}.}
 

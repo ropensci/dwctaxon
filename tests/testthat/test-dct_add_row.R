@@ -24,6 +24,20 @@ test_that("check for bad col names works", {
   )
 })
 
+test_that("check agreement between taxonID in data and fill_usage_id works", {
+  expect_error(
+    dct_add_row(
+      data.frame(scientificName = "a"),
+      scientificName = "b",
+      acceptedNameUsage = "a",
+      fill_taxon_id = FALSE,
+      stamp_modified = FALSE,
+      fill_usage_id = TRUE
+    ),
+    "tax_dat must include column taxonID if fill_usage_id is TRUE"
+  )
+})
+
 # warnings ---
 test_that("warning about changing taxonID class works", {
   expect_warning(
@@ -67,37 +81,6 @@ test_that("new_dat argument works", {
       "1", "foo", NA, NA,
       "2", "bar", "1", "synonym",
       "3", "bat", NA, NA,
-    )
-  )
-})
-
-test_that("argument aliases work", {
-  expect_equal(
-    dct_add_row(
-      base_dat,
-      taxonID = "2", scientificName = "bar", acceptedNameUsageID = "1",
-      taxonomicStatus = "synonym",
-      stamp_modified = FALSE
-    ),
-    tibble::tribble(
-      ~taxonID, ~scientificName, ~acceptedNameUsageID, ~taxonomicStatus,
-      "1", "foo", NA, NA,
-      "2", "bar", "1", "synonym"
-    )
-  )
-  expect_equal(
-    dct_add_row(
-      base_dat,
-      taxonID = "2", scientificName = "bar", acceptedNameUsageID = "1",
-      taxonomicStatus = "synonym",
-      stamp_modified = FALSE
-    ),
-    dct_add_row(
-      base_dat,
-      taxonID = "2", scientificName = "bar",
-      acceptedNameUsageID = "1",
-      taxonomicStatus = "synonym",
-      stamp_modified = FALSE
     )
   )
 })
@@ -202,7 +185,7 @@ test_that("fill_usage_id works", {
   )
 })
 
-test_that("fill_usage_id doesn't create acceptedUsageID column", {
+test_that("fill_usage_id doesn't create acceptedUsageID column when FALSE", {
   expect_snapshot(
     tibble::tibble(
       taxonID = "123",
@@ -217,7 +200,8 @@ test_that("fill_usage_id doesn't create acceptedUsageID column", {
         scientificName = c("Foogenus boospecies", "Bargenus bkaspecies"),
         acceptedNameUsage = c("Foogenus barspecies", "Bargenus foosp"),
         taxonomicStatus = "synonym",
-        stamp_modified = FALSE
+        stamp_modified = FALSE,
+        fill_usage_id = FALSE
       )
   )
 })
