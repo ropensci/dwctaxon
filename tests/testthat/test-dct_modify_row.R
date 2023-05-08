@@ -509,6 +509,21 @@ test_that("format_modified_row_output() works", {
   )
 })
 
+test_that("na_to_null() works", {
+  expect_equal(
+    na_to_null(NA_character_),
+    NULL
+  )
+  expect_equal(
+    na_to_null("a"),
+    "a"
+  )
+  expect_equal(
+    na_to_null(NULL),
+    NULL
+  )
+})
+
 # Other tests ----
 
 test_that("Catching missing taxonID works", {

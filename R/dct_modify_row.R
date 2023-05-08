@@ -290,6 +290,24 @@ format_modified_row_output <- function(tax_dat,
   res
 }
 
+#' Convert NA arguments to NULL
+#'
+#' Helper function for dct_modify_row_single()
+#'
+#' If x is a matrix or dataframe, will check for all cells being NA
+#'
+#' @param x An object to check for being NA or NULL.
+#'
+#' @return NULL if x was NA
+#' @autoglobal
+#' @noRd
+na_to_null <- function(x) {
+  if (isTRUE(!is.null(x) && all(is.na(x)))) {
+    x <- NULL
+  }
+  x
+}
+
 #' Modify one row of a taxonomic database
 #'
 #' @param other_terms Tibble of additional DwC terms to add to data;
@@ -317,12 +335,12 @@ dct_modify_row_single <- function(tax_dat,
                                   quiet = dct_options()$quiet,
                                   other_terms = NULL) {
   # Convert any NA input (from args_tbl) to NULL
-  if (!is.null(taxon_id) && is.na(taxon_id)) taxon_id <- NULL
-  if (!is.null(sci_name) && is.na(sci_name)) sci_name <- NULL
-  if (!is.null(tax_status) && is.na(tax_status)) tax_status <- NULL
-  if (!is.null(usage_id) && is.na(usage_id)) usage_id <- NULL
-  if (!is.null(usage_name) && is.na(usage_name)) usage_name <- NULL
-  if (!is.null(other_terms) && isTRUE(is.na(other_terms))) other_terms <- NULL
+  taxon_id <- na_to_null(taxon_id)
+  sci_name <- na_to_null(sci_name)
+  tax_status <- na_to_null(tax_status)
+  usage_id <- na_to_null(usage_id)
+  usage_name <- na_to_null(usage_name)
+  other_terms <- na_to_null(other_terms)
 
   # Check input ----
   assertthat::assert_that(
