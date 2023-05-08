@@ -24,7 +24,6 @@ Roxygen: list(
     roclets = c("collate", "namespace", "rd", "roxyglobals::global_roclet"))
 RoxygenNote: 7.2.3
 Imports: 
-    assertr,
     assertthat,
     digest,
     dplyr,

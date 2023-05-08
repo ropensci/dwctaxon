@@ -7,34 +7,6 @@ drop_first <- function(x) {
   x[-1]
 }
 
-#' Make an assertion and return an error message
-#'
-#' assertr::assert() normally prints the diagnostic part of the error
-#' to the screen instead of returning it as a proper error. This will
-#' return an error, not a printed message
-#'
-#' @param ... Arguments passed to assertr::assert()
-#' @noRd
-#' @autoglobal
-assert_dat <- function(...) {
-  assertthat::assert_that(
-    assertr::assert(
-      ...,
-      success_fun = assertr::success_logical,
-      error_fun = assertr::error_logical
-    ),
-    msg = utils::capture.output(
-      assertr::assert(
-        ...,
-        success_fun = assertr::success_logical,
-        error_fun = assertr::error_return
-      )
-    ) |>
-      drop_first() |>
-      paste(collapse = "\n")
-  )
-}
-
 #' Make an assertion and return a dataframe if not true
 #'
 #' Similar to assertthat::assert_that(), but returns a dataframe (and a warning)
