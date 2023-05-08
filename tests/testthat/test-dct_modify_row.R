@@ -349,6 +349,181 @@ test_that("args_tbl can be used to update data", {
   )
 })
 
+# Helper functions ----
+# These are mostly already covered by tests of dct_modify_row(),
+# so tests in this section are not exhaustive
+
+test_that("isolate_row() works", {
+  expect_equal(
+    isolate_row(tax_dat = data.frame(taxonID = c(1, 2)), taxon_id = 1),
+    data.frame(taxonID = 1)
+  )
+  expect_equal(
+    isolate_row(
+      tax_dat = data.frame(scientificName = c("a", "b")), sci_name = "a"
+    ),
+    data.frame(scientificName = "a")
+  )
+  expect_error(
+    isolate_row(
+      tax_dat = data.frame(scientificName = c("a", "a")), sci_name = "a"
+    ),
+    "Not exactly one scientificName in data matches input scientificName 'a'"
+  )
+})
+
+test_that("lookup_usage_id() works", {
+  expect_equal(
+    lookup_usage_id(
+      tax_dat = data.frame(taxonID = c(1, 2), scientificName = c("a", "b")),
+      usage_name = "b"
+    ),
+    2
+  )
+  expect_error(
+    lookup_usage_id(
+      tax_dat = data.frame(taxonID = c(1, 2), scientificName = c("b", "b")),
+      usage_name = "b"
+    ),
+    "Not exactly one scientificName in data matches input acceptedNameUsage 'b'"
+  )
+  expect_error(
+    lookup_usage_id(
+      tax_dat = data.frame(taxonID = c(1, 2), scientificName = c("a", "b")),
+      usage_name = "b",
+      usage_id = 1
+    ),
+    "Input acceptedNameUsageID and acceptedNameUsage do not agree"
+  )
+})
+
+test_that("create_new_row_by_modification() works", {
+  expect_equal(
+    create_new_row_by_modification(
+      tax_dat = data.frame(taxonID = "a"),
+      tax_dat_row = data.frame(taxonID = "a"),
+      sci_name = "foo",
+      taxon_id = "a"
+    ),
+    data.frame(taxonID = "a", scientificName = "foo")
+  )
+  expect_equal(
+    create_new_row_by_modification(
+      tax_dat = data.frame(taxonID = "a", scientificName = "bar"),
+      tax_dat_row = data.frame(taxonID = "a", scientificName = "bar"),
+      sci_name = "foo",
+      taxon_id = "a"
+    ),
+    data.frame(taxonID = "a", scientificName = "foo")
+  )
+  expect_equal(
+    create_new_row_by_modification(
+      tax_dat = data.frame(taxonID = "a", scientificName = "bar"),
+      tax_dat_row = data.frame(taxonID = "a", scientificName = "bar"),
+      sci_name = "foo",
+      taxon_id = "a"
+    ),
+    data.frame(taxonID = "a", scientificName = "foo")
+  )
+  expect_equal(
+    create_new_row_by_modification(
+      tax_dat = data.frame(taxonID = "a"),
+      tax_dat_row = data.frame(taxonID = "a"),
+      sci_name = "foo",
+      tax_status = "bar",
+      taxon_id = "a"
+    ),
+    data.frame(taxonID = "a", taxonomicStatus = "bar", scientificName = "foo")
+  )
+  # Clearing acceptedNameUsageID works
+  expect_equal(
+    create_new_row_by_modification(
+      tax_dat = data.frame(
+        taxonID = "a", taxonomicStatus = "synonym", acceptedNameUsageID = "b"
+      ),
+      tax_dat_row = data.frame(
+        taxonID = "a", taxonomicStatus = "synonym", acceptedNameUsageID = "b"
+      ),
+      taxon_id = "a",
+      tax_status = "accepted",
+      clear_usage_id = TRUE
+    ),
+    data.frame(
+      taxonID = "a",
+      taxonomicStatus = "accepted", acceptedNameUsageID = NA_character_
+    )
+  )
+})
+
+test_that("change_other_rows() finds other rows affected by change", {
+  expect_equal(
+    change_other_rows(
+      tax_dat = data.frame(
+        taxonID = c(1, 2, 3),
+        scientificName = c("a", "b", "c"),
+        acceptedNameUsageID = c(NA, NA, 1),
+        taxonomicStatus = c("accepted", "accepted", "synonym")
+      ),
+      tax_dat_row = data.frame(taxonID = 1),
+      remap_variant = TRUE,
+      remap_names = TRUE,
+      usage_id = 2
+    ),
+    data.frame(
+      taxonID = 3,
+      scientificName = "c",
+      acceptedNameUsageID = 2,
+      taxonomicStatus = "synonym"
+    )
+  )
+})
+
+test_that("format_modified_row_output() works", {
+  tax_dat_test <- data.frame(
+    taxonID = c(1, 2, 3),
+    scientificName = c("a", "b", "c"),
+    acceptedNameUsageID = c(NA, NA, 1),
+    taxonomicStatus = c("accepted", "accepted", "synonym")
+  )
+  expect_equal(
+    format_modified_row_output(
+      tax_dat = tax_dat_test,
+      tax_dat_row = tax_dat_test[1, ],
+      new_row = data.frame(
+        taxonID = 1, scientificName = "a",
+        acceptedNameUsageID = 2, taxonomicStatus = "synonym"
+      ),
+      new_row_other = data.frame(
+        taxonID = 3, scientificName = "c",
+        acceptedNameUsageID = 2, taxonomicStatus = "synonym"
+      ),
+      quiet = FALSE,
+      strict = TRUE
+    ),
+    data.frame(
+      taxonID = c(1, 2, 3),
+      scientificName = c("a", "b", "c"),
+      acceptedNameUsageID = c(2, NA, 2),
+      taxonomicStatus = c("synonym", "accepted", "synonym")
+    )
+  )
+})
+
+test_that("na_to_null() works", {
+  expect_equal(
+    na_to_null(NA_character_),
+    NULL
+  )
+  expect_equal(
+    na_to_null("a"),
+    "a"
+  )
+  expect_equal(
+    na_to_null(NULL),
+    NULL
+  )
+})
+
 # Other tests ----
 
 test_that("Catching missing taxonID works", {
