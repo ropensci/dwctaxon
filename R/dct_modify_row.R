@@ -554,12 +554,11 @@ dct_modify_row <- function(tax_dat,
     msg = "tax_dat must be of class data.frame"
   )
   # - args_tbl must be dataframe
-  if (!is.null(args_tbl)) {
-    assertthat::assert_that(
+  assertthat::assert_that(
+    is.null(args_tbl) ||
       inherits(args_tbl, "data.frame"),
-      msg = "args_tbl must be of class data.frame"
-    )
-  }
+    msg = "args_tbl must be of class data.frame"
+  )
   # - taxonID of tax_dat must be non-missing and unique
   tryCatch(
     dct_check_taxon_id(tax_dat, on_fail = "error", on_success = "logical"),
