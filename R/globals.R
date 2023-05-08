@@ -15,8 +15,8 @@ utils::globalVariables(c(
   "scientificName", # <isolate_row>
   "acceptedNameUsageID", # <change_other_rows>
   "taxonomicStatus", # <change_other_rows>
+  "taxonID", # <format_modified_row_output>
   "dct_terms", # <dct_modify_row_single>
-  "taxonID", # <dct_modify_row_single>
   "check", # <dct_validate>
   "error", # <dct_validate>
   "dct_terms", # <sort_cols_dwc>

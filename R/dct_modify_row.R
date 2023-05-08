@@ -231,6 +231,65 @@ change_other_rows <- function(tax_dat,
   return(new_row_other)
 }
 
+#' Format output after modifying rows
+#'
+#' Helper function for dct_modify_row_single
+#'
+#' @param tax_dat_row Dataframe; original taxonomic data
+#' @param tax_dat_row Dataframe with a single row; original taxonomic data to
+#'   modify.
+#' @param new_row Dataframe with a single row; modified row
+#' @param new_row_other Dataframe; other rows of modified data
+#' @inheritParams dct_modify_row
+#'
+#' @return Dataframe including modifications
+#' @noRd
+#' @autoglobal
+format_modified_row_output <- function(tax_dat,
+                                       tax_dat_row,
+                                       new_row,
+                                       new_row_other,
+                                       quiet,
+                                       strict) {
+  # Return input if update doesn't modify changes anything
+  if (isTRUE(all.equal(tax_dat_row, new_row))) {
+    if (quiet == FALSE) {
+      warning(
+        glue::glue(
+          "No change to taxonomicStatus or acceptedNameUsageID for selected \\
+          row (taxonID {tax_dat_row$taxonID}); returning original input"
+        )
+      )
+    }
+    return(tax_dat)
+  }
+
+  # Remove selected row, add back in with modified taxonomic status
+  res <- tax_dat |>
+    dplyr::anti_join(new_row, by = "taxonID") |>
+    dplyr::bind_rows(new_row)
+
+  # Do same for other synonyms, if present
+  if (!is.null(new_row_other) && isTRUE(nrow(new_row_other) > 0)) {
+    res <-
+      res |>
+      dplyr::anti_join(new_row_other, by = "taxonID") |>
+      dplyr::bind_rows(new_row_other)
+  }
+
+  # Restore original order
+  res <-
+    tax_dat |>
+    dplyr::select(taxonID) |>
+    dplyr::inner_join(res, by = "taxonID")
+
+  # Optionally run taxonomic database checks
+  if (isTRUE(strict)) {
+    res <- dct_validate(res)
+  }
+  res
+}
+
 #' Modify one row of a taxonomic database
 #'
 #' @param other_terms Tibble of additional DwC terms to add to data;
@@ -371,43 +430,15 @@ dct_modify_row_single <- function(tax_dat,
     stamp_modified = stamp_modified
   )
 
-  # Format output ----
-  # Return input if update doesn't modify changes anything
-  if (isTRUE(all.equal(tax_dat_row, new_row))) {
-    if (quiet == FALSE) {
-      warning(
-        glue::glue(
-          "No change to taxonomicStatus or acceptedNameUsageID for selected \\
-          row (taxonID {tax_dat_row$taxonID}); returning original input"
-        )
-      )
-    }
-    return(tax_dat)
-  }
-
-  # Remove selected row, add back in with modified taxonomic status
-  res <- tax_dat |>
-    dplyr::anti_join(new_row, by = "taxonID") |>
-    dplyr::bind_rows(new_row)
-
-  # Do same for other synonyms, if present
-  if (!is.null(new_row_other) && isTRUE(nrow(new_row_other) > 0)) {
-    res <-
-      res |>
-      dplyr::anti_join(new_row_other, by = "taxonID") |>
-      dplyr::bind_rows(new_row_other)
-  }
-
-  # Restore original order
-  res <-
-    tax_dat |>
-    dplyr::select(taxonID) |>
-    dplyr::inner_join(res, by = "taxonID")
-
-  # Optionally run taxonomic database checks
-  if (isTRUE(strict)) {
-    res <- dct_validate(res)
-  }
+  # Format output
+  res <- format_modified_row_output(
+    tax_dat = tax_dat,
+    tax_dat_row = tax_dat_row,
+    new_row = new_row,
+    new_row_other = new_row_other,
+    quiet = quiet,
+    strict = strict
+  )
 
   res
 }

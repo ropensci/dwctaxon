@@ -350,6 +350,9 @@ test_that("args_tbl can be used to update data", {
 })
 
 # Helper functions ----
+# These are mostly already covered by tests of dct_modify_row(),
+# so tests in this section are not exhaustive
+
 test_that("isolate_row() works", {
   expect_equal(
     isolate_row(tax_dat = data.frame(taxonID = c(1, 2)), taxon_id = 1),
@@ -394,7 +397,6 @@ test_that("lookup_usage_id() works", {
   )
 })
 
-# mostly already covered by tests of dct_modify_row()
 test_that("create_new_row_by_modification() works", {
   expect_equal(
     create_new_row_by_modification(
@@ -453,7 +455,6 @@ test_that("create_new_row_by_modification() works", {
   )
 })
 
-# mostly already covered by tests of dct_modify_row()
 test_that("change_other_rows() finds other rows affected by change", {
   expect_equal(
     change_other_rows(
@@ -473,6 +474,37 @@ test_that("change_other_rows() finds other rows affected by change", {
       scientificName = "c",
       acceptedNameUsageID = 2,
       taxonomicStatus = "synonym"
+    )
+  )
+})
+
+test_that("format_modified_row_output() works", {
+  tax_dat_test <- data.frame(
+    taxonID = c(1, 2, 3),
+    scientificName = c("a", "b", "c"),
+    acceptedNameUsageID = c(NA, NA, 1),
+    taxonomicStatus = c("accepted", "accepted", "synonym")
+  )
+  expect_equal(
+    format_modified_row_output(
+      tax_dat = tax_dat_test,
+      tax_dat_row = tax_dat_test[1, ],
+      new_row = data.frame(
+        taxonID = 1, scientificName = "a",
+        acceptedNameUsageID = 2, taxonomicStatus = "synonym"
+      ),
+      new_row_other = data.frame(
+        taxonID = 3, scientificName = "c",
+        acceptedNameUsageID = 2, taxonomicStatus = "synonym"
+      ),
+      quiet = FALSE,
+      strict = TRUE
+    ),
+    data.frame(
+      taxonID = c(1, 2, 3),
+      scientificName = c("a", "b", "c"),
+      acceptedNameUsageID = c(2, NA, 2),
+      taxonomicStatus = c("synonym", "accepted", "synonym")
     )
   )
 })
