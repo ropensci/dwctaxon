@@ -27,6 +27,7 @@ Copel
 crassum
 cre
 ctb
+cyclomatic
 dat
 dct
 de
@@ -102,6 +103,7 @@ purrr
 Qiang
 Queljoe
 Radford
+README
 readr
 reprex
 rlang
@@ -127,6 +129,7 @@ Stokely
 stringi
 stringr
 styler
+subfunctions
 sublicense
 Suruceanu
 taxastand
