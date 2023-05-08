@@ -69,6 +69,112 @@ lookup_usage_id <- function(tax_dat, usage_name = NULL, usage_id = NULL) {
   return(usage_id)
 }
 
+#' Create a new row of taxonomic data by modification
+#'
+#' Helper function for dct_modify_row_single
+#'
+#' @param tax_dat_row Dataframe with a single row; original taxonomic data to
+#'   modify.
+#' @inheritParams dct_modify_row
+#'
+#' @return Value of taxonID for the row with scientificName matching usage_name
+#' @noRd
+#' @autoglobal
+create_new_row_by_modification <- function(tax_dat,
+                                           tax_dat_row,
+                                           tax_status = NULL,
+                                           sci_name = NULL,
+                                           taxon_id = NULL,
+                                           usage_id = NULL,
+                                           clear_usage_id = NULL,
+                                           fill_usage_name = NULL,
+                                           clear_usage_name = NULL,
+                                           other_terms = NULL,
+                                           stamp_modified = NULL) {
+  new_row <- tax_dat_row
+  # - modify taxonomicStatus
+  if (!is.null(tax_status)) {
+    new_row <- dplyr::mutate(new_row, taxonomicStatus = tax_status)
+  }
+  # - modify scientificName only if both taxon_id and sci_name provided
+  if (!is.null(sci_name) && !is.null(taxon_id)) {
+    new_row <- dplyr::mutate(new_row, scientificName = sci_name)
+  }
+  # - modify acceptedNameUsageID
+  if (!is.null(usage_id)) {
+    new_row <- dplyr::mutate(new_row, acceptedNameUsageID = usage_id)
+  }
+  # - clear acceptedNameUsageID if taxonomicStatus includes "accepted"
+  # (so if usage_id is provided and taxonomicStatus includes "accepted",
+  # the acceptedNameUsageID will be cleared)
+  if (isTRUE(clear_usage_id) &&
+    "taxonomicStatus" %in% colnames(new_row) &&
+    "acceptedNameUsageID" %in% colnames(new_row) &&
+    "acceptedNameUsageID" %in% colnames(tax_dat_row)) {
+    is_acc <- grepl("accepted", new_row$taxonomicStatus, ignore.case = TRUE)
+    if (inherits(tax_dat_row$acceptedNameUsageID, "character") && is_acc) {
+      new_row <- dplyr::mutate(new_row, acceptedNameUsageID = NA_character_)
+    }
+    if (inherits(tax_dat_row$acceptedNameUsageID, "numeric") && is_acc) {
+      new_row <- dplyr::mutate(new_row, acceptedNameUsageID = NaN)
+    }
+  }
+  # - fill usage name
+  usage_name_match <- NULL
+  if (isTRUE(fill_usage_name) &&
+    !is.null(usage_id) &&
+    "scientificName" %in% colnames(tax_dat) &&
+    "taxonID" %in% colnames(tax_dat) &&
+    "acceptedNameUsage" %in% colnames(tax_dat_row)) {
+    usage_name_match <- tax_dat$scientificName[tax_dat$taxonID == usage_id]
+    assertthat::assert_that(
+      isTRUE(length(usage_name_match) == 1),
+      msg = glue::glue(
+        "Not exactly one scientificName matches acceptedNameUsageID \\
+        '{usage_id}'"
+      )
+    )
+    new_row <- dplyr::mutate(new_row, acceptedNameUsage = usage_name_match)
+    # Need usage_name_match later, so store as attribute
+    attributes(new_row) <- c(
+      attributes(new_row),
+      usage_name_match = usage_name_match
+    )
+  }
+  # - clear acceptedNameUsage if taxonomicStatus includes "accepted"
+  # (so if usage_name is provided and taxonomicStatus includes "accepted",
+  # the acceptedNameUsage will be cleared)
+  if (isTRUE(clear_usage_name) &&
+    "taxonomicStatus" %in% colnames(new_row) &&
+    "acceptedNameUsage" %in% colnames(new_row) &&
+    "acceptedNameUsage" %in% colnames(tax_dat_row)) {
+    is_acc <- grepl("accepted", new_row$taxonomicStatus, ignore.case = TRUE)
+    if (inherits(tax_dat_row$acceptedNameUsage, "character") && is_acc) {
+      new_row <- dplyr::mutate(new_row, acceptedNameUsage = NA_character_)
+    }
+    if (inherits(tax_dat_row$acceptedNameUsage, "numeric") && is_acc) {
+      new_row <- dplyr::mutate(new_row, acceptedNameUsage = NaN)
+    }
+  }
+  # - add other DwC terms, overwriting existing values
+  if (!is.null(other_terms)) {
+    if (nrow(other_terms) > 0) {
+      new_row <-
+        new_row |>
+        dplyr::select(-dplyr::any_of(colnames(other_terms))) |>
+        dplyr::bind_cols(other_terms)
+    }
+  }
+  # - add timestamp
+  if (isTRUE(stamp_modified)) {
+    new_row <- dplyr::mutate(
+      new_row,
+      modified = as.character(Sys.time())
+    )
+  }
+  return(new_row)
+}
+
 #' Modify one row of a taxonomic database
 #'
 #' @param other_terms Tibble of additional DwC terms to add to data;
@@ -173,95 +279,34 @@ dct_modify_row_single <- function(tax_dat,
     )
   )
 
-  # Isolate row to change ----
-  # by sci_name or taxon_id
+  # Isolate row to change
   tax_dat_row <- isolate_row(tax_dat, sci_name, taxon_id)
 
   # Look up usage_id if usage_name provided
   usage_id <- lookup_usage_id(tax_dat, usage_name, usage_id)
 
-  # Create new row by modification ----
-  new_row <- tax_dat_row
-  # - modify taxonomicStatus
-  if (!is.null(tax_status)) {
-    new_row <- dplyr::mutate(new_row, taxonomicStatus = tax_status)
-  }
-  # - modify scientificName only if both taxon_id and sci_name provided
-  if (!is.null(sci_name) && !is.null(taxon_id)) {
-    new_row <- dplyr::mutate(new_row, scientificName = sci_name)
-  }
-  # - modify acceptedNameUsageID
-  if (!is.null(usage_id)) {
-    new_row <- dplyr::mutate(new_row, acceptedNameUsageID = usage_id)
-  }
-  # - clear acceptedNameUsageID if taxonomicStatus includes "accepted"
-  # (so if usage_id is provided and taxonomicStatus includes "accepted",
-  # the acceptedNameUsageID will be cleared)
-  if (isTRUE(clear_usage_id) &&
-    "taxonomicStatus" %in% colnames(new_row) &&
-    "acceptedNameUsageID" %in% colnames(new_row) &&
-    "acceptedNameUsageID" %in% colnames(tax_dat_row)) {
-    is_acc <- grepl("accepted", new_row$taxonomicStatus, ignore.case = TRUE)
-    if (inherits(tax_dat_row$acceptedNameUsageID, "character") && is_acc) {
-      new_row <- dplyr::mutate(new_row, acceptedNameUsageID = NA_character_)
-    }
-    if (inherits(tax_dat_row$acceptedNameUsageID, "numeric") && is_acc) {
-      new_row <- dplyr::mutate(new_row, acceptedNameUsageID = NaN)
-    }
-  }
-  # - fill usage name
-  usage_name_match <- NULL
-  if (isTRUE(fill_usage_name) &&
-    !is.null(usage_id) &&
-    "scientificName" %in% colnames(tax_dat) &&
-    "taxonID" %in% colnames(tax_dat) &&
-    "acceptedNameUsage" %in% colnames(tax_dat_row)) {
-    usage_name_match <- tax_dat$scientificName[tax_dat$taxonID == usage_id]
-    assertthat::assert_that(
-      isTRUE(length(usage_name_match) == 1),
-      msg = glue::glue(
-        "Not exactly one scientificName matches acceptedNameUsageID \\
-        '{usage_id}'"
-      )
-    )
-    new_row <- dplyr::mutate(new_row, acceptedNameUsage = usage_name_match)
-  }
-  # - clear acceptedNameUsage if taxonomicStatus includes "accepted"
-  # (so if usage_name is provided and taxonomicStatus includes "accepted",
-  # the acceptedNameUsage will be cleared)
-  if (isTRUE(clear_usage_name) &&
-    "taxonomicStatus" %in% colnames(new_row) &&
-    "acceptedNameUsage" %in% colnames(new_row) &&
-    "acceptedNameUsage" %in% colnames(tax_dat_row)) {
-    is_acc <- grepl("accepted", new_row$taxonomicStatus, ignore.case = TRUE)
-    if (inherits(tax_dat_row$acceptedNameUsage, "character") && is_acc) {
-      new_row <- dplyr::mutate(new_row, acceptedNameUsage = NA_character_)
-    }
-    if (inherits(tax_dat_row$acceptedNameUsage, "numeric") && is_acc) {
-      new_row <- dplyr::mutate(new_row, acceptedNameUsage = NaN)
-    }
-  }
-  # - add other DwC terms, overwriting existing values
-  if (!is.null(other_terms)) {
-    if (nrow(other_terms) > 0) {
-      new_row <-
-        new_row |>
-        dplyr::select(-dplyr::any_of(colnames(other_terms))) |>
-        dplyr::bind_cols(other_terms)
-    }
-  }
-  # - add timestamp
-  if (isTRUE(stamp_modified)) {
-    new_row <- dplyr::mutate(
-      new_row,
-      modified = as.character(Sys.time())
-    )
-  }
+  # Create new row by modification
+  new_row <- create_new_row_by_modification(
+    tax_dat = tax_dat,
+    tax_dat_row = tax_dat_row,
+    tax_status = tax_status,
+    sci_name = sci_name,
+    taxon_id = taxon_id,
+    usage_id = usage_id,
+    clear_usage_id = clear_usage_id,
+    fill_usage_name = fill_usage_name,
+    clear_usage_name = clear_usage_name,
+    other_terms = other_terms,
+    stamp_modified = stamp_modified
+  )
 
   # Change other rows -----
   # For change to synonym or variety (acceptedNameUsageID not NA),
   # check if other names will be affected
   new_row_other <- NULL
+  # Extract usage_name_match from new_row, which is stored as an attribute
+  usage_name_match <- attributes(new_row)$usage_name_match
+  attributes(new_row)$usage_name_match <- NULL
   if (!is.null(usage_id) && isTRUE(remap_names)) {
     # - find other rows affected
     if (isTRUE(remap_variant)) {

@@ -394,6 +394,65 @@ test_that("lookup_usage_id() works", {
   )
 })
 
+# mostly already covered by tests of dct_modify_row()
+test_that("create_new_row_by_modification() works", {
+  expect_equal(
+    create_new_row_by_modification(
+      tax_dat = data.frame(taxonID = "a"),
+      tax_dat_row = data.frame(taxonID = "a"),
+      sci_name = "foo",
+      taxon_id = "a"
+    ),
+    data.frame(taxonID = "a", scientificName = "foo")
+  )
+  expect_equal(
+    create_new_row_by_modification(
+      tax_dat = data.frame(taxonID = "a", scientificName = "bar"),
+      tax_dat_row = data.frame(taxonID = "a", scientificName = "bar"),
+      sci_name = "foo",
+      taxon_id = "a"
+    ),
+    data.frame(taxonID = "a", scientificName = "foo")
+  )
+  expect_equal(
+    create_new_row_by_modification(
+      tax_dat = data.frame(taxonID = "a", scientificName = "bar"),
+      tax_dat_row = data.frame(taxonID = "a", scientificName = "bar"),
+      sci_name = "foo",
+      taxon_id = "a"
+    ),
+    data.frame(taxonID = "a", scientificName = "foo")
+  )
+  expect_equal(
+    create_new_row_by_modification(
+      tax_dat = data.frame(taxonID = "a"),
+      tax_dat_row = data.frame(taxonID = "a"),
+      sci_name = "foo",
+      tax_status = "bar",
+      taxon_id = "a"
+    ),
+    data.frame(taxonID = "a", taxonomicStatus = "bar", scientificName = "foo")
+  )
+  # Clearing acceptedNameUsageID works
+  expect_equal(
+    create_new_row_by_modification(
+      tax_dat = data.frame(
+        taxonID = "a", taxonomicStatus = "synonym", acceptedNameUsageID = "b"
+      ),
+      tax_dat_row = data.frame(
+        taxonID = "a", taxonomicStatus = "synonym", acceptedNameUsageID = "b"
+      ),
+      taxon_id = "a",
+      tax_status = "accepted",
+      clear_usage_id = TRUE
+    ),
+    data.frame(
+      taxonID = "a",
+      taxonomicStatus = "accepted", acceptedNameUsageID = NA_character_
+    )
+  )
+})
+
 # Other tests ----
 
 test_that("Catching missing taxonID works", {
