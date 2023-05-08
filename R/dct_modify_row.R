@@ -1,3 +1,36 @@
+#' Isolate a row of taxonomic data to modify
+#'
+#' Helper function for dct_modify_row_single
+#'
+#' @param tax_dat Dataframe; taxonomic data.
+#' @param sci_name scientificName of row to isolate.
+#' @param taxon_id taxonID of row to isolate.
+#'
+#' @return Dataframe with one row.
+#' @noRd
+#' @autoglobal
+isolate_row <- function(tax_dat, sci_name = NULL, taxon_id = NULL) {
+  assertthat::assert_that(
+    !(is.null(sci_name) && is.null(taxon_id)),
+    msg = "Must provide one or both of scientificName and taxonID"
+  )
+  # Identify by taxon_id first
+  if (!is.null(taxon_id)) {
+    tax_dat_row <- dplyr::filter(tax_dat, taxonID == taxon_id)
+    return(tax_dat_row)
+  }
+  if (!is.null(sci_name)) {
+    tax_dat_row <- dplyr::filter(tax_dat, scientificName == sci_name)
+    assertthat::assert_that(nrow(tax_dat_row) == 1,
+      msg = glue::glue(
+        "Not exactly one scientificName in data \\
+        matches input scientificName '{sci_name}'"
+      )
+    )
+    return(tax_dat_row)
+  }
+}
+
 #' Modify one row of a taxonomic database
 #'
 #' @param other_terms Tibble of additional DwC terms to add to data;
@@ -104,22 +137,7 @@ dct_modify_row_single <- function(tax_dat,
 
   # Isolate row to change ----
   # by sci_name or taxon_id
-  assertthat::assert_that(
-    !(is.null(sci_name) && is.null(taxon_id)),
-    msg = "Must provide one or both of scientificName and taxonID"
-  )
-  if (!is.null(taxon_id)) {
-    tax_dat_row <- dplyr::filter(tax_dat, taxonID == taxon_id)
-  }
-  if (is.null(taxon_id) && !is.null(sci_name)) {
-    tax_dat_row <- dplyr::filter(tax_dat, scientificName == sci_name)
-    assertthat::assert_that(nrow(tax_dat_row) == 1,
-      msg = glue::glue(
-        "Not exactly one scientificName in data \\
-        matches input scientificName '{sci_name}'"
-      )
-    )
-  }
+  tax_dat_row <- isolate_row(tax_dat, sci_name, taxon_id)
 
   # Look up usage_id if usage_name provided
   if (!is.null(usage_name)) {

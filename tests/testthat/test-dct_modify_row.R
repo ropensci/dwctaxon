@@ -349,6 +349,26 @@ test_that("args_tbl can be used to update data", {
   )
 })
 
+# Helper functions ----
+test_that("Isolating rows works", {
+  expect_equal(
+    isolate_row(tax_dat = data.frame(taxonID = c(1, 2)), taxon_id = 1),
+    data.frame(taxonID = 1)
+  )
+  expect_equal(
+    isolate_row(
+      tax_dat = data.frame(scientificName = c("a", "b")), sci_name = "a"
+    ),
+    data.frame(scientificName = "a")
+  )
+  expect_error(
+    isolate_row(
+      tax_dat = data.frame(scientificName = c("a", "a")), sci_name = "a"
+    ),
+    "Not exactly one scientificName in data matches input scientificName 'a'"
+  )
+})
+
 # Other tests ----
 
 test_that("Catching missing taxonID works", {
