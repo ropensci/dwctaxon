@@ -48,7 +48,7 @@ temp_unzip <- paste0(temp_dir, "/dwca-vascan")
 # Download data
 download.file(
   url = "https://data.canadensys.net/ipt/archive.do?r=vascan&v=37.12",
-  destfile = temp_zip
+  destfile = temp_zip, mode = "wb"
 )
 
 # Unzip
