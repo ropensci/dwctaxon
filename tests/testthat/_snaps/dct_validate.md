@@ -14,7 +14,7 @@
     Code
       (expect_warning(dct_validate(bad_dat, on_fail = "summary")))
     Output
-      <simpleWarning in assert_that_d(sum(map_id_is_bad) == 0, data = tibble::tibble(taxonID = bad_taxon_id,     scientificName = bad_sci_name, `:=`({        {            col_select        }    }, bad_acc_id), error = error_msg, check = "check_mapping"),     msg = error_msg, quiet = quiet): taxonID detected with identical acceptedNameUsageID>
+      <simpleWarning: taxonID detected with identical acceptedNameUsageID>
 
 ---
 
@@ -42,7 +42,7 @@
     Code
       (expect_warning(dct_validate(bad_dat, on_fail = "summary")))
     Output
-      <simpleWarning in assert_that_d(sum(map_id_is_bad) == 0, data = tibble::tibble(taxonID = bad_taxon_id,     scientificName = bad_sci_name, `:=`({        {            col_select        }    }, bad_acc_id), error = error_msg, check = "check_mapping"),     msg = error_msg, quiet = quiet): taxonID detected with identical parentNameUsageID>
+      <simpleWarning: taxonID detected with identical parentNameUsageID>
 
 ---
 
@@ -70,7 +70,7 @@
     Code
       (expect_warning(dct_validate(bad_dat, on_fail = "summary")))
     Output
-      <simpleWarning in assert_that_d(sum(map_id_is_bad) == 0, data = tibble::tibble(taxonID = bad_taxon_id,     scientificName = bad_sci_name, `:=`({        {            col_select        }    }, bad_acc_id), error = error_msg, check = "check_mapping"),     msg = error_msg, quiet = quiet): taxonID detected with identical originalNameUsageID>
+      <simpleWarning: taxonID detected with identical originalNameUsageID>
 
 ---
 
@@ -98,7 +98,7 @@
     Code
       (expect_warning(dct_validate(bad_dat, on_fail = "summary")))
     Output
-      <simpleWarning in assert_that_d(sum(map_id_is_bad) == 0, data = tibble::tibble(taxonID = bad_taxon_id,     scientificName = bad_sci_name, `:=`({        {            col_select        }    }, bad_acc_id), error = error_msg, check = "check_mapping"),     msg = error_msg, quiet = quiet): taxonID detected whose acceptedNameUsageID value does not map to taxonID of an existing name.>
+      <simpleWarning: taxonID detected whose acceptedNameUsageID value does not map to taxonID of an existing name.>
 
 ---
 
@@ -126,7 +126,7 @@
     Code
       (expect_warning(dct_validate(bad_dat, on_fail = "summary")))
     Output
-      <simpleWarning in assert_that_d(sum(map_id_is_bad) == 0, data = tibble::tibble(taxonID = bad_taxon_id,     scientificName = bad_sci_name, `:=`({        {            col_select        }    }, bad_acc_id), error = error_msg, check = "check_mapping"),     msg = error_msg, quiet = quiet): taxonID detected whose parentNameUsageID value does not map to taxonID of an existing name.>
+      <simpleWarning: taxonID detected whose parentNameUsageID value does not map to taxonID of an existing name.>
 
 ---
 
@@ -154,7 +154,7 @@
     Code
       (expect_warning(dct_validate(bad_dat, on_fail = "summary")))
     Output
-      <simpleWarning in assert_that_d(sum(map_id_is_bad) == 0, data = tibble::tibble(taxonID = bad_taxon_id,     scientificName = bad_sci_name, `:=`({        {            col_select        }    }, bad_acc_id), error = error_msg, check = "check_mapping"),     msg = error_msg, quiet = quiet): taxonID detected whose originalNameUsageID value does not map to taxonID of an existing name.>
+      <simpleWarning: taxonID detected whose originalNameUsageID value does not map to taxonID of an existing name.>
 
 ---
 

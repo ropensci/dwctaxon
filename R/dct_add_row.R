@@ -110,7 +110,8 @@ dct_add_row <- function(tax_dat,
         paste(
           "Class of taxonID column changed in either new_dat or tax_dat",
           "so new data could be added"
-        )
+        ),
+        call. = FALSE
       )
     }
     # - duplicated taxonID in new and old data

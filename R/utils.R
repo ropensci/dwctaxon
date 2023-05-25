@@ -42,7 +42,10 @@ assert_that_d <- function(condition,
     return(TRUE)
   } else {
     if (!quiet) {
-      warning(unclass(assert_res)$message)
+      warning(
+        unclass(assert_res)$message,
+        call. = FALSE
+      )
     }
     do.call("return", list(data), envir = env)
   }
