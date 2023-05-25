@@ -13,9 +13,9 @@ Provides functions to create, manipulate, and validate taxonomic data in complia
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://joelnitta.github.io/dwctaxon/}
-  \item \url{https://github.com/joelnitta/dwctaxon}
-  \item Report bugs at \url{https://github.com/joelnitta/dwctaxon/issues}
+  \item \url{https://docs.ropensci.org/dwctaxon/}
+  \item \url{https://github.com/ropensci/dwctaxon}
+  \item Report bugs at \url{https://github.com/ropensci/dwctaxon/issues}
 }
 
 }
@@ -25,6 +25,8 @@ Useful links:
 Other contributors:
 \itemize{
   \item Wataru Iwasaki (\href{https://orcid.org/0000-0002-9169-9245}{ORCID}) [contributor]
+  \item Collin Schwantes (Collin reviewed the package (v. 1.0.0.9000) for rOpenSci, see <https://github.com/ropensci/software-review/issues/574>) [reviewer]
+  \item Stephen Formel (Stephen reviewed the package (v. 1.0.0.9000) for rOpenSci, see <https://github.com/ropensci/software-review/issues/574>) [reviewer]
 }
 
 }
