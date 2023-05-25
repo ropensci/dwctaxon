@@ -280,8 +280,55 @@ test_that("stamp_modified argument works", {
   )
 })
 
-# TODO - strict
-# TODO - quiet
+# - strict
+test_that("strict argument works", {
+  tax_dat <- tribble(
+    ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
+    "1", NA_character_, "accepted", "foo"
+  )
+  expect_error(
+    dct_modify_row(
+      tax_dat, "1",
+      taxonomicStatus = "bar", strict = TRUE
+    ),
+    paste(
+      "taxonID detected whose taxonomicStatus is not in",
+      "valid_tax_status.*1.*foo.*bar"
+    )
+  )
+  expect_no_error(
+    dct_modify_row(
+      tax_dat, "1",
+      taxonomicStatus = "bar", strict = FALSE
+    )
+  )
+})
+
+# - quiet
+test_that("quiet argument works", {
+  tax_dat <- tribble(
+    ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
+    "1", NA_character_, "accepted", "foo"
+  )
+  expect_warning(
+    dct_modify_row(
+      tax_dat, "1",
+      taxonomicStatus = "accepted",
+      quiet = FALSE
+    ),
+    paste0(
+      "No change to taxonomicStatus or acceptedNameUsageID for selected row.*",
+      "returning original input"
+    )
+  )
+  expect_no_warning(
+    dct_modify_row(
+      tax_dat, "1",
+      taxonomicStatus = "accepted",
+      quiet = TRUE
+    )
+  )
+})
 
 # - args_tbl
 test_that("args_tbl can be used to update data", {
