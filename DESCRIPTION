@@ -11,7 +11,11 @@ Authors@R:
       person(given = "Wataru",
            family = "Iwasaki",
            role = c("ctb"),
-           comment = c(ORCID = "0000-0002-9169-9245"))
+           comment = c(ORCID = "0000-0002-9169-9245")),
+      person("Collin", "Schwantes", role = "rev",
+           comment = "Collin reviewed the package (v. 1.0.0.9000) for rOpenSci, see <https://github.com/ropensci/software-review/issues/574>"),
+      person("Stephen", "Formel", role = "rev",
+           comment = "Stephen reviewed the package (v. 1.0.0.9000) for rOpenSci, see <https://github.com/ropensci/software-review/issues/574>")
     )
 Description: Provides functions to create, manipulate, and validate taxonomic 
     data in compliance with Darwin Core standards 
