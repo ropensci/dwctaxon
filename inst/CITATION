@@ -1,9 +1,9 @@
 citHeader("To cite dwctaxon in publications use:")
 
-citEntry(
-  entry    = "Misc",
+bibentry(
+  bibtype    = "Manual",
   title    = "The dwctaxon R package for working with Darwin Core Taxon data",
-  author   = personList(
+  author   = c(
                as.person("Joel H. Nitta"),
                as.person("Wataru Iwasaki")
              ),
