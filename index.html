@@ -68,7 +68,7 @@ data in compliance with Darwin Core standards in R.
 
       <ul class="navbar-nav">
 <li class="nav-item">
-  <a class="external-link nav-link" href="https://github.com/joelnitta/dwctaxon/" aria-label="github">
+  <a class="external-link nav-link" href="https://github.com/ropensci/dwctaxon/" aria-label="github">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -168,7 +168,7 @@ data in compliance with Darwin Core standards in R.
 <span><span class="co">#&gt; 3 54115097                         &lt;NA&gt;                accepted        species   Cephalomanes crassum (Copel.) M. G. Price &lt;NA&gt;             </span></span>
 <span><span class="co">#&gt; 4 54133784                         54115098            synonym         species   Trichomanes densinervium Copel.           &lt;NA&gt;             </span></span>
 <span><span class="co">#&gt; 5 54115098                         &lt;NA&gt;                accepted        species   Cephalomanes densinervium (Copel.) Copel. &lt;NA&gt;             </span></span>
-<span><span class="co">#&gt; 6 193e2011c8ace0ed138af91f41a335cc &lt;NA&gt;                accepted        &lt;NA&gt;      Hymenophyllum dwctaxonense Nitta          2023-05-25 09:49…</span></span></code></pre></div>
+<span><span class="co">#&gt; 6 193e2011c8ace0ed138af91f41a335cc &lt;NA&gt;                accepted        &lt;NA&gt;      Hymenophyllum dwctaxonense Nitta          2023-05-25 10:25…</span></span></code></pre></div>
 <p><code><a href="reference/dct_modify_row.html">dct_modify_row()</a></code> modifies a row, automatically re-mapping synonyms if needed.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Change C. densinervium to a synonym of C. crassum</span></span>
@@ -184,8 +184,8 @@ data in compliance with Darwin Core standards in R.
 <span><span class="co">#&gt; 1 54115096 &lt;NA&gt;                accepted        species   Cephalomanes atrovirens Presl             &lt;NA&gt;                      </span></span>
 <span><span class="co">#&gt; 2 54133783 54115097            synonym         species   Trichomanes crassum Copel.                &lt;NA&gt;                      </span></span>
 <span><span class="co">#&gt; 3 54115097 &lt;NA&gt;                accepted        species   Cephalomanes crassum (Copel.) M. G. Price &lt;NA&gt;                      </span></span>
-<span><span class="co">#&gt; 4 54133784 54115097            synonym         species   Trichomanes densinervium Copel.           2023-05-25 09:49:57.292347</span></span>
-<span><span class="co">#&gt; 5 54115098 54115097            synonym         species   Cephalomanes densinervium (Copel.) Copel. 2023-05-25 09:49:57.268524</span></span></code></pre></div>
+<span><span class="co">#&gt; 4 54133784 54115097            synonym         species   Trichomanes densinervium Copel.           2023-05-25 10:25:00.169633</span></span>
+<span><span class="co">#&gt; 5 54115098 54115097            synonym         species   Cephalomanes densinervium (Copel.) Copel. 2023-05-25 10:25:00.137428</span></span></code></pre></div>
 <p><code><a href="reference/dct_fill_col.html">dct_fill_col()</a></code> fills in values for columns that have “term” - “termID” pairs (e.g., <code>acceptedNameUsage</code> and <code>acceptedNameUsageID</code>).</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Fill-in the acceptedNameUsage column with scientific names</span></span>
@@ -268,7 +268,7 @@ data in compliance with Darwin Core standards in R.
 <span><span class="co">#&gt;    taxonID  acceptedNameUsageID taxonomicStatus taxonRank scientificName                             modified                  </span></span>
 <span><span class="co">#&gt;    &lt;chr&gt;    &lt;chr&gt;               &lt;chr&gt;           &lt;chr&gt;     &lt;chr&gt;                                      &lt;chr&gt;                     </span></span>
 <span><span class="co">#&gt;  1 54115096 &lt;NA&gt;                accepted        species   Cephalomanes atrovirens Presl              &lt;NA&gt;                      </span></span>
-<span><span class="co">#&gt;  2 54133783 &lt;NA&gt;                accepted        species   Trichomanes crassum Copel.                 2023-05-25 09:49:57.415098</span></span>
+<span><span class="co">#&gt;  2 54133783 &lt;NA&gt;                accepted        species   Trichomanes crassum Copel.                 2023-05-25 10:25:00.293978</span></span>
 <span><span class="co">#&gt;  3 54115097 &lt;NA&gt;                accepted        species   Cephalomanes crassum (Copel.) M. G. Price  &lt;NA&gt;                      </span></span>
 <span><span class="co">#&gt;  4 54133784 54115098            synonym         species   Trichomanes densinervium Copel.            &lt;NA&gt;                      </span></span>
 <span><span class="co">#&gt;  5 54115098 &lt;NA&gt;                accepted        species   Cephalomanes densinervium (Copel.) Copel.  &lt;NA&gt;                      </span></span>
@@ -305,8 +305,8 @@ data in compliance with Darwin Core standards in R.
   </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/joelnitta/dwctaxon/" class="external-link">Browse source code</a></li>
-<li><a href="https://github.com/joelnitta/dwctaxon/issues" class="external-link">Report a bug</a></li>
+<li><a href="https://github.com/ropensci/dwctaxon/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/ropensci/dwctaxon/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
 
@@ -347,7 +347,7 @@ data in compliance with Darwin Core standards in R.
 <li><a href="https://zenodo.org/badge/latestdoi/434126221" class="external-link"><img src="https://zenodo.org/badge/434126221.svg" alt="DOI"></a></li>
 <li><a href="https://joelnitta.r-universe.dev/ui#package:dwctaxon" class="external-link"><img src="https://joelnitta.r-universe.dev/badges/dwctaxon" alt="runiverse"></a></li>
 <li><a href="https://app.codecov.io/gh/joelnitta/dwctaxon?branch=main" class="external-link"><img src="https://codecov.io/gh/joelnitta/dwctaxon/branch/main/graph/badge.svg" alt="Codecov test coverage"></a></li>
-<li><a href="https://github.com/joelnitta/dwctaxon/actions?query=workflow%3Apkgcheck" class="external-link"><img src="https://github.com/joelnitta/dwctaxon/workflows/pkgcheck/badge.svg" alt="pkgcheck"></a></li>
+<li><a href="https://github.com/ropensci/dwctaxon/actions?query=workflow%3Apkgcheck" class="external-link"><img src="https://github.com/ropensci/dwctaxon/workflows/pkgcheck/badge.svg" alt="pkgcheck"></a></li>
 <li><a href="https://github.com/ropensci/software-review/issues/574" class="external-link"><img src="https://badges.ropensci.org/574_status.svg" alt="Status at rOpenSci Software Peer Review"></a></li>
 </ul>
 </div>
