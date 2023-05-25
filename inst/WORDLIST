@@ -24,6 +24,7 @@ CMD
 Codecov
 Config
 Copel
+cph
 crassum
 cre
 ctb
@@ -107,6 +108,7 @@ Queljoe
 Radford
 README
 readr
+repo
 reprex
 rlang
 rmarkdown

@@ -2,13 +2,13 @@
   "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
   "@type": "SoftwareSourceCode",
   "identifier": "dwctaxon",
-  "description": "Provides functions to create, manipulate, and validate taxonomic data in compliance with Darwin Core standards (Darwin Core \"Taxon\" class https://dwc.tdwg.org/terms/#taxon).",
-  "name": "dwctaxon: Tools for Working with Darwin Core Taxon Data",
+  "description": "Edit and validate taxonomic data in compliance with Darwin Core standards (Darwin Core 'Taxon' class <https://dwc.tdwg.org/terms/#taxon>).",
+  "name": "dwctaxon: Edit and Validate Darwin Core Taxon Data",
   "relatedLink": "https://docs.ropensci.org/dwctaxon/",
   "codeRepository": "https://github.com/ropensci/dwctaxon",
   "issueTracker": "https://github.com/ropensci/dwctaxon/issues",
   "license": "https://spdx.org/licenses/MIT",
-  "version": "1.0.0.9000",
+  "version": "2.0.0",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
@@ -30,6 +30,15 @@
       "givenName": "Wataru",
       "familyName": "Iwasaki",
       "@id": "https://orcid.org/0000-0002-9169-9245"
+    }
+  ],
+  "copyrightHolder": [
+    {
+      "@type": "Person",
+      "givenName": "Joel H.",
+      "familyName": "Nitta",
+      "email": "joelnitta@gmail.com",
+      "@id": "https://orcid.org/0000-0003-4719-7472"
     }
   ],
   "maintainer": [
@@ -59,8 +68,7 @@
       "@type": "SoftwareApplication",
       "identifier": "roxyglobals",
       "name": "roxyglobals",
-      "version": ">= 0.2.1",
-      "sameAs": "https://github.com/anthonynorth/roxyglobals"
+      "version": ">= 0.2.1"
     },
     {
       "@type": "SoftwareApplication",
@@ -293,7 +301,7 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "493.314KB",
+  "fileSize": "493.321KB",
   "citation": [
     {
       "@type": "CreativeWork",
@@ -322,5 +330,6 @@
     "@type": "Review",
     "url": "https://github.com/ropensci/software-review/issues/574",
     "provider": "https://ropensci.org"
-  }
+  },
+  "keywords": ["database", "r-package", "rstats"]
 }
