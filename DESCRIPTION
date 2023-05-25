@@ -38,7 +38,6 @@ Imports:
     tibble
 Suggests: 
     testthat (>= 3.0.0),
-    roxyglobals (>= 0.2.1),
     mockery,
     readr,
     usethis,
