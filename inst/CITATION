@@ -8,10 +8,10 @@ citEntry(
                as.person("Wataru Iwasaki")
              ),
   year     = 2023,
-  url      = "https://github.com/joelnitta/dwctaxon",
+  url      = "https://github.com/ropensci/dwctaxon",
   textVersion = paste(
     "Nitta and Iwasaki (2023).",
     "The dwctaxon R package for working with Darwin Core Taxon data.",
-    "https://github.com/joelnitta/dwctaxon"
+    "https://github.com/ropensci/dwctaxon"
   )
 )
