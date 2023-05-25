@@ -35,7 +35,7 @@ The "terms" referred to are typically encountered as columns in rectangular data
 
 In practice, a given set of DwC data are contained in an archive (zip file) including multiple spreadsheets (CSV files) and XML files with additional metadata. The spreadsheets typically include datasets like occurrences, taxonomy, and collection events.
 
-![DwC archive components, from https://gcube.wiki.gcube-system.org/gcube/Darwin_Core_Terms](https://gcube.wiki.gcube-system.org/images_gcube/f/f8/Dwca.png "Scheme of Darwing Core Archive, showing connected spreadsheets and metadata files contained in a zip archive")
+![DwC archive components, from https://github.com/gbif/ipt/](dwca.png "Scheme of Darwing Core Archive, showing connected spreadsheets and metadata files contained in a zip archive")
 
 While other parts of DwC such as organism and occurrence data are clearly important, they are out of the scope of dwctaxon, which only focuses on taxonomic data.
 
