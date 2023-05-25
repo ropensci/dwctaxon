@@ -50,8 +50,6 @@ Suggests:
     english,
     tidyr,
     utils
-Remotes: 
-    anthonynorth/roxyglobals
 Depends: 
     R (>= 2.10)
 Config/testthat/edition: 3

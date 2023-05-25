@@ -134,7 +134,7 @@ filmies_small |>
 #> 3 54115097                         <NA>                accepted        species   Cephalomanes crassum (Copel.) M. G. Price <NA>             
 #> 4 54133784                         54115098            synonym         species   Trichomanes densinervium Copel.           <NA>             
 #> 5 54115098                         <NA>                accepted        species   Cephalomanes densinervium (Copel.) Copel. <NA>             
-#> 6 193e2011c8ace0ed138af91f41a335cc <NA>                accepted        <NA>      Hymenophyllum dwctaxonense Nitta          2023-05-25 14:19…
+#> 6 193e2011c8ace0ed138af91f41a335cc <NA>                accepted        <NA>      Hymenophyllum dwctaxonense Nitta          2023-05-25 15:17…
 ```
 
 `dct_modify_row()` modifies a row, automatically re-mapping synonyms if
@@ -154,8 +154,8 @@ filmies_small |>
 #> 1 54115096 <NA>                accepted        species   Cephalomanes atrovirens Presl             <NA>                      
 #> 2 54133783 54115097            synonym         species   Trichomanes crassum Copel.                <NA>                      
 #> 3 54115097 <NA>                accepted        species   Cephalomanes crassum (Copel.) M. G. Price <NA>                      
-#> 4 54133784 54115097            synonym         species   Trichomanes densinervium Copel.           2023-05-25 14:19:00.826117
-#> 5 54115098 54115097            synonym         species   Cephalomanes densinervium (Copel.) Copel. 2023-05-25 14:19:00.796366
+#> 4 54133784 54115097            synonym         species   Trichomanes densinervium Copel.           2023-05-25 15:17:16.8004  
+#> 5 54115098 54115097            synonym         species   Cephalomanes densinervium (Copel.) Copel. 2023-05-25 15:17:16.772151
 ```
 
 `dct_fill_col()` fills in values for columns that have “term” - “termID”
@@ -259,7 +259,7 @@ dct_filmies |>
 #>    taxonID  acceptedNameUsageID taxonomicStatus taxonRank scientificName                             modified                  
 #>    <chr>    <chr>               <chr>           <chr>     <chr>                                      <chr>                     
 #>  1 54115096 <NA>                accepted        species   Cephalomanes atrovirens Presl              <NA>                      
-#>  2 54133783 <NA>                accepted        species   Trichomanes crassum Copel.                 2023-05-25 14:19:00.950024
+#>  2 54133783 <NA>                accepted        species   Trichomanes crassum Copel.                 2023-05-25 15:17:16.924915
 #>  3 54115097 <NA>                accepted        species   Cephalomanes crassum (Copel.) M. G. Price  <NA>                      
 #>  4 54133784 54115098            synonym         species   Trichomanes densinervium Copel.            <NA>                      
 #>  5 54115098 <NA>                accepted        species   Cephalomanes densinervium (Copel.) Copel.  <NA>                      
@@ -294,8 +294,15 @@ the right.
 ## Contributing
 
 Contributions to this package are welcome! Please see the [Contribution
-Guide](.github/CONTRIBUTING.md) and [Code of
-Conduct](https://ropensci.org/code-of-conduct/).
+Guide](https://github.com/ropensci/dwctaxon/blob/main/.github/CONTRIBUTING.md)
+and [Code of Conduct](https://ropensci.org/code-of-conduct/).
+
+## Note to developers
+
+[roxyglobals](https://github.com/anthonynorth/roxyglobals) is used to
+maintain [`R/globals.R`](R/globals.R), but is not available on CRAN. You
+will need to install this package from github and use the `@autoglobal`
+or `@global` roxygen tags to develop functions with globals.
 
 ## License
 
