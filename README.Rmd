@@ -213,4 +213,4 @@ Contributions to this package are welcome! Please see the [Contribution Guide](h
 
 ## License
 
-[MIT License](LICENSE.md)
+[MIT License](https://github.com/ropensci/dwctaxon/blob/main/LICENSE.md)
