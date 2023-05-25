@@ -293,7 +293,7 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "492.934KB",
+  "fileSize": "492.927KB",
   "citation": [
     {
       "@type": "CreativeWork",
@@ -316,7 +316,7 @@
   ],
   "releaseNotes": "https://github.com/ropensci/dwctaxon/blob/master/NEWS.md",
   "readme": "https://github.com/ropensci/dwctaxon/blob/main/README.md",
-  "contIntegration": ["https://app.codecov.io/gh/joelnitta/dwctaxon?branch=main", "https://github.com/ropensci/dwctaxon/actions?query=workflow%3Apkgcheck"],
+  "contIntegration": ["https://app.codecov.io/gh/ropensci/dwctaxon?branch=main", "https://github.com/ropensci/dwctaxon/actions?query=workflow%3Apkgcheck"],
   "developmentStatus": "https://www.repostatus.org/#wip",
   "review": {
     "@type": "Review",
