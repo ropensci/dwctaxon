@@ -66,12 +66,6 @@
     },
     {
       "@type": "SoftwareApplication",
-      "identifier": "roxyglobals",
-      "name": "roxyglobals",
-      "version": ">= 0.2.1"
-    },
-    {
-      "@type": "SoftwareApplication",
       "identifier": "mockery",
       "name": "mockery",
       "provider": {
@@ -301,10 +295,10 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "493.321KB",
+  "fileSize": "493.269KB",
   "citation": [
     {
-      "@type": "CreativeWork",
+      "@type": "SoftwareSourceCode",
       "datePublished": "2023",
       "author": [
         {
