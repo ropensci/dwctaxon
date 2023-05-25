@@ -96,7 +96,7 @@ All functions in dwctaxon start with `dct_`.
 ```{r add-row}
 filmies_small |>
   dct_add_row(
-    sci_name = "Hymenophyllum dwctaxonense Nitta",
+    scientificName = "Hymenophyllum dwctaxonense Nitta",
     taxonomicStatus = "accepted"
   )
 ```
@@ -107,9 +107,9 @@ filmies_small |>
 # Change C. densinervium to a synonym of C. crassum
 filmies_small |>
   dct_modify_row(
-    sci_name = "Cephalomanes densinervium (Copel.) Copel.",
-    tax_status = "synonym",
-    usage_name = "Cephalomanes crassum (Copel.) M. G. Price"
+    scientificName = "Cephalomanes densinervium (Copel.) Copel.",
+    taxonomicStatus = "synonym",
+    acceptedNameUsage = "Cephalomanes crassum (Copel.) M. G. Price"
   )
 ```
 
@@ -171,11 +171,11 @@ All the functions in dwctaxon take a dataframe as their first argument and retur
 ```{r pipe}
 dct_filmies |>
   dct_modify_row(
-    taxon_id = "54133783",
-    tax_status = "accepted"
+    taxonID = "54133783",
+    taxonomicStatus = "accepted"
   ) |>
   dct_add_row(
-    sci_name = "Hymenophyllum dwctaxonense Nitta",
+    scientificName = "Hymenophyllum dwctaxonense Nitta",
     taxonomicStatus = "accepted"
   ) |>
   dct_validate()
