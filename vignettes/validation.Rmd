@@ -32,7 +32,7 @@ set.seed(12345)
 
 ## The data
 
-As [before](https://joelnitta.github.io/dwctaxon/articles/editing.html#the-data), we will use the example dataset that comes with dwctaxon, `dct_filmies`:
+As [before](https://docs.ropensci.org/dwctaxon/articles/editing.html#the-data), we will use the example dataset that comes with dwctaxon, `dct_filmies`:
 
 ```{r filmy-data}
 dct_filmies

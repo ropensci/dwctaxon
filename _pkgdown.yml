@@ -1,8 +1,4 @@
-url: https://joelnitta.github.io/dwctaxon/
-template:
-  bootstrap: 5
-  params:
-    bootswatch: lumen
+url: https://docs.ropensci.org/dwctaxon/
 home:
   title: Tools for Working with Darwin Core Taxon Data in R
   description: |
