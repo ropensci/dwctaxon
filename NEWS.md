@@ -1,4 +1,4 @@
-# dwctaxon 1.0.0.9000
+# dwctaxon 2.0.0
 
 ## Breaking Changes
 
@@ -16,6 +16,8 @@
 
 ## Documentation
 
+- Move repo to rOpenSci organization (https://github.com/ropensci/dwctaxon/pull/78)
+
 - Add Statement of Need to README (https://github.com/ropensci/dwctaxon/pull/55)
 
 - Add vignette showing how to fetch data (https://github.com/ropensci/dwctaxon/pull/62)
@@ -30,7 +32,7 @@
 
 ## Other
 
-- Reduce cyclomatic complexity  by splitting out subfunctions and removing `if()` calls when possible (https://github.com/ropensci/dwctaxon/issues/50)
+- Reduce cyclomatic complexity by splitting out subfunctions and removing `if()` calls when possible (https://github.com/ropensci/dwctaxon/issues/50)
 
 # dwctaxon 1.0.0
 

@@ -1,11 +1,11 @@
 Package: dwctaxon
-Title: Tools for Working with Darwin Core Taxon Data
-Version: 1.0.0.9000
+Title: Edit and Validate Darwin Core Taxon Data
+Version: 2.0.0
 Authors@R: 
     c(
       person(given = "Joel H.",
            family = "Nitta",
-           role = c("aut", "cre"),
+           role = c("aut", "cre", "cph"),
            email = "joelnitta@gmail.com",
            comment = c(ORCID = "0000-0003-4719-7472")),
       person(given = "Wataru",
@@ -17,9 +17,8 @@ Authors@R:
       person("Stephen", "Formel", role = "rev",
            comment = "Stephen reviewed the package (v. 1.0.0.9000) for rOpenSci, see <https://github.com/ropensci/software-review/issues/574>")
     )
-Description: Provides functions to create, manipulate, and validate taxonomic 
-    data in compliance with Darwin Core standards 
-    (Darwin Core "Taxon" class https://dwc.tdwg.org/terms/#taxon).
+Description: Edit and validate taxonomic data in compliance with Darwin Core
+    standards (Darwin Core 'Taxon' class <https://dwc.tdwg.org/terms/#taxon>).
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
