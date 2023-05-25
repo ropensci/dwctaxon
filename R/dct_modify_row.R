@@ -251,14 +251,16 @@ format_modified_row_output <- function(tax_dat,
                                        new_row_other,
                                        quiet,
                                        strict) {
-  # Return input if update doesn't modify changes anything
-  if (isTRUE(all.equal(tax_dat_row, new_row))) {
+  # Return input if update doesn't modify changes anything, excluding 'modified'
+  new_row_check <- new_row[, colnames(new_row) != "modified"]
+  if (isTRUE(all.equal(tax_dat_row, new_row_check))) {
     if (quiet == FALSE) {
       warning(
         glue::glue(
           "No change to taxonomicStatus or acceptedNameUsageID for selected \\
           row (taxonID {tax_dat_row$taxonID}); returning original input"
-        )
+        ),
+        call. = FALSE
       )
     }
     return(tax_dat)
