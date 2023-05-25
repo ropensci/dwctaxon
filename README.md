@@ -12,7 +12,7 @@ public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostat
 [![runiverse](https://joelnitta.r-universe.dev/badges/dwctaxon)](https://joelnitta.r-universe.dev/ui#package:dwctaxon)
 [![Codecov test
 coverage](https://codecov.io/gh/joelnitta/dwctaxon/branch/main/graph/badge.svg)](https://app.codecov.io/gh/joelnitta/dwctaxon?branch=main)
-[![pkgcheck](https://github.com/joelnitta/dwctaxon/workflows/pkgcheck/badge.svg)](https://github.com/joelnitta/dwctaxon/actions?query=workflow%3Apkgcheck)
+[![pkgcheck](https://github.com/ropensci/dwctaxon/workflows/pkgcheck/badge.svg)](https://github.com/ropensci/dwctaxon/actions?query=workflow%3Apkgcheck)
 [![Status at rOpenSci Software Peer
 Review](https://badges.ropensci.org/574_status.svg)](https://github.com/ropensci/software-review/issues/574)
 <!-- badges: end -->
@@ -130,7 +130,7 @@ filmies_small |>
 #> 3 54115097                         <NA>                accepted        species   Cephalomanes crassum (Copel.) M. G. Price <NA>             
 #> 4 54133784                         54115098            synonym         species   Trichomanes densinervium Copel.           <NA>             
 #> 5 54115098                         <NA>                accepted        species   Cephalomanes densinervium (Copel.) Copel. <NA>             
-#> 6 193e2011c8ace0ed138af91f41a335cc <NA>                accepted        <NA>      Hymenophyllum dwctaxonense Nitta          2023-05-25 09:49…
+#> 6 193e2011c8ace0ed138af91f41a335cc <NA>                accepted        <NA>      Hymenophyllum dwctaxonense Nitta          2023-05-25 10:25…
 ```
 
 `dct_modify_row()` modifies a row, automatically re-mapping synonyms if
@@ -150,8 +150,8 @@ filmies_small |>
 #> 1 54115096 <NA>                accepted        species   Cephalomanes atrovirens Presl             <NA>                      
 #> 2 54133783 54115097            synonym         species   Trichomanes crassum Copel.                <NA>                      
 #> 3 54115097 <NA>                accepted        species   Cephalomanes crassum (Copel.) M. G. Price <NA>                      
-#> 4 54133784 54115097            synonym         species   Trichomanes densinervium Copel.           2023-05-25 09:49:57.292347
-#> 5 54115098 54115097            synonym         species   Cephalomanes densinervium (Copel.) Copel. 2023-05-25 09:49:57.268524
+#> 4 54133784 54115097            synonym         species   Trichomanes densinervium Copel.           2023-05-25 10:25:00.169633
+#> 5 54115098 54115097            synonym         species   Cephalomanes densinervium (Copel.) Copel. 2023-05-25 10:25:00.137428
 ```
 
 `dct_fill_col()` fills in values for columns that have “term” - “termID”
@@ -258,7 +258,7 @@ dct_filmies |>
 #>    taxonID  acceptedNameUsageID taxonomicStatus taxonRank scientificName                             modified                  
 #>    <chr>    <chr>               <chr>           <chr>     <chr>                                      <chr>                     
 #>  1 54115096 <NA>                accepted        species   Cephalomanes atrovirens Presl              <NA>                      
-#>  2 54133783 <NA>                accepted        species   Trichomanes crassum Copel.                 2023-05-25 09:49:57.415098
+#>  2 54133783 <NA>                accepted        species   Trichomanes crassum Copel.                 2023-05-25 10:25:00.293978
 #>  3 54115097 <NA>                accepted        species   Cephalomanes crassum (Copel.) M. G. Price  <NA>                      
 #>  4 54133784 54115098            synonym         species   Trichomanes densinervium Copel.            <NA>                      
 #>  5 54115098 <NA>                accepted        species   Cephalomanes densinervium (Copel.) Copel.  <NA>                      
