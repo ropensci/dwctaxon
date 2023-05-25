@@ -4,11 +4,11 @@
 \name{dwctaxon-package}
 \alias{dwctaxon}
 \alias{dwctaxon-package}
-\title{dwctaxon: Tools for Working with Darwin Core Taxon Data}
+\title{dwctaxon: Edit and Validate Darwin Core Taxon Data}
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-Provides functions to create, manipulate, and validate taxonomic data in compliance with Darwin Core standards (Darwin Core "Taxon" class https://dwc.tdwg.org/terms/#taxon).
+Edit and validate taxonomic data in compliance with Darwin Core standards (Darwin Core 'Taxon' class \url{https://dwc.tdwg.org/terms/#taxon}).
 }
 \seealso{
 Useful links:
@@ -20,7 +20,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Joel H. Nitta \email{joelnitta@gmail.com} (\href{https://orcid.org/0000-0003-4719-7472}{ORCID})
+\strong{Maintainer}: Joel H. Nitta \email{joelnitta@gmail.com} (\href{https://orcid.org/0000-0003-4719-7472}{ORCID}) [copyright holder]
 
 Other contributors:
 \itemize{
