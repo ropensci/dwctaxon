@@ -4,7 +4,7 @@
   "identifier": "dwctaxon",
   "description": "Provides functions to create, manipulate, and validate taxonomic data in compliance with Darwin Core standards (Darwin Core \"Taxon\" class https://dwc.tdwg.org/terms/#taxon).",
   "name": "dwctaxon: Tools for Working with Darwin Core Taxon Data",
-  "relatedLink": "https://joelnitta.github.io/dwctaxon/",
+  "relatedLink": "https://docs.ropensci.org/dwctaxon/",
   "codeRepository": "https://github.com/ropensci/dwctaxon",
   "issueTracker": "https://github.com/ropensci/dwctaxon/issues",
   "license": "https://spdx.org/licenses/MIT",
@@ -293,7 +293,7 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "492.865KB",
+  "fileSize": "492.934KB",
   "citation": [
     {
       "@type": "CreativeWork",

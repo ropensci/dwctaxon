@@ -9,7 +9,7 @@
 has not yet been a stable, usable release suitable for the
 public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
 [![DOI](https://zenodo.org/badge/434126221.svg)](https://zenodo.org/badge/latestdoi/434126221)
-[![runiverse](https://joelnitta.r-universe.dev/badges/dwctaxon)](https://joelnitta.r-universe.dev/ui#package:dwctaxon)
+[![runiverse](https://ropensci.r-universe.dev/badges/dwctaxon)](https://ropensci.r-universe.dev/ui#package:dwctaxon)
 [![Codecov test
 coverage](https://codecov.io/gh/joelnitta/dwctaxon/branch/main/graph/badge.svg)](https://app.codecov.io/gh/joelnitta/dwctaxon?branch=main)
 [![pkgcheck](https://github.com/ropensci/dwctaxon/workflows/pkgcheck/badge.svg)](https://github.com/ropensci/dwctaxon/actions?query=workflow%3Apkgcheck)
@@ -44,13 +44,13 @@ analysis as opposed to data entry).
 For detailed usage examples, see the vignettes:
 
 - [What is
-  DwC?](https://joelnitta.github.io/dwctaxon/articles/what-is-dwc.html)
+  DwC?](https://docs.ropensci.org/dwctaxon/articles/what-is-dwc.html)
 - [Editing DwC taxon
-  data](https://joelnitta.github.io/dwctaxon/articles/editing.html)
+  data](https://docs.ropensci.org/dwctaxon/articles/editing.html)
 - [Validating DwC taxon
-  data](https://joelnitta.github.io/dwctaxon/articles/validation.html)
+  data](https://docs.ropensci.org/dwctaxon/articles/validation.html)
 - [Real World
-  Example](https://joelnitta.github.io/dwctaxon/articles/real-data.html)
+  Example](https://docs.ropensci.org/dwctaxon/articles/real-data.html)
 
 For more information about dwctaxon, in particular for using it to
 maintain a reference database for taxonomic name resolution, see
@@ -61,18 +61,22 @@ talk)](https://www.joelnitta.com/talks/2022-09-27_biodigi.html).
 ## Installation
 
 `dwctaxon` can be installed from
-[r-universe](https://joelnitta.r-universe.dev) or
-[github](https://github.com/joelnitta).
+[r-universe](https://ropensci.r-universe.dev/dwctaxon) or
+[github](https://github.com/ropensci/dwctaxon).
 
 ``` r
-install.packages("dwctaxon", repos = 'https://joelnitta.r-universe.dev')
+options(repos = c(
+  ropensci = "https://ropensci.r-universe.dev/", 
+  CRAN = "https://cran.rstudio.com/"
+))
+install.packages("dwctaxon", dep = TRUE)
 ```
 
 OR
 
 ``` r
 # install.packages("remotes")
-remotes::install_github("joelnitta/dwctaxon")
+remotes::install_github("ropensci/dwctaxon")
 ```
 
 ## Usage
@@ -130,7 +134,7 @@ filmies_small |>
 #> 3 54115097                         <NA>                accepted        species   Cephalomanes crassum (Copel.) M. G. Price <NA>             
 #> 4 54133784                         54115098            synonym         species   Trichomanes densinervium Copel.           <NA>             
 #> 5 54115098                         <NA>                accepted        species   Cephalomanes densinervium (Copel.) Copel. <NA>             
-#> 6 193e2011c8ace0ed138af91f41a335cc <NA>                accepted        <NA>      Hymenophyllum dwctaxonense Nitta          2023-05-25 10:25…
+#> 6 193e2011c8ace0ed138af91f41a335cc <NA>                accepted        <NA>      Hymenophyllum dwctaxonense Nitta          2023-05-25 10:53…
 ```
 
 `dct_modify_row()` modifies a row, automatically re-mapping synonyms if
@@ -145,13 +149,13 @@ filmies_small |>
     acceptedNameUsage = "Cephalomanes crassum (Copel.) M. G. Price"
   )
 #> # A tibble: 5 × 6
-#>   taxonID  acceptedNameUsageID taxonomicStatus taxonRank scientificName                            modified                  
-#>   <chr>    <chr>               <chr>           <chr>     <chr>                                     <chr>                     
-#> 1 54115096 <NA>                accepted        species   Cephalomanes atrovirens Presl             <NA>                      
-#> 2 54133783 54115097            synonym         species   Trichomanes crassum Copel.                <NA>                      
-#> 3 54115097 <NA>                accepted        species   Cephalomanes crassum (Copel.) M. G. Price <NA>                      
-#> 4 54133784 54115097            synonym         species   Trichomanes densinervium Copel.           2023-05-25 10:25:00.169633
-#> 5 54115098 54115097            synonym         species   Cephalomanes densinervium (Copel.) Copel. 2023-05-25 10:25:00.137428
+#>   taxonID  acceptedNameUsageID taxonomicStatus taxonRank scientificName                            modified                 
+#>   <chr>    <chr>               <chr>           <chr>     <chr>                                     <chr>                    
+#> 1 54115096 <NA>                accepted        species   Cephalomanes atrovirens Presl             <NA>                     
+#> 2 54133783 54115097            synonym         species   Trichomanes crassum Copel.                <NA>                     
+#> 3 54115097 <NA>                accepted        species   Cephalomanes crassum (Copel.) M. G. Price <NA>                     
+#> 4 54133784 54115097            synonym         species   Trichomanes densinervium Copel.           2023-05-25 10:53:04.84565
+#> 5 54115098 54115097            synonym         species   Cephalomanes densinervium (Copel.) Copel. 2023-05-25 10:53:04.81563
 ```
 
 `dct_fill_col()` fills in values for columns that have “term” - “termID”
@@ -258,7 +262,7 @@ dct_filmies |>
 #>    taxonID  acceptedNameUsageID taxonomicStatus taxonRank scientificName                             modified                  
 #>    <chr>    <chr>               <chr>           <chr>     <chr>                                      <chr>                     
 #>  1 54115096 <NA>                accepted        species   Cephalomanes atrovirens Presl              <NA>                      
-#>  2 54133783 <NA>                accepted        species   Trichomanes crassum Copel.                 2023-05-25 10:25:00.293978
+#>  2 54133783 <NA>                accepted        species   Trichomanes crassum Copel.                 2023-05-25 10:53:04.987267
 #>  3 54115097 <NA>                accepted        species   Cephalomanes crassum (Copel.) M. G. Price  <NA>                      
 #>  4 54133784 54115098            synonym         species   Trichomanes densinervium Copel.            <NA>                      
 #>  5 54115098 <NA>                accepted        species   Cephalomanes densinervium (Copel.) Copel.  <NA>                      
