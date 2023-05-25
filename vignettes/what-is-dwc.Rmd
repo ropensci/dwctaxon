@@ -43,7 +43,7 @@ While other parts of DwC such as organism and occurrence data are clearly import
 
 Most of the terms used in the DwC format for taxonomic data ("DwC taxon") should be familiar to biologists. Here is a simple example mapping taxonomic data on the left to their DwC terms on the right for the genus *Sarda*:
 
-![Example terms in DwC taxon, from https://gcube.wiki.gcube-system.org/gcube/Darwin_Core_Terms](https://gcube.wiki.gcube-system.org/images_gcube/c/c5/Sarda4.png "Visual example of terms in Darwin Core Taxon for the genus Sarda with a picture of this organism (a fish)")
+![Example terms in DwC taxon](sarda.png "Visual example of terms in Darwin Core Taxon for the genus Sarda with a picture of this organism (a fish)")
 
 However, there are some peculiarities that are good to be familiar with as follows.
 
