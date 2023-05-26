@@ -2,7 +2,7 @@
 title: "Validating DwC taxon data"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Validation}
+  %\VignetteIndexEntry{Validating DwC taxon data}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
