@@ -211,6 +211,15 @@ Contributions to this package are welcome! Please see the [Contribution Guide](h
 
 [roxyglobals](https://github.com/anthonynorth/roxyglobals) is used to maintain [`R/globals.R`](R/globals.R), but is not available on CRAN. You will need to install this package from github and use the `@autoglobal` or `@global` roxygen tags to develop functions with globals.
 
-## License
+## Licenses
 
-[MIT License](https://github.com/ropensci/dwctaxon/blob/main/LICENSE.md)
+Code: [MIT License](https://github.com/ropensci/dwctaxon/blob/main/LICENSE.md)
+
+Data: 
+
+- [`dct_filmies`](https://docs.ropensci.org/dwctaxon/reference/dct_filmies.html): Modified from data downloaded from the [Catalog of Life](https://www.catalogueoflife.org/) under the [Creative Commons Attribution (CC BY) 4.0](https://creativecommons.org/licenses/by/4.0/) license.
+- [`dct_terms`](https://docs.ropensci.org/dwctaxon/reference/dct_terms.html): Modified from data downloaded from [TDWG Darwin Core](https://dwc.tdwg.org/) under the [Creative Commons Attribution (CC BY)4.0](https://creativecommons.org/licenses/by/4.0/) license.
+
+Images:
+
+- [DwC archive components image](https://docs.ropensci.org/dwctaxon/articles/dwca.png): Copied from [GBIF Integrated Publishing Toolkit (IPT)](https://github.com/gbif/ipt/) under the [Apache license](https://github.com/gbif/ipt/blob/master/LICENSE.txt)

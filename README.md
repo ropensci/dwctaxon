@@ -134,7 +134,7 @@ filmies_small |>
 #> 3 54115097                         <NA>                accepted        species   Cephalomanes crassum (Copel.) M. G. Price <NA>             
 #> 4 54133784                         54115098            synonym         species   Trichomanes densinervium Copel.           <NA>             
 #> 5 54115098                         <NA>                accepted        species   Cephalomanes densinervium (Copel.) Copel. <NA>             
-#> 6 193e2011c8ace0ed138af91f41a335cc <NA>                accepted        <NA>      Hymenophyllum dwctaxonense Nitta          2023-05-25 18:37…
+#> 6 193e2011c8ace0ed138af91f41a335cc <NA>                accepted        <NA>      Hymenophyllum dwctaxonense Nitta          2023-05-26 10:07…
 ```
 
 `dct_modify_row()` modifies a row, automatically re-mapping synonyms if
@@ -154,8 +154,8 @@ filmies_small |>
 #> 1 54115096 <NA>                accepted        species   Cephalomanes atrovirens Presl             <NA>                      
 #> 2 54133783 54115097            synonym         species   Trichomanes crassum Copel.                <NA>                      
 #> 3 54115097 <NA>                accepted        species   Cephalomanes crassum (Copel.) M. G. Price <NA>                      
-#> 4 54133784 54115097            synonym         species   Trichomanes densinervium Copel.           2023-05-25 18:37:24.426627
-#> 5 54115098 54115097            synonym         species   Cephalomanes densinervium (Copel.) Copel. 2023-05-25 18:37:24.396852
+#> 4 54133784 54115097            synonym         species   Trichomanes densinervium Copel.           2023-05-26 10:07:25.668319
+#> 5 54115098 54115097            synonym         species   Cephalomanes densinervium (Copel.) Copel. 2023-05-26 10:07:25.65504
 ```
 
 `dct_fill_col()` fills in values for columns that have “term” - “termID”
@@ -259,7 +259,7 @@ dct_filmies |>
 #>    taxonID  acceptedNameUsageID taxonomicStatus taxonRank scientificName                             modified                  
 #>    <chr>    <chr>               <chr>           <chr>     <chr>                                      <chr>                     
 #>  1 54115096 <NA>                accepted        species   Cephalomanes atrovirens Presl              <NA>                      
-#>  2 54133783 <NA>                accepted        species   Trichomanes crassum Copel.                 2023-05-25 18:37:24.552694
+#>  2 54133783 <NA>                accepted        species   Trichomanes crassum Copel.                 2023-05-26 10:07:25.723392
 #>  3 54115097 <NA>                accepted        species   Cephalomanes crassum (Copel.) M. G. Price  <NA>                      
 #>  4 54133784 54115098            synonym         species   Trichomanes densinervium Copel.            <NA>                      
 #>  5 54115098 <NA>                accepted        species   Cephalomanes densinervium (Copel.) Copel.  <NA>                      
@@ -304,6 +304,27 @@ maintain [`R/globals.R`](R/globals.R), but is not available on CRAN. You
 will need to install this package from github and use the `@autoglobal`
 or `@global` roxygen tags to develop functions with globals.
 
-## License
+## Licenses
 
-[MIT License](https://github.com/ropensci/dwctaxon/blob/main/LICENSE.md)
+Code: [MIT
+License](https://github.com/ropensci/dwctaxon/blob/main/LICENSE.md)
+
+Data:
+
+- [`dct_filmies`](https://docs.ropensci.org/dwctaxon/reference/dct_filmies.html):
+  Modified from data downloaded from the [Catalog of
+  Life](https://www.catalogueoflife.org/) under the [Creative Commons
+  Attribution (CC BY) 4.0](https://creativecommons.org/licenses/by/4.0/)
+  license.
+- [`dct_terms`](https://docs.ropensci.org/dwctaxon/reference/dct_terms.html):
+  Modified from data downloaded from [TDWG Darwin
+  Core](https://dwc.tdwg.org/) under the [Creative Commons Attribution
+  (CC BY)4.0](https://creativecommons.org/licenses/by/4.0/) license.
+
+Images:
+
+- [DwC archive components
+  image](https://docs.ropensci.org/dwctaxon/articles/dwca.png): Copied
+  from [GBIF Integrated Publishing Toolkit
+  (IPT)](https://github.com/gbif/ipt/) under the [Apache
+  license](https://github.com/gbif/ipt/blob/master/LICENSE.txt)

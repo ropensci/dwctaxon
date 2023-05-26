@@ -10,7 +10,7 @@ Dataframe (tibble), with 2451 rows and
 \url{https://dwc.tdwg.org/terms/#taxon}.
 }
 \source{
-\url{https://dwc.tdwg.org/terms/#taxon}
+\url{https://www.catalogueoflife.org/}
 }
 \usage{
 dct_filmies
@@ -24,5 +24,8 @@ formal data analysis.
 \details{
 Modified from data downloaded from the \href{https://www.catalogueoflife.org/}{Catalog of Life} under the \href{https://creativecommons.org/licenses/by/4.0/}{Creative Commons Attribution (CC BY) 4.0}
 license.
+}
+\examples{
+dct_filmies
 }
 \keyword{datasets}

@@ -29,4 +29,12 @@ dct_terms
 A table of valid Darwin Core terms. Only terms in the Taxon class or at the
 record-level are included.
 }
+\details{
+Modified from data downloaded from \href{https://dwc.tdwg.org/}{TDWG Darwin Core}
+under the \href{https://creativecommons.org/licenses/by/4.0/}{Creative Commons Attribution (CC BY) 4.0}
+license.
+}
+\examples{
+dct_terms
+}
 \keyword{datasets}
