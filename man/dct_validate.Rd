@@ -112,14 +112,17 @@ bad_dat$scientificName[1] <- bad_dat$scientificName[2]
 
 # The incorrectly formatted data won't pass (example produces an error, so
 # not run by default)
- \dontrun{
-  dct_validate(bad_dat)
- }
+\dontrun{
+dct_validate(bad_dat)
+}
 
 # It will pass if we allow duplicated scientific names though
 dct_validate(bad_dat, check_sci_name = FALSE)
 
 # Individual checks can also be turned or off with dct_options()
+
+# First save the current settings before making any changes
+old_settings <- dct_options()
 
 # Let's allow duplicated scientific names by default
 dct_options(check_sci_name = FALSE)
@@ -128,7 +131,7 @@ dct_options(check_sci_name = FALSE)
 # `check_sci_name = FALSE` in the function call
 dct_validate(bad_dat)
 
-# Reset options to their defaults
-dct_options(reset = TRUE)
+# Reset options to those before this example was run
+do.call(dct_options, old_settings)
 
 }

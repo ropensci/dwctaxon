@@ -67,6 +67,9 @@
 #'
 #' # Individual checks can also be turned or off with dct_options()
 #'
+#' # First save the current settings before making any changes
+#' old_settings <- dct_options()
+#'
 #' # Let's allow duplicated scientific names by default
 #' dct_options(check_sci_name = FALSE)
 #'
@@ -74,8 +77,8 @@
 #' # `check_sci_name = FALSE` in the function call
 #' dct_validate(bad_dat)
 #'
-#' # Reset options to their defaults
-#' dct_options(reset = TRUE)
+#' # Reset options to those before this example was run
+#' do.call(dct_options, old_settings)
 #'
 #' @export
 #'
