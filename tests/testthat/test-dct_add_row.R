@@ -260,4 +260,6 @@ test_that("setting validation args via options works", {
   dct_options(reset = TRUE)
 })
 
+dct_options(reset = TRUE)
+
 rm(base_dat)

@@ -52,3 +52,30 @@ test_that("dct_options() can be set and unset", {
     TRUE
   )
 })
+
+test_that("do.call works on a list of options", {
+  dct_options(reset = TRUE)
+  old_settings <- dct_options()
+  # check_taxon_id and stamp_modified are both TRUE by default
+  dct_options(check_taxon_id = FALSE)
+  dct_options(stamp_modified = FALSE)
+  expect_equal(
+    dct_options()$check_taxon_id,
+    FALSE
+  )
+  expect_equal(
+    dct_options()$stamp_modified,
+    FALSE
+  )
+  do.call(dct_options, old_settings)
+  expect_equal(
+    dct_options()$check_taxon_id,
+    TRUE
+  )
+  expect_equal(
+    dct_options()$stamp_modified,
+    TRUE
+  )
+})
+
+dct_options(reset = TRUE)

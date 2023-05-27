@@ -279,3 +279,5 @@ test_that("check_fill_usage_id_name() works", {
   )
   dct_options(reset = TRUE)
 })
+
+dct_options(reset = TRUE)

@@ -135,6 +135,10 @@ But specifying this argument every time you want to check something gets tedious
 So we can change the default setting for `valid_tax_status` with `dct_options()` like so:
 
 ```{r set-tax-status-default}
+# First save the current settings before making any changes
+old_settings <- dct_options()
+
+# Change valid_tax_status setting
 dct_options(valid_tax_status = "good, accepted, synonym")
 ```
 
@@ -170,4 +174,10 @@ Or check the value of one particular setting by passing its name with the `$` op
 
 ```{r dct-options-show-single}
 dct_options()$valid_tax_status
+```
+
+We can restore the settings as they were before any of these changes were applied by running `do.call()` on the settings we saved above:
+
+```{r dct-options-restore}
+do.call(dct_options, old_settings)
 ```
