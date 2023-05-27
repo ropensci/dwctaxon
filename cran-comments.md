@@ -1,8 +1,18 @@
-# CRAN submission for dwctaxon 2.0.0
+# CRAN submission for dwctaxon 2.0.1
 
-2023-05-26
+2023-05-27
+## Resubmission
 
-This is the first submission of dwctaxon to CRAN, so it has no reverse dependencies.
+This is a resubmission. In this version I have:
+
+* Changed one example that was wrapped in `if (FALSE)` to `\dontrun{}`. This was
+an example of code that intentionally produces an error, so it needs to be
+prevented from automatically running.
+
+* Reset any global options changed with dct_options() in an example or vignette
+to their state before examples were run
+
+dwctaxon has never previously been on CRAN, so it has no reverse dependencies.
 
 Thank you for reviewing this submission.
 

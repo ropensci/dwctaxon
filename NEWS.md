@@ -1,3 +1,11 @@
+# dwctaxon 2.0.1
+
+## Other
+
+- Use `/dontrun{}` to skip examples that intentionally cause errors (https://github.com/ropensci/dwctaxon/pull/89)
+
+- Save user settings and restore at end of each example (https://github.com/ropensci/dwctaxon/pull/91)
+
 # dwctaxon 2.0.0
 
 ## Breaking Changes
