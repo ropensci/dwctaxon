@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 )
 
 # Increase width for printing tibbles
-options(width = 140)
+old <- options(width = 140)
 
 set.seed(12345)
 ```
@@ -223,3 +223,8 @@ Data:
 Images:
 
 - [DwC archive components image](https://docs.ropensci.org/dwctaxon/articles/dwca.png): Copied from [GBIF Integrated Publishing Toolkit (IPT)](https://github.com/gbif/ipt/) under the [Apache license](https://github.com/gbif/ipt/blob/master/LICENSE.txt)
+
+```{r, include = FALSE}
+# Reset options
+options(old)
+```

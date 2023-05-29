@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 )
 
 # Increase width for printing tibbles
-options(width = 120)
+old <- options(width = 120)
 ```
 
 dwctaxon is all about handling taxonomic data in the [Darwin Core (DwC) taxon format](https://dwc.tdwg.org/terms/#taxon).
@@ -134,3 +134,8 @@ There are many terms listed in the DwC taxon [documentation](https://dwc.tdwg.or
 Furthermore, some of the terms are likely to have restricted vocabularies. For example, a given dataset may only use a limited set of words to describe `taxonomicStatus` like "accepted", "synonym", and "doubtful". This is in contrast to a term that could be (nearly) anything, like `scientificName`. DwC does not provide any official set of vocabularies; it is left to the database manager to determine that. One feature of dwctaxon is to verify that only the values you want to allow are used for a given term. To learn more about that, please see `vignette("validation")`.
 
 These qualities make the DwC taxon format flexible, so it can meet the needs of the dataset at hand. The dwctaxon functions try to provide sensible defaults, but they may need to be adjusted appropriately. 
+
+```{r, include = FALSE}
+# Reset options
+options(old)
+```

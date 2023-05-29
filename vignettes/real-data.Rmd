@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 )
 
 # Increase width for printing tibbles
-options(width = 140)
+old <- options(width = 140)
 ```
 
 This vignette demonstrates using dwctaxon on "real life" data found in the wild. Our goal is to import the data and validate it.
@@ -196,3 +196,8 @@ It passes, so we have now confirmed that the only steps needed to obtain correct
 This vignette shows how dwctaxon can be used on DwC data to find possible problems in a taxonomic dataset.
 We were able to identify several rows with duplicated scientific names and one column that does not follow DwC standards.
 Other than that, it passes validation, giving us confidence that this dataset can be used for downstream taxonomic analyses.
+
+```{r, include = FALSE}
+# Reset options
+options(old)
+```

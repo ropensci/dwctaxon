@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 )
 
 # Increase width for printing tibbles
-options(width = 140)
+old <- options(width = 140)
 ```
 
 dwctaxon has two major purposes, (1) editing and (2) validation of taxonomic data in [Darwin Core (DwC)](https://dwc.tdwg.org/terms/#taxon) format. This vignette is about the former. Although you could use dwctaxon to build a taxonomic database from scratch, it is more likely you will be using it to modify an existing database, so we will focus on that kind of use-case.
@@ -182,3 +182,8 @@ The meaning of the arguments `fill_to` and `fill_from` I think are fairly clear:
 `match_to` and `match_from` are a bit trickier; they describe *how* to find the data for filling. Here, we are looking up `acceptedNameUsage` by matching `acceptedNameUsageID` (`match_from`) to `taxonID` (`match_to`).
 
 Like I said, it's easiest to figure out `dct_fill_col()` by trying it yourself.
+
+```{r, include = FALSE}
+# Reset options
+options(old)
+```

@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 )
 
 # Increase width for printing tibbles
-options(width = 220)
+old <- options(width = 220)
 ```
 
 dwctaxon has two major purposes, (1) editing and (2) validation of taxonomic data in [Darwin Core (DwC)](https://dwc.tdwg.org/terms/#taxon) format. This vignette is about the latter.
@@ -180,4 +180,9 @@ We can restore the settings as they were before any of these changes were applie
 
 ```{r dct-options-restore}
 do.call(dct_options, old_settings)
+```
+
+```{r, include = FALSE}
+# Reset options
+options(old)
 ```
