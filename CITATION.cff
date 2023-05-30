@@ -8,7 +8,7 @@ message: 'To cite package "dwctaxon" in publications use:'
 type: software
 license: MIT
 title: 'dwctaxon: Edit and Validate Darwin Core Taxon Data'
-version: 2.0.2
+version: 2.0.2.9000
 abstract: Edit and validate taxonomic data in compliance with Darwin Core standards
   (Darwin Core 'Taxon' class <https://dwc.tdwg.org/terms/#taxon>).
 authors:
@@ -28,6 +28,7 @@ preferred-citation:
     given-names: Wataru
   year: '2023'
   url: https://github.com/ropensci/dwctaxon
+repository: https://CRAN.R-project.org/package=dwctaxon
 repository-code: https://github.com/ropensci/dwctaxon
 url: https://docs.ropensci.org/dwctaxon/
 contact:
