@@ -1,6 +1,6 @@
 Package: dwctaxon
 Title: Edit and Validate Darwin Core Taxon Data
-Version: 2.0.1
+Version: 2.0.2
 Authors@R: 
     c(
       person(given = "Joel H.",

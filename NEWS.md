@@ -1,10 +1,16 @@
+# dwctaxon 2.0.2
+
+## Other
+
+- Save options with `options()` and restore at end of each example (https://github.com/ropensci/dwctaxon/commit/c9a3c3b432854521d876c2492931ed6189a7abca)
+
 # dwctaxon 2.0.1
 
 ## Other
 
 - Use `/dontrun{}` to skip examples that intentionally cause errors (https://github.com/ropensci/dwctaxon/pull/89)
 
-- Save user settings and restore at end of each example (https://github.com/ropensci/dwctaxon/pull/91)
+- Save user settings with `dct_options()` and restore at end of each example (https://github.com/ropensci/dwctaxon/pull/91)
 
 # dwctaxon 2.0.0
 

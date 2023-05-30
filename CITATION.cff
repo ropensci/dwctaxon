@@ -7,17 +7,17 @@ cff-version: 1.2.0
 message: 'To cite package "dwctaxon" in publications use:'
 type: software
 license: MIT
-title: 'dwctaxon: Tools for Working with Darwin Core Taxon Data'
-version: 1.0.0.9000
-abstract: Provides functions to create, manipulate, and validate taxonomic data in
-  compliance with Darwin Core standards (Darwin Core "Taxon" class https://dwc.tdwg.org/terms/#taxon).
+title: 'dwctaxon: Edit and Validate Darwin Core Taxon Data'
+version: 2.0.2
+abstract: Edit and validate taxonomic data in compliance with Darwin Core standards
+  (Darwin Core 'Taxon' class <https://dwc.tdwg.org/terms/#taxon>).
 authors:
 - family-names: Nitta
   given-names: Joel H.
   email: joelnitta@gmail.com
   orcid: https://orcid.org/0000-0003-4719-7472
 preferred-citation:
-  type: generic
+  type: manual
   title: The dwctaxon R package for working with Darwin Core Taxon data
   authors:
   - family-names: Nitta
@@ -35,3 +35,7 @@ contact:
   given-names: Joel H.
   email: joelnitta@gmail.com
   orcid: https://orcid.org/0000-0003-4719-7472
+keywords:
+- database
+- r-package
+- rstats
