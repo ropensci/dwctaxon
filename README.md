@@ -5,9 +5,9 @@
 
 <!-- badges: start -->
 
-[![Project Status: WIP – Initial development is in progress, but there
-has not yet been a stable, usable release suitable for the
-public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
+[![Project Status: Active – The project has reached a stable, usable
+state and is being actively
+developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![DOI](https://zenodo.org/badge/434126221.svg)](https://zenodo.org/badge/latestdoi/434126221)
 [![runiverse](https://ropensci.r-universe.dev/badges/dwctaxon)](https://ropensci.r-universe.dev/dwctaxon)
 [![Codecov test
@@ -60,7 +60,14 @@ talk)](https://www.joelnitta.com/talks/2022-09-27_biodigi.html).
 
 ## Installation
 
-`dwctaxon` can be installed from
+The stable version can be installed from
+[CRAN](https://cran.r-project.org/web/packages/dwctaxon/index.html):
+
+``` r
+install.packages("dwctaxon")
+```
+
+The development version can be installed from
 [r-universe](https://ropensci.r-universe.dev/dwctaxon) or
 [github](https://github.com/ropensci/dwctaxon).
 
@@ -134,7 +141,7 @@ filmies_small |>
 #> 3 54115097                         <NA>                accepted        species   Cephalomanes crassum (Copel.) M. G. Price <NA>             
 #> 4 54133784                         54115098            synonym         species   Trichomanes densinervium Copel.           <NA>             
 #> 5 54115098                         <NA>                accepted        species   Cephalomanes densinervium (Copel.) Copel. <NA>             
-#> 6 193e2011c8ace0ed138af91f41a335cc <NA>                accepted        <NA>      Hymenophyllum dwctaxonense Nitta          2023-05-30 07:39…
+#> 6 193e2011c8ace0ed138af91f41a335cc <NA>                accepted        <NA>      Hymenophyllum dwctaxonense Nitta          2023-05-30 20:28…
 ```
 
 `dct_modify_row()` modifies a row, automatically re-mapping synonyms if
@@ -154,8 +161,8 @@ filmies_small |>
 #> 1 54115096 <NA>                accepted        species   Cephalomanes atrovirens Presl             <NA>                      
 #> 2 54133783 54115097            synonym         species   Trichomanes crassum Copel.                <NA>                      
 #> 3 54115097 <NA>                accepted        species   Cephalomanes crassum (Copel.) M. G. Price <NA>                      
-#> 4 54133784 54115097            synonym         species   Trichomanes densinervium Copel.           2023-05-30 07:39:46.993856
-#> 5 54115098 54115097            synonym         species   Cephalomanes densinervium (Copel.) Copel. 2023-05-30 07:39:46.964886
+#> 4 54133784 54115097            synonym         species   Trichomanes densinervium Copel.           2023-05-30 20:28:14.034279
+#> 5 54115098 54115097            synonym         species   Cephalomanes densinervium (Copel.) Copel. 2023-05-30 20:28:14.021024
 ```
 
 `dct_fill_col()` fills in values for columns that have “term” - “termID”
@@ -256,18 +263,18 @@ dct_filmies |>
   ) |>
   dct_validate()
 #> # A tibble: 2,452 × 6
-#>    taxonID  acceptedNameUsageID taxonomicStatus taxonRank scientificName                             modified                  
-#>    <chr>    <chr>               <chr>           <chr>     <chr>                                      <chr>                     
-#>  1 54115096 <NA>                accepted        species   Cephalomanes atrovirens Presl              <NA>                      
-#>  2 54133783 <NA>                accepted        species   Trichomanes crassum Copel.                 2023-05-30 07:39:47.117826
-#>  3 54115097 <NA>                accepted        species   Cephalomanes crassum (Copel.) M. G. Price  <NA>                      
-#>  4 54133784 54115098            synonym         species   Trichomanes densinervium Copel.            <NA>                      
-#>  5 54115098 <NA>                accepted        species   Cephalomanes densinervium (Copel.) Copel.  <NA>                      
-#>  6 54133786 54115100            synonym         species   Cephalomanes curvatum (J. Sm.) V. D. Bosch <NA>                      
-#>  7 54133787 54115100            synonym         species   Cephalomanes javanica (Bl.) V. D. Bosch    <NA>                      
-#>  8 54133788 54115100            synonym         species   Cephalomanes oblongifolium Presl           <NA>                      
-#>  9 54133789 54115100            synonym         species   Cephalomanes zollingeri V. D. Bosch        <NA>                      
-#> 10 54133790 54115100            synonym         species   Lacostea javanica (Bl.) Prantl             <NA>                      
+#>    taxonID  acceptedNameUsageID taxonomicStatus taxonRank scientificName                             modified                 
+#>    <chr>    <chr>               <chr>           <chr>     <chr>                                      <chr>                    
+#>  1 54115096 <NA>                accepted        species   Cephalomanes atrovirens Presl              <NA>                     
+#>  2 54133783 <NA>                accepted        species   Trichomanes crassum Copel.                 2023-05-30 20:28:14.09112
+#>  3 54115097 <NA>                accepted        species   Cephalomanes crassum (Copel.) M. G. Price  <NA>                     
+#>  4 54133784 54115098            synonym         species   Trichomanes densinervium Copel.            <NA>                     
+#>  5 54115098 <NA>                accepted        species   Cephalomanes densinervium (Copel.) Copel.  <NA>                     
+#>  6 54133786 54115100            synonym         species   Cephalomanes curvatum (J. Sm.) V. D. Bosch <NA>                     
+#>  7 54133787 54115100            synonym         species   Cephalomanes javanica (Bl.) V. D. Bosch    <NA>                     
+#>  8 54133788 54115100            synonym         species   Cephalomanes oblongifolium Presl           <NA>                     
+#>  9 54133789 54115100            synonym         species   Cephalomanes zollingeri V. D. Bosch        <NA>                     
+#> 10 54133790 54115100            synonym         species   Lacostea javanica (Bl.) Prantl             <NA>                     
 #> # ℹ 2,442 more rows
 ```
 

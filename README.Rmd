@@ -22,7 +22,7 @@ set.seed(12345)
 # dwctaxon <img src="man/figures/logo.png" align="right" alt="" width="120" />
 
 <!-- badges: start -->
-[![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
+[![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![DOI](https://zenodo.org/badge/434126221.svg)](https://zenodo.org/badge/latestdoi/434126221)
 [![runiverse](https://ropensci.r-universe.dev/badges/dwctaxon)](https://ropensci.r-universe.dev/dwctaxon)
 [![Codecov test coverage](https://codecov.io/gh/ropensci/dwctaxon/branch/main/graph/badge.svg)](https://app.codecov.io/gh/ropensci/dwctaxon?branch=main)
@@ -55,7 +55,13 @@ For more information about dwctaxon, in particular for using it to maintain a re
 
 ## Installation
 
-`dwctaxon` can be installed from [r-universe](https://ropensci.r-universe.dev/dwctaxon) or [github](https://github.com/ropensci/dwctaxon).
+The stable version can be installed from [CRAN](https://cran.r-project.org/web/packages/dwctaxon/index.html):
+
+```r
+install.packages("dwctaxon")
+```
+
+The development version can be installed from [r-universe](https://ropensci.r-universe.dev/dwctaxon) or [github](https://github.com/ropensci/dwctaxon).
 
 ``` r
 options(repos = c(
