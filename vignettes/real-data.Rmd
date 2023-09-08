@@ -34,6 +34,22 @@ We will use the [Database of Vascular Plants of Canada (VASCAN)](http://data.can
 
 The data can be obtained manually by going to the [VASCAN website](http://data.canadensys.net/ipt/resource.do?r=vascan), downloading the Darwin Core Archive, and unzipping it^[If you download the data manually, it may be a different version than the one used here, v37.12].
 
+```{r, echo = FALSE, results = "asis"}
+# Check if file can be downloaded safely, quit early if not
+# Make sure this URL matches the one in the next chunk
+vascan_url <- "https://data.canadensys.net/ipt/archive.do?r=vascan&v=37.12"
+if (!dwctaxon:::safe_to_download(vascan_url)) {
+  cat(
+    paste0(
+      "Vignette rendering stopped. The zip file (",
+      vascan_url,
+      ") could not be downloaded. Check your internet connection and the URL."
+    )
+  )
+  knitr::knit_exit()
+}
+```
+
 Alternatively, it can be downloaded and unzipped with R:
 
 ```{r download-unzip}
@@ -62,8 +78,6 @@ Next, load the taxonomic data (`taxon.txt`) into R. It is a tab-separated text f
 
 ```{r load-data}
 vascan <- read_tsv(paste0(temp_unzip, "/taxon.txt"))
-
-# OK to delete the tempo
 
 # Take a peak at the data
 vascan
