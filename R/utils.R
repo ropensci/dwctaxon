@@ -292,14 +292,17 @@ is_unique <- function(x, allow_na = TRUE) {
 #'
 #' @param url Character vector of length 1; URL pointing to zip file to
 #' download ie "https://data.canadensys.net/ipt/archive.do?r=vascan&v=37.12"
+#' @param online Logical vector of length 1; is this computer connected to the
+#' internet? Defaults to curl::has_internet(), but provided for testing
+#' purposes.
 #'
 #' @return Logical vector of length 1.
 #' @noRd
 #' @autoglobal
-safe_to_download <- function(url) {
+safe_to_download <- function(url, online = curl::has_internet()) {
   get_safely <- purrr::safely(httr::GET)
   # Check for internet connection
-  if (!curl::has_internet()) {
+  if (!online) {
     return(FALSE)
   }
   # Check for functioning URL
