@@ -138,22 +138,25 @@ dct_add_row <- function(tax_dat,
     if (!"acceptedNameUsageID" %in% colnames(new_dat)) {
       new_dat[["acceptedNameUsageID"]] <- rep(NA, nrow(new_dat))
     }
-    # Check that all tax dat sci names are unique
-    assertthat::assert_that(
-      is_unique(tax_dat[["scientificName"]]),
-      msg =
-        "fill_usage_id requires values of tax_dat$scientificName to be unique"
+    # Lookup acceptedNameUsageID
+    acc_name_usage_id_lookup <- dplyr::left_join(
+      dplyr::select(new_dat, scientificName, acceptedNameUsage),
+      dplyr::select(tax_dat, scientificName, acceptedNameUsageID = taxonID),
+      na_matches = "never",
+      by = c(acceptedNameUsage = "scientificName"),
+      multiple = "all"
     )
-    # Lookup location of values to copy
-    loc <- match(
-      new_dat[["acceptedNameUsage"]],
-      tax_dat[["scientificName"]]
+    # Check for unique matches
+    assertthat::assert_that(
+      nrow(acc_name_usage_id_lookup) == nrow(new_dat),
+      msg = paste(
+        "fill_usage_id requires unique match between acceptedNameUsage and",
+        "scientificName"
+      )
     )
     # Copy values
-    new_dat[["acceptedNameUsageID"]] <- dplyr::coalesce(
-      tax_dat[["acceptedNameUsageID"]],
-      tax_dat[["taxonID"]][loc]
-    )
+    new_dat[["acceptedNameUsageID"]] <-
+      acc_name_usage_id_lookup[["acceptedNameUsageID"]]
   }
 
   # Add timestamp

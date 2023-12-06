@@ -16,6 +16,20 @@
       3 442c4d2d~ Foogenus boos~ synonym         123                 Foogenus barspec~
       4 42e72bd3~ Bargenus bkas~ synonym         22aad27626cf8f945d~ Bargenus foosp   
 
+# fill_usage_id only cares about uniqueness of matching names
+
+    Code
+      dct_add_row(base_dat, scientificName = "Bargenus foosp", acceptedNameUsage = "Bargenus bkaspecies",
+        taxonomicStatus = "synonym", stamp_modified = FALSE)
+    Output
+      # A tibble: 4 x 5
+        taxonID   scientificName taxonomicStatus acceptedNameUsage acceptedNameUsageID
+        <chr>     <chr>          <chr>           <chr>             <chr>              
+      1 1         Foogenus bars~ accepted        <NA>              <NA>               
+      2 2         Foogenus bars~ accepted        <NA>              <NA>               
+      3 3         Bargenus bkas~ accepted        <NA>              <NA>               
+      4 22aad276~ Bargenus foosp synonym         Bargenus bkaspec~ 3                  
+
 # fill_usage_id doesn't create acceptedUsageID column when FALSE
 
     Code
