@@ -1,5 +1,15 @@
 # dwctaxon (development version)
 
+## Bug fixes
+
+- Don't require that all values of a reference column be unique when matching
+values, instead only require that the matched values be unique. This means
+it is now possible to use (for example) `dct_fill_col()` to fill 
+`acceptedNameUsageID` based on `scientificName` even if `scientificName`
+contains some duplicated values, as long as those don't match any
+values in the `match_from` column
+(https://github.com/ropensci/dwctaxon/pull/97)
+
 # dwctaxon 2.0.2
 
 ## Other
