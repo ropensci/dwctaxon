@@ -162,7 +162,6 @@ test_that("fill_taxon_id warning works", {
     )
   )
 })
-
 # fill_usage_id is TRUE by default
 test_that("fill_usage_id works", {
   expect_snapshot(
@@ -182,6 +181,45 @@ test_that("fill_usage_id works", {
         taxonomicStatus = "synonym",
         stamp_modified = FALSE
       )
+  )
+})
+
+test_that("fill_usage_id only cares about uniqueness of matching names", {
+  # Original data has repeated sci name
+  base_dat <- tibble::tibble(
+    taxonID = c("1", "2"),
+    scientificName = rep("Foogenus barspecies", 2),
+    taxonomicStatus = rep("accepted", 2)
+  ) |>
+    dct_add_row(
+      taxonID = "3",
+      scientificName = "Bargenus bkaspecies",
+      taxonomicStatus = "accepted",
+      stamp_modified = FALSE
+    )
+  # Here the added data is not a match to the duplicated name, so its OK
+  expect_snapshot(
+    base_dat |>
+      dct_add_row(
+        scientificName = "Bargenus foosp",
+        acceptedNameUsage = "Bargenus bkaspecies",
+        taxonomicStatus = "synonym",
+        stamp_modified = FALSE
+      )
+  )
+  # Here the added data does hit a duplicated name, should fail
+  expect_error(
+    base_dat |>
+      dct_add_row(
+        scientificName = "Foogenus boospecies",
+        acceptedNameUsage = "Foogenus barspecies",
+        taxonomicStatus = "synonym",
+        stamp_modified = FALSE
+      ),
+    paste(
+      "fill_usage_id requires unique match between",
+      "acceptedNameUsage and scientificName"
+    )
   )
 })
 
