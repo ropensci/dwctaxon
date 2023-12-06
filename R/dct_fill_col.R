@@ -54,10 +54,6 @@ dct_fill_col <- function(tax_dat,
 
   # other input checks ----
   assertthat::assert_that(
-    is_unique(tax_dat[[match_to]]),
-    msg = glue::glue("match_to column ({match_to}) must have unique values")
-  )
-  assertthat::assert_that(
     fill_to %in% dct_terms$term,
     msg = "fill_to must be a valid DwC term; see `dct_terms`"
   )
@@ -95,15 +91,30 @@ dct_fill_col <- function(tax_dat,
   }
 
   # Lookup location of values to copy
-  loc <- match(
-    tax_dat[[match_from]],
-    tax_dat[[match_to]]
+  lookup_res <- dplyr::left_join(
+    dplyr::select(tax_dat, !!rlang::sym(match_from)),
+    dplyr::select(
+      tax_dat,
+      !!rlang::sym(fill_to) := !!rlang::sym(fill_from),
+      !!rlang::sym(match_from) := !!rlang::sym(match_to)
+    ),
+    na_matches = "never",
+    by = match_from,
+    multiple = "all"
+  )
+  # Check for unique matches
+  assertthat::assert_that(
+    nrow(lookup_res) == nrow(tax_dat),
+    msg = paste(
+      "Multiple (non-unique) matches detected between `match_from` and",
+      "`match_to` columns"
+    )
   )
 
   # Copy values
   tax_dat[[fill_to]] <- dplyr::coalesce(
     tax_dat[[fill_to]],
-    tax_dat[[fill_from]][loc]
+    lookup_res[[fill_to]]
   )
   # Get elements that differ between rows
   changed <- !purrr::map_lgl(
