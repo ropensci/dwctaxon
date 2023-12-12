@@ -55,7 +55,7 @@ For more information about dwctaxon, in particular for using it to maintain a re
 
 ## Installation
 
-The stable version can be installed from [CRAN](https://cran.r-project.org/web/packages/dwctaxon/index.html):
+The stable version can be installed from [CRAN](https://cran.r-project.org/package=dwctaxon):
 
 ```r
 install.packages("dwctaxon")
