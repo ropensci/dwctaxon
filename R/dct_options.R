@@ -52,37 +52,38 @@ settings_is_string <- function(..., null_allowed = FALSE) {
 #'
 #' ### Validation arguments
 #'
-#' - `check_taxon_id`: `r param_check_taxon_id`
-#' - `check_tax_status`: `r param_check_tax_status`
-#' - `check_mapping_accepted`: `r param_check_mapping_accepted`
-#' - `check_mapping_parent`: `r param_check_mapping_parent`
-#' - `check_mapping_original`: `r param_check_mapping_original`
+#' - `check_col_names`: `r param_check_col_names`
 #' - `check_mapping_accepted_status`: `r param_check_mapping_accepted_status`
-#' (See `dct_validate()`).
+#'   (See `dct_validate()`).
+#' - `check_mapping_accepted`: `r param_check_mapping_accepted`
+#' - `check_mapping_original`: `r param_check_mapping_original`
+#' - `check_mapping_parent`: `r param_check_mapping_parent`
 #' - `check_sci_name`: `r param_check_sci_name`
 #' - `check_status_diff`: `r param_check_status_diff`
-#' - `check_col_names`: `r param_check_col_names`
-#' - `valid_tax_status`: `r param_valid_tax_status`
-#' - `skip_missing_cols`: `r param_skip_missing_cols`
-#' - `on_success`: `r param_on_success`
+#' - `check_tax_status`: `r param_check_tax_status`
+#' - `check_taxon_id`: `r param_check_taxon_id`
+#' - `extra_cols`: `r param_extra_cols`
 #' - `on_fail`: `r param_on_fail`
+#' - `on_success`: `r param_on_success`
+#' - `skip_missing_cols`: `r param_skip_missing_cols`
+#' - `valid_tax_status`: `r param_valid_tax_status`
 #'
 #' ### Editing arguments
 #'
-#' - `fill_taxon_id`: `r param_fill_taxon_id`
-#' - `fill_usage_id`: `r param_fill_usage_id`
-#' - `taxon_id_length`: `r param_taxon_id_length`
 #' - `clear_usage_id`: `r param_clear_usage_id`
 #' - `clear_usage_name`: `r param_clear_usage_name`
+#' - `fill_taxon_id`: `r param_fill_taxon_id`
+#' - `fill_usage_id`: `r param_fill_usage_id`
 #' - `fill_usage_name`: `r param_fill_usage_name`
 #' - `remap_names`: `r param_remap_names`
 #' - `remap_variant`: `r param_remap_variant`
 #' - `stamp_modified`: `r param_stamp_modified`
+#' - `taxon_id_length`: `r param_taxon_id_length`
 #'
 #' ### General arguments
 #'
-#' - `strict`: `r param_strict`
 #' - `quiet`: `r param_quiet`
+#' - `strict`: `r param_strict`
 #'
 #' @param reset Logical vector of length 1; if TRUE, reset all options to their
 #' default values.
