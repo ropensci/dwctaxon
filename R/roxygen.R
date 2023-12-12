@@ -56,7 +56,7 @@ param_check_status_diff <- glue::glue(
 
 param_check_col_names <- glue::glue(
   'Logical vector of length 1; should all column names be \\
-  required to be a valid Darwin Core term? \\
+  required to be a valid DwC term? \\
   {print_default("check_col_names")}.'
 )
 
@@ -74,7 +74,7 @@ if (!is.null(get_dct_opt("extra_cols"))) {
 }
 param_extra_cols <- glue::glue(
   "Character vector; names of columns that should be allowed beyond
-  those defined by the Darwin Core DwC taxon standard. \\
+  those defined by the DwC taxon standard. \\
   Default NULL. \\
   Providing column name(s) that are valid DwC taxon column(s) has no effect."
 )

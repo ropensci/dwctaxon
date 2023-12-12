@@ -27,42 +27,44 @@ don't have to type the same thing each time you call a function.
 The arguments that can be set with this function are as follows:
 \subsection{Validation arguments}{
 \itemize{
-\item \code{check_taxon_id}: Logical vector of length 1; should all instances of  \code{taxonID} be required to be non-missing and unique? Default \code{TRUE}.
-\item \code{check_tax_status}: Logical vector of length 1; should all taxonomic names be required to have a valid value for taxonomic status (by default, "accepted", "synonym", or "variant")? Default \code{TRUE}.
-\item \code{check_mapping_accepted}: Logical vector of length 1; should all values of \code{acceptedNameUsageID} be required to map to the \code{taxonID} of an existing name? Default \code{TRUE}.
-\item \code{check_mapping_parent}: Logical vector of length 1; should all values of \code{parentNameUsageID} be required to map to the \code{taxonID} of an existing name? Default \code{TRUE}.
-\item \code{check_mapping_original}: Logical vector of length 1; should all values of \code{originalNameUsageID} be required to map to the \code{taxonID} of an existing name? Default \code{TRUE}.
+\item \code{check_col_names}: Logical vector of length 1; should all column names be required to be a valid DwC term? Default \code{TRUE}.
 \item \code{check_mapping_accepted_status}: Logical vector of length 1; should rules about mapping of variants and synonyms be enforced? Default \code{FALSE}.
 (See \code{dct_validate()}).
+\item \code{check_mapping_accepted}: Logical vector of length 1; should all values of \code{acceptedNameUsageID} be required to map to the \code{taxonID} of an existing name? Default \code{TRUE}.
+\item \code{check_mapping_original}: Logical vector of length 1; should all values of \code{originalNameUsageID} be required to map to the \code{taxonID} of an existing name? Default \code{TRUE}.
+\item \code{check_mapping_parent}: Logical vector of length 1; should all values of \code{parentNameUsageID} be required to map to the \code{taxonID} of an existing name? Default \code{TRUE}.
 \item \code{check_sci_name}: Logical vector of length 1; should all instances of \code{scientificName} be required to be non-missing and unique? Default \code{TRUE}.
 \item \code{check_status_diff}: Logical vector of length 1; should each scientific name be allowed to have only one taxonomic status? Default \code{FALSE}.
-\item \code{check_col_names}: Logical vector of length 1; should all column names be required to be a valid Darwin Core term? Default \code{TRUE}.
-\item \code{valid_tax_status}: Character vector of length 1; valid values for \code{taxonomicStatus}. Each value must be separated by a comma. Default \verb{accepted, synonym, variant, NA}. \code{"NA"} indicates that missing (NA) values are valid. Case-sensitive.
+\item \code{check_tax_status}: Logical vector of length 1; should all taxonomic names be required to have a valid value for taxonomic status (by default, "accepted", "synonym", or "variant")? Default \code{TRUE}.
+\item \code{check_taxon_id}: Logical vector of length 1; should all instances of  \code{taxonID} be required to be non-missing and unique? Default \code{TRUE}.
+\item \code{extra_cols}: Character vector; names of columns that should be allowed beyond
+those defined by the DwC taxon standard. Default NULL. Providing column name(s) that are valid DwC taxon column(s) has no effect.
+\item \code{on_fail}: Character vector of length 1, either "error" or "summary". Describes what to do if the check fails. Default \code{"error"}.
+\item \code{on_success}: Character vector of length 1, either "logical" or "data". Describes what to do if the check passes. Default \code{"data"}.
 \item \code{skip_missing_cols}: Logical vector of length 1; should checks be silently skipped if any of the
 columns they inspect are missing? Default \code{FALSE}.
-\item \code{on_success}: Character vector of length 1, either "logical" or "data". Describes what to do if the check passes. Default \code{"data"}.
-\item \code{on_fail}: Character vector of length 1, either "error" or "summary". Describes what to do if the check fails. Default \code{"error"}.
+\item \code{valid_tax_status}: Character vector of length 1; valid values for \code{taxonomicStatus}. Each value must be separated by a comma. Default \verb{accepted, synonym, variant, NA}. \code{"NA"} indicates that missing (NA) values are valid. Case-sensitive.
 }
 }
 
 \subsection{Editing arguments}{
 \itemize{
-\item \code{fill_taxon_id}: Logical vector of length 1; if \code{taxon_id} is not provided, should values in the taxonID column be filled in by generating them automatically from the scientificName? If the \code{taxonID} column does not yet exist it will be created. Default \code{TRUE}.
-\item \code{fill_usage_id}: Logical vector of length 1; if \code{usage_id} is not provided, should values in the acceptedNameUsageID column be filled in by matching acceptedNameUsage to scientificName? If the \code{acceptedNameUsageID} column does not yet exist it will be created. Default \code{TRUE}.
-\item \code{taxon_id_length}: Numeric vector of length 1; how many characters should be included in automatically generated values of taxonID? Must be between 1 and 32, inclusive. Default \code{32}.
 \item \code{clear_usage_id}: Logical vector of length 1; should acceptedNameUsageID of the selected row be set to \code{NA} if the word "accepted" is detected in tax_status (not case-sensitive)? Default \code{TRUE}.
 \item \code{clear_usage_name}: Logical vector of length 1; should acceptedNameUsage of the selected row be set to \code{NA} if the word "accepted" is detected in tax_status (not case-sensitive)? Default \code{TRUE}.
+\item \code{fill_taxon_id}: Logical vector of length 1; if \code{taxon_id} is not provided, should values in the taxonID column be filled in by generating them automatically from the scientificName? If the \code{taxonID} column does not yet exist it will be created. Default \code{TRUE}.
+\item \code{fill_usage_id}: Logical vector of length 1; if \code{usage_id} is not provided, should values in the acceptedNameUsageID column be filled in by matching acceptedNameUsage to scientificName? If the \code{acceptedNameUsageID} column does not yet exist it will be created. Default \code{TRUE}.
 \item \code{fill_usage_name}: Logical vector of length 1; should the acceptedNameUsage of the selected row be set to the scientificName corresponding to its acceptedNameUsageID? Default \code{TRUE}.
 \item \code{remap_names}: Logical vector of length 1; should the acceptedNameUsageID be updated (remapped) for rows with the same acceptedNameUsageID as the taxonID of the row to be modified? Default \code{TRUE}.
 \item \code{remap_variant}: Same as \code{remap_names}, but applies specifically to rows with taxonomicStatus of "variant". Default \code{FALSE}.
 \item \code{stamp_modified}: Logical vector of length 1; should the \code{modified} column of any newly created or modified row include a timestamp with the date and time of its creation/modification? If the \code{modified} column does not yet exist it will be created. Default \code{TRUE}.
+\item \code{taxon_id_length}: Numeric vector of length 1; how many characters should be included in automatically generated values of taxonID? Must be between 1 and 32, inclusive. Default \code{32}.
 }
 }
 
 \subsection{General arguments}{
 \itemize{
-\item \code{strict}: Logical vector of length 1; should taxonomic checks be run on the updated taxonomic database? Default \code{FALSE}.
 \item \code{quiet}: Logical vector of length 1; should warnings be silenced? Default \code{FALSE}.
+\item \code{strict}: Logical vector of length 1; should taxonomic checks be run on the updated taxonomic database? Default \code{FALSE}.
 }
 }
 }

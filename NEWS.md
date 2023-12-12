@@ -10,6 +10,10 @@ contains some duplicated values, as long as those don't match any
 values in the `match_from` column
 (https://github.com/ropensci/dwctaxon/pull/97)
 
+## Documentation
+
+- Add documentation of `extra_cols` option in `dct_options()` (https://github.com/ropensci/dwctaxon/pull/99)
+
 # dwctaxon 2.0.2
 
 ## Other
