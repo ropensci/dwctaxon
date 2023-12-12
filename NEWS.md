@@ -1,4 +1,4 @@
-# dwctaxon (development version)
+# dwctaxon 2.0.3
 
 ## Bug fixes
 
@@ -13,6 +13,11 @@ values in the `match_from` column
 ## Documentation
 
 - Add documentation of `extra_cols` option in `dct_options()` (https://github.com/ropensci/dwctaxon/pull/99)
+
+## CRAN policies
+
+- Add a check for an internet connection and valid URL when downloading files to
+ensure compliance with CRAN policy (https://github.com/ropensci/dwctaxon/pull/94)
 
 # dwctaxon 2.0.2
 
