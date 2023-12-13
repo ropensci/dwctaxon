@@ -1,5 +1,10 @@
 # CRAN submission for dwctaxon 2.0.3
 
+(resubmission)
+
+Update 2023-12-13: in response to comment on initial submission of v2.0.3,
+change example code to use try() instead of \dontrun{}
+
 This fixes a violation of CRAN's policy on internet access.
 
 dwctaxon has no reverse dependencies.
