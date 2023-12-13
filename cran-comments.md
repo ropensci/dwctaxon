@@ -4,6 +4,7 @@
 
 Update 2023-12-13: in response to comment on initial submission of v2.0.3,
 change example code to use try() instead of \dontrun{}
+https://github.com/ropensci/dwctaxon/pull/101
 
 This fixes a violation of CRAN's policy on internet access.
 
