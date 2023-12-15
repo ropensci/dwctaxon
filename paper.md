@@ -1,6 +1,3 @@
-
-<!-- YAML header for JOSS paper -->
-
 ---
 title: dwctaxon, an R package for editing and validating taxonomic data in Darwin Core format
 tags:
