@@ -15,6 +15,7 @@ coverage](https://codecov.io/gh/ropensci/dwctaxon/branch/main/graph/badge.svg)](
 [![pkgcheck](https://github.com/ropensci/dwctaxon/workflows/pkgcheck/badge.svg)](https://github.com/ropensci/dwctaxon/actions?query=workflow%3Apkgcheck)
 [![Status at rOpenSci Software Peer
 Review](https://badges.ropensci.org/574_status.svg)](https://github.com/ropensci/software-review/issues/574)
+[![JOSS](https://joss.theoj.org/papers/10.21105/joss.06215/status.svg)](https://doi.org/10.21105/joss.06215)
 <!-- badges: end -->
 
 The goal of dwctaxon is to facilitate working with [Darwin Core Taxon
@@ -141,7 +142,7 @@ filmies_small |>
 #> 3 54115097                         <NA>                accepted        species   Cephalomanes crassum (Copel.) M. G. Price <NA>             
 #> 4 54133784                         54115098            synonym         species   Trichomanes densinervium Copel.           <NA>             
 #> 5 54115098                         <NA>                accepted        species   Cephalomanes densinervium (Copel.) Copel. <NA>             
-#> 6 193e2011c8ace0ed138af91f41a335cc <NA>                accepted        <NA>      Hymenophyllum dwctaxonense Nitta          2023-12-12 14:20…
+#> 6 193e2011c8ace0ed138af91f41a335cc <NA>                accepted        <NA>      Hymenophyllum dwctaxonense Nitta          2024-01-14 05:59…
 ```
 
 `dct_modify_row()` modifies a row, automatically re-mapping synonyms if
@@ -161,8 +162,8 @@ filmies_small |>
 #> 1 54115096 <NA>                accepted        species   Cephalomanes atrovirens Presl             <NA>                      
 #> 2 54133783 54115097            synonym         species   Trichomanes crassum Copel.                <NA>                      
 #> 3 54115097 <NA>                accepted        species   Cephalomanes crassum (Copel.) M. G. Price <NA>                      
-#> 4 54133784 54115097            synonym         species   Trichomanes densinervium Copel.           2023-12-12 14:20:43.034087
-#> 5 54115098 54115097            synonym         species   Cephalomanes densinervium (Copel.) Copel. 2023-12-12 14:20:43.003212
+#> 4 54133784 54115097            synonym         species   Trichomanes densinervium Copel.           2024-01-14 05:59:58.288207
+#> 5 54115098 54115097            synonym         species   Cephalomanes densinervium (Copel.) Copel. 2024-01-14 05:59:58.260572
 ```
 
 `dct_fill_col()` fills in values for columns that have “term” - “termID”
@@ -180,11 +181,11 @@ filmies_small |>
 #> # A tibble: 5 × 7
 #>   taxonID  acceptedNameUsageID taxonomicStatus taxonRank scientificName                            acceptedNameUsage                modified
 #>   <chr>    <chr>               <chr>           <chr>     <chr>                                     <chr>                            <chr>   
-#> 1 54115096 <NA>                accepted        species   Cephalomanes atrovirens Presl             <NA>                             2023-12…
-#> 2 54133783 54115097            synonym         species   Trichomanes crassum Copel.                Cephalomanes crassum (Copel.) M… 2023-12…
-#> 3 54115097 <NA>                accepted        species   Cephalomanes crassum (Copel.) M. G. Price <NA>                             2023-12…
-#> 4 54133784 54115098            synonym         species   Trichomanes densinervium Copel.           Cephalomanes densinervium (Cope… 2023-12…
-#> 5 54115098 <NA>                accepted        species   Cephalomanes densinervium (Copel.) Copel. <NA>                             2023-12…
+#> 1 54115096 <NA>                accepted        species   Cephalomanes atrovirens Presl             <NA>                             2024-01…
+#> 2 54133783 54115097            synonym         species   Trichomanes crassum Copel.                Cephalomanes crassum (Copel.) M… 2024-01…
+#> 3 54115097 <NA>                accepted        species   Cephalomanes crassum (Copel.) M. G. Price <NA>                             2024-01…
+#> 4 54133784 54115098            synonym         species   Trichomanes densinervium Copel.           Cephalomanes densinervium (Cope… 2024-01…
+#> 5 54115098 <NA>                accepted        species   Cephalomanes densinervium (Copel.) Copel. <NA>                             2024-01…
 ```
 
 ### Validate data
@@ -263,18 +264,18 @@ dct_filmies |>
   ) |>
   dct_validate()
 #> # A tibble: 2,452 × 6
-#>    taxonID  acceptedNameUsageID taxonomicStatus taxonRank scientificName                             modified                 
-#>    <chr>    <chr>               <chr>           <chr>     <chr>                                      <chr>                    
-#>  1 54115096 <NA>                accepted        species   Cephalomanes atrovirens Presl              <NA>                     
-#>  2 54133783 <NA>                accepted        species   Trichomanes crassum Copel.                 2023-12-12 14:20:43.16032
-#>  3 54115097 <NA>                accepted        species   Cephalomanes crassum (Copel.) M. G. Price  <NA>                     
-#>  4 54133784 54115098            synonym         species   Trichomanes densinervium Copel.            <NA>                     
-#>  5 54115098 <NA>                accepted        species   Cephalomanes densinervium (Copel.) Copel.  <NA>                     
-#>  6 54133786 54115100            synonym         species   Cephalomanes curvatum (J. Sm.) V. D. Bosch <NA>                     
-#>  7 54133787 54115100            synonym         species   Cephalomanes javanica (Bl.) V. D. Bosch    <NA>                     
-#>  8 54133788 54115100            synonym         species   Cephalomanes oblongifolium Presl           <NA>                     
-#>  9 54133789 54115100            synonym         species   Cephalomanes zollingeri V. D. Bosch        <NA>                     
-#> 10 54133790 54115100            synonym         species   Lacostea javanica (Bl.) Prantl             <NA>                     
+#>    taxonID  acceptedNameUsageID taxonomicStatus taxonRank scientificName                             modified                  
+#>    <chr>    <chr>               <chr>           <chr>     <chr>                                      <chr>                     
+#>  1 54115096 <NA>                accepted        species   Cephalomanes atrovirens Presl              <NA>                      
+#>  2 54133783 <NA>                accepted        species   Trichomanes crassum Copel.                 2024-01-14 05:59:58.414124
+#>  3 54115097 <NA>                accepted        species   Cephalomanes crassum (Copel.) M. G. Price  <NA>                      
+#>  4 54133784 54115098            synonym         species   Trichomanes densinervium Copel.            <NA>                      
+#>  5 54115098 <NA>                accepted        species   Cephalomanes densinervium (Copel.) Copel.  <NA>                      
+#>  6 54133786 54115100            synonym         species   Cephalomanes curvatum (J. Sm.) V. D. Bosch <NA>                      
+#>  7 54133787 54115100            synonym         species   Cephalomanes javanica (Bl.) V. D. Bosch    <NA>                      
+#>  8 54133788 54115100            synonym         species   Cephalomanes oblongifolium Presl           <NA>                      
+#>  9 54133789 54115100            synonym         species   Cephalomanes zollingeri V. D. Bosch        <NA>                      
+#> 10 54133790 54115100            synonym         species   Lacostea javanica (Bl.) Prantl             <NA>                      
 #> # ℹ 2,442 more rows
 ```
 
@@ -284,19 +285,9 @@ formatted.
 
 ## Citing this package
 
-If you use this package, please cite it! Here is an example:
+If you use this package, please cite it!
 
-    Nitta, JH and Iwasaki, W (2023) dwctaxon: Tools for working with Darwin Core Taxon data in R. https://doi.org/10.5281/zenodo.6388271
-
-The example DOI above is for the overall package.
-
-Here is the latest DOI, which you should use if you are using the latest
-version of the package:
-
-[![DOI](https://zenodo.org/badge/434126221.svg)](https://zenodo.org/badge/latestdoi/434126221)
-
-You can find DOIs for older versions by viewing the “Releases” menu on
-the right.
+    Nitta, JH and Iwasaki, W (2024). dwctaxon, an R package for editing and validating taxonomic data in Darwin Core format. Journal of Open Source Software, 9(93), 6215, https://doi.org/10.21105/joss.06215
 
 ## Contributing
 

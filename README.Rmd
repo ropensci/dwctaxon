@@ -28,6 +28,7 @@ set.seed(12345)
 [![Codecov test coverage](https://codecov.io/gh/ropensci/dwctaxon/branch/main/graph/badge.svg)](https://app.codecov.io/gh/ropensci/dwctaxon?branch=main)
 [![pkgcheck](https://github.com/ropensci/dwctaxon/workflows/pkgcheck/badge.svg)](https://github.com/ropensci/dwctaxon/actions?query=workflow%3Apkgcheck)
 [![Status at rOpenSci Software Peer Review](https://badges.ropensci.org/574_status.svg)](https://github.com/ropensci/software-review/issues/574)
+[![JOSS](https://joss.theoj.org/papers/10.21105/joss.06215/status.svg)](https://doi.org/10.21105/joss.06215)
 <!-- badges: end -->
 
 The goal of dwctaxon is to facilitate working with [Darwin Core Taxon data](https://dwc.tdwg.org/terms/#taxon) in R.
@@ -195,19 +196,9 @@ It's often a good idea to include `dct_validate()` at the end of a chain to make
 
 ## Citing this package
 
-If you use this package, please cite it! Here is an example:
+If you use this package, please cite it!
 
-    Nitta, JH and Iwasaki, W (2023) dwctaxon: Tools for working with Darwin Core Taxon data in R. https://doi.org/10.5281/zenodo.6388271
-
-The example DOI above is for the overall package.
-
-Here is the latest DOI, which you should use if you are using the latest
-version of the package:
-
-[![DOI](https://zenodo.org/badge/434126221.svg)](https://zenodo.org/badge/latestdoi/434126221)
-
-You can find DOIs for older versions by viewing the "Releases" menu on
-the right.
+    Nitta, JH and Iwasaki, W (2024). dwctaxon, an R package for editing and validating taxonomic data in Darwin Core format. Journal of Open Source Software, 9(93), 6215, https://doi.org/10.21105/joss.06215
 
 ## Contributing
 
