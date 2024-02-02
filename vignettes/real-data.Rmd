@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 # Increase width for printing tibbles
 old <- options(width = 140)
 
-knitr::read_chunk(system.file("extdata", "vascan_url.R", package = "dwctaxon"))
+source(system.file("extdata", "vascan_url.R", package = "dwctaxon"))
 ```
 
 This vignette demonstrates using dwctaxon on "real life" data found in the wild. Our goal is to import the data and validate it.
