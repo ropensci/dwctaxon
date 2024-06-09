@@ -78,12 +78,16 @@ settings_is_string <- function(..., null_allowed = FALSE) {
 #' - `remap_names`: `r param_remap_names`
 #' - `remap_variant`: `r param_remap_variant`
 #' - `stamp_modified`: `r param_stamp_modified`
+#' - `stamp_modified_by_id`: `r param_stamp_modified_by_id`
+#' - `stamp_modified_by_name`: `r param_stamp_modified_by_name`
 #' - `taxon_id_length`: `r param_taxon_id_length`
 #'
 #' ### General arguments
 #'
 #' - `quiet`: `r param_quiet`
 #' - `strict`: `r param_strict`
+#' - `user_name`: `r param_user_name`
+#' - `user_id`: `r param_user_id`
 #'
 #' @param reset Logical vector of length 1; if TRUE, reset all options to their
 #' default values.
@@ -131,9 +135,13 @@ dct_opts <- settings::options_manager(
   remap_names = TRUE,
   remap_variant = FALSE,
   stamp_modified = TRUE,
+  stamp_modified_by_name = FALSE,
+  stamp_modified_by_id = FALSE,
   strict = FALSE,
   # general
   quiet = FALSE,
+  user_name = "",
+  user_id = "",
   .allowed = list(
     check_taxon_id = settings::inlist(TRUE, FALSE),
     check_tax_status = settings::inlist(TRUE, FALSE),
@@ -159,7 +167,11 @@ dct_opts <- settings::options_manager(
     remap_variant = settings::inlist(TRUE, FALSE),
     stamp_modified = settings::inlist(TRUE, FALSE),
     strict = settings::inlist(TRUE, FALSE),
-    quiet = settings::inlist(TRUE, FALSE)
+    quiet = settings::inlist(TRUE, FALSE),
+    user_name = settings_is_string(),
+    user_id = settings_is_string(),
+    stamp_modified_by_name = settings::inlist(TRUE, FALSE),
+    stamp_modified_by_id = settings::inlist(TRUE, FALSE)
   )
 )
 

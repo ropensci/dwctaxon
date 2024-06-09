@@ -300,4 +300,59 @@ test_that("setting validation args via options works", {
 
 dct_options(reset = TRUE)
 
+# modifiedBy and modifiedByID ----
+test_that("Adding modifiedBy works", {
+  dct_options(reset = TRUE)
+  dct_options(user_name = "me")
+  expect_error(
+    dct_add_row(
+      base_dat,
+      scientificName = "foo", stamp_modified_by_name = TRUE
+    ),
+    "stamp_modified_by_name requires 'modifiedBy' in extra_cols"
+  )
+  dct_options(reset = TRUE)
+  dct_options(
+    user_name = "me", extra_cols = "modifiedBy",
+    # Turn off time stamp so snapshot works
+    stamp_modified = FALSE
+  )
+  expect_snapshot({
+    (expect_no_error(
+      dct_add_row(
+        base_dat,
+        scientificName = "foo", stamp_modified_by_name = TRUE
+      )
+    ))
+  })
+  dct_options(reset = TRUE)
+})
+
+test_that("Adding modifiedByID works", {
+  dct_options(reset = TRUE)
+  dct_options(user_id = "me")
+  expect_error(
+    dct_add_row(
+      base_dat,
+      scientificName = "foo", stamp_modified_by_id = TRUE
+    ),
+    "stamp_modified_by_id requires 'modifiedByID' in extra_cols"
+  )
+  dct_options(reset = TRUE)
+  dct_options(
+    user_id = "me", extra_cols = "modifiedByID",
+    # Turn off time stamp so snapshot works
+    stamp_modified = FALSE
+  )
+  expect_snapshot({
+    (expect_no_error(
+      dct_add_row(
+        base_dat,
+        scientificName = "foo", stamp_modified_by_id = TRUE
+      )
+    ))
+  })
+  dct_options(reset = TRUE)
+})
+
 rm(base_dat)
