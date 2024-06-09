@@ -57,6 +57,14 @@ columns they inspect are missing? Default \code{FALSE}.
 \item \code{remap_names}: Logical vector of length 1; should the acceptedNameUsageID be updated (remapped) for rows with the same acceptedNameUsageID as the taxonID of the row to be modified? Default \code{TRUE}.
 \item \code{remap_variant}: Same as \code{remap_names}, but applies specifically to rows with taxonomicStatus of "variant". Default \code{FALSE}.
 \item \code{stamp_modified}: Logical vector of length 1; should the \code{modified} column of any newly created or modified row include a timestamp with the date and time of its creation/modification? If the \code{modified} column does not yet exist it will be created. Default \code{TRUE}.
+\item \code{stamp_modified_by_id}: Logical vector of length 1; should the \code{modifiedByID} column of any newly created or modified row include the ID of the
+current user? If the \code{modifiedByID} column does not yet exist it will be created; note that
+this is a non-DWC standard column, so \code{"modifiedByID"} is required in
+\code{extra_cols}. The current user ID can be specified with the \code{user_id} option. Default \code{FALSE}.
+\item \code{stamp_modified_by_name}: Logical vector of length 1; should the \code{modifiedBy} column of any newly created or modified row include the name of the
+current user? If the \code{modifiedBy} column does not yet exist it will be created; note that
+this is a non-DWC standard column, so \code{"modifiedBy"} is required in
+\code{extra_cols}. The current user can be specified with the \code{user_name} option. Default \code{FALSE}.
 \item \code{taxon_id_length}: Numeric vector of length 1; how many characters should be included in automatically generated values of taxonID? Must be between 1 and 32, inclusive. Default \code{32}.
 }
 }
@@ -65,6 +73,8 @@ columns they inspect are missing? Default \code{FALSE}.
 \itemize{
 \item \code{quiet}: Logical vector of length 1; should warnings be silenced? Default \code{FALSE}.
 \item \code{strict}: Logical vector of length 1; should taxonomic checks be run on the updated taxonomic database? Default \code{FALSE}.
+\item \code{user_name}: Character vector of length 1; the name of the current user. Default \code{""}.
+\item \code{user_id}: Character vector of length 1; the ID of the current user. Default \code{""}.
 }
 }
 }

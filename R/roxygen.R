@@ -133,6 +133,28 @@ param_stamp_modified <- glue::glue(
   {print_default("stamp_modified")}.'
 )
 
+param_stamp_modified_by_name <- glue::glue(
+  'Logical vector of length 1; should the `modifiedBy` \\
+  column of any newly created or modified row include the name of the
+  current user? \\
+  If the `modifiedBy` column does not yet exist it will be created; note that
+  this is a non-DWC standard column, so `"modifiedBy"` is required in
+  `extra_cols`. \\
+  The current user can be specified with the `user_name` option. \\
+  {print_default("stamp_modified_by_name")}.'
+)
+
+param_stamp_modified_by_id <- glue::glue(
+  'Logical vector of length 1; should the `modifiedByID` \\
+  column of any newly created or modified row include the ID of the
+  current user? \\
+  If the `modifiedByID` column does not yet exist it will be created; note that
+  this is a non-DWC standard column, so `"modifiedByID"` is required in
+  `extra_cols`. \\
+  The current user ID can be specified with the `user_id` option. \\
+  {print_default("stamp_modified_by_id")}.'
+)
+
 param_fill_usage_name <- glue::glue(
   'Logical vector of length 1; should the \\
   acceptedNameUsage of the selected row be set to the \\
@@ -171,6 +193,16 @@ param_skip_missing_cols <- glue::glue(
   'Logical vector of length 1; should checks be silently skipped if any of the
   columns they inspect are missing? \\
   {print_default("skip_missing_cols")}.'
+)
+
+param_user_name <- glue::glue(
+  'Character vector of length 1; the name of the current user. \\
+  {print_default("user_name", quote = TRUE)}.'
+)
+
+param_user_id <- glue::glue(
+  'Character vector of length 1; the ID of the current user. \\
+  {print_default("user_id", quote = TRUE)}.'
 )
 
 # Check that default values of both clear_usage_name and

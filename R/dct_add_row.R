@@ -31,6 +31,8 @@
 #' @param fill_usage_id `r param_fill_usage_id`
 #' @param taxon_id_length `r param_taxon_id_length`
 #' @param stamp_modified `r param_stamp_modified`
+#' @param stamp_modified_by_id `r param_stamp_modified_by_id`
+#' @param stamp_modified_by_name `r param_stamp_modified_by_name`
 #' @param strict `r param_strict`
 #' @param ... Additional data to add, specified as sets of named
 #' character or numeric vectors; e.g., `parentNameUsageID = "6SH4"`. The name of
@@ -52,6 +54,10 @@ dct_add_row <- function(tax_dat,
                         fill_usage_id = dct_options()$fill_usage_id,
                         taxon_id_length = dct_options()$taxon_id_length,
                         stamp_modified = dct_options()$stamp_modified,
+                        stamp_modified_by_id =
+                          dct_options()$stamp_modified_by_id,
+                        stamp_modified_by_name =
+                          dct_options()$stamp_modified_by_name,
                         strict = dct_options()$strict,
                         ...) {
   # Create new_dat from direct input if provided
@@ -131,9 +137,9 @@ dct_add_row <- function(tax_dat,
     msg = "tax_dat must include column taxonID if fill_usage_id is TRUE"
   )
   if (isTRUE(fill_usage_id) &&
-    "acceptedNameUsage" %in% colnames(new_dat) &&
-    "scientificName" %in% colnames(tax_dat) &&
-    "taxonID" %in% colnames(tax_dat)) {
+        "acceptedNameUsage" %in% colnames(new_dat) &&
+        "scientificName" %in% colnames(tax_dat) &&
+        "taxonID" %in% colnames(tax_dat)) {
     # Add "acceptedNameUsageID" as empty col if it does not yet exist
     if (!"acceptedNameUsageID" %in% colnames(new_dat)) {
       new_dat[["acceptedNameUsageID"]] <- rep(NA, nrow(new_dat))
@@ -159,11 +165,35 @@ dct_add_row <- function(tax_dat,
       acc_name_usage_id_lookup[["acceptedNameUsageID"]]
   }
 
-  # Add timestamp
+  # Add modified timestamp
   if (isTRUE(stamp_modified)) {
     new_dat <- dplyr::mutate(
       new_dat,
       modified = as.character(Sys.time())
+    )
+  }
+
+  # Add modifiedBy
+  if (isTRUE(stamp_modified_by_name)) {
+    assertthat::assert_that(
+      isTRUE("modifiedBy" %in% dct_options()$extra_cols),
+      msg = "stamp_modified_by_name requires 'modifiedBy' in extra_cols"
+    )
+    new_dat <- dplyr::mutate(
+      new_dat,
+      modifiedBy = dct_options()$user_name
+    )
+  }
+
+  # Add modifiedByUserID
+  if (isTRUE(stamp_modified_by_id)) {
+    assertthat::assert_that(
+      isTRUE("modifiedByID" %in% dct_options()$extra_cols),
+      msg = "stamp_modified_by_id requires 'modifiedByID' in extra_cols"
+    )
+    new_dat <- dplyr::mutate(
+      new_dat,
+      modifiedByID = dct_options()$user_id
     )
   }
 
