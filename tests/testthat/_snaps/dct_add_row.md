@@ -59,3 +59,27 @@
       1 1         foo            <NA>                <NA>              <NA>           
       2 bd40ef6d~ foo            <NA>                <NA>              <NA>           
 
+# Adding modifiedBy works
+
+    Code
+      (expect_no_error(dct_add_row(base_dat, scientificName = "foo",
+        stamp_modified_by_name = TRUE)))
+    Output
+      # A tibble: 2 x 3
+        taxonID                          scientificName modifiedBy
+        <chr>                            <chr>          <chr>     
+      1 1                                foo            <NA>      
+      2 bd40ef6d4a9413de9c1318a65cbae5d7 foo            me        
+
+# Adding modifiedByID works
+
+    Code
+      (expect_no_error(dct_add_row(base_dat, scientificName = "foo",
+        stamp_modified_by_id = TRUE)))
+    Output
+      # A tibble: 2 x 3
+        taxonID                          scientificName modifiedByID
+        <chr>                            <chr>          <chr>       
+      1 1                                foo            <NA>        
+      2 bd40ef6d4a9413de9c1318a65cbae5d7 foo            me          
+

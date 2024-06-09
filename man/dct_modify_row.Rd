@@ -17,6 +17,8 @@ dct_modify_row(
   remap_names = dct_options()$remap_names,
   remap_variant = dct_options()$remap_variant,
   stamp_modified = dct_options()$stamp_modified,
+  stamp_modified_by_id = dct_options()$stamp_modified_by_id,
+  stamp_modified_by_name = dct_options()$stamp_modified_by_name,
   strict = dct_options()$strict,
   quiet = dct_options()$quiet,
   args_tbl = NULL,
@@ -53,6 +55,16 @@ assign to the selected row.}
 \item{remap_variant}{Same as \code{remap_names}, but applies specifically to rows with taxonomicStatus of "variant". Default \code{FALSE}.}
 
 \item{stamp_modified}{Logical vector of length 1; should the \code{modified} column of any newly created or modified row include a timestamp with the date and time of its creation/modification? If the \code{modified} column does not yet exist it will be created. Default \code{TRUE}.}
+
+\item{stamp_modified_by_id}{Logical vector of length 1; should the \code{modifiedByID} column of any newly created or modified row include the ID of the
+current user? If the \code{modifiedByID} column does not yet exist it will be created; note that
+this is a non-DWC standard column, so \code{"modifiedByID"} is required in
+\code{extra_cols}. The current user ID can be specified with the \code{user_id} option. Default \code{FALSE}.}
+
+\item{stamp_modified_by_name}{Logical vector of length 1; should the \code{modifiedBy} column of any newly created or modified row include the name of the
+current user? If the \code{modifiedBy} column does not yet exist it will be created; note that
+this is a non-DWC standard column, so \code{"modifiedBy"} is required in
+\code{extra_cols}. The current user can be specified with the \code{user_name} option. Default \code{FALSE}.}
 
 \item{strict}{Logical vector of length 1; should taxonomic checks be run on the updated taxonomic database? Default \code{FALSE}..}
 
