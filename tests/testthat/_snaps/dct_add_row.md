@@ -63,7 +63,7 @@
 
     Code
       (expect_no_error(dct_add_row(base_dat, scientificName = "foo",
-        stamp_modified_by_name = TRUE)))
+        stamp_modified_by = TRUE)))
     Output
       # A tibble: 2 x 3
         taxonID                          scientificName modifiedBy

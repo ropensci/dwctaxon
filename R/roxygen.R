@@ -141,7 +141,7 @@ param_stamp_modified_by_name <- glue::glue(
   this is a non-DWC standard column, so `"modifiedBy"` is required in
   `extra_cols`. \\
   The current user can be specified with the `user_name` option. \\
-  {print_default("stamp_modified_by_name")}.'
+  {print_default("stamp_modified_by")}.'
 )
 
 param_stamp_modified_by_id <- glue::glue(

@@ -32,7 +32,7 @@
 #' @param taxon_id_length `r param_taxon_id_length`
 #' @param stamp_modified `r param_stamp_modified`
 #' @param stamp_modified_by_id `r param_stamp_modified_by_id`
-#' @param stamp_modified_by_name `r param_stamp_modified_by_name`
+#' @param stamp_modified_by `r param_stamp_modified_by_name`
 #' @param strict `r param_strict`
 #' @param ... Additional data to add, specified as sets of named
 #' character or numeric vectors; e.g., `parentNameUsageID = "6SH4"`. The name of
@@ -56,8 +56,8 @@ dct_add_row <- function(tax_dat,
                         stamp_modified = dct_options()$stamp_modified,
                         stamp_modified_by_id =
                           dct_options()$stamp_modified_by_id,
-                        stamp_modified_by_name =
-                          dct_options()$stamp_modified_by_name,
+                        stamp_modified_by =
+                          dct_options()$stamp_modified_by,
                         strict = dct_options()$strict,
                         ...) {
   # Create new_dat from direct input if provided
@@ -174,10 +174,10 @@ dct_add_row <- function(tax_dat,
   }
 
   # Add modifiedBy
-  if (isTRUE(stamp_modified_by_name)) {
+  if (isTRUE(stamp_modified_by)) {
     assertthat::assert_that(
       isTRUE("modifiedBy" %in% dct_options()$extra_cols),
-      msg = "stamp_modified_by_name requires 'modifiedBy' in extra_cols"
+      msg = "stamp_modified_by requires 'modifiedBy' in extra_cols"
     )
     new_dat <- dplyr::mutate(
       new_dat,

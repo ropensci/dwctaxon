@@ -92,7 +92,7 @@ create_new_row_by_modification <- function(tax_dat,
                                            other_terms = NULL,
                                            stamp_modified = NULL,
                                            stamp_modified_by_id = NULL,
-                                           stamp_modified_by_name = NULL) {
+                                           stamp_modified_by = NULL) {
   new_row <- tax_dat_row
   # - modify taxonomicStatus
   if (!is.null(tax_status)) {
@@ -176,10 +176,10 @@ create_new_row_by_modification <- function(tax_dat,
   }
 
   # Add modifiedBy
-  if (isTRUE(stamp_modified_by_name)) {
+  if (isTRUE(stamp_modified_by)) {
     assertthat::assert_that(
       isTRUE("modifiedBy" %in% dct_options()$extra_cols),
-      msg = "stamp_modified_by_name requires 'modifiedBy' in extra_cols"
+      msg = "stamp_modified_by requires 'modifiedBy' in extra_cols"
     )
     new_row <- dplyr::mutate(
       new_row,
@@ -222,7 +222,7 @@ change_other_rows <- function(tax_dat,
                               fill_usage_name = NULL,
                               stamp_modified = NULL,
                               stamp_modified_by_id = NULL,
-                              stamp_modified_by_name = NULL) {
+                              stamp_modified_by = NULL) {
   new_row_other <- NULL
   if (!is.null(usage_id) && isTRUE(remap_names)) {
     # - find other rows affected
@@ -256,10 +256,10 @@ change_other_rows <- function(tax_dat,
         )
       }
       # Add modifiedBy
-      if (isTRUE(stamp_modified_by_name)) {
+      if (isTRUE(stamp_modified_by)) {
         assertthat::assert_that(
           isTRUE("modifiedBy" %in% dct_options()$extra_cols),
-          msg = "stamp_modified_by_name requires 'modifiedBy' in extra_cols"
+          msg = "stamp_modified_by requires 'modifiedBy' in extra_cols"
         )
         new_row_other <- dplyr::mutate(
           new_row_other,
@@ -386,8 +386,8 @@ dct_modify_row_single <- function(tax_dat,
                                   stamp_modified = dct_options()$stamp_modified,
                                   stamp_modified_by_id =
                                     dct_options()$stamp_modified_by_id,
-                                  stamp_modified_by_name =
-                                    dct_options()$stamp_modified_by_name,
+                                  stamp_modified_by =
+                                    dct_options()$stamp_modified_by,
                                   strict = dct_options()$strict,
                                   quiet = dct_options()$quiet,
                                   other_terms = NULL) {
@@ -486,7 +486,7 @@ dct_modify_row_single <- function(tax_dat,
     other_terms = other_terms,
     stamp_modified = stamp_modified,
     stamp_modified_by_id = stamp_modified_by_id,
-    stamp_modified_by_name = stamp_modified_by_name
+    stamp_modified_by = stamp_modified_by
   )
 
   # Extract usage_name_match from new_row, which is stored as an attribute
@@ -506,7 +506,7 @@ dct_modify_row_single <- function(tax_dat,
     fill_usage_name = fill_usage_name,
     stamp_modified = stamp_modified,
     stamp_modified_by_id = stamp_modified_by_id,
-    stamp_modified_by_name = stamp_modified_by_name
+    stamp_modified_by = stamp_modified_by
   )
 
   # Format output
@@ -578,7 +578,7 @@ dct_modify_row_single <- function(tax_dat,
 #' @param remap_variant `r param_remap_variant`
 #' @param stamp_modified `r param_stamp_modified`
 #' @param stamp_modified_by_id `r param_stamp_modified_by_id`
-#' @param stamp_modified_by_name `r param_stamp_modified_by_name`
+#' @param stamp_modified_by `r param_stamp_modified_by_name`
 #' @param strict `r param_strict`.
 #' @param quiet `r param_quiet`.
 #' @param args_tbl A dataframe including columns corresponding to one or more of
@@ -608,8 +608,8 @@ dct_modify_row <- function(tax_dat,
                            stamp_modified = dct_options()$stamp_modified,
                            stamp_modified_by_id =
                              dct_options()$stamp_modified_by_id,
-                           stamp_modified_by_name =
-                             dct_options()$stamp_modified_by_name,
+                           stamp_modified_by =
+                             dct_options()$stamp_modified_by,
                            strict = dct_options()$strict,
                            quiet = dct_options()$quiet,
                            args_tbl = NULL,
@@ -666,8 +666,8 @@ dct_modify_row <- function(tax_dat,
         stamp_modified_by_id = val_if_in_dat(
           args_tbl, "stamp_modified_by_id", i
         ),
-        stamp_modified_by_name = val_if_in_dat(
-          args_tbl, "stamp_modified_by_name", i
+        stamp_modified_by = val_if_in_dat(
+          args_tbl, "stamp_modified_by", i
         ),
         strict = val_if_in_dat(args_tbl, "strict", i),
         quiet = quiet,
@@ -692,7 +692,7 @@ dct_modify_row <- function(tax_dat,
     remap_variant = remap_variant,
     stamp_modified = stamp_modified,
     stamp_modified_by_id = stamp_modified_by_id,
-    stamp_modified_by_name = stamp_modified_by_name,
+    stamp_modified_by = stamp_modified_by,
     strict = strict,
     quiet = quiet,
     other_terms = tibble::tibble(...)
