@@ -589,7 +589,7 @@ test_that("Filling in modifiedBy and modifiedByID works", {
     dct_modify_row(
       tax_dat,
       scientificName = "foo", taxonomicStatus = "maybe accepted",
-      stamp_modified = FALSE, stamp_modified_by_name = TRUE,
+      stamp_modified = FALSE, stamp_modified_by = TRUE,
       stamp_modified_by_id = TRUE
     ),
     tribble(
@@ -604,14 +604,14 @@ test_that("Filling in modifiedBy and modifiedByID works", {
     user_name = "me", user_id = "123",
     extra_cols = c("modifiedBy", "modifiedByID"),
     stamp_modified = FALSE,
-    stamp_modified_by_name = TRUE,
+    stamp_modified_by = TRUE,
     stamp_modified_by_id = TRUE
   )
   expect_equal(
     dct_modify_row(
       tax_dat,
       scientificName = "foo", taxonomicStatus = "maybe accepted",
-      stamp_modified = FALSE, stamp_modified_by_name = TRUE,
+      stamp_modified = FALSE, stamp_modified_by = TRUE,
       stamp_modified_by_id = TRUE
     ),
     tribble(
@@ -636,9 +636,9 @@ test_that("modifiedBy and modifiedByID fail if extra_cols not set properly", {
     dct_modify_row(
       tax_dat,
       scientificName = "foo", taxonomicStatus = "maybe accepted",
-      stamp_modified_by_name = TRUE
+      stamp_modified_by = TRUE
     ),
-    "stamp_modified_by_name requires 'modifiedBy' in extra_cols"
+    "stamp_modified_by requires 'modifiedBy' in extra_cols"
   )
   expect_error(
     dct_modify_row(
@@ -656,7 +656,7 @@ test_that("modifiedBy and modifiedByID fill in for all remapped names", {
     user_name = "me", user_id = "123",
     extra_cols = c("modifiedBy", "modifiedByID"),
     stamp_modified = FALSE,
-    stamp_modified_by_name = TRUE,
+    stamp_modified_by = TRUE,
     stamp_modified_by_id = TRUE
   )
   tax_dat <- tribble(

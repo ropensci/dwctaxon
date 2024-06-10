@@ -18,7 +18,7 @@ dct_modify_row(
   remap_variant = dct_options()$remap_variant,
   stamp_modified = dct_options()$stamp_modified,
   stamp_modified_by_id = dct_options()$stamp_modified_by_id,
-  stamp_modified_by_name = dct_options()$stamp_modified_by_name,
+  stamp_modified_by = dct_options()$stamp_modified_by,
   strict = dct_options()$strict,
   quiet = dct_options()$quiet,
   args_tbl = NULL,
@@ -61,7 +61,7 @@ current user? If the \code{modifiedByID} column does not yet exist it will be cr
 this is a non-DWC standard column, so \code{"modifiedByID"} is required in
 \code{extra_cols}. The current user ID can be specified with the \code{user_id} option. Default \code{FALSE}.}
 
-\item{stamp_modified_by_name}{Logical vector of length 1; should the \code{modifiedBy} column of any newly created or modified row include the name of the
+\item{stamp_modified_by}{Logical vector of length 1; should the \code{modifiedBy} column of any newly created or modified row include the name of the
 current user? If the \code{modifiedBy} column does not yet exist it will be created; note that
 this is a non-DWC standard column, so \code{"modifiedBy"} is required in
 \code{extra_cols}. The current user can be specified with the \code{user_name} option. Default \code{FALSE}.}

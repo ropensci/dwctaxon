@@ -78,8 +78,8 @@ settings_is_string <- function(..., null_allowed = FALSE) {
 #' - `remap_names`: `r param_remap_names`
 #' - `remap_variant`: `r param_remap_variant`
 #' - `stamp_modified`: `r param_stamp_modified`
+#' - `stamp_modified_by`: `r param_stamp_modified_by_name`
 #' - `stamp_modified_by_id`: `r param_stamp_modified_by_id`
-#' - `stamp_modified_by_name`: `r param_stamp_modified_by_name`
 #' - `taxon_id_length`: `r param_taxon_id_length`
 #'
 #' ### General arguments
@@ -135,7 +135,7 @@ dct_opts <- settings::options_manager(
   remap_names = TRUE,
   remap_variant = FALSE,
   stamp_modified = TRUE,
-  stamp_modified_by_name = FALSE,
+  stamp_modified_by = FALSE,
   stamp_modified_by_id = FALSE,
   strict = FALSE,
   # general
@@ -170,7 +170,7 @@ dct_opts <- settings::options_manager(
     quiet = settings::inlist(TRUE, FALSE),
     user_name = settings_is_string(),
     user_id = settings_is_string(),
-    stamp_modified_by_name = settings::inlist(TRUE, FALSE),
+    stamp_modified_by = settings::inlist(TRUE, FALSE),
     stamp_modified_by_id = settings::inlist(TRUE, FALSE)
   )
 )

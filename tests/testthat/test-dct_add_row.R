@@ -307,9 +307,9 @@ test_that("Adding modifiedBy works", {
   expect_error(
     dct_add_row(
       base_dat,
-      scientificName = "foo", stamp_modified_by_name = TRUE
+      scientificName = "foo", stamp_modified_by = TRUE
     ),
-    "stamp_modified_by_name requires 'modifiedBy' in extra_cols"
+    "stamp_modified_by requires 'modifiedBy' in extra_cols"
   )
   dct_options(reset = TRUE)
   dct_options(
@@ -321,7 +321,7 @@ test_that("Adding modifiedBy works", {
     (expect_no_error(
       dct_add_row(
         base_dat,
-        scientificName = "foo", stamp_modified_by_name = TRUE
+        scientificName = "foo", stamp_modified_by = TRUE
       )
     ))
   })
