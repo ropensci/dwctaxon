@@ -89,6 +89,7 @@ create_new_row_by_modification <- function(tax_dat,
                                            clear_usage_id = NULL,
                                            fill_usage_name = NULL,
                                            clear_usage_name = NULL,
+                                           remap_parent = NULL,
                                            other_terms = NULL,
                                            stamp_modified = NULL,
                                            stamp_modified_by_id = NULL,
@@ -158,6 +159,51 @@ create_new_row_by_modification <- function(tax_dat,
       new_row <- dplyr::mutate(new_row, acceptedNameUsage = NaN)
     }
   }
+  # - change parentNameUsageID to that of the accepted name if it currently
+  #   points to a synonym
+  if (isTRUE(remap_parent) &&
+        "taxonomicStatus" %in% colnames(new_row) &&
+        "parentNameUsageID" %in% colnames(new_row) &&
+        "acceptedNameUsageID" %in% colnames(new_row) &&
+        "taxonID" %in% colnames(tax_dat) &&
+        "taxonomicStatus" %in% colnames(tax_dat) &&
+        "parentNameUsageID" %in% colnames(tax_dat) &&
+        "acceptedNameUsageID" %in% colnames(tax_dat) &&
+        !is.na(new_row$parentNameUsageID)) {
+    parent_row <- tax_dat[tax_dat$taxonID == new_row$parentNameUsageID, ]
+    parent_is_syn <- grepl(
+      "synonym",
+      parent_row$taxonomicStatus, ignore.case = TRUE
+    )
+    if (parent_is_syn) {
+      new_row <- dplyr::mutate(
+        new_row,
+        parentNameUsageID = parent_row$acceptedNameUsageID
+      )
+    }
+  }
+
+  # - change parentNameUsage to that of the accepted name if it currently
+  #   points to a synonym
+  if (isTRUE(remap_parent) &&
+        "parentNameUsageID" %in% colnames(new_row) &&
+        "taxonID" %in% colnames(tax_dat) &&
+        "scientificName" %in% colnames(tax_dat) &&
+        "taxonomicStatus" %in% colnames(tax_dat) &&
+        "parentNameUsage" %in% colnames(tax_dat) &&
+        !is.na(new_row$parentNameUsage)) {
+    # Already modified parentNameUsageID to point to correct (accepted) name,
+    # so don't need to check for that
+    parent_row <- tax_dat[tax_dat$taxonID == new_row$parentNameUsageID, ]
+    parent_name_match <- parent_row$scientificName
+    new_row$parentNameUsage <- parent_name_match
+    # Need parent_name_match later, so store as attribute
+    attributes(new_row) <- c(
+      attributes(new_row),
+      parent_name_match = parent_name_match
+    )
+  }
+
   # - add other DwC terms, overwriting existing values
   if (!is.null(other_terms)) {
     if (nrow(other_terms) > 0) {
@@ -216,8 +262,11 @@ create_new_row_by_modification <- function(tax_dat,
 change_other_rows <- function(tax_dat,
                               tax_dat_row,
                               usage_name_match = NULL,
+                              parent_name_match = NULL,
                               usage_id = NULL,
+                              parent_id = NULL,
                               remap_names = NULL,
+                              remap_parent = NULL,
                               remap_variant = NULL,
                               fill_usage_name = NULL,
                               stamp_modified = NULL,
@@ -239,6 +288,7 @@ change_other_rows <- function(tax_dat,
     }
     # - update other rows affected
     if (nrow(new_row_other) > 0) {
+      # Update acceptedNameUsageID
       new_row_other <- dplyr::mutate(
         new_row_other,
         acceptedNameUsageID = usage_id
@@ -249,6 +299,20 @@ change_other_rows <- function(tax_dat,
           acceptedNameUsage = usage_name_match
         )
       }
+      # Remap parent
+      if (isTRUE(remap_parent)) {
+        new_row_other <- dplyr::mutate(
+          new_row_other,
+          parentNameUsageID = parent_id
+        )
+      }
+      if (isTRUE(remap_parent) && !is.null(parent_name_match)) {
+        new_row_other <- dplyr::mutate(
+          new_row_other,
+          parentNameUsage = parent_name_match
+        )
+      }
+      # Add modified time stamp
       if (isTRUE(stamp_modified)) {
         new_row_other <- dplyr::mutate(
           new_row_other,
@@ -382,6 +446,7 @@ dct_modify_row_single <- function(tax_dat,
                                   fill_usage_name =
                                     dct_options()$fill_usage_name,
                                   remap_names = dct_options()$remap_names,
+                                  remap_parent = dct_options()$remap_parent,
                                   remap_variant = dct_options()$remap_variant,
                                   stamp_modified = dct_options()$stamp_modified,
                                   stamp_modified_by_id =
@@ -427,6 +492,7 @@ dct_modify_row_single <- function(tax_dat,
   assertthat::assert_that(assertthat::is.flag(clear_usage_id))
   assertthat::assert_that(assertthat::is.flag(fill_usage_name))
   assertthat::assert_that(assertthat::is.flag(remap_names))
+  assertthat::assert_that(assertthat::is.flag(remap_parent))
   assertthat::assert_that(assertthat::is.flag(remap_variant))
   assertthat::assert_that(assertthat::is.flag(stamp_modified))
   assertthat::assert_that(assertthat::is.flag(strict))
@@ -483,6 +549,7 @@ dct_modify_row_single <- function(tax_dat,
     clear_usage_id = clear_usage_id,
     fill_usage_name = fill_usage_name,
     clear_usage_name = clear_usage_name,
+    remap_parent = remap_parent,
     other_terms = other_terms,
     stamp_modified = stamp_modified,
     stamp_modified_by_id = stamp_modified_by_id,
@@ -492,6 +559,13 @@ dct_modify_row_single <- function(tax_dat,
   # Extract usage_name_match from new_row, which is stored as an attribute
   usage_name_match <- attributes(new_row)$usage_name_match
   attributes(new_row)$usage_name_match <- NULL
+  parent_name_match <- attributes(new_row)$parent_name_match
+  attributes(new_row)$parent_name_match <- NULL
+  parent_id <- if ("parentNameUsageID" %in% colnames(new_row)) {
+    new_row$parentNameUsageID
+  } else {
+    NULL
+  }
 
   # Change other rows
   # For change to synonym or variety (acceptedNameUsageID not NA),
@@ -500,8 +574,11 @@ dct_modify_row_single <- function(tax_dat,
     tax_dat = tax_dat,
     tax_dat_row = tax_dat_row,
     usage_name_match = usage_name_match,
+    parent_name_match = parent_name_match,
     usage_id = usage_id,
+    parent_id = parent_id,
     remap_names = remap_names,
+    remap_parent = remap_parent,
     remap_variant = remap_variant,
     fill_usage_name = fill_usage_name,
     stamp_modified = stamp_modified,
@@ -549,6 +626,12 @@ dct_modify_row_single <- function(tax_dat,
 #' is not applied to names with taxonomicStatus of "variant" by default, but can
 #' be turned on for such names with `remap_variant`.
 #'
+#' If `remap_parent` is `TRUE` (default) and the `parentNameUsageID` of the
+#' selected row is a synonym, the `parentNameUsageID` will be changed to
+#' that of the accepted name (of the parent taxon). This will also apply to any
+#' other row with the same `parentNameUsageID` as the selected row. This applies
+#' to `parentNameUsage` as well.
+#'
 #' If `clear_usage_id` or `clear_usage_name` is `TRUE` and `taxonomicStatus`
 #' includes the word "accepted", acceptedNameUsageID
 #' or acceptedNameUsage will be set to NA respectively, regardless of the
@@ -575,6 +658,7 @@ dct_modify_row_single <- function(tax_dat,
 #' @param clear_usage_name `r param_clear_usage_id`
 #' @param fill_usage_name `r param_fill_usage_name`
 #' @param remap_names `r param_remap_names`
+#' @param remap_parent `r param_remap_parent`
 #' @param remap_variant `r param_remap_variant`
 #' @param stamp_modified `r param_stamp_modified`
 #' @param stamp_modified_by_id `r param_stamp_modified_by_id`
@@ -604,6 +688,7 @@ dct_modify_row <- function(tax_dat,
                            clear_usage_name = dct_options()$clear_usage_name,
                            fill_usage_name = dct_options()$fill_usage_name,
                            remap_names = dct_options()$remap_names,
+                           remap_parent = dct_options()$remap_parent,
                            remap_variant = dct_options()$remap_variant,
                            stamp_modified = dct_options()$stamp_modified,
                            stamp_modified_by_id =
@@ -661,6 +746,7 @@ dct_modify_row <- function(tax_dat,
         clear_usage_name = val_if_in_dat(args_tbl, "clear_usage_name", i),
         fill_usage_name = val_if_in_dat(args_tbl, "fill_usage_name", i),
         remap_names = val_if_in_dat(args_tbl, "remap_names", i),
+        remap_parent = val_if_in_dat(args_tbl, "remap_parent", i),
         remap_variant = val_if_in_dat(args_tbl, "remap_variant", i),
         stamp_modified = val_if_in_dat(args_tbl, "stamp_modified", i),
         stamp_modified_by_id = val_if_in_dat(
@@ -689,6 +775,7 @@ dct_modify_row <- function(tax_dat,
     clear_usage_name = clear_usage_name,
     fill_usage_name = fill_usage_name,
     remap_names = remap_names,
+    remap_parent = remap_parent,
     remap_variant = remap_variant,
     stamp_modified = stamp_modified,
     stamp_modified_by_id = stamp_modified_by_id,

@@ -77,6 +77,7 @@ settings_is_string <- function(..., null_allowed = FALSE) {
 #' - `fill_usage_id`: `r param_fill_usage_id`
 #' - `fill_usage_name`: `r param_fill_usage_name`
 #' - `remap_names`: `r param_remap_names`
+#' - `remap_parent`: `r param_remap_parent`
 #' - `remap_variant`: `r param_remap_variant`
 #' - `stamp_modified`: `r param_stamp_modified`
 #' - `stamp_modified_by`: `r param_stamp_modified_by_name`
@@ -135,6 +136,7 @@ dct_opts <- settings::options_manager(
   clear_usage_name = TRUE,
   fill_usage_name = TRUE,
   remap_names = TRUE,
+  remap_parent = TRUE,
   remap_variant = FALSE,
   stamp_modified = TRUE,
   stamp_modified_by = FALSE,
