@@ -29,6 +29,13 @@ param_check_mapping_parent <- glue::glue(
   {print_default("check_mapping_parent")}.'
 )
 
+param_check_mapping_parent_accepted <- glue::glue( # nolint
+  'Logical vector of length 1; should all values of \\
+  `parentNameUsageID` be required to map to the `taxonID` of an accepted \\
+  name? \\
+  {print_default("check_mapping_parent_accepted")}.'
+)
+
 param_check_mapping_original <- glue::glue(
   'Logical vector of length 1; should all values of \\
   `originalNameUsageID` be required to map to the `taxonID` of an existing \\

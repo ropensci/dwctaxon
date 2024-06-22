@@ -32,6 +32,7 @@
 #' @param check_tax_status `r param_check_tax_status`
 #' @param check_mapping_accepted `r param_check_mapping_accepted`
 #' @param check_mapping_parent `r param_check_mapping_parent`
+#' @param check_mapping_parent_accepted `r param_check_mapping_parent_accepted`
 #' @param check_mapping_original `r param_check_mapping_original`
 #' @param check_mapping_accepted_status `r param_check_mapping_accepted_status`
 #' (see Details).
@@ -57,6 +58,8 @@ dct_validate <- function(tax_dat,
                            dct_options()$check_mapping_accepted,
                          check_mapping_parent =
                            dct_options()$check_mapping_parent,
+                         check_mapping_parent_accepted =
+                           dct_options()$check_mapping_parent_accepted,
                          check_mapping_original =
                            dct_options()$check_mapping_original,
                          check_mapping_accepted_status =
@@ -81,6 +84,7 @@ dct_validate <- function(tax_dat,
   assertthat::assert_that(assertthat::is.flag(check_tax_status))
   assertthat::assert_that(assertthat::is.flag(check_mapping_accepted))
   assertthat::assert_that(assertthat::is.flag(check_mapping_parent))
+  assertthat::assert_that(assertthat::is.flag(check_mapping_parent_accepted))
   assertthat::assert_that(assertthat::is.flag(check_mapping_original))
   assertthat::assert_that(assertthat::is.flag(check_mapping_accepted_status))
   assertthat::assert_that(assertthat::is.flag(check_sci_name))
@@ -102,6 +106,7 @@ dct_validate <- function(tax_dat,
   )
 
   # Check pre-requisites
+  # - check_mapping_accepted_status
   if (check_mapping_accepted_status) {
     assertthat::assert_that(
       check_taxon_id,
@@ -120,9 +125,29 @@ dct_validate <- function(tax_dat,
     )
   }
 
+  # - check_mapping_parent_accepted
+  if (check_mapping_parent_accepted) {
+    assertthat::assert_that(
+      check_taxon_id,
+      msg = "check_mapping_parent_accepted requires check_taxon_id to be TRUE"
+    )
+    assertthat::assert_that(
+      check_mapping_parent,
+      msg = paste(
+        "check_mapping_parent_accepted requires check_mapping_parent",
+        "to be TRUE"
+      )
+    )
+    assertthat::assert_that(
+      check_tax_status,
+      msg = "check_mapping_parent_accepted requires check_tax_status to be TRUE"
+    )
+  }
+
   # Run main checks ----
   check_res <- list(
     # Required column checks ----
+    # - taxonID
     assert_col(
       tax_dat, "taxonID", c("character", "numeric", "integer"),
       req_by = "check_taxon_id",
@@ -134,10 +159,23 @@ dct_validate <- function(tax_dat,
       run = check_mapping_accepted_status && !skip_missing_cols
     ),
     assert_col(
+      tax_dat, "taxonID", c("character", "numeric", "integer"),
+      req_by = "check_map_to_parent_accepted",
+      run = check_mapping_parent_accepted && !skip_missing_cols
+    ),
+    # - acceptedNameUsageID
+    assert_col(
       tax_dat, "acceptedNameUsageID", c("character", "numeric", "integer"),
       req_by = "check_mapping_accepted_status",
       run = check_mapping_accepted_status && !skip_missing_cols
     ),
+    # - parentNameUsageID
+    assert_col(
+      tax_dat, "parentNameUsageID", c("character", "numeric", "integer"),
+      req_by = "check_map_to_parent_accepted",
+      run = check_mapping_parent_accepted && !skip_missing_cols
+    ),
+    # - taxonomicStatus
     assert_col(
       tax_dat, "taxonomicStatus", "character",
       req_by = "check_tax_status",
@@ -153,6 +191,12 @@ dct_validate <- function(tax_dat,
       req_by = "check_mapping_accepted_status",
       run = check_mapping_accepted_status && !skip_missing_cols
     ),
+    assert_col(
+      tax_dat, "taxonomicStatus", "character",
+      req_by = "check_map_to_parent_accepted",
+      run = check_mapping_parent_accepted && !skip_missing_cols
+    ),
+    # - scientificName
     assert_col(
       tax_dat, "scientificName", "character",
       req_by = "check_status_diff",
@@ -280,6 +324,14 @@ dct_validate <- function(tax_dat,
       tax_dat,
       on_fail = on_fail, on_success = "logical",
       run = check_mapping_accepted_status,
+      quiet = quiet
+    ),
+    # Parent mapping ----
+    # - parent is an accepted name
+    check_map_to_parent_accepted(
+      tax_dat,
+      on_fail = on_fail, on_success = "logical",
+      run = check_mapping_parent_accepted,
       quiet = quiet
     ),
     # Scientific name ----

@@ -10,6 +10,7 @@ dct_validate(
   check_tax_status = dct_options()$check_tax_status,
   check_mapping_accepted = dct_options()$check_mapping_accepted,
   check_mapping_parent = dct_options()$check_mapping_parent,
+  check_mapping_parent_accepted = dct_options()$check_mapping_parent_accepted,
   check_mapping_original = dct_options()$check_mapping_original,
   check_mapping_accepted_status = dct_options()$check_mapping_accepted_status,
   check_sci_name = dct_options()$check_sci_name,
@@ -33,6 +34,8 @@ dct_validate(
 \item{check_mapping_accepted}{Logical vector of length 1; should all values of \code{acceptedNameUsageID} be required to map to the \code{taxonID} of an existing name? Default \code{TRUE}.}
 
 \item{check_mapping_parent}{Logical vector of length 1; should all values of \code{parentNameUsageID} be required to map to the \code{taxonID} of an existing name? Default \code{TRUE}.}
+
+\item{check_mapping_parent_accepted}{Logical vector of length 1; should all values of \code{parentNameUsageID} be required to map to the \code{taxonID} of an accepted name? Default \code{FALSE}.}
 
 \item{check_mapping_original}{Logical vector of length 1; should all values of \code{originalNameUsageID} be required to map to the \code{taxonID} of an existing name? Default \code{TRUE}.}
 
