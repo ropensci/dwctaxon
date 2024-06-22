@@ -683,6 +683,10 @@ test_that("modifiedBy and modifiedByID fill in for all remapped names", {
   dct_options(reset = TRUE)
 })
 
+# remap_parent
+
+# see test-dct_modify_row-remap_parent.R
+
 # Other tests ----
 
 test_that("Catching missing taxonID works", {

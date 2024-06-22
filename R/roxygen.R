@@ -190,6 +190,14 @@ param_remap_names <- glue::glue(
   {print_default("remap_names")}.'
 )
 
+param_remap_parent <- glue::glue(
+  'Logical vector of length 1; should the parentNameUsageID be updated \\
+  (remapped) to that of its accepted name if it is a synonym? \\
+  Will also apply to any other rows with the same \\
+  parentNameUsageID as the taxonID of the row to be modified. \\
+  {print_default("remap_names")}.'
+)
+
 param_remap_variant <- glue::glue(
   'Same as `remap_names`, but applies specifically to \\
   rows with taxonomicStatus of "variant". \\
