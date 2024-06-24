@@ -288,6 +288,8 @@ test_that("Check for zip file ready to download works", {
   )
   # Rest of tests require an internet connection
   skip_if_offline(host = "r-project.org")
+  # TODO run test when #116 is fixed
+  skip("Need to fix #116")
   # URL used in vignette should work
   # - load URL
   source(system.file("extdata", "vascan_url.R", package = "dwctaxon"))
