@@ -622,7 +622,8 @@ dct_modify_row_single <- function(tax_dat,
 #' If `remap_names` is `TRUE` (default) and `acceptedNameUsageID` is provided,
 #' any names that have an acceptedNameUsageID matching the taxonID of the
 #' selected row (i.e., synonyms of that row) will also have their
-#' acceptedNameUsageID replaced with the new acceptedNameUsageID. This behavior
+#' acceptedNameUsageID replaced with the new acceptedNameUsageID. This applies
+#' to `acceptedNameUsage` as well. This behavior
 #' is not applied to names with taxonomicStatus of "variant" by default, but can
 #' be turned on for such names with `remap_variant`.
 #'

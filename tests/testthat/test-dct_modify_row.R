@@ -52,10 +52,11 @@ test_that(
   "Name remapping works",
   {
     tax_dat <- tribble(
-      ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
-      "1", NA, "accepted", "foo",
-      "2", NA, "accepted", "bar",
-      "3", "2", "synonym", "bat"
+      ~taxonID, ~acceptedNameUsageID, ~acceptedNameUsage,
+      ~taxonomicStatus, ~scientificName,
+      "1", NA, NA, "accepted", "foo",
+      "2", NA, NA, "accepted", "bar",
+      "3", "2", "bar", "synonym", "bat"
     )
     expect_equal(
       dct_modify_row(
@@ -64,10 +65,11 @@ test_that(
         stamp_modified = FALSE
       ),
       tribble(
-        ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
-        "1", NA, "accepted", "foo",
-        "2", "1", "synonym", "bar",
-        "3", "1", "synonym", "bat"
+        ~taxonID, ~acceptedNameUsageID, ~acceptedNameUsage,
+        ~taxonomicStatus, ~scientificName,
+        "1", NA, NA, "accepted", "foo",
+        "2", "1", "foo", "synonym", "bar",
+        "3", "1", "foo", "synonym", "bat"
       )
     )
     expect_equal(
@@ -77,10 +79,11 @@ test_that(
         stamp_modified = FALSE, remap_names = FALSE
       ),
       tribble(
-        ~taxonID, ~acceptedNameUsageID, ~taxonomicStatus, ~scientificName,
-        "1", NA, "accepted", "foo",
-        "2", "1", "synonym", "bar",
-        "3", "2", "synonym", "bat"
+        ~taxonID, ~acceptedNameUsageID,  ~acceptedNameUsage,
+        ~taxonomicStatus, ~scientificName,
+        "1", NA, NA, "accepted", "foo",
+        "2", "1", "foo", "synonym", "bar",
+        "3", "2", "bar", "synonym", "bat"
       )
     )
   }
