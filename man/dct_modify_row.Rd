@@ -108,7 +108,8 @@ selected row (i.e., they will modify the row).
 If \code{remap_names} is \code{TRUE} (default) and \code{acceptedNameUsageID} is provided,
 any names that have an acceptedNameUsageID matching the taxonID of the
 selected row (i.e., synonyms of that row) will also have their
-acceptedNameUsageID replaced with the new acceptedNameUsageID. This behavior
+acceptedNameUsageID replaced with the new acceptedNameUsageID. This applies
+to \code{acceptedNameUsage} as well. This behavior
 is not applied to names with taxonomicStatus of "variant" by default, but can
 be turned on for such names with \code{remap_variant}.
 
