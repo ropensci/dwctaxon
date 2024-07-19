@@ -8,13 +8,13 @@
   "codeRepository": "https://github.com/ropensci/dwctaxon",
   "issueTracker": "https://github.com/ropensci/dwctaxon/issues",
   "license": "https://spdx.org/licenses/MIT",
-  "version": "2.0.3.9000",
+  "version": "2.0.3.9001",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 4.3.2 (2023-10-31)",
+  "runtimePlatform": "R version 4.4.0 (2024-04-24)",
   "provider": {
     "@id": "https://cran.r-project.org",
     "@type": "Organization",
@@ -325,7 +325,7 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "1276.854KB",
+  "fileSize": "1308.095KB",
   "citation": [
     {
       "@type": "SoftwareSourceCode",
