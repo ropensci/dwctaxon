@@ -346,6 +346,7 @@ safe_to_download <- function(url, online = curl::has_internet()) {
 #' @param quiet Logical vector of length 1; should messages be suppressed?
 #'
 #' @return Logical vector of length 1; TRUE if successful, FALSE otherwise.
+#' @importFrom utils download.file unzip
 #' @noRd
 #' @autoglobal
 safe_download_unzip <- function(url, destfile, exdir, quiet = FALSE) {
