@@ -15,8 +15,6 @@ knitr::opts_chunk$set(
 
 # Increase width for printing tibbles
 old <- options(width = 140)
-
-source(system.file("extdata", "vascan_url.R", package = "dwctaxon"))
 ```
 
 This vignette demonstrates using dwctaxon on "real life" data found in the wild. Our goal is to import the data and validate it.
@@ -36,7 +34,9 @@ We will use the [Database of Vascular Plants of Canada (VASCAN)](http://data.can
 
 The data can be obtained manually by going to the [VASCAN website](http://data.canadensys.net/ipt/resource.do?r=vascan), downloading the Darwin Core Archive, and unzipping it^[If you download the data manually, it may be a different version than the one used here, v37.12].
 
-Alternatively, it can be downloaded and unzipped with R. First, we set up some temporary folders for downloading and specify the URL:
+Alternatively, it can be downloaded and unzipped from the comfort of R.
+
+First, we set up some temporary folders for downloading.
 
 ```{r download-setup}
 # - Specify temporary folder for downloading data
@@ -47,12 +47,17 @@ temp_zip <- paste0(temp_dir, "/dwca-vascan.zip")
 temp_unzip <- paste0(temp_dir, "/dwca-vascan")
 ```
 
-```{r, set-url}
+The URL for the zip file can be obtained from the dwctaxon package by running this code, which saves it as `vascan_url`:
+
+```{r get-vascan-url}
+source(system.file("extdata", "vascan_url.R", package = "dwctaxon"))
+
+# Check that we now have the URL loaded:
+vascan_url
 ```
 
 ```{r, echo = FALSE, results = "asis"}
 # Check if file can be downloaded safely, quit early if not
-# Make sure this URL matches the one in the next chunk
 if (!dwctaxon:::safe_to_download(vascan_url)) {
   cat(
     paste0(
@@ -65,16 +70,34 @@ if (!dwctaxon:::safe_to_download(vascan_url)) {
 }
 ```
 
-Next, download and unzip the zip file.
+We are now ready to download and unzip the zip file.
 
-```{r download-unzip}
+```{r download-unzip-hide, include = FALSE}
+# Download and unzip data
+download_success <- dwctaxon:::safe_download_unzip(
+  url = vascan_url,
+  destfile = temp_zip,
+  exdir = temp_unzip
+)
+
+# Check if download or unzip failed
+if (!download_success) {
+  message("Zip file could not be loaded. Stopping vignette rendering.")
+  knitr::knit_exit()
+}
+```
+
+```{r download-unzip-show, eval = FALSE}
 # Download data
 download.file(url = vascan_url, destfile = temp_zip, mode = "wb")
 
 # Unzip
 unzip(temp_zip, exdir = temp_unzip)
+```
 
-# Check the contents of the unzipped data (the Darwin Core Archive)
+Let's check the contents of the unzipped data (the Darwin Core Archive).
+
+```{r list-zip-contents}
 list.files(temp_unzip)
 ```
 

@@ -334,3 +334,55 @@ safe_to_download <- function(url, online = curl::has_internet()) {
   }
   TRUE
 }
+
+#' Download and unzip a file with error handling
+#'
+#' @param url Character vector of length 1; URL pointing to zip file to
+#' download.
+#' @param destfile Character vector of length 1; path where the zip file
+#' should be saved.
+#' @param exdir Character vector of length 1; directory where the zip file
+#' should be extracted.
+#' @param quiet Logical vector of length 1; should messages be suppressed?
+#'
+#' @return Logical vector of length 1; TRUE if successful, FALSE otherwise.
+#' @noRd
+#' @autoglobal
+safe_download_unzip <- function(url, destfile, exdir, quiet = FALSE) {
+  # Download data
+  download_result <- try(
+    suppressWarnings(
+      download.file(url = url, destfile = destfile, mode = "wb", quiet = quiet)
+    ),
+    silent = TRUE
+  )
+
+  # Check if download failed
+  if (inherits(download_result, "try-error")) {
+    if (!quiet) {
+      message(
+        paste0(
+          "Failed to download file from ",
+          url
+        )
+      )
+    }
+    return(FALSE)
+  }
+
+  # Unzip
+  unzip_result <- try(
+    unzip(destfile, exdir = exdir),
+    silent = TRUE
+  )
+
+  # Check if unzip failed
+  if (inherits(unzip_result, "try-error")) {
+    if (!quiet) {
+      message("Failed to unzip file.")
+    }
+    return(FALSE)
+  }
+
+  TRUE
+}

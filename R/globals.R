@@ -25,3 +25,7 @@ utils::globalVariables(c(
   "dct_terms", # <sort_cols_dwc>
   NULL
 ))
+
+# Bindings for base functions to enable mocking in tests
+download.file <- NULL
+unzip <- NULL
