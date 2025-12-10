@@ -1,5 +1,11 @@
 # dwctaxon (development version)
 
+# dwctaxon 2.0.4
+
+## Bug fixes
+
+- Add internal function so that `real-data.Rmd` vignette will fail gracefully if data file cannot be downloaded (https://github.com/ropensci/dwctaxon/pull/123). This should ensure compliance with CRAN policy.
+
 # dwctaxon 2.0.3
 
 ## Bug fixes
