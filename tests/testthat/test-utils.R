@@ -337,4 +337,133 @@ test_that("Check for zip file ready to download works", {
   )
 })
 
+test_that("safe_download_unzip() works with valid URL", {
+  # Rest of tests require an internet connection
+  skip_if_offline(host = "r-project.org")
+
+  # Set up temporary directories
+  temp_dir <- tempdir()
+  temp_zip <- file.path(temp_dir, "test_dwca.zip")
+  temp_unzip <- file.path(temp_dir, "test_dwca")
+
+  # Clean up any existing files
+  if (file.exists(temp_zip)) {
+    unlink(temp_zip)
+  }
+  if (dir.exists(temp_unzip)) {
+    unlink(temp_unzip, recursive = TRUE)
+  }
+
+  # Load URL
+  source(system.file("extdata", "vascan_url.R", package = "dwctaxon"))
+
+  # Test successful download and unzip
+  result <- safe_download_unzip(
+    url = vascan_url,
+    destfile = temp_zip,
+    exdir = temp_unzip,
+    quiet = TRUE
+  )
+
+  expect_true(result)
+  expect_true(file.exists(temp_zip))
+  expect_true(dir.exists(temp_unzip))
+  expect_true(length(list.files(temp_unzip)) > 0)
+
+  # Clean up
+  unlink(temp_zip)
+  unlink(temp_unzip, recursive = TRUE)
+})
+
+test_that("safe_download_unzip() handles invalid URL gracefully", {
+  # Rest of tests require an internet connection
+  skip_if_offline(host = "r-project.org")
+
+  # Set up temporary directories
+  temp_dir <- tempdir()
+  temp_zip <- file.path(temp_dir, "test_invalid.zip")
+  temp_unzip <- file.path(temp_dir, "test_invalid")
+
+  # Clean up any existing files
+  if (file.exists(temp_zip)) {
+    unlink(temp_zip)
+  }
+  if (dir.exists(temp_unzip)) {
+    unlink(temp_unzip, recursive = TRUE)
+  }
+
+  # Test with 404 URL
+  expect_message(
+    result <- safe_download_unzip(
+      url = "https://github.com/joelnitta/i_will_never_make_this_repo",
+      destfile = temp_zip,
+      exdir = temp_unzip
+    ),
+    "Failed to download file"
+  )
+  expect_false(result)
+
+  # Test with quiet = TRUE (no message)
+  expect_no_message(
+    result <- safe_download_unzip(
+      url = "https://github.com/joelnitta/i_will_never_make_this_repo",
+      destfile = temp_zip,
+      exdir = temp_unzip,
+      quiet = TRUE
+    )
+  )
+  expect_false(result)
+
+  # Clean up
+  if (file.exists(temp_zip)) {
+    unlink(temp_zip)
+  }
+  if (dir.exists(temp_unzip)) unlink(temp_unzip, recursive = TRUE)
+})
+
+test_that("safe_download_unzip() handles unzip failure gracefully", {
+  # Set up temporary directories
+  temp_dir <- tempdir()
+  temp_zip <- file.path(temp_dir, "test_notazip.zip")
+  temp_unzip <- file.path(temp_dir, "test_notazip")
+
+  # Clean up any existing files
+  if (file.exists(temp_zip)) {
+    unlink(temp_zip)
+  }
+  if (dir.exists(temp_unzip)) {
+    unlink(temp_unzip, recursive = TRUE)
+  }
+
+  # Mock download.file to succeed (create a dummy file)
+  # and unzip to fail
+  local_mocked_bindings(
+    download.file = function(url, destfile, mode, quiet) {
+      # Create a dummy file
+      writeLines("dummy content", destfile)
+      return(0)
+    },
+    unzip = function(zipfile, exdir) {
+      stop("invalid or corrupt zip file")
+    }
+  )
+
+  # Test unzip failure
+  expect_message(
+    result <- safe_download_unzip(
+      url = "https://fake.url/file.zip",
+      destfile = temp_zip,
+      exdir = temp_unzip
+    ),
+    "Failed to unzip file"
+  )
+  expect_false(result)
+
+  # Clean up
+  if (file.exists(temp_zip)) {
+    unlink(temp_zip)
+  }
+  if (dir.exists(temp_unzip)) unlink(temp_unzip, recursive = TRUE)
+})
+
 dct_options(reset = TRUE)
