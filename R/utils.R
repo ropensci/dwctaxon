@@ -24,11 +24,13 @@ drop_first <- function(x) {
 #' @return TRUE if test is true or `data` if test is false
 #' @noRd
 #' @autoglobal
-assert_that_d <- function(condition,
-                          data,
-                          msg = NULL,
-                          env = parent.frame(),
-                          quiet = FALSE) {
+assert_that_d <- function(
+  condition,
+  data,
+  msg = NULL,
+  env = parent.frame(),
+  quiet = FALSE
+) {
   assert_res <- tryCatch(
     expr = assertthat::assert_that(isTRUE(condition), msg = msg),
     error = function(e) {
@@ -65,8 +67,15 @@ assert_that_d <- function(condition,
 #'
 #' @noRd
 #' @autoglobal
-assert_col <- function(dat, col, class = NULL, req_by = NULL,
-                       on_fail = "error", run = TRUE, quiet = FALSE) {
+assert_col <- function(
+  dat,
+  col,
+  class = NULL,
+  req_by = NULL,
+  on_fail = "error",
+  run = TRUE,
+  quiet = FALSE
+) {
   if (run == FALSE) {
     return(NULL)
   }
@@ -105,7 +114,9 @@ assert_col <- function(dat, col, class = NULL, req_by = NULL,
     # Format error message
     if (length(class) > 2) {
       class_list <- c(
-        class[seq_along(class) - 1], "or", class[length(class)]
+        class[seq_along(class) - 1],
+        "or",
+        class[length(class)]
       )
       class_list <- paste(class_list, collapse = ", ") |>
         gsub("or,", "or", x = _)
@@ -262,7 +273,8 @@ make_taxon_id_from_sci_name_1 <- function(taxon_id, sci_name, max_len = 8) {
 #' @autoglobal
 make_taxon_id_from_sci_name <- function(taxon_id, sci_name, max_len = 8) {
   purrr::map2(
-    taxon_id, sci_name,
+    taxon_id,
+    sci_name,
     ~ make_taxon_id_from_sci_name_1(
       taxon_id = .x,
       sci_name = .y,
