@@ -316,7 +316,8 @@ safe_to_download <- function(url, online = curl::has_internet()) {
     return(FALSE)
   }
   # Check that URL points to a zip file
-  zip_check <- grepl("zip", dl_check_result$headers$`content-type`)
+  zip_check <- grepl("zip", dl_check_result$headers$`content-type`) ||
+    grepl("zip", dl_check_result$headers$`content-encoding`)
   if (zip_check == FALSE) {
     return(FALSE)
   }
