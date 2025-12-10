@@ -17,7 +17,8 @@ test_that("assert_that_d() works", {
   expect_equal(
     assert_that_d_wrapper(
       1 == 2,
-      data = data.frame(error = "1 not equal to 2"), msg = "1 not equal to 2",
+      data = data.frame(error = "1 not equal to 2"),
+      msg = "1 not equal to 2",
       quiet = TRUE
     ),
     data.frame(error = "1 not equal to 2")
@@ -45,8 +46,11 @@ test_that("assert_col() detects missing column", {
   # on_fail = "summary" returns df
   expect_equal(
     assert_col(
-      data.frame(a = 1), "b",
-      req_by = "some_func", on_fail = "summary", quiet = TRUE
+      data.frame(a = 1),
+      "b",
+      req_by = "some_func",
+      on_fail = "summary",
+      quiet = TRUE
     ),
     tibble::tibble(
       check = "some_func",
@@ -56,8 +60,10 @@ test_that("assert_col() detects missing column", {
   # `req_by` is optional
   expect_equal(
     assert_col(
-      data.frame(a = 1), "b",
-      on_fail = "summary", quiet = TRUE
+      data.frame(a = 1),
+      "b",
+      on_fail = "summary",
+      quiet = TRUE
     ),
     tibble::tibble(
       error = "Column b required in input data"
@@ -66,8 +72,10 @@ test_that("assert_col() detects missing column", {
   # on_fail = "summary" issues warning
   expect_warning(
     assert_col(
-      data.frame(a = 1), "b",
-      req_by = "some_func", on_fail = "summary"
+      data.frame(a = 1),
+      "b",
+      req_by = "some_func",
+      on_fail = "summary"
     ),
     "some_func requires column b in input data"
   )
@@ -82,8 +90,12 @@ test_that("assert_col() detects column of wrong class", {
   # on_fail = "summary" returns df
   expect_equal(
     assert_col(
-      data.frame(a = 1), "a", "character",
-      req_by = "some_fun", on_fail = "summary", quiet = TRUE
+      data.frame(a = 1),
+      "a",
+      "character",
+      req_by = "some_fun",
+      on_fail = "summary",
+      quiet = TRUE
     ),
     tibble::tibble(
       check = "some_fun",
@@ -93,8 +105,11 @@ test_that("assert_col() detects column of wrong class", {
   # `req_by` is optional
   expect_equal(
     assert_col(
-      data.frame(a = 1), "a", "character",
-      on_fail = "summary", quiet = TRUE
+      data.frame(a = 1),
+      "a",
+      "character",
+      on_fail = "summary",
+      quiet = TRUE
     ),
     tibble::tibble(
       error = "Column a must be of class character"
@@ -103,8 +118,11 @@ test_that("assert_col() detects column of wrong class", {
   # on_fail = "summary" issues warning
   expect_warning(
     assert_col(
-      data.frame(a = 1), "a", "character",
-      req_by = "some_fun", on_fail = "summary"
+      data.frame(a = 1),
+      "a",
+      "character",
+      req_by = "some_fun",
+      on_fail = "summary"
     ),
     "Column a must be of class character"
   )
@@ -206,14 +224,16 @@ test_that("val_if_in_dat() works", {
   expect_equal(
     val_if_in_dat(
       data.frame(a = 1),
-      "a", 1
+      "a",
+      1
     ),
     1
   )
   expect_equal(
     val_if_in_dat(
       data.frame(a = 1),
-      "b", 1
+      "b",
+      1
     ),
     NA
   )
@@ -288,8 +308,7 @@ test_that("Check for zip file ready to download works", {
   )
   # Rest of tests require an internet connection
   skip_if_offline(host = "r-project.org")
-  # TODO run test when #116 is fixed
-  skip("Need to fix #116")
+  
   # URL used in vignette should work
   # - load URL
   source(system.file("extdata", "vascan_url.R", package = "dwctaxon"))
@@ -300,7 +319,8 @@ test_that("Check for zip file ready to download works", {
   # Check for 404
   expect_equal(
     safe_to_download(
-      "https://github.com/joelnitta/i_will_never_make_this_repo"),
+      "https://github.com/joelnitta/i_will_never_make_this_repo"
+    ),
     FALSE
   )
   # Check for something that is not a zip file
@@ -311,7 +331,8 @@ test_that("Check for zip file ready to download works", {
   # Check for something that is not a zip file
   expect_equal(
     safe_to_download(
-      "https://data.canadensys.net/ipt/archive.do?r=vascan&v=WRONGNUMBER"),
+      "https://data.canadensys.net/ipt/archive.do?r=vascan&v=WRONGNUMBER"
+    ),
     FALSE
   )
 })
