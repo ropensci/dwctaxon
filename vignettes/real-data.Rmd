@@ -81,7 +81,7 @@ list.files(temp_unzip)
 Finally, load the taxonomic data (`taxon.txt`) into R. It is a tab-separated text file, so we use `readr::read_tsv()` to load it.
 
 ```{r load-data}
-vascan <- read_tsv(paste0(temp_unzip, "/taxon.txt"))
+vascan <- read_tsv(paste0(temp_unzip, "/taxon.txt"), show_col_types = FALSE)
 
 # Take a peak at the data
 vascan
