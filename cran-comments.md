@@ -1,12 +1,10 @@
-# CRAN submission for dwctaxon 2.0.3
+# CRAN submission for dwctaxon 2.0.4
 
 (resubmission)
 
-Update 2023-12-13: in response to comment on initial submission of v2.0.3,
-change example code to use try() instead of \dontrun{}
-https://github.com/ropensci/dwctaxon/pull/101
+This fixes a violation of CRAN's policy on internet access, where a file needed for a vignette could not be downloaded on MKL.
 
-This fixes a violation of CRAN's policy on internet access.
+It also adds a dependency on R >= 4.2.0 because the code includes the base pipe.
 
 dwctaxon has no reverse dependencies.
 
@@ -14,46 +12,34 @@ Thank you for reviewing this submission.
 
 ## Test environments
 
-* local OS X install, R 4.3.2 (devtools::check(remote = TRUE, manual = TRUE))
-* Ubuntu Linux 20.04.1 LTS, R-release, GCC (rhub)
-* Fedora Linux, R-devel, clang, gfortran (rhub)
-* Windows Server 2022, R-devel, 64 bit (rhub)
-* Windows Server 2022, x86_64-w64-mingw32, 64-bit (win-builder)
+* local OS X install, R 4.5.0 (devtools::check(remote = TRUE, manual = TRUE))
+* atlas R Under development (unstable) (2025-12-13 r89166) on Fedora Linux 38 (rhub)
+* c23 R Under development (unstable) (2025-12-12 r89163) on Ubuntu 22.04.5 LTS (rhub)
+* gcc-asan R Under development (unstable) (2025-12-13 r89166) on Fedora Linux 40 (rhub)
+* lto R version 4.5.2 (2025-10-31) on Ubuntu 24.04.3 LTS (rhub)
+* mkl R Under development (unstable) (2025-12-13 r89166) on Fedora Linux 38 (rhub)
+* ubuntu-next R version 4.5.2 Patched (2025-12-12 r89163) on Ubuntu 24.04.3 LTS (rhub)
+* valgrind R Under development (unstable) (2025-12-13 r89166) on Fedora Linux 38 (rhub)
+* linux (R-devel) (rhub)
+* windows (R-devel) (rhub)
+
+rhub run summary: https://github.com/ropensci/dwctaxon/actions/runs/20098165281
 
 No ERRORs were reported.
 
 ## NOTEs
 
-* All test environments issue the following NOTE:
+local OS install generated this NOTE:
 
-```
-New submission
+  Found the following (possibly) invalid URLs:
+    URL: https://www.gbif.org/
+      From: inst/doc/what-is-dwc.html
+      Status: 403
+      Message: Forbidden
+    URL: https://www.gbif.org/darwin-core
+      From: inst/doc/what-is-dwc.html
+      Status: 403
+      Message: Forbidden
 
-Package was archived on CRAN
 
-CRAN repository db overrides:
-  X-CRAN-Comment: Archived on 2023-07-10 for policy violation.
-
-  On Internet access.
-```
-
-This is correct; the package was removed from CRAN because it could not be updated in time. The current submission fixes the violation
-(https://github.com/ropensci/dwctaxon/commit/e7f71308871f9b0cf9244b6d852a71039555bc61)
-
-* The following NOTE was found on Ubuntu Linux and Fedora Linux:
-
-```
-* checking HTML version of manual ... NOTE
-Skipping checking HTML validation: no command 'tidy' found
-```
-
-This seems to be due to [rhub lacking tidy](https://github.com/r-hub/rhub/issues/548)
-
-* The following NOTE was found on Windows Server 2022, R-devel, 64 bit (rhub):
-
-```
-Found the following files/directories:
-    'lastMiKTeXException'
-```
-
-As previously noted in [R-hub issue #503](https://github.com/r-hub/rhub/issues/503), `'lastMiKTeXException'` has been flagged as a bug in MiKTeK and probably can be safely ignored.
+Both URLs have been confirmed to properly work in a web browser (Firefox v144.0.2).
